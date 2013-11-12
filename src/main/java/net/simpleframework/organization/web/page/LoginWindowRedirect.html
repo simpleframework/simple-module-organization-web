@@ -1,0 +1,27 @@
+<div id="${loginId}"></div>
+<script type="text/javascript">
+  (function() {
+    var ele = $("${loginId}");
+    var win = $win(ele);
+    var loginWin = function() {
+      $Actions["${win}"]();
+      if (Tips)
+        Tips.hideAll();
+    };
+    if (win) {
+      win.observe("hidden", function() {
+        loginWin();
+      });
+      new PeriodicalExecuter(function(executer) {
+        if (win.visible) {
+          win.close();
+          executer.stop();
+        }
+      }, 0.1);
+    } else {
+      if (ele)
+        ele.remove();
+      loginWin();
+    }
+  })();
+</script>

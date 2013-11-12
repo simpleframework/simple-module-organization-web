@@ -1,0 +1,82 @@
+.AccountPasswordPage {
+	width: 450px;
+}
+
+.AccountPasswordPage .pwdstrength {
+  margin-top: 4px;
+}
+
+.AccountPasswordPage .bb {
+  margin-top: 8px;
+}
+
+.AccountPasswordPage .bb .mail {
+  float: left;
+}
+
+.AccountPasswordPage .bb .btn {
+  float: right;
+}
+
+.AccountPasswordPage .nav_arrow,
+.PhotoPage .nav_arrow {
+  background-position: 0 4px;
+  margin-bottom: 6px;
+}
+
+.PhotoPage .photo_icon {
+	width: 168px;
+	height: 168px;
+}
+
+.PhotoUploadPage .text input {
+	line-height: 20px;
+	height: 20px;
+}
+
+.PhotoUploadPage .desc {
+	color: red;
+	margin: 2px 0 6px 0;
+}
+
+.PhotoUploadResultPage {
+	padding: 4px;
+}
+
+.PhotoUploadResultPage .info {
+	font-size: 22pt;
+	font-weight: bold;
+	line-height: 120%;
+}
+
+.AbstractAttriPage .FormTableRowTemplatePage {
+  padding: 1px 0;
+}
+
+.AbstractAttriPage .UserAttriTPage,
+.AbstractAttriPage .AccountPasswordTPage {
+  padding: 20px;
+  width: 80%;
+}
+
+.AbstractAttriPage .AccountStatTPage,
+.AbstractAttriPage .PhotoTPage {
+  padding: 20px;
+  width: 65%;
+}
+
+.AbstractAttriPage .img_account {
+  background-image: url("images/account.png");
+}
+
+.AbstractAttriPage .img_password {
+  background-image: url("images/password.png");
+}
+
+.AbstractAttriPage .img_photo {
+  background-image: url("images/photo.png");
+}
+
+.AbstractAttriPage .img_user {
+  background-image: url("images/user.png");
+}

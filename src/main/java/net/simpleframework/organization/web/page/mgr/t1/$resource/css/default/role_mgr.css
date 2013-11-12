@@ -1,0 +1,52 @@
+.RoleMgrPage .tb {
+	background: #eef;
+	border-bottom: 1px solid #aaa;
+	padding: 6px 10px;
+	overflow: hidden;
+	_zoom: 1;
+}
+
+.RoleMgrPage .tb .nav_arrow {
+	float: left;
+	line-height: 23px;
+	background-position: 0 6px;
+	min-height: 25px;
+}
+
+.RoleMgrPage .tb .nav_arrow .rt {
+	color: red;
+}
+
+.RoleMgrPage .tb .btn {
+	float: right;
+	margin-right: 10px;
+}
+
+#idRoleMemberVal .rule {
+	margin: 8px;
+}
+
+#idRoleMemberVal .rule .t {
+	padding-bottom: 6px;
+	color: #666;
+}
+
+#idRoleMemberVal .rule .c {
+	padding: 2px;
+	border: 1px solid #ccc;
+	background: #fff;
+}
+
+#idRoleMemberVal .rule textarea {
+	border: 0 !important;
+	background: none !important;
+	width: 100%;
+	color: #400;
+	font-size: 10.5pt;
+	font-style: italic;
+	line-height: 1.5;
+}
+
+#idMemberTable {
+  padding: 5px;
+}

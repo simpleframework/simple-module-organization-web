@@ -1,0 +1,43 @@
+.role_select .tb {
+	border-bottom: 1px solid #ccc;
+	padding: 5px;
+	overflow: hidden;
+	_zoom: 1;
+	background: #fafafa;
+}
+
+.role_select  .icon {
+	background: url(images/role32.png) no-repeat center center;
+	width: 32px;
+	height: 32px;
+	vertical-align: middle;
+	width: 32px;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+}
+
+.role_select .chart {
+	background: url(images/menu.png) no-repeat center right;
+	color: #358119;
+	padding-right: 10px;
+	margin-left: 8px;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+}
+
+.role_select .ct {
+	padding: 4px 2px;
+	overflow-y: auto; 	
+}
+
+.role_select .bottom {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	padding: 6px;
+	border-top: 1px solid #aaa;
+	background: #f7f7ff;
+}
