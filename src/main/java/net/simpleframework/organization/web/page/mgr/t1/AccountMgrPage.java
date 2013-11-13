@@ -225,21 +225,17 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			if (menuItem == null) {
-				final MenuItems items = MenuItems.of(MenuItem.itemEdit().setOnclick(
-						"$Actions['AccountMgrPage_edit']('accountId=' + $pager_action(item).rowId());"));
+				final MenuItems items = MenuItems.of(MenuItem.itemEdit().setOnclick_act(
+						"AccountMgrPage_edit", "accountId"));
 				final int type = Convert.toInt(getSelectedTreeNode(cp));
 				if (type != IAccountService.ONLINE_ID) {
-					items.add(MenuItem.itemDelete().setOnclick(
-							"$Actions['AccountMgrPage_delete']('id=' + $pager_action(item).rowId());"));
+					items.add(MenuItem.itemDelete().setOnclick_act("AccountMgrPage_delete", "id"));
 				}
 				items.add(MenuItem.sep());
-				items.add(MenuItem
-						.of($m("AccountMgrPage.18"))
-						.setOnclick(
-								"$Actions['AccountMgrPage_accountWin']('accountId=' + $pager_action(item).rowId());"));
+				items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act(
+						"AccountMgrPage_accountWin", "accountId"));
 				items.add(MenuItem.sep());
-				items.add(MenuItem.itemLog().setOnclick(
-						"$Actions['AccountMgrPage_logWin']('beanId=' + $pager_action(item).rowId());"));
+				items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
 				return items;
 			}
 			return null;
