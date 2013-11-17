@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.web.html.HtmlConst;
 import net.simpleframework.mvc.PageParameter;
 
 /**
@@ -27,12 +28,12 @@ public class PhotoUploadResultPage extends AbstractAccountPage {
 			final String src = pp.getParameter("src");
 			if (StringUtils.hasText(src)) {
 				sb.append("<div class='info'>#(PhotoUploadResultPage.2)</div>");
-				sb.append(TAG_SCRIPT_START);
+				sb.append(HtmlConst.TAG_SCRIPT_START);
 				sb.append("(function() {");
 				sb.append("parent.$('user_edit_photo_image').src = '")
 						.append(new String(AlgorithmUtils.base64Decode(src))).append("';");
 				sb.append("})();");
-				sb.append(TAG_SCRIPT_END);
+				sb.append(HtmlConst.TAG_SCRIPT_END);
 			}
 		}
 		sb.append("<p><input type='button' value='#(PhotoUploadResultPage.1)' onclick='history.back();'/></p>");

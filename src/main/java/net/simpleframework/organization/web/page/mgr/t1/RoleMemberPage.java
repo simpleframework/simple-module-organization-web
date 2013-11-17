@@ -9,6 +9,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.web.html.HtmlConst;
 import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -151,7 +152,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 			sb.append("<a class='").append(aClass)
 					.append("' onclick=\"$Actions['addMemberWindow']('roleId=").append(role.getId())
 					.append("');\">#(RoleMemberPage.1)</a>");
-			sb.append(NBSP).append("<a class='").append(aClass)
+			sb.append(HtmlConst.NBSP).append("<a class='").append(aClass)
 					.append("' onclick=\"this.up('.RoleMgrPage').deleteMember();\">#(Delete)</a>");
 		} else if (rt == ERoleType.handle) {
 			sb.append("<a class='").append(aClass).append("' onclick=\"")
@@ -161,7 +162,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 			sb.append("<a class='").append(aClass).append("' onclick=\"")
 					.append("$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));")
 					.append("\">#(RoleMemberPage.8)</a>");
-			sb.append(NBSP).append("<a class='").append(aClass).append("' onclick=\"")
+			sb.append(HtmlConst.NBSP).append("<a class='").append(aClass).append("' onclick=\"")
 					.append("\">#(RoleMemberPage.9)</a>");
 		}
 		sb.append("</div>");
@@ -177,7 +178,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 				sb.append(role.getId()).append("' />");
 			}
 			if (rt == ERoleType.handle) {
-				sb.append("<div class='t'>#(RoleMemberPage.10)").append(NBSP)
+				sb.append("<div class='t'>#(RoleMemberPage.10)").append(HtmlConst.NBSP)
 						.append(IRoleHandler.class.getName()).append("</div>");
 				sb.append("<div class='c'><textarea name='role_ruleValue' rows='1'>");
 				final IRoleHandler rHandler = context.getRoleService().getRoleHandler(role);
