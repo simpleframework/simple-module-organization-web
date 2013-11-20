@@ -52,7 +52,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 				final int l1 = service.getLevel(d1);
 				final int l2 = service.getLevel(d2);
 				if (l1 == l2) {
-					return (int) (d2.getOorder() - d1.getOorder());
+					return d2.getOorder() - d1.getOorder();
 				} else {
 					return l1 - l2;
 				}
