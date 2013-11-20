@@ -300,7 +300,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			kv.add("lastLoginDate", account.getLastLoginDate());
 			kv.add("status", account.getStatus());
 			kv.add("loginTimes", account.getLoginTimes());
-			kv.add("u.text", toIconUser(cp, user.getText()));
+			kv.add("u.text", toIconUser(cp, user));
 			final String email = user.getEmail();
 			kv.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			kv.add("u.mobile", user.getMobile());
