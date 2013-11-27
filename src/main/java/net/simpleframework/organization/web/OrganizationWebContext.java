@@ -19,14 +19,15 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class OrganizationWebContext extends OrganizationContext implements IOrganizationWebContext {
+public class OrganizationWebContext extends OrganizationContext implements IOrganizationWebContext,
+		IMVCContextVar {
 
 	@Override
 	public void onInit(final IApplicationContext application) throws Exception {
 		super.onInit(application);
 
 		// 添加监听器
-		IMVCContextVar.ctx.getEventAdapter().addListener(new HttpSessionListener() {
+		ctx.getEventAdapter().addListener(new HttpSessionListener() {
 			@Override
 			public void sessionCreated(final HttpSessionEvent event) {
 			}
