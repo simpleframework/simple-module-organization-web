@@ -98,18 +98,20 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 			final Map<ID, Collection<IDepartment>> depts, final Map<ID, Collection<IUser>> users,
 			final Collection<IDepartment> children) {
 		final Collection<DepartmentWrapper> wrappers = new ArrayList<DepartmentWrapper>();
-		for (final IDepartment dept : children) {
-			final DepartmentWrapper wrapper = new DepartmentWrapper(dept);
-			final ID k = dept.getId();
-			final Collection<IDepartment> v1 = depts.get(k);
-			final Collection<IUser> v2 = users.get(k);
-			if (v1 != null) {
-				wrapper.getChildren().addAll(createDepartmentColl(depts, users, v1));
+		if (children != null) {
+			for (final IDepartment dept : children) {
+				final DepartmentWrapper wrapper = new DepartmentWrapper(dept);
+				final ID k = dept.getId();
+				final Collection<IDepartment> v1 = depts.get(k);
+				final Collection<IUser> v2 = users.get(k);
+				if (v1 != null) {
+					wrapper.getChildren().addAll(createDepartmentColl(depts, users, v1));
+				}
+				if (v2 != null) {
+					wrapper.getUsers().addAll(v2);
+				}
+				wrappers.add(wrapper);
 			}
-			if (v2 != null) {
-				wrapper.getUsers().addAll(v2);
-			}
-			wrappers.add(wrapper);
 		}
 		return wrappers;
 	}

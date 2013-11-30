@@ -2,12 +2,16 @@ package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.ImageUtils;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.AbstractUrlForward;
@@ -23,6 +27,7 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.organization.IAccount;
 import net.simpleframework.organization.IOrganizationContext;
+import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.OrganizationException;
 
 /**
@@ -52,12 +57,22 @@ public class PhotoUploadPage extends AbstractAccountPage {
 		final ID accountId = account.getId();
 		final MultipartPageRequest request = (MultipartPageRequest) cp.request;
 		final IMultipartFile multipart = request.getFile("user_photo");
-		if (multipart.getSize() > 1024 * 1024) {
+		long size;
+		if ((size = multipart.getSize()) > 1024 * 1024) {
 			return new UrlForward(AbstractMVCPage.url(PhotoUploadResultPage.class, "accountId="
 					+ accountId + "&error=size"));
 		} else {
 			try {
-				context.getUserService().updatePhoto(accountId, multipart.getInputStream());
+				final IUserService uService = context.getUserService();
+				final InputStream inputStream = multipart.getInputStream();
+				if (inputStream != null) {
+					final ByteArrayOutputStream os = new ByteArrayOutputStream();
+					final double l = Math.min(102400d / Math.abs(size - 102400), 1d);
+					ImageUtils.thumbnail(inputStream, l, os);
+					uService.updatePhoto(accountId, new ByteArrayInputStream(os.toByteArray()));
+				} else {
+					uService.updatePhoto(accountId, null);
+				}
 				deletePhoto(cp, accountId);
 				return new UrlForward(url(
 						PhotoUploadResultPage.class,
