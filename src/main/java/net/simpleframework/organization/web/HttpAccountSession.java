@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.mvc.IMVCContextVar;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.organization.IAccount;
 import net.simpleframework.organization.IAccountSession;
@@ -19,7 +20,8 @@ import net.simpleframework.organization.LoginObject;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class HttpAccountSession implements IAccountSession, IOrganizationContextAware {
+public class HttpAccountSession implements IAccountSession, IOrganizationContextAware,
+		IMVCContextVar {
 
 	private PageRequestResponse rRequest;
 
@@ -31,14 +33,14 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 	}
 
 	public HttpAccountSession(final HttpSession httpSession) {
-		this.httpSession = httpSession;
+		this.httpSession = ctx.createHttpSession(httpSession);
 	}
 
 	public HttpSession getHttpSession() {
 		return httpSession;
 	}
 
-	public PageRequestResponse getrPageRequest() {
+	public PageRequestResponse getPageRequest() {
 		return rRequest;
 	}
 
@@ -85,7 +87,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 				((OrganizationLogRef) ref).logLogout(login.getAttr("logId"));
 			}
 		}
-		if (rRequest.response != null) {
+		if (rRequest != null && rRequest.response != null) {
 			HttpUtils.addCookie(rRequest.response, "_account_pwd", null);
 		}
 	}
