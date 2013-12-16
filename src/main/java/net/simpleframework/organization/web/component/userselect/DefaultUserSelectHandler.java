@@ -77,18 +77,21 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	public Collection<DepartmentWrapper> getDepartmentWrappers(final ComponentParameter cp) {
 		final Map<ID, Collection<IDepartment>> depts = context.getDepartmentService().queryAllTree();
 		final Map<ID, Collection<IUser>> users = new HashMap<ID, Collection<IUser>>();
-		final IDataQuery<?> dq = getUsers(cp).setFetchSize(0);
-		IUser user;
-		while ((user = (IUser) dq.next()) != null) {
-			ID deptId = user.getDepartmentId();
-			if (deptId == null) {
-				deptId = ID.NULL_ID;
+		final IDataQuery<?> dq = getUsers(cp);
+		if (dq != null) {
+			dq.setFetchSize(0);
+			IUser user;
+			while ((user = (IUser) dq.next()) != null) {
+				ID deptId = user.getDepartmentId();
+				if (deptId == null) {
+					deptId = ID.NULL_ID;
+				}
+				Collection<IUser> l = users.get(deptId);
+				if (l == null) {
+					users.put(deptId, l = new ArrayList<IUser>());
+				}
+				l.add(user);
 			}
-			Collection<IUser> l = users.get(deptId);
-			if (l == null) {
-				users.put(deptId, l = new ArrayList<IUser>());
-			}
-			l.add(user);
 		}
 		return createDepartmentColl(depts, users, depts.get(ID.NULL_ID));
 	}
