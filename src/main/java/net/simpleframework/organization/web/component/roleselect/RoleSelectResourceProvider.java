@@ -1,7 +1,6 @@
 package net.simpleframework.organization.web.component.roleselect;
 
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.component.IComponentRegistry;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryResourceProvider;
 
 /**
@@ -11,10 +10,6 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryResourceProvide
  *         http://www.simpleframework.net
  */
 public class RoleSelectResourceProvider extends DictionaryResourceProvider {
-
-	public RoleSelectResourceProvider(final IComponentRegistry componentRegistry) {
-		super(componentRegistry);
-	}
 
 	@Override
 	public String[] getCssPath(final PageParameter pp) {

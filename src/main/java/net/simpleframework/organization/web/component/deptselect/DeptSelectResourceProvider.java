@@ -1,6 +1,5 @@
 package net.simpleframework.organization.web.component.deptselect;
 
-import net.simpleframework.mvc.component.IComponentRegistry;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryResourceProvider;
 
 /**
@@ -10,8 +9,4 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryResourceProvide
  *         http://www.simpleframework.net
  */
 public class DeptSelectResourceProvider extends DictionaryResourceProvider {
-
-	public DeptSelectResourceProvider(final IComponentRegistry componentRegistry) {
-		super(componentRegistry);
-	}
 }
