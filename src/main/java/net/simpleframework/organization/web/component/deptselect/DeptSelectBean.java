@@ -1,8 +1,6 @@
 package net.simpleframework.organization.web.component.deptselect;
 
 import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
 
 /**
@@ -13,8 +11,7 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
  */
 public class DeptSelectBean extends DictionaryBean {
 
-	public DeptSelectBean(final PageDocument pageDocument, final XmlElement xmlElement) {
-		super(pageDocument, xmlElement);
+	public DeptSelectBean() {
 		setTitle($m("DeptSelectBean.0"));
 		setWidth(280);
 		setHeight(360);

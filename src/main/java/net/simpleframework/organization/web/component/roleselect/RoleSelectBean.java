@@ -1,8 +1,6 @@
 package net.simpleframework.organization.web.component.roleselect;
 
 import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.ctx.common.xml.XmlElement;
-import net.simpleframework.mvc.PageDocument;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
 
 /**
@@ -20,8 +18,7 @@ public class RoleSelectBean extends DictionaryBean {
 	 */
 	private String defaultRoleChart;
 
-	public RoleSelectBean(final PageDocument pageDocument, final XmlElement xmlElement) {
-		super(pageDocument, xmlElement);
+	public RoleSelectBean() {
 		setTitle($m("RoleSelectBean.0"));
 		setWidth(280);
 		setHeight(360);
