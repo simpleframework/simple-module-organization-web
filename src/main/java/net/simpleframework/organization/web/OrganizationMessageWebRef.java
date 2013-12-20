@@ -3,9 +3,8 @@ package net.simpleframework.organization.web;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.ClassUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.ctx.IModuleContext;
-import net.simpleframework.module.msg.plugin.NoticeMessageCategoryPlugin;
+import net.simpleframework.module.msg.plugin.NoticeMessageCategory;
 import net.simpleframework.module.msg.plugin.NoticeMessagePlugin;
 import net.simpleframework.organization.IAccount;
 import net.simpleframework.organization.OrganizationMessageRef;
@@ -18,7 +17,7 @@ import net.simpleframework.organization.OrganizationMessageRef;
  */
 public class OrganizationMessageWebRef extends OrganizationMessageRef {
 
-	protected NoticeMessageCategoryPlugin MC_PASSWORD_EDIT, MC_PASSWORD_GET;
+	protected NoticeMessageCategory MC_PASSWORD_EDIT, MC_PASSWORD_GET;
 
 	@Override
 	public void onInit(final IModuleContext context) throws Exception {
@@ -26,16 +25,16 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 
 		final NoticeMessagePlugin plugin = getNoticeMessagePlugin();
 
-		MC_PASSWORD_EDIT = new NoticeMessageCategoryPlugin(ObjectUtils.hashInt("MC_PASSWORD_EDIT"),
+		MC_PASSWORD_EDIT = new NoticeMessageCategory("MC_PASSWORD_EDIT",
 				$m("OrganizationMessageWebRef.0"), $m("OrganizationMessageWebRef.1"),
 				ClassUtils.getResourceAsString(OrganizationMessageWebRef.class, "MC_PASSWORD_EDIT.txt"));
-		plugin.registMessageCategoryPlugin(setGroup(MC_PASSWORD_EDIT));
+		plugin.registMessageCategory(setGroup(MC_PASSWORD_EDIT));
 
-		MC_PASSWORD_GET = new NoticeMessageCategoryPlugin(ObjectUtils.hashInt("MC_PASSWORD_GET"),
+		MC_PASSWORD_GET = new NoticeMessageCategory("MC_PASSWORD_GET",
 				$m("OrganizationMessageWebRef.2"), $m("OrganizationMessageWebRef.3"),
 				ClassUtils.getResourceAsString(OrganizationMessageWebRef.class, "MC_PASSWORD_GET.txt"))
 				.setSendTo_normal(false).setSendTo_email(true);
-		plugin.registMessageCategoryPlugin(setGroup(MC_PASSWORD_GET));
+		plugin.registMessageCategory(setGroup(MC_PASSWORD_GET));
 	}
 
 	public void doPasswordEditMessage(final IAccount account, final String password) {
