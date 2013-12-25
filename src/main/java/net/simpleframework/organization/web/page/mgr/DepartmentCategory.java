@@ -33,6 +33,7 @@ import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IDepartment;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -185,5 +186,12 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 				EDepartmentType.department, EDepartmentType.organization));
 		editor.getFormFields().add(1, f);
 		return editor;
+	}
+
+	@Override
+	public void setTreeBean(final ComponentParameter cp, final TreeBean treeBean) {
+		super.setTreeBean(cp, treeBean);
+		treeBean.setImgHome(cp.getCssResourceHomePath(AccountMgrPage.class) + "/images")
+				.setDragScroll(".left_c>div");
 	}
 }

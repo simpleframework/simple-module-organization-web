@@ -64,8 +64,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 	protected void addComponents(final PageParameter pp) {
 		super.addComponents(pp);
 
-		addCategoryBean(pp, DepartmentCategory.class).setImgHome(
-				pp.getCssResourceHomePath(AccountMgrPage.class) + "/images");
+		addCategoryBean(pp, DepartmentCategory.class);
 
 		// 账号列表
 		addTablePagerBean(pp, AccountList.class)
