@@ -3,8 +3,7 @@ package net.simpleframework.organization.web;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Map;
 
 import net.simpleframework.common.ID;
@@ -143,16 +142,20 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
-	public Collection<ID> users(final Object role, final Map<String, Object> variables) {
-		final ArrayList<ID> al = new ArrayList<ID>();
+	public Enumeration<ID> users(final Object role, final Map<String, Object> variables) {
 		final IRole oRole = getRoleObject(role);
-		final Collection<? extends IUser> users = context.getRoleService().users(oRole, variables);
-		if (users != null) {
-			for (final IUser user : users) {
-				al.add(user.getId());
+		final Enumeration<IUser> nest = context.getRoleService().users(oRole, variables);
+		return new Enumeration<ID>() {
+			@Override
+			public boolean hasMoreElements() {
+				return nest.hasMoreElements();
 			}
-		}
-		return al;
+
+			@Override
+			public ID nextElement() {
+				return nest.nextElement().getId();
+			}
+		};
 	}
 
 	protected IRole getRoleObject(final Object o) {
@@ -193,7 +196,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
-	public Collection<ID> roles(final Object user, final Map<String, Object> variables) {
+	public Enumeration<ID> roles(final Object user, final Map<String, Object> variables) {
 		return super.roles(user, variables);
 	}
 
