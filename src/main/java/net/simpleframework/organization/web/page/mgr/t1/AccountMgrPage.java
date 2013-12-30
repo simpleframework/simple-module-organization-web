@@ -13,7 +13,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
-import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -33,6 +32,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
@@ -118,6 +118,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addComponentBean(pp, "AccountMgrPage_accountWin", WindowBean.class)
 				.setContentRef("AccountMgrPage_accountPage").setTitle($m("AccountMgrPage.18"))
 				.setHeight(450).setWidth(380);
+
+		// 移动
+		addAjaxRequest(pp, "AccountMgrPage_Move").setHandleMethod("doMove");
 	}
 
 	@Override
@@ -136,28 +139,40 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 	public IForward doLockAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		context.getAccountService().lock(ids);
-		return new JavascriptForward("$Actions['").append(COMPONENT_TABLE).append("']();");
+		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUnLockAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		context.getAccountService().unlock(ids);
-		return new JavascriptForward("$Actions['").append(COMPONENT_TABLE).append("']();");
+		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		context.getAccountService().delete(ids);
-		return new JavascriptForward("$Actions['").append(COMPONENT_TABLE).append("']();");
+		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUndeleteAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		context.getAccountService().undelete(ids);
-		return new JavascriptForward("$Actions['").append(COMPONENT_TABLE).append("']();");
+		return createTableRefresh();
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doMove(final ComponentParameter cp) {
+		final IAccountService service = context.getAccountService();
+		final IAccount item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final IAccount item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		if (item != null && item2 != null) {
+			service.exchange(item, item2,
+					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
+		}
+		return createTableRefresh();
 	}
 
 	@Override
@@ -234,6 +249,21 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 						"AccountMgrPage_accountWin", "accountId"));
 				items.add(MenuItem.sep());
 				items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
+				items.add(MenuItem.sep());
+				items.append(MenuItem
+						.of($m("Menu.move"))
+						.addChild(
+								MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
+										"$pager_action(item).move(true, 'AccountMgrPage_Move');"))
+						.addChild(
+								MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
+										"$pager_action(item).move2(true, 'AccountMgrPage_Move');"))
+						.addChild(
+								MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
+										"$pager_action(item).move(false, 'AccountMgrPage_Move');"))
+						.addChild(
+								MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
+										"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
 				return items;
 			}
 			return null;
@@ -269,8 +299,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		@Override
 		protected ElementList getNavigationTitle(final ComponentParameter cp) {
 			final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage."
-					+ IAccountService.ALL)).setOnclick("$Actions['" + COMPONENT_TABLE
-					+ "']('deptId=&type=" + IAccountService.ALL + "');"));
+					+ IAccountService.ALL)).setOnclick(createTableRefresh(
+					"deptId=&type=" + IAccountService.ALL).toString()));
+
 			final Object s = getSelectedTreeNode(cp);
 			if (s instanceof IDepartment) {
 				eles.append(new LabelElement(s));

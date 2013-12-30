@@ -32,8 +32,7 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 	@Transaction(context = IOrganizationContext.class)
 	public JavascriptForward onSave(final ComponentParameter cp) {
 		super.onSave(cp);
-		final JavascriptForward js = new JavascriptForward();
-		js.append("$Actions['").append(CategoryTableLCTemplatePage.COMPONENT_TABLE).append("']();");
+		final JavascriptForward js = CategoryTableLCTemplatePage.createTableRefresh();
 		if (Convert.toBool(cp.getParameter(OPT_NEXT))) {
 			js.append("$('").append(getFormSelector()).append("').reset();");
 			js.append("$('ae_accountName').focus();");

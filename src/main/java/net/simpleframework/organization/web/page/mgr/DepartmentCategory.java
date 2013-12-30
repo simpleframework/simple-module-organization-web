@@ -69,8 +69,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 				}
 				final TreeNode treeNode2 = new TreeNode(treeBean, treeNode, text);
 				treeNode2.setId(String.valueOf(id));
-				treeNode2.setJsClickCallback("$Actions['" + CategoryTableLCTemplatePage.COMPONENT_TABLE
-						+ "']('deptId=&type=" + id + "');");
+				treeNode2.setJsClickCallback(CategoryTableLCTemplatePage.createTableRefresh(
+						"deptId=&type=" + id).toString());
 				treeNode2.setImage(images[i++]);
 				treeNode2.setPostfixText(getPostfixText(id));
 				treeNode2.setContextMenu("none");
@@ -89,9 +89,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 							EAccountStatus.values()[i]);
 					treeNode2.setId(String.valueOf(id));
 					treeNode2.setImage(images[i++]);
-					treeNode2.setJsClickCallback("$Actions['"
-							+ CategoryTableLCTemplatePage.COMPONENT_TABLE + "']('deptId=&type=" + id
-							+ "');");
+					treeNode2.setJsClickCallback(CategoryTableLCTemplatePage.createTableRefresh(
+							"deptId=&type=" + id).toString());
 					treeNode2.setPostfixText(getPostfixText(id));
 					treeNode2.setContextMenu("none");
 					treeNodes.add(treeNode2);
@@ -113,9 +112,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 							.setImage(dept.getDepartmentType() == EDepartmentType.organization ? "/org.gif"
 									: "/dept.png");
 					treeNode.setPostfixText(getPostfixText(dept));
-					treeNode.setJsClickCallback("$Actions['"
-							+ CategoryTableLCTemplatePage.COMPONENT_TABLE + "']('deptId=" + dept.getId()
-							+ "');");
+					treeNode.setJsClickCallback(CategoryTableLCTemplatePage.createTableRefresh(
+							"deptId=" + dept.getId()).toString());
 					final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, treeNode);
 					if (nodes != null) {
 						for (final TreeNode tn : nodes) {
