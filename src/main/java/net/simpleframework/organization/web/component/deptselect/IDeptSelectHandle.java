@@ -5,7 +5,7 @@ import java.util.Collection;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.IDictionaryHandle;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
-import net.simpleframework.organization.IDepartment;
+import net.simpleframework.organization.Department;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -23,6 +23,5 @@ public interface IDeptSelectHandle extends IDictionaryHandle {
 	 * @param parent
 	 * @return
 	 */
-	Collection<? extends IDepartment> getDepartments(ComponentParameter cp, TreeBean treeBean,
-			IDepartment parent);
+	Collection<Department> getDepartments(ComponentParameter cp, TreeBean treeBean, Department parent);
 }

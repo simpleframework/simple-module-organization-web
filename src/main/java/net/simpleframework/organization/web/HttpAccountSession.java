@@ -9,7 +9,7 @@ import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.IMVCContextVar;
 import net.simpleframework.mvc.PageRequestResponse;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IAccountSession;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.LoginObject;
@@ -67,7 +67,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 
 	@Override
 	public LoginObject getAutoLogin() {
-		IAccount login = null;
+		Account login = null;
 		final String pwd = HttpUtils.getCookie(rRequest.request, "_account_pwd");
 		if (StringUtils.hasText(pwd) && getLogin() == null) {
 			login = context.getAccountService().getAccountByName(

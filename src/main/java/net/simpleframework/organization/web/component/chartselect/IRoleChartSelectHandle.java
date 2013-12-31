@@ -5,8 +5,8 @@ import java.util.Collection;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.IDictionaryHandle;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
-import net.simpleframework.organization.IDepartment;
-import net.simpleframework.organization.IRoleChart;
+import net.simpleframework.organization.Department;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -25,8 +25,8 @@ public interface IRoleChartSelectHandle extends IDictionaryHandle {
 	 *           department==null返回全局视图
 	 * @return
 	 */
-	Collection<? extends IRoleChart> getRoleCharts(ComponentParameter cp, TreeBean treeBean,
-			IDepartment department);
+	Collection<RoleChart> getRoleCharts(ComponentParameter cp, TreeBean treeBean,
+			Department department);
 
 	/**
 	 * 获取部门树
@@ -36,6 +36,5 @@ public interface IRoleChartSelectHandle extends IDictionaryHandle {
 	 * @param parent
 	 * @return
 	 */
-	Collection<? extends IDepartment> getDepartments(ComponentParameter cp, TreeBean treeBean,
-			IDepartment parent);
+	Collection<Department> getDepartments(ComponentParameter cp, TreeBean treeBean, Department parent);
 }

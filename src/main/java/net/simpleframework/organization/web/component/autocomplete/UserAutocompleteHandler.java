@@ -8,7 +8,7 @@ import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.autocomplete.AbstractAutocompleteHandler;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
@@ -23,9 +23,9 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 	@Override
 	public Object[] getData(final ComponentParameter cp, final String val, final String val2) {
 		final ArrayList<String> al = new ArrayList<String>();
-		final IDataQuery<IAccount> dq = context.getAccountService().queryByParams(
+		final IDataQuery<Account> dq = context.getAccountService().queryByParams(
 				FilterItems.of(new FilterItem("name", EFilterRelation.like, val2)));
-		IAccount account;
+		Account account;
 		while ((account = dq.next()) != null) {
 			al.add(account.getName());
 		}

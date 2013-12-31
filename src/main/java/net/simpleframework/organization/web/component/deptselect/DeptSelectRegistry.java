@@ -12,7 +12,7 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
-import net.simpleframework.organization.IDepartment;
+import net.simpleframework.organization.Department;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -51,14 +51,14 @@ public class DeptSelectRegistry extends DictionaryRegistry {
 			final ComponentParameter nCP = ComponentParameter.get(cp,
 					(DeptSelectBean) treeBean.getAttr("__deptSelect"));
 			final IDeptSelectHandle hdl = (IDeptSelectHandle) nCP.getComponentHandler();
-			IDepartment parent = null;
+			Department parent = null;
 			if (treeNode != null) {
-				parent = (IDepartment) treeNode.getDataObject();
+				parent = (Department) treeNode.getDataObject();
 			}
-			final Collection<? extends IDepartment> coll = hdl.getDepartments(nCP, treeBean, parent);
+			final Collection<Department> coll = hdl.getDepartments(nCP, treeBean, parent);
 			if (coll != null) {
 				final TreeNodes nodes = TreeNodes.of();
-				for (final IDepartment d : coll) {
+				for (final Department d : coll) {
 					final TreeNode n = new TreeNode(treeBean, treeNode, d);
 					n.setImage(DeptSelectUtils.icon_dept(nCP, d));
 					n.setDynamicLoading(treeNode != null);

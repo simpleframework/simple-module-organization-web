@@ -5,7 +5,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
@@ -30,7 +30,7 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 		return sb.toString();
 	}
 
-	protected IAccount getAccount(final PageParameter pp) {
+	protected Account getAccount(final PageParameter pp) {
 		Object id = pp.getParameter("accountId");
 		if (!StringUtils.hasObject(id)) {
 			id = pp.getLoginId();
@@ -41,7 +41,7 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 	@Override
 	public KVMap createVariables(final PageParameter pp) {
 		final KVMap variables = (KVMap) super.createVariables(pp);
-		final IAccount account = getAccount(pp);
+		final Account account = getAccount(pp);
 		variables.put("account", account);
 		// variables.put("user", client.accountMgr().getUser(account.getId()));
 		return variables;

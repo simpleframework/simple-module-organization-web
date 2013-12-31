@@ -37,13 +37,14 @@ import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
 import net.simpleframework.mvc.template.t1.ext.LCTemplateTablePagerHandler;
+import net.simpleframework.organization.Account;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
-import net.simpleframework.organization.IAccount;
 import net.simpleframework.organization.IAccountService;
-import net.simpleframework.organization.IDepartment;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUser;
+import net.simpleframework.organization.IUserService;
+import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
 import net.simpleframework.organization.web.page.attri.AccountStatPage;
@@ -165,9 +166,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IAccountService service = context.getAccountService();
-		final IAccount item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final IAccount item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		final IUserService service = context.getUserService();
+		final User item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final User item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
 		if (item != null && item2 != null) {
 			service.exchange(item, item2,
 					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
@@ -202,8 +203,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			}
 		}
 
-		if (s instanceof IDepartment) {
-			add.setOnclick("$Actions['AccountMgrPage_edit']('deptId=" + ((IDepartment) s).getId()
+		if (s instanceof Department) {
+			add.setOnclick("$Actions['AccountMgrPage_edit']('deptId=" + ((Department) s).getId()
 					+ "');");
 		} else {
 			add.setOnclick("$Actions['AccountMgrPage_edit']();");
@@ -272,7 +273,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final String deptId = cp.getParameter("deptId");
-			IDepartment dept;
+			Department dept;
 			if (StringUtils.hasText(deptId)
 					&& (dept = context.getDepartmentService().getBean(deptId)) != null) {
 				cp.setRequestAttr("select_category", dept);
@@ -288,8 +289,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
 			final Map<String, Object> m = super.getFormParameters(cp);
 			final Object s = getSelectedTreeNode(cp);
-			if (s instanceof IDepartment) {
-				m.put("deptId", ((IDepartment) s).getId());
+			if (s instanceof Department) {
+				m.put("deptId", ((Department) s).getId());
 			} else {
 				m.put("type", s);
 			}
@@ -303,7 +304,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 					"deptId=&type=" + IAccountService.ALL).toString()));
 
 			final Object s = getSelectedTreeNode(cp);
-			if (s instanceof IDepartment) {
+			if (s instanceof Department) {
 				eles.append(new LabelElement(s));
 			} else {
 				final int type = (Integer) s;
@@ -322,9 +323,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final IAccount account = (IAccount) dataObject;
+			final Account account = (Account) dataObject;
 			final ID id = account.getId();
-			final IUser user = context.getAccountService().getUser(account.getId());
+			final User user = context.getAccountService().getUser(account.getId());
 			final KVMap kv = new KVMap();
 			kv.add("name", account.getName());
 			kv.add("lastLoginDate", account.getLastLoginDate());

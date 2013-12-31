@@ -6,7 +6,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleContext;
 import net.simpleframework.module.msg.plugin.NoticeMessageCategory;
 import net.simpleframework.module.msg.plugin.NoticeMessagePlugin;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.OrganizationMessageRef;
 
 /**
@@ -37,7 +37,7 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 		plugin.registMessageCategory(setGroup(MC_PASSWORD_GET));
 	}
 
-	public void doPasswordEditMessage(final IAccount account, final String password) {
+	public void doPasswordEditMessage(final Account account, final String password) {
 		if (MC_PASSWORD_EDIT == null) {
 			return;
 		}
@@ -45,7 +45,7 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 				new KVMap().add("account", account).add("password", password));
 	}
 
-	public void doPasswordGetMessage(final IAccount account, final String code) {
+	public void doPasswordGetMessage(final Account account, final String code) {
 		if (MC_PASSWORD_GET == null) {
 			return;
 		}

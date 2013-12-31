@@ -2,8 +2,8 @@ package net.simpleframework.organization.web.component.deptselect;
 
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IDepartment;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -13,7 +13,7 @@ import net.simpleframework.organization.IDepartment;
  */
 public abstract class DeptSelectUtils {
 
-	public static String icon_dept(final PageParameter pp, final IDepartment dept) {
+	public static String icon_dept(final PageParameter pp, final Department dept) {
 		final String imgBase = ComponentUtils.getCssResourceHomePath(pp, DeptSelectBean.class)
 				+ "/images/";
 		return imgBase

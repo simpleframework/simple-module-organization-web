@@ -21,12 +21,12 @@ import net.simpleframework.mvc.component.ui.propeditor.PropField;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleType;
-import net.simpleframework.organization.IDepartment;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
-import net.simpleframework.organization.IRoleChart;
 import net.simpleframework.organization.IRoleService;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.web.component.chartselect.RoleChartSelectUtils;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectUtils;
 
@@ -36,7 +36,7 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectUtils
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
+public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		IOrganizationContextAware {
 
 	@Override
@@ -44,8 +44,8 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 		return context.getRoleService();
 	}
 
-	private IRoleChart getRoleChart(final PageRequestResponse rRequest) {
-		IRoleChart roleChart = (IRoleChart) rRequest.getRequestAttr("@chartId");
+	private RoleChart getRoleChart(final PageRequestResponse rRequest) {
+		RoleChart roleChart = (RoleChart) rRequest.getRequestAttr("@chartId");
 		if (roleChart != null) {
 			return roleChart;
 		}
@@ -60,7 +60,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 	@Override
 	protected IDataQuery<?> categoryBeans(final ComponentParameter cp, final Object categoryId) {
 		final IRoleService service = getBeanService();
-		final IRole parent = service.getBean(categoryId);
+		final Role parent = service.getBean(categoryId);
 		if (parent == null) {
 			return service.queryRoot(getRoleChart(cp));
 		} else {
@@ -80,15 +80,15 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 			final TreeNodes nodes = TreeNodes.of();
 			final TreeNode tn = createRoot(treeBean, $m("RoleCategory.0"), $m("RoleCategory.1"));
 			tn.setContextMenu("none");
-			final IRoleChart chart = getRoleChart(cp);
+			final RoleChart chart = getRoleChart(cp);
 			tn.setImage(RoleChartSelectUtils.icon_chart(cp, chart));
 			tn.setAcceptdrop(true);
 			nodes.add(tn);
 			return nodes;
 		} else {
 			final Object o = parent.getDataObject();
-			if (o instanceof IRole) {
-				final IRole role = (IRole) o;
+			if (o instanceof Role) {
+				final Role role = (Role) o;
 				parent.setImage(RoleSelectUtils.icon_role(cp, role));
 				if (role.getRoleType() == ERoleType.normal) {
 					final int count = context.getRoleMemberService().queryMembers(role).getCount();
@@ -96,8 +96,8 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 						parent.setPostfixText("(" + count + ")");
 					}
 				}
-				parent.setJsClickCallback("$Actions['ajaxRoleMemberVal']('roleId="
-						+ ((IRole) o).getId() + "');");
+				parent.setJsClickCallback("$Actions['ajaxRoleMemberVal']('roleId=" + ((Role) o).getId()
+						+ "');");
 			}
 			return super.getCategoryTreenodes(cp, treeBean, parent);
 		}
@@ -107,15 +107,15 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 	public TreeNodes getCategoryDictTreenodes(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode treeNode) {
 		Object o;
-		if (treeNode != null && (o = treeNode.getDataObject()) instanceof IRole) {
-			treeNode.setImage(RoleSelectUtils.icon_role(cp, (IRole) o));
+		if (treeNode != null && (o = treeNode.getDataObject()) instanceof Role) {
+			treeNode.setImage(RoleSelectUtils.icon_role(cp, (Role) o));
 		}
 		return super.getCategoryTreenodes(cp, treeBean, treeNode);
 	}
 
 	@Override
 	protected void onLoaded_dataBinding(final ComponentParameter cp,
-			final Map<String, Object> dataBinding, final PageSelector selector, final IRole role) {
+			final Map<String, Object> dataBinding, final PageSelector selector, final Role role) {
 		if (role != null) {
 			dataBinding.put("role_type", role.getRoleType());
 			// 该字段不能编辑
@@ -124,7 +124,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 	}
 
 	@Override
-	protected void onSave_setProperties(final ComponentParameter cp, final IRole role,
+	protected void onSave_setProperties(final ComponentParameter cp, final Role role,
 			final boolean insert) {
 		if (insert) {
 			role.setRoleChartId(getRoleChart(cp).getId());
@@ -142,14 +142,14 @@ public class RoleCategory extends CategoryBeanAwareHandler<IRole> implements
 
 	@Override
 	public Map<String, Object> toJSON(final ComponentParameter cp) {
-		final IRoleChart roleChart = getRoleChart(cp);
+		final RoleChart roleChart = getRoleChart(cp);
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='nav_arrow'>");
 		if (roleChart.getDepartmentId() == null) {
 			sb.append($m("RoleChartCategory.0")).append(SpanElement.NAV);
 		} else {
-			final IDepartment dept = context.getDepartmentService().getBean(
-					roleChart.getDepartmentId());
+			final Department dept = context.getDepartmentService()
+					.getBean(roleChart.getDepartmentId());
 			if (dept != null) {
 				sb.append(dept.getText()).append(SpanElement.NAV);
 			}

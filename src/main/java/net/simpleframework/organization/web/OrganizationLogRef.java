@@ -7,7 +7,7 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
@@ -28,7 +28,7 @@ public class OrganizationLogRef extends LogRef implements IOrganizationContextAw
 	public static class AccountLogPage extends EntityUpdateLogPage {
 
 		@Override
-		protected IAccount getBean(final PageParameter pp) {
+		protected Account getBean(final PageParameter pp) {
 			return getCacheBean(pp, context.getAccountService(), getBeanIdParameter());
 		}
 

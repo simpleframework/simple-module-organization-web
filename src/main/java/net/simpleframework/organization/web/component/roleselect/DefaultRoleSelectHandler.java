@@ -6,8 +6,8 @@ import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
-import net.simpleframework.organization.IRoleChart;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -19,8 +19,8 @@ public class DefaultRoleSelectHandler extends AbstractDictionaryHandler implemen
 		IRoleSelectHandle, IOrganizationContextAware {
 
 	@Override
-	public Collection<? extends IRole> roles(final ComponentParameter cp,
-			final IRoleChart roleChart, final IRole parent) {
+	public Collection<Role> roles(final ComponentParameter cp, final RoleChart roleChart,
+			final Role parent) {
 		return DataQueryUtils.toList(parent == null ? context.getRoleService().queryRoot(roleChart)
 				: context.getRoleService().queryChildren(parent));
 	}

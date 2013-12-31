@@ -28,9 +28,9 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IDepartment;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
@@ -41,7 +41,7 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> implements
+public class DepartmentCategory extends CategoryBeanAwareHandler<Department> implements
 		IOrganizationContextAware {
 
 	@Override
@@ -106,8 +106,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 				return nodes;
 			} else {
 				final Object dataObject = treeNode.getDataObject();
-				if (dataObject instanceof IDepartment) {
-					final IDepartment dept = (IDepartment) dataObject;
+				if (dataObject instanceof Department) {
+					final Department dept = (Department) dataObject;
 					treeNode
 							.setImage(dept.getDepartmentType() == EDepartmentType.organization ? "/org.gif"
 									: "/dept.png");
@@ -132,7 +132,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 		if (type instanceof Integer) {
 			c = context.getAccountService().query((Integer) type).getCount();
 		} else {
-			c = context.getAccountService().count((IDepartment) type);
+			c = context.getAccountService().count((Department) type);
 		}
 		return c > 0 ? "(" + c + ")" : null;
 	}
@@ -141,9 +141,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 	public TreeNodes getCategoryDictTreenodes(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode treeNode) {
 		final Object dept;
-		if (treeNode != null && (dept = treeNode.getDataObject()) instanceof IDepartment) {
+		if (treeNode != null && (dept = treeNode.getDataObject()) instanceof Department) {
 			treeNode
-					.setImage(((IDepartment) dept).getDepartmentType() == EDepartmentType.organization ? "/org.gif"
+					.setImage(((Department) dept).getDepartmentType() == EDepartmentType.organization ? "/org.gif"
 							: "/dept.png");
 		}
 		final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, treeNode);
@@ -157,14 +157,14 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<IDepartment> im
 
 	@Override
 	protected void onLoaded_dataBinding(final ComponentParameter cp,
-			final Map<String, Object> dataBinding, final PageSelector selector, final IDepartment dept) {
+			final Map<String, Object> dataBinding, final PageSelector selector, final Department dept) {
 		if (dept != null) {
 			dataBinding.put("department_type", dept.getDepartmentType());
 		}
 	}
 
 	@Override
-	protected void onSave_setProperties(final ComponentParameter cp, final IDepartment dept,
+	protected void onSave_setProperties(final ComponentParameter cp, final Department dept,
 			final boolean insert) {
 		dept.setDepartmentType(Convert.toEnum(EDepartmentType.class,
 				cp.getParameter("department_type")));

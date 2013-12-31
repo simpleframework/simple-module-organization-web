@@ -10,9 +10,9 @@ import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.organization.ERoleMark;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
-import net.simpleframework.organization.IRoleChart;
 import net.simpleframework.organization.IRoleChartService;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -33,16 +33,16 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
-	public static IRoleChart getRoleChart(final ComponentParameter cp) {
+	public static RoleChart getRoleChart(final ComponentParameter cp) {
 		final IRoleChartService service = context.getRoleChartService();
-		IRoleChart roleChart = service.getBean(cp.getParameter("chartId"));
+		RoleChart roleChart = service.getBean(cp.getParameter("chartId"));
 		if (roleChart == null) {
 			roleChart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
 		}
 		return roleChart != null ? roleChart : context.getSystemChart();
 	}
 
-	public static String icon_role(final PageParameter pp, final IRole role) {
+	public static String icon_role(final PageParameter pp, final Role role) {
 		final String imgBase = ComponentUtils.getCssResourceHomePath(pp, RoleSelectBean.class)
 				+ "/images/";
 		String img;

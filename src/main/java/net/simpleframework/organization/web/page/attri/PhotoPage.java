@@ -5,7 +5,7 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.SpanElement;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -15,11 +15,11 @@ import net.simpleframework.organization.IAccount;
  */
 public class PhotoPage extends AbstractAccountPage {
 
-	public String getPhotoUrl(final PageParameter pp, final IAccount account) {
+	public String getPhotoUrl(final PageParameter pp, final Account account) {
 		return pp.getPhotoUrl(account.getId(), 164, 164);
 	}
 
-	public String getUploadUrl(final PageParameter pp, final IAccount account) {
+	public String getUploadUrl(final PageParameter pp, final Account account) {
 		return pp.getContextPath() + url(PhotoUploadPage.class, "accountId=" + account.getId());
 	}
 

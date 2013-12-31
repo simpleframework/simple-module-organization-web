@@ -6,9 +6,9 @@ import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
-import net.simpleframework.organization.IDepartment;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRoleChart;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -20,14 +20,14 @@ public class DefaultRoleChartSelectHandler extends AbstractDictionaryHandler imp
 		IRoleChartSelectHandle, IOrganizationContextAware {
 
 	@Override
-	public Collection<? extends IRoleChart> getRoleCharts(final ComponentParameter cp,
-			final TreeBean treeBean, final IDepartment department) {
+	public Collection<RoleChart> getRoleCharts(final ComponentParameter cp, final TreeBean treeBean,
+			final Department department) {
 		return DataQueryUtils.toList(context.getRoleChartService().query(department));
 	}
 
 	@Override
-	public Collection<? extends IDepartment> getDepartments(final ComponentParameter cp,
-			final TreeBean treeBean, final IDepartment parent) {
+	public Collection<Department> getDepartments(final ComponentParameter cp,
+			final TreeBean treeBean, final Department parent) {
 		return DataQueryUtils.toList(context.getDepartmentService().queryChildren(parent));
 	}
 }

@@ -16,10 +16,9 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.EWarnType;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.impl.Account;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationMessageWebRef;
 
@@ -66,7 +65,7 @@ public class AccountPasswordPage extends AbstractAccountPage {
 		final JavascriptForward js = new JavascriptForward(
 				"Validation.clearInsert(['user_old_password']);");
 		final IAccountService service = context.getAccountService();
-		final IAccount account = getAccount(cp);
+		final Account account = getAccount(cp);
 		final String oldpassword = cp.getParameter("user_old_password");
 		if (!service.verifyPassword(account, oldpassword)) {
 			js.append("Validation.insertAfter('user_old_password', '")

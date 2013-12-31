@@ -11,7 +11,7 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
+import net.simpleframework.organization.Role;
 import net.simpleframework.organization.web.component.chartselect.RoleChartSelectBean;
 
 /**
@@ -57,13 +57,13 @@ public class RoleSelectLoaded extends DefaultPageHandler implements IOrganizatio
 		public TreeNodes getTreenodes(final ComponentParameter cp, final TreeNode parent) {
 			final ComponentParameter nCP = RoleSelectUtils.get(cp);
 			final IRoleSelectHandle hdl = (IRoleSelectHandle) nCP.getComponentHandler();
-			final Collection<? extends IRole> coll = hdl.roles(nCP, RoleSelectUtils.getRoleChart(nCP),
-					(parent == null ? null : (IRole) parent.getDataObject()));
+			final Collection<Role> coll = hdl.roles(nCP, RoleSelectUtils.getRoleChart(nCP),
+					(parent == null ? null : (Role) parent.getDataObject()));
 			TreeNodes nodes = null;
 			if (coll != null) {
 				nodes = TreeNodes.of();
 				final String name = nCP.getComponentName();
-				for (final IRole r : coll) {
+				for (final Role r : coll) {
 					final TreeNode tn = new TreeNode((TreeBean) cp.componentBean, parent, r);
 					tn.setImage(RoleSelectUtils.icon_role(nCP, r));
 					tn.setJsDblclickCallback("selected_" + name + "(branch, ev);");

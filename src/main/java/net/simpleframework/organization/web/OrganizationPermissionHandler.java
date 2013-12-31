@@ -12,20 +12,20 @@ import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.ctx.permission.DefaultPagePermissionHandler;
+import net.simpleframework.organization.Account;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EAccountType;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IAccount;
 import net.simpleframework.organization.IAccountService;
-import net.simpleframework.organization.IDepartment;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
 import net.simpleframework.organization.IRoleService;
-import net.simpleframework.organization.IUser;
 import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.page.LoginWindowRedirect;
 
 /**
@@ -37,9 +37,9 @@ import net.simpleframework.organization.web.page.LoginWindowRedirect;
 public class OrganizationPermissionHandler extends DefaultPagePermissionHandler implements
 		IOrganizationContextAware {
 
-	protected IUser getUserObject(Object o) {
-		if (o instanceof IUser) {
-			return (IUser) o;
+	protected User getUserObject(Object o) {
+		if (o instanceof User) {
+			return (User) o;
 		}
 		final IUserService uService = context.getUserService();
 		if (o instanceof String) {
@@ -47,21 +47,21 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			if (s.contains("@")) {
 				return uService.getUserByMail(s);
 			} else {
-				final IAccount account = context.getAccountService().getAccountByName(s);
+				final Account account = context.getAccountService().getAccountByName(s);
 				if (account != null) {
 					o = account;
 				}
 			}
 		}
-		if (o instanceof IAccount) {
-			o = ((IAccount) o).getId();
+		if (o instanceof Account) {
+			o = ((Account) o).getId();
 		}
 		return uService.getBean(o);
 	}
 
 	@Override
 	public PermissionUser getUser(final Object user) {
-		final IUser oUser = getUserObject(user);
+		final User oUser = getUserObject(user);
 		if (oUser == null) {
 			return super.getUser(user);
 		}
@@ -77,7 +77,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 					return (String) user;
 				}
 
-				final IAccount account = context.getAccountService().getBean(user);
+				final Account account = context.getAccountService().getBean(user);
 				return account != null ? account.getName() : null;
 			}
 
@@ -94,12 +94,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			@Override
 			public ID getOrgId() {
 				final IDepartmentService service = context.getDepartmentService();
-				IDepartment org = service.getBean(oUser.getDepartmentId());
+				Department org = service.getBean(oUser.getDepartmentId());
 				if (org == null) {
 					return null;
 				}
 				while (org.getDepartmentType() != EDepartmentType.organization) {
-					final IDepartment org2 = service.getBean(org.getParentId());
+					final Department org2 = service.getBean(org.getParentId());
 					if (org2 != null) {
 						org = org2;
 					} else {
@@ -111,7 +111,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public String toOrgText() {
-				final IDepartment org = context.getDepartmentService().getBean(getOrgId());
+				final Department org = context.getDepartmentService().getBean(getOrgId());
 				return org != null ? org.toString() : null;
 			}
 
@@ -143,8 +143,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Enumeration<ID> users(final Object role, final Map<String, Object> variables) {
-		final IRole oRole = getRoleObject(role);
-		final Enumeration<IUser> nest = context.getRoleService().users(oRole, variables);
+		final Role oRole = getRoleObject(role);
+		final Enumeration<User> nest = context.getRoleService().users(oRole, variables);
 		return new Enumeration<ID>() {
 			@Override
 			public boolean hasMoreElements() {
@@ -158,9 +158,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		};
 	}
 
-	protected IRole getRoleObject(final Object o) {
-		if (o instanceof IRole) {
-			return (IRole) o;
+	protected Role getRoleObject(final Object o) {
+		if (o instanceof Role) {
+			return (Role) o;
 		}
 		final IRoleService service = context.getRoleService();
 		if (o instanceof String) {
@@ -171,7 +171,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public PermissionRole getRole(final Object role) {
-		final IRole oRole = getRoleObject(role);
+		final Role oRole = getRoleObject(role);
 		if (oRole == null) {
 			return super.getRole(role);
 		}
@@ -221,7 +221,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			accountType = EAccountType.normal;
 		}
 
-		IAccount account = null;
+		Account account = null;
 		if (accountType == EAccountType.normal) {
 			account = service.getAccountByName(login);
 		}

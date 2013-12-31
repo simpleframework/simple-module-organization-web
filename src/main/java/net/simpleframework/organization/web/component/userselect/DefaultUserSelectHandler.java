@@ -14,11 +14,10 @@ import net.simpleframework.ctx.permission.DepartmentWrapper;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
-import net.simpleframework.organization.IDepartment;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUser;
-import net.simpleframework.organization.impl.Department;
+import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -64,10 +63,10 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Object getDepartment(final Object key) {
 		final IDepartmentService service = context.getDepartmentService();
-		if (key instanceof IDepartment) {
+		if (key instanceof Department) {
 			return key;
-		} else if (key instanceof IUser) {
-			return service.getBean(((IUser) key).getDepartmentId());
+		} else if (key instanceof User) {
+			return service.getBean(((User) key).getDepartmentId());
 		} else {
 			return service.getBean(key);
 		}
@@ -75,20 +74,20 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public Collection<DepartmentWrapper> getDepartmentWrappers(final ComponentParameter cp) {
-		final Map<ID, Collection<IDepartment>> depts = context.getDepartmentService().queryAllTree();
-		final Map<ID, Collection<IUser>> users = new HashMap<ID, Collection<IUser>>();
+		final Map<ID, Collection<Department>> depts = context.getDepartmentService().queryAllTree();
+		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
 		final IDataQuery<?> dq = getUsers(cp);
 		if (dq != null) {
 			dq.setFetchSize(0);
-			IUser user;
-			while ((user = (IUser) dq.next()) != null) {
+			User user;
+			while ((user = (User) dq.next()) != null) {
 				ID deptId = user.getDepartmentId();
 				if (deptId == null) {
 					deptId = ID.NULL_ID;
 				}
-				Collection<IUser> l = users.get(deptId);
+				Collection<User> l = users.get(deptId);
 				if (l == null) {
-					users.put(deptId, l = new ArrayList<IUser>());
+					users.put(deptId, l = new ArrayList<User>());
 				}
 				l.add(user);
 			}
@@ -98,15 +97,15 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@SuppressWarnings("unchecked")
 	private Collection<DepartmentWrapper> createDepartmentColl(
-			final Map<ID, Collection<IDepartment>> depts, final Map<ID, Collection<IUser>> users,
-			final Collection<IDepartment> children) {
+			final Map<ID, Collection<Department>> depts, final Map<ID, Collection<User>> users,
+			final Collection<Department> children) {
 		final Collection<DepartmentWrapper> wrappers = new ArrayList<DepartmentWrapper>();
 		if (children != null) {
-			for (final IDepartment dept : children) {
+			for (final Department dept : children) {
 				final DepartmentWrapper wrapper = new DepartmentWrapper(dept);
 				final ID k = dept.getId();
-				final Collection<IDepartment> v1 = depts.get(k);
-				final Collection<IUser> v2 = users.get(k);
+				final Collection<Department> v1 = depts.get(k);
+				final Collection<User> v2 = users.get(k);
 				if (v1 != null) {
 					wrapper.getChildren().addAll(createDepartmentColl(depts, users, v1));
 				}

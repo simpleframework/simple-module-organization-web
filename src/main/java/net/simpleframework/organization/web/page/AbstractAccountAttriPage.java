@@ -25,10 +25,10 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ui.calendar.CalendarBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
-import net.simpleframework.organization.IAccount;
-import net.simpleframework.organization.IDepartment;
+import net.simpleframework.organization.Account;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUser;
+import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -73,7 +73,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		return super.onSave(cp);
 	}
 
-	protected IAccount getAccount(final PageParameter pp) {
+	protected Account getAccount(final PageParameter pp) {
 		Object id = pp.getParameter("accountId");
 		if (!StringUtils.hasObject(id)) {
 			id = pp.getLoginId();
@@ -84,14 +84,14 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	@Override
 	public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
 			final PageSelector selector) {
-		final IAccount account = getAccount(pp);
-		IDepartment dept = null;
+		final Account account = getAccount(pp);
+		Department dept = null;
 		if (account != null) {
 			dataBinding.put("ae_id", account.getId());
 			dataBinding.put("ae_accountName", account.getName());
 			dataBinding.put("ae_password", account.getPassword());
 
-			final IUser user = context.getAccountService().getUser(account.getId());
+			final User user = context.getAccountService().getUser(account.getId());
 			dept = context.getDepartmentService().getBean(user.getDepartmentId());
 			final Map<String, Object> kv = BeanUtils.toMap(user);
 			for (final String k : kv.keySet()) {

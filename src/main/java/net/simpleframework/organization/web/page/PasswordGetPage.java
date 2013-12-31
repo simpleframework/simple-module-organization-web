@@ -12,12 +12,11 @@ import net.simpleframework.mvc.component.base.validation.EWarnType;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUser;
 import net.simpleframework.organization.IUserService;
-import net.simpleframework.organization.impl.Account;
+import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationMessageWebRef;
 
@@ -53,7 +52,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			final IModuleRef ref = ((IOrganizationWebContext) context).getMessageRef();
 			if (ref != null) {
 				final IUserService uService = context.getUserService();
-				final IUser user = uService.getUserByMail(cp.getParameter("val"));
+				final User user = uService.getUserByMail(cp.getParameter("val"));
 				if (user == null) {
 					return new JavascriptForward("alert('").append($m("PasswordGetPage.6"))
 							.append("');");
@@ -73,7 +72,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 				return new JavascriptForward("alert('").append($m("PasswordGetPage.8")).append("');");
 			}
 			final IAccountService aService = context.getAccountService();
-			final IAccount account = aService.getBean(arr[1]);
+			final Account account = aService.getBean(arr[1]);
 			if (account != null) {
 				final String password = ObjectUtils.hashStr(cp);
 				account.setPassword(Account.encrypt(password));

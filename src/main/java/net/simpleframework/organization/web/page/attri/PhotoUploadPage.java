@@ -25,7 +25,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.submit.SubmitBean;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.OrganizationException;
@@ -53,7 +53,7 @@ public class PhotoUploadPage extends AbstractAccountPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public AbstractUrlForward upload(final ComponentParameter cp) {
-		final IAccount account = getAccount(cp);
+		final Account account = getAccount(cp);
 		final ID accountId = account.getId();
 		final MultipartPageRequest request = (MultipartPageRequest) cp.request;
 		final IMultipartFile multipart = request.getFile("user_photo");

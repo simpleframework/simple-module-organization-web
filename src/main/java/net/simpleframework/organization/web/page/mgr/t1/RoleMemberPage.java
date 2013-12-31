@@ -38,11 +38,11 @@ import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
 import net.simpleframework.organization.IRoleHandler;
-import net.simpleframework.organization.IRoleMember;
 import net.simpleframework.organization.IRoleMemberService;
 import net.simpleframework.organization.IRoleService;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.web.page.mgr.AddMemberPage;
 
 /**
@@ -110,7 +110,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doRoleSave(final ComponentParameter cp) {
 		final IRoleService service = context.getRoleService();
-		final IRole role = service.getBean(cp.getParameter("roleId"));
+		final Role role = service.getBean(cp.getParameter("roleId"));
 		if (role != null) {
 			final String ruleValue = cp.getParameter("role_ruleValue");
 			if (role.getRoleType() == ERoleType.handle) {
@@ -129,8 +129,8 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
 		final IRoleMemberService service = context.getRoleMemberService();
-		final IRoleMember item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final IRoleMember item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		final RoleMember item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final RoleMember item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
 		if (item != null && item2 != null) {
 			service.exchange(item, item2,
 					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
@@ -138,8 +138,8 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
-	private IRole roleCache(final PageRequestResponse rRequest) {
-		IRole role = (IRole) rRequest.getRequestAttr("@roleId");
+	private Role roleCache(final PageRequestResponse rRequest) {
+		Role role = (Role) rRequest.getRequestAttr("@roleId");
 		if (role != null) {
 			return role;
 		}
@@ -157,7 +157,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tb'>");
 		sb.append("<div class='nav_arrow'>");
-		final IRole role = roleCache(pp);
+		final Role role = roleCache(pp);
 		ERoleType rt = null;
 		if (role != null) {
 			rt = role.getRoleType();
@@ -221,19 +221,19 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 
 		@Override
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
-			final IRole role = AbstractMVCPage.get(RoleMemberPage.class).roleCache(cp);
+			final Role role = AbstractMVCPage.get(RoleMemberPage.class).roleCache(cp);
 			return ((KVMap) super.getFormParameters(cp)).add("roleId", role.getId());
 		}
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final IRole role = AbstractMVCPage.get(RoleMemberPage.class).roleCache(cp);
+			final Role role = AbstractMVCPage.get(RoleMemberPage.class).roleCache(cp);
 			return context.getRoleService().members(role);
 		}
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final IRoleMember rm = (IRoleMember) dataObject;
+			final RoleMember rm = (RoleMember) dataObject;
 			final ID id = rm.getId();
 			final KVMap kv = new KVMap();
 			final ERoleMemberType mType = rm.getMemberType();

@@ -15,8 +15,8 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
-import net.simpleframework.organization.IDepartment;
-import net.simpleframework.organization.IRoleChart;
+import net.simpleframework.organization.Department;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -79,11 +79,11 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 								hdl.getDepartments(nCP, treeBean, null), null));
 					} else {
 						final Object o = parent.getDataObject();
-						if (o instanceof IDepartment) {
+						if (o instanceof Department) {
 							nodes.addAll(RoleChartSelectUtils.rolecharts(cp, treeBean, parent,
-									hdl.getRoleCharts(cp, treeBean, (IDepartment) o), null));
+									hdl.getRoleCharts(cp, treeBean, (Department) o), null));
 							nodes.addAll(RoleChartSelectUtils.departments(nCP, treeBean, parent,
-									hdl.getDepartments(nCP, treeBean, (IDepartment) o), null));
+									hdl.getDepartments(nCP, treeBean, (Department) o), null));
 						}
 					}
 				}
@@ -95,7 +95,7 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 		public Map<String, Object> getTreenodeAttributes(final ComponentParameter cp,
 				final TreeNode treeNode, final TreeNodes children) {
 			final KVMap kv = (KVMap) super.getTreenodeAttributes(cp, treeNode, children);
-			if (treeNode == null || !(treeNode.getDataObject() instanceof IRoleChart)) {
+			if (treeNode == null || !(treeNode.getDataObject() instanceof RoleChart)) {
 				kv.put(TN_ATTRI_SELECT_DISABLE, Boolean.TRUE);
 			}
 			return kv;

@@ -7,7 +7,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
@@ -43,7 +43,7 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 	}
 
 	@Override
-	protected IAccount getAccount(final PageParameter pp) {
+	protected Account getAccount(final PageParameter pp) {
 		return context.getAccountService().getBean(pp.getParameter("accountId"));
 	}
 

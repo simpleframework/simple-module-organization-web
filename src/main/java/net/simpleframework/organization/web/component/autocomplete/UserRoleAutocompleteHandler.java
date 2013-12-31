@@ -8,9 +8,9 @@ import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.organization.IRole;
-import net.simpleframework.organization.IRoleChart;
 import net.simpleframework.organization.IRoleChartService;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,10 +29,10 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 			nVal = nVal.substring(1);
 			final String[] arr = StringUtils.split(nVal, ":");
 			if (arr.length == 2) {
-				final IRoleChart rChart = rcService.getRoleChartByName(arr[0]);
+				final RoleChart rChart = rcService.getRoleChartByName(arr[0]);
 				if (rChart != null) {
-					IRole role;
-					final IDataQuery<IRole> dq = context.getRoleService().queryRoles(rChart);
+					Role role;
+					final IDataQuery<Role> dq = context.getRoleService().queryRoles(rChart);
 					while ((role = dq.next()) != null) {
 						final String rn = role.getName();
 						if (rn.indexOf(arr[1]) > -1) {
@@ -41,9 +41,9 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 					}
 				}
 			} else {
-				final IDataQuery<IRoleChart> dq = rcService.queryByParams(FilterItems
-						.of(new FilterItem("name", EFilterRelation.like, nVal)));
-				IRoleChart rChart;
+				final IDataQuery<RoleChart> dq = rcService.queryByParams(FilterItems.of(new FilterItem(
+						"name", EFilterRelation.like, nVal)));
+				RoleChart rChart;
 				while ((rChart = dq.next()) != null) {
 					al.add("#" + rChart.getName());
 				}

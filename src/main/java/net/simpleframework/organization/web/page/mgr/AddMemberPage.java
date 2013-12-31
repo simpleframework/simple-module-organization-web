@@ -25,10 +25,10 @@ import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRole;
-import net.simpleframework.organization.IRoleMember;
 import net.simpleframework.organization.IRoleMemberService;
 import net.simpleframework.organization.IRoleService;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
 /**
@@ -57,7 +57,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 
 	@Override
 	protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
-		final IRole role = context.getRoleService().getBean(pp.getParameter("roleId"));
+		final Role role = context.getRoleService().getBean(pp.getParameter("roleId"));
 		final PropField f1 = new PropField($m("AddMemberPage.0")).addComponents(
 				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
 						String.valueOf(role.getId())),
@@ -81,7 +81,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 	public JavascriptForward onSave(final ComponentParameter cp) {
 		final IRoleService service = context.getRoleService();
 
-		final IRole role = service.getBean(cp.getParameter("roleId"));
+		final Role role = service.getBean(cp.getParameter("roleId"));
 		final ERoleMemberType mType = Convert.toEnum(ERoleMemberType.class,
 				cp.getParameter("member_type"));
 
@@ -90,10 +90,10 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? context.getUserService()
 				: service);
 		final IRoleMemberService mService = context.getRoleMemberService();
-		final ArrayList<IRoleMember> beans = new ArrayList<IRoleMember>();
+		final ArrayList<RoleMember> beans = new ArrayList<RoleMember>();
 		for (final String id : StringUtils.split(cp.getParameter("member_id"), ",")) {
 			final ID mId = ((IIdBeanAware) mgr.getBean(id)).getId();
-			final IRoleMember rm = mService.createBean();
+			final RoleMember rm = mService.createBean();
 			rm.setRoleId(role.getId());
 			rm.setMemberType(mType);
 			rm.setMemberId(mId);
@@ -101,7 +101,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 			rm.setDescription(description);
 			beans.add(rm);
 		}
-		mService.insert(beans.toArray(new IRoleMember[beans.size()]));
+		mService.insert(beans.toArray(new RoleMember[beans.size()]));
 
 		return super.onSave(cp).append("$Actions['ajaxRoleMemberVal']('roleId=").append(role.getId())
 				.append("')");

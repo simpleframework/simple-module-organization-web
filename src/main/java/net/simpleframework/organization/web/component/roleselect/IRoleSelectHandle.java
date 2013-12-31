@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.IDictionaryHandle;
-import net.simpleframework.organization.IRole;
-import net.simpleframework.organization.IRoleChart;
+import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -23,5 +23,5 @@ public interface IRoleSelectHandle extends IDictionaryHandle {
 	 * @param parent
 	 * @return
 	 */
-	Collection<? extends IRole> roles(ComponentParameter cp, IRoleChart roleChart, IRole parent);
+	Collection<Role> roles(ComponentParameter cp, RoleChart roleChart, Role parent);
 }

@@ -10,7 +10,7 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.organization.IAccount;
+import net.simpleframework.organization.Account;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -23,7 +23,7 @@ public class AccountStatPage extends AbstractAccountPage {
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
-		final IAccount account = getAccount(pp);
+		final Account account = getAccount(pp);
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='AccountStatPage'>");
 		sb.append("<table class='form_tbl' cellspacing='1'>");

@@ -14,11 +14,11 @@ import net.simpleframework.mvc.component.ui.tree.ITreeNodeAttributesCallback;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
-import net.simpleframework.organization.IDepartment;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRoleChart;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
+import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.web.component.chartselect.RoleChartSelectUtils;
 
 /**
@@ -27,7 +27,7 @@ import net.simpleframework.organization.web.component.chartselect.RoleChartSelec
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class RoleChartCategory extends CategoryBeanAwareHandler<IRoleChart> implements
+public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> implements
 		IOrganizationContextAware {
 
 	@Override
@@ -58,10 +58,10 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<IRoleChart> impl
 					nodes.addAll(departments(cp, treeBean, parent, null));
 				} else {
 					final Object dept = parent != null ? parent.getDataObject() : null;
-					if (dept instanceof IDepartment) {
-						nodes.addAll(rolecharts(cp, treeBean, parent, (IDepartment) dept));
+					if (dept instanceof Department) {
+						nodes.addAll(rolecharts(cp, treeBean, parent, (Department) dept));
 						// 动态装载
-						final TreeNodes _nodes = departments(cp, treeBean, parent, (IDepartment) dept);
+						final TreeNodes _nodes = departments(cp, treeBean, parent, (Department) dept);
 						for (final TreeNode tn : _nodes) {
 							tn.setDynamicLoading(true);
 						}
@@ -74,7 +74,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<IRoleChart> impl
 	}
 
 	private TreeNodes rolecharts(final ComponentParameter cp, final TreeBean treeBean,
-			final TreeNode parent, final IDepartment dept) {
+			final TreeNode parent, final Department dept) {
 		final String contextMenu = treeBean.getContextMenu();
 		final IRoleService service = context.getRoleService();
 		return RoleChartSelectUtils.rolecharts(cp, treeBean, parent,
@@ -82,7 +82,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<IRoleChart> impl
 					@Override
 					public void setAttributes(final TreeNode tn) {
 						tn.setContextMenu(contextMenu);
-						final IRoleChart chart = (IRoleChart) tn.getDataObject();
+						final RoleChart chart = (RoleChart) tn.getDataObject();
 						final int c = service.queryRoles(chart).getCount();
 						if (c > 0) {
 							tn.setPostfixText("(" + c + ")");
@@ -94,7 +94,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<IRoleChart> impl
 	}
 
 	private TreeNodes departments(final ComponentParameter cp, final TreeBean treeBean,
-			final TreeNode parent, final IDepartment dept) {
+			final TreeNode parent, final Department dept) {
 		return RoleChartSelectUtils.departments(cp, treeBean, parent,
 				DataQueryUtils.toList(context.getDepartmentService().queryChildren(dept)),
 				new ITreeNodeAttributesCallback() {
@@ -111,10 +111,10 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<IRoleChart> impl
 	}
 
 	@Override
-	protected void onSave_setProperties(final ComponentParameter cp, final IRoleChart roleChart,
+	protected void onSave_setProperties(final ComponentParameter cp, final RoleChart roleChart,
 			final boolean insert) {
 		if (insert) {
-			final IDepartment dept = context.getDepartmentService().getBean(
+			final Department dept = context.getDepartmentService().getBean(
 					cp.getParameter(PARAM_CATEGORY_PARENTID));
 			if (dept != null) {
 				roleChart.setDepartmentId(dept.getId());
