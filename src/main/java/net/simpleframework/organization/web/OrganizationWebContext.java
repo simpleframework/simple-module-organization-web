@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSessionListener;
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.Module;
+import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.mvc.IMVCContextVar;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -61,8 +62,15 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 
 	@Override
 	protected Module createModule() {
-		return super.createModule().setDefaultFunction(
-				new WebModuleFunction(AccountMgrPage.class).setName(MODULE_NAME + "-AccountMgrPage")
-						.setText($m("OrganizationWebContext.0")));
+		return super.createModule().setDefaultFunction(FUNC_ACCOUNT_MGR);
 	}
+
+	@Override
+	protected ModuleFunctions getFunctions() {
+		return ModuleFunctions.of(FUNC_ACCOUNT_MGR);
+	}
+
+	public final WebModuleFunction FUNC_ACCOUNT_MGR = (WebModuleFunction) new WebModuleFunction(
+			AccountMgrPage.class).setName(MODULE_NAME + "-AccountMgrPage").setText(
+			$m("OrganizationWebContext.0"));
 }
