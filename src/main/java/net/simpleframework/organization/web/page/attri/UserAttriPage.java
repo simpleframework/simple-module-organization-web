@@ -22,7 +22,7 @@ import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 public class UserAttriPage extends AbstractAccountAttriPage {
 
 	@Override
-	public JavascriptForward onSave(final ComponentParameter cp) {
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		super.onSave(cp);
 		return new JavascriptForward("alert('").append($m("UserAttriPage.0")).append("');");
 	}

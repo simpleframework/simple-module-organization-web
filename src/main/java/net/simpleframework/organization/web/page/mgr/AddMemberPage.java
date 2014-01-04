@@ -78,7 +78,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 
 	@Transaction(context = IOrganizationContext.class)
 	@Override
-	public JavascriptForward onSave(final ComponentParameter cp) {
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final IRoleService service = context.getRoleService();
 
 		final Role role = service.getBean(cp.getParameter("roleId"));

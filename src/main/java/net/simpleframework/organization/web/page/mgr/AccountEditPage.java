@@ -30,7 +30,7 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 
 	@Override
 	@Transaction(context = IOrganizationContext.class)
-	public JavascriptForward onSave(final ComponentParameter cp) {
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		super.onSave(cp);
 		final JavascriptForward js = CategoryTableLCTemplatePage.createTableRefresh();
 		if (Convert.toBool(cp.getParameter(OPT_NEXT))) {

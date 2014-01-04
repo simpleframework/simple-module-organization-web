@@ -58,7 +58,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
-	public JavascriptForward onSave(final ComponentParameter cp) {
+	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final KVMap userData = new KVMap();
 		final Enumeration<?> e = cp.getParameterNames();
 		while (e.hasMoreElements()) {
