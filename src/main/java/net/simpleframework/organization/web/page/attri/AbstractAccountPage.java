@@ -18,8 +18,8 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 		IOrganizationContextAware {
 
 	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		pp.addImportCSS(AbstractAccountPage.class, "/account_attri.css");
 	}

@@ -21,8 +21,8 @@ import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 public class AccountEditPage extends AbstractAccountAttriPage {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		addComponentBean(pp, "AccountEditPage_deptDict", DeptSelectBean.class).setBindingId(
 				"ue_departmentId").setBindingText("id_departmentText");

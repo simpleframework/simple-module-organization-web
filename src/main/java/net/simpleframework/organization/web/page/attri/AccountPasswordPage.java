@@ -31,8 +31,8 @@ import net.simpleframework.organization.web.OrganizationMessageWebRef;
 public class AccountPasswordPage extends AbstractAccountPage {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		addComponentBean(pp, "userpwdValidation", ValidationBean.class)
 				.setTriggerSelector("#_userpwd_save")

@@ -54,8 +54,8 @@ import net.simpleframework.organization.web.page.mgr.AddMemberPage;
 public class RoleMemberPage extends AbstractTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		addAjaxRequest(pp, "ajax_addMemberPage", AddMemberPage.class);
 		addComponentBean(pp, "addMemberWindow", WindowBean.class).setContentRef("ajax_addMemberPage")

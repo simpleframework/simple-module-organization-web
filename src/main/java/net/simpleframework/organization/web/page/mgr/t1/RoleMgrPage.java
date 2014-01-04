@@ -31,8 +31,10 @@ import net.simpleframework.organization.web.page.mgr.RoleChartCategory.DeptConte
 public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+
+		pp.addImportCSS(RoleMgrPage.class, "/role_mgr.css");
 
 		// 创建roleChart tree
 		addComponentBean(pp, "roleChartCategory", CategoryBean.class).setDraggable(false)
@@ -49,12 +51,6 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 				url(RoleMemberPage.class)).setContainerId("idRoleMemberVal");
 		addComponentBean(pp, "ajaxRoleMemberVal", AjaxRequestBean.class).setUrlForward(
 				url(RoleMemberPage.class)).setUpdateContainerId("idRoleMemberVal");
-	}
-
-	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
-		pp.addImportCSS(RoleMgrPage.class, "/role_mgr.css");
 	}
 
 	@Override

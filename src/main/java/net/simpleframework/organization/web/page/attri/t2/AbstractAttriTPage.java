@@ -32,8 +32,8 @@ import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.User
 public abstract class AbstractAttriTPage extends Category_BlankPage {
 
 	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		pp.addImportCSS(AbstractAccountPage.class, "/account_attri.css");
 	}

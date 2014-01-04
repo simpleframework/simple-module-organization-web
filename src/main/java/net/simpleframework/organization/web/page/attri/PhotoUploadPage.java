@@ -39,8 +39,8 @@ import net.simpleframework.organization.OrganizationException;
 public class PhotoUploadPage extends AbstractAccountPage {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		addComponentBean(pp, "uploadPhoto", SubmitBean.class).setFormName("uploadPhoto")
 				.setBinary(true).setConfirmMessage($m("Confirm.Post")).setHandleMethod("upload")

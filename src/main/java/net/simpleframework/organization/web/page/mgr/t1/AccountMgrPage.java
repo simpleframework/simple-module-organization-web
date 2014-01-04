@@ -62,8 +62,10 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		IOrganizationContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+
+		pp.addImportCSS(AccountMgrPage.class, "/account_mgr.css");
 
 		addCategoryBean(pp, DepartmentCategory.class);
 
@@ -122,13 +124,6 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 		// 移动
 		addAjaxRequest(pp, "AccountMgrPage_Move").setHandleMethod("doMove");
-	}
-
-	@Override
-	protected void addImportCSS(final PageParameter pp) {
-		super.addImportCSS(pp);
-
-		pp.addImportCSS(AccountMgrPage.class, "/account_mgr.css");
 	}
 
 	@Override

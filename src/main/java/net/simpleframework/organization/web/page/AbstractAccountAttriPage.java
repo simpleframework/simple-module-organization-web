@@ -40,8 +40,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		IOrganizationContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		addComponentBean(pp, "cal_Birthday", CalendarBean.class);
 

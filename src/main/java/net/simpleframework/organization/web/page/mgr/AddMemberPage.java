@@ -40,8 +40,8 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 public class AddMemberPage extends FormPropEditorTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void addComponents(final PageParameter pp) {
-		super.addComponents(pp);
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
 
 		// 验证
 		addFormValidationBean(pp).addValidators(
