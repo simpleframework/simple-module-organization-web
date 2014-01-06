@@ -141,23 +141,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		};
 	}
 
-	@Override
-	public Enumeration<ID> users(final Object role, final Map<String, Object> variables) {
-		final Role oRole = getRoleObject(role);
-		final Enumeration<User> nest = context.getRoleService().users(oRole, variables);
-		return new Enumeration<ID>() {
-			@Override
-			public boolean hasMoreElements() {
-				return nest.hasMoreElements();
-			}
-
-			@Override
-			public ID nextElement() {
-				return nest.nextElement().getId();
-			}
-		};
-	}
-
 	protected Role getRoleObject(final Object o) {
 		if (o instanceof Role) {
 			return (Role) o;
@@ -196,7 +179,25 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
+	public Enumeration<ID> users(final Object role, final Map<String, Object> variables) {
+		final Role oRole = getRoleObject(role);
+		final Enumeration<User> nest = context.getRoleService().users(oRole, variables);
+		return new Enumeration<ID>() {
+			@Override
+			public boolean hasMoreElements() {
+				return nest.hasMoreElements();
+			}
+
+			@Override
+			public ID nextElement() {
+				return nest.nextElement().getId();
+			}
+		};
+	}
+
+	@Override
 	public Enumeration<ID> roles(final Object user, final Map<String, Object> variables) {
+		// context.getRoleService().r
 		return super.roles(user, variables);
 	}
 
