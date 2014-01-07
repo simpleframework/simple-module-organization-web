@@ -26,7 +26,7 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 
 	public String buildFormHidden(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
-		sb.append(InputElement.hidden().setName("accountId").setText(pp.getParameter("accountId")));
+		sb.append(InputElement.hidden().setName("accountId").setValue(pp));
 		return sb.toString();
 	}
 
