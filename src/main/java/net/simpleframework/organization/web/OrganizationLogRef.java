@@ -1,13 +1,14 @@
 package net.simpleframework.organization.web;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.ado.bean.AbstractIdBean;
+import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.module.log.LogRef;
 import net.simpleframework.module.log.web.page.EntityUpdateLogPage;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
@@ -28,15 +29,15 @@ public class OrganizationLogRef extends LogRef implements IOrganizationContextAw
 	public static class AccountLogPage extends EntityUpdateLogPage {
 
 		@Override
-		protected Account getBean(final PageParameter pp) {
-			return getCacheBean(pp, context.getAccountService(), getBeanIdParameter());
+		protected IDbBeanService<?> getBeanService() {
+			return context.getAccountService();
 		}
 
 		@Override
 		public String getTitle(final PageParameter pp) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append($m("AccountMgrPage.0")).append(" - ");
-			sb.append(context.getAccountService().getUser(getBean(pp).getId()));
+			sb.append(context.getAccountService().getUser(((AbstractIdBean) getBean(pp)).getId()));
 			return sb.toString();
 		}
 	}
