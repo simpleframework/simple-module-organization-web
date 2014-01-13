@@ -122,7 +122,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public ID getRoleId() {
-				return super.getRoleId();
+				return context.getRoleService().getPrimaryRole(oUser).getId();
 			}
 
 			private final IRoleService rService = context.getRoleService();
