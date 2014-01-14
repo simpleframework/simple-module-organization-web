@@ -34,7 +34,7 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 		super.onSave(cp);
 		final JavascriptForward js = CategoryTableLCTemplatePage.createTableRefresh();
 		if (Convert.toBool(cp.getParameter(OPT_NEXT))) {
-			js.append("$('").append(getFormSelector()).append("').reset();");
+			js.append("$('").append(getFormSelector()).append("').down('form').reset();");
 			js.append("$('ae_accountName').focus();");
 		} else {
 			js.append("$Actions['AccountMgrPage_edit'].close();");
