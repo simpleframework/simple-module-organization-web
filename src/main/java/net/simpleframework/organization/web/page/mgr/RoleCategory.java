@@ -14,7 +14,6 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.category.ctx.CategoryBeanAwareHandler;
-import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
 import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
@@ -121,6 +120,8 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 			dataBinding.put("role_type", role.getRoleType());
 			// 该字段不能编辑
 			selector.disabledSelector = "#role_type";
+
+			dataBinding.put("role_isUserRole", role.isUserRole());
 		}
 	}
 
@@ -134,6 +135,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		if (StringUtils.hasText(role_type)) {
 			role.setRoleType(Convert.toEnum(ERoleType.class, role_type));
 		}
+		role.setUserRole(cp.getBoolParameter("role_isUserRole"));
 	}
 
 	@Override
@@ -164,11 +166,10 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 	protected AbstractComponentBean categoryEdit_createPropEditor(final ComponentParameter cp) {
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
 		final PropFields fields = editor.getFormFields();
-		fields.add(
-				2,
-				new PropField($m("RoleCategory.2")).addComponents(new InputComp("role_type").setType(
-						EInputCompType.select).setDefaultValue(ERoleType.normal, ERoleType.handle,
-						ERoleType.script)));
+		fields.add(2, new PropField($m("RoleCategory.2")).addComponents(InputComp.select("role_type",
+				ERoleType.class)));
+		fields.add(2, new PropField($m("RoleCategory.4")).addComponents(InputComp
+				.checkbox("role_isUserRole")));
 		return editor;
 	}
 
