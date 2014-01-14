@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 import net.simpleframework.common.ID;
+import net.simpleframework.common.coll.CollectionUtils.NestEnumeration;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -180,25 +181,24 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Enumeration<ID> users(final Object role, final Map<String, Object> variables) {
-		final Role oRole = getRoleObject(role);
-		final Enumeration<User> nest = context.getRoleService().users(oRole, variables);
-		return new Enumeration<ID>() {
+		return new NestEnumeration<ID, User>(context.getRoleService().users(getRoleObject(role),
+				variables)) {
 			@Override
-			public boolean hasMoreElements() {
-				return nest.hasMoreElements();
-			}
-
-			@Override
-			public ID nextElement() {
-				return nest.nextElement().getId();
+			protected ID change(final User n) {
+				return n.getId();
 			}
 		};
 	}
 
 	@Override
 	public Enumeration<ID> roles(final Object user, final Map<String, Object> variables) {
-		// context.getRoleService().r
-		return super.roles(user, variables);
+		return new NestEnumeration<ID, Role>(context.getRoleService().roles(getUserObject(user),
+				variables)) {
+			@Override
+			protected ID change(final Role n) {
+				return n.getId();
+			}
+		};
 	}
 
 	@Override
