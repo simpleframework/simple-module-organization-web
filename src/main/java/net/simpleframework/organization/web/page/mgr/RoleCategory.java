@@ -18,6 +18,7 @@ import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
 import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
+import net.simpleframework.mvc.component.ui.propeditor.PropFields;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
@@ -162,7 +163,8 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 	@Override
 	protected AbstractComponentBean categoryEdit_createPropEditor(final ComponentParameter cp) {
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
-		editor.getFormFields().add(
+		final PropFields fields = editor.getFormFields();
+		fields.add(
 				2,
 				new PropField($m("RoleCategory.2")).addComponents(new InputComp("role_type").setType(
 						EInputCompType.select).setDefaultValue(ERoleType.normal, ERoleType.handle,
@@ -173,6 +175,6 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 	@Override
 	public KVMap categoryEdit_attri(final ComponentParameter cp) {
 		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("RoleCategory.3")).add(
-				window_height, 320);
+				window_height, 360);
 	}
 }
