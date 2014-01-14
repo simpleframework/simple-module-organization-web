@@ -20,7 +20,6 @@ import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.category.LinkAddCategoryNode;
 import net.simpleframework.mvc.component.ext.category.ctx.CategoryBeanAwareHandler;
-import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
 import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
@@ -173,16 +172,16 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	@Override
 	public KVMap categoryEdit_attri(final ComponentParameter cp) {
 		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("AccountMgrPage.9")).add(
-				window_height, 320);
+				window_height, 340);
 	}
 
 	@Override
 	protected AbstractComponentBean categoryEdit_createPropEditor(final ComponentParameter cp) {
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
-		final PropField f = new PropField($m("DepartmentCategory.0")).addComponents(new InputComp(
-				"department_type").setType(EInputCompType.select).setDefaultValue(
-				EDepartmentType.department, EDepartmentType.organization));
-		editor.getFormFields().add(1, f);
+		editor.getFormFields().add(
+				1,
+				new PropField($m("DepartmentCategory.0")).addComponents(InputComp.select(
+						"department_type", EDepartmentType.class)));
 		return editor;
 	}
 

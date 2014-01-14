@@ -166,10 +166,10 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 	protected AbstractComponentBean categoryEdit_createPropEditor(final ComponentParameter cp) {
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
 		final PropFields fields = editor.getFormFields();
-		fields.add(2, new PropField($m("RoleCategory.2")).addComponents(InputComp.select("role_type",
-				ERoleType.class)));
 		fields.add(2, new PropField($m("RoleCategory.4")).addComponents(InputComp
 				.checkbox("role_isUserRole")));
+		fields.add(2, new PropField($m("RoleCategory.2")).addComponents(InputComp.select("role_type",
+				ERoleType.class)));
 		return editor;
 	}
 
