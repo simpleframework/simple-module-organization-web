@@ -99,6 +99,6 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 
 	@Override
 	public String getRemoteAddr() {
-		return HttpUtils.getRemoteAddr(rRequest.request);
+		return rRequest.getRemoteAddr();
 	}
 }
