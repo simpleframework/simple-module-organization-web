@@ -81,7 +81,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 				js.append("var np=$('idNewPassword');");
 				js.append("np.innerHTML='")
 						.append($m("PasswordGetPage.10", account.getName(), password)).append("';");
-				js.append("np.$shake();");
+				js.append("$Effect.shake(np);");
 				return js;
 			}
 		}
