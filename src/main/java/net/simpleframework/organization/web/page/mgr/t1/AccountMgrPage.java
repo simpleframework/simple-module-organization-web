@@ -219,7 +219,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 	}
 
 	@Override
-	protected TabButtons getTabButtons(final PageParameter pp) {
+	public TabButtons getTabButtons(final PageParameter pp) {
 		return TabButtons.of(new TabButton($m("AccountMgrPage.0"), url(AccountMgrPage.class)),
 				new TabButton($m("RoleMgrPage.0"), url(RoleMgrPage.class)));
 	}
