@@ -23,7 +23,6 @@ import net.simpleframework.mvc.common.element.TextButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.mvc.component.ui.calendar.CalendarBean;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
@@ -43,7 +42,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		addComponentBean(pp, "cal_Birthday", CalendarBean.class);
+		addCalendarBean(pp, "cal_Birthday");
 
 		addFormValidationBean(pp)
 				.addValidators(
