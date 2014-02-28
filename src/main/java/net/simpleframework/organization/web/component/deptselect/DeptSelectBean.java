@@ -15,6 +15,6 @@ public class DeptSelectBean extends DictionaryBean {
 		setTitle($m("DeptSelectBean.0"));
 		setWidth(280);
 		setHeight(360);
-		setHandleClass(DefaultDeptSelectHandler.class);
+		setHandlerClass(DefaultDeptSelectHandler.class);
 	}
 }

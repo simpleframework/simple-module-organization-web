@@ -43,7 +43,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 				.addValidators(new Validator(EValidatorMethod.required, "#pg_code"));
 
 		addAjaxRequest(pp, "PasswordGetPage_post").setConfirmMessage($m("Confirm.Post"))
-				.setHandleMethod("doPost");
+				.setHandlerMethod("doPost");
 	}
 
 	public IForward doPost(final ComponentParameter cp) {

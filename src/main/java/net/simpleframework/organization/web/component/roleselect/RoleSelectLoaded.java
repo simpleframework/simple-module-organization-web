@@ -43,12 +43,12 @@ public class RoleSelectLoaded extends DefaultPageHandler implements IOrganizatio
 
 		final String roleChartHandle = (String) nCP.getBeanProperty("roleChartHandler");
 		if (StringUtils.hasText(roleChartHandle)) {
-			roleChartSelect.setHandleClass(roleChartHandle);
+			roleChartSelect.setHandlerClass(roleChartHandle);
 		}
 
 		// 角色树
 		pp.addComponentBean(selectName + "_tree", TreeBean.class)
-				.setContainerId("container_" + hashId).setHandleClass(RoleSelectTree.class)
+				.setContainerId("container_" + hashId).setHandlerClass(RoleSelectTree.class)
 				.setSelector(".role_select form");
 	}
 

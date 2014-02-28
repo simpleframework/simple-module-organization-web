@@ -16,7 +16,7 @@ public class RoleChartSelectBean extends DictionaryBean {
 		setTitle($m("RoleChartSelectBean.0"));
 		setWidth(280);
 		setHeight(360);
-		setHandleClass(DefaultRoleChartSelectHandler.class);
+		setHandlerClass(DefaultRoleChartSelectHandler.class);
 	}
 
 	public boolean isShowGlobalChart() {

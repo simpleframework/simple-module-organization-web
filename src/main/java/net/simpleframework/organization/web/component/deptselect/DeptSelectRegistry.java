@@ -35,7 +35,7 @@ public class DeptSelectRegistry extends DictionaryRegistry {
 		final String deptSelectName = nCP.getComponentName();
 
 		final TreeBean treeBean = (TreeBean) pp.addComponentBean(deptSelectName + "_tree",
-				TreeBean.class).setHandleClass(DeptTree.class);
+				TreeBean.class).setHandlerClass(DeptTree.class);
 
 		deptSelect.addTreeRef(nCP, treeBean.getName());
 		treeBean.setAttr("__deptSelect", deptSelect);

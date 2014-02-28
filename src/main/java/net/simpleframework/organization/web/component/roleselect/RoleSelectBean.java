@@ -22,7 +22,7 @@ public class RoleSelectBean extends DictionaryBean {
 		setTitle($m("RoleSelectBean.0"));
 		setWidth(280);
 		setHeight(360);
-		setHandleClass(DefaultRoleSelectHandler.class);
+		setHandlerClass(DefaultRoleSelectHandler.class);
 	}
 
 	public String getDefaultRoleChart() {

@@ -38,14 +38,14 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 
 		// 创建roleChart tree
 		addComponentBean(pp, "roleChartCategory", CategoryBean.class).setDraggable(false)
-				.setContainerId("category_" + hashId).setHandleClass(RoleChartCategory.class);
+				.setContainerId("category_" + hashId).setHandlerClass(RoleChartCategory.class);
 
-		addComponentBean(pp, "roleChartCategory_DeptMenu", MenuBean.class).setHandleClass(
+		addComponentBean(pp, "roleChartCategory_DeptMenu", MenuBean.class).setHandlerClass(
 				DeptContextMenu.class);
 
 		// 创建role tree
 		addComponentBean(pp, "roleCategory", CategoryBean.class).setContainerId("idRoleCategory")
-				.setHandleClass(RoleCategory.class);
+				.setHandlerClass(RoleCategory.class);
 
 		addComponentBean(pp, "roleMemberVal", PageIncludeBean.class).setPageUrl(
 				url(RoleMemberPage.class)).setContainerId("idRoleMemberVal");

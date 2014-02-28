@@ -97,18 +97,18 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addDeleteAjaxRequest(pp, "AccountMgrPage_delete");
 		// 取消删除
 		addAjaxRequest(pp, "AccountMgrPage_undelete").setConfirmMessage($m("AccountMgrPage.14"))
-				.setHandleMethod("doUndeleteAccount");
+				.setHandlerMethod("doUndeleteAccount");
 
 		// 锁定
 		addAjaxRequest(pp, "AccountMgrPage_lock").setConfirmMessage($m("AccountMgrPage.15"))
-				.setHandleMethod("doLockAccount");
+				.setHandlerMethod("doLockAccount");
 		// 解锁
 		addAjaxRequest(pp, "AccountMgrPage_unlock").setConfirmMessage($m("AccountMgrPage.16"))
-				.setHandleMethod("doUnLockAccount");
+				.setHandlerMethod("doUnLockAccount");
 
 		// 注销
 		addAjaxRequest(pp, "AccountMgrPage_logout").setConfirmMessage($m("AccountMgrPage.17"))
-				.setHandleMethod("doDelete");
+				.setHandlerMethod("doDelete");
 
 		// 日志
 		final IModuleRef ref = ((IOrganizationWebContext) context).getLogRef();
@@ -123,7 +123,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.setHeight(450).setWidth(380);
 
 		// 移动
-		addAjaxRequest(pp, "AccountMgrPage_Move").setHandleMethod("doMove");
+		addAjaxRequest(pp, "AccountMgrPage_Move").setHandlerMethod("doMove");
 	}
 
 	@Override

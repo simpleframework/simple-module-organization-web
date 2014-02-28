@@ -45,7 +45,7 @@ public class AccountPasswordPage extends AbstractAccountPage {
 								.setArgs("#user_password"));
 
 		addAjaxRequest(pp, "ajaxEditPassword").setConfirmMessage($m("Confirm.Post"))
-				.setHandleMethod("saveAction").setSelector(".AccountPasswordPage");
+				.setHandlerMethod("saveAction").setSelector(".AccountPasswordPage");
 	}
 
 	@Override

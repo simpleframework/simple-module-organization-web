@@ -40,7 +40,7 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 		final String chartSelectName = nCP.getComponentName();
 
 		final TreeBean treeBean = (TreeBean) pp.addComponentBean(chartSelectName + "_tree",
-				TreeBean.class).setHandleClass(RoleChartTree.class);
+				TreeBean.class).setHandlerClass(RoleChartTree.class);
 
 		roleChart.addTreeRef(nCP, treeBean.getName());
 		treeBean.setAttr("__roleChart", roleChart);

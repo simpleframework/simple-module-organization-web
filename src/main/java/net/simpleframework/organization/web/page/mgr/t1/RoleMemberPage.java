@@ -64,13 +64,13 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 		// 删除成员
 		addDeleteAjaxRequest(pp, "ajax_deleteMember");
 
-		addAjaxRequest(pp, "ajax_editPrimaryRole").setHandleMethod("doPrimaryRole");
+		addAjaxRequest(pp, "ajax_editPrimaryRole").setHandlerMethod("doPrimaryRole");
 
 		// 成员列表
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
 				TablePagerBean.class).setShowLineNo(true).setPagerBarLayout(EPagerBarLayout.none)
 				.setPageItems(Integer.MAX_VALUE).setContainerId("idMemberTable")
-				.setHandleClass(MemberTable.class);
+				.setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMemberPage.2"), 110)
@@ -85,10 +85,10 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 保存规则角色
-		addAjaxRequest(pp, "ajax_roleSave").setHandleMethod("doRoleSave");
+		addAjaxRequest(pp, "ajax_roleSave").setHandlerMethod("doRoleSave");
 
 		// 移动
-		addAjaxRequest(pp, "RoleMemberPage_Move").setHandleMethod("doMove");
+		addAjaxRequest(pp, "RoleMemberPage_Move").setHandlerMethod("doMove");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
