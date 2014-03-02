@@ -34,6 +34,7 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
+import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
 import net.simpleframework.mvc.template.t1.ext.LCTemplateTablePagerHandler;
@@ -326,7 +327,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			kv.add("lastLoginDate", account.getLastLoginDate());
 			kv.add("status", account.getStatus());
 			kv.add("loginTimes", account.getLoginTimes());
-			kv.add("u.text", toIconUser(cp, user));
+			kv.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
 			final String email = user.getEmail();
 			kv.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			kv.add("u.mobile", user.getMobile());
