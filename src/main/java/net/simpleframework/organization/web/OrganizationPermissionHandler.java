@@ -3,11 +3,11 @@ package net.simpleframework.organization.web;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.InputStream;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.simpleframework.common.ID;
-import net.simpleframework.common.coll.CollectionUtils.NestEnumeration;
+import net.simpleframework.common.coll.CollectionUtils.NestIterator;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -180,8 +180,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
-	public Enumeration<ID> users(final Object role, final Map<String, Object> variables) {
-		return new NestEnumeration<ID, User>(context.getRoleService().users(getRoleObject(role),
+	public Iterator<ID> users(final Object role, final Map<String, Object> variables) {
+		return new NestIterator<ID, User>(context.getRoleService().users(getRoleObject(role),
 				variables)) {
 			@Override
 			protected ID change(final User n) {
@@ -191,8 +191,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
-	public Enumeration<ID> roles(final Object user, final Map<String, Object> variables) {
-		return new NestEnumeration<ID, Role>(context.getRoleService().roles(getUserObject(user),
+	public Iterator<ID> roles(final Object user, final Map<String, Object> variables) {
+		return new NestIterator<ID, Role>(context.getRoleService().roles(getUserObject(user),
 				variables)) {
 			@Override
 			protected ID change(final Role n) {
