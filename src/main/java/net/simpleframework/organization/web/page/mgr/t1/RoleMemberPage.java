@@ -94,9 +94,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("mId"), ";");
-		if (ids != null) {
-			context.getRoleMemberService().delete(ids);
-		}
+		context.getRoleMemberService().delete(ids);
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
