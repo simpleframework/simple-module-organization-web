@@ -85,7 +85,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.addColumn(new TablePagerColumn("loginTimes", $m("AccountMgrPage.5"), 70))
 				.addColumn(new TablePagerColumn("u.email", $m("AccountMgrPage.6")))
 				.addColumn(new TablePagerColumn("u.mobile", $m("AccountMgrPage.7")))
-				.addColumn(TablePagerColumn.OPE().setWidth(140));
+				.addColumn(TablePagerColumn.OPE().setWidth(135));
 
 		// 添加账号
 		addComponentBean(pp, "AccountMgrPage_editPage", AjaxRequestBean.class).setUrlForward(
