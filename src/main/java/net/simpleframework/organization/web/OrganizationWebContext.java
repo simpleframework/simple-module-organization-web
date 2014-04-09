@@ -28,7 +28,7 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 		super.onInit(application);
 
 		// 添加监听器
-		ctx.getEventAdapter().addListener(new HttpSessionListener() {
+		mvcContext.getEventAdapter().addListener(new HttpSessionListener() {
 			@Override
 			public void sessionCreated(final HttpSessionEvent event) {
 			}

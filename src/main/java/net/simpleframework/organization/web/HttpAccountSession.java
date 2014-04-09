@@ -33,7 +33,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 	}
 
 	public HttpAccountSession(final HttpSession httpSession) {
-		this.httpSession = ctx.createHttpSession(httpSession);
+		this.httpSession = mvcContext.createHttpSession(httpSession);
 	}
 
 	public HttpSession getHttpSession() {
