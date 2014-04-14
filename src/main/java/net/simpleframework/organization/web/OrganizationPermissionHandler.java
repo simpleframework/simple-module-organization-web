@@ -3,6 +3,7 @@ package net.simpleframework.organization.web;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -90,6 +91,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			@Override
 			public String getEmail() {
 				return oUser.getEmail();
+			}
+
+			@Override
+			public Date getBirthday() {
+				return oUser.getBirthday();
 			}
 
 			@Override
