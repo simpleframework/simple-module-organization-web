@@ -94,8 +94,18 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			}
 
 			@Override
+			public String getSex() {
+				return oUser.getSex();
+			}
+
+			@Override
 			public Date getBirthday() {
 				return oUser.getBirthday();
+			}
+
+			@Override
+			public String getDescription() {
+				return oUser.getDescription();
 			}
 
 			@Override
