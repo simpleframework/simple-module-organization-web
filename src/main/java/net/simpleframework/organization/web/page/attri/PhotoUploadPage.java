@@ -27,8 +27,8 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.OrganizationException;
+import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -63,15 +63,16 @@ public class PhotoUploadPage extends AbstractAccountPage {
 					+ accountId + "&error=size"));
 		} else {
 			try {
-				final IUserService uService = context.getUserService();
+				final User user = context.getAccountService().getUser(accountId);
 				final InputStream inputStream = multipart.getInputStream();
 				if (inputStream != null) {
 					final ByteArrayOutputStream os = new ByteArrayOutputStream();
 					final double l = Math.min(102400d / Math.abs(size - 102400), 1d);
 					ImageUtils.thumbnail(inputStream, l, os);
-					uService.updatePhoto(accountId, new ByteArrayInputStream(os.toByteArray()));
+					context.getUserService().updatePhoto(user,
+							new ByteArrayInputStream(os.toByteArray()));
 				} else {
-					uService.updatePhoto(accountId, null);
+					context.getUserService().updatePhoto(user, null);
 				}
 				deletePhoto(cp, accountId);
 				return new UrlForward(url(

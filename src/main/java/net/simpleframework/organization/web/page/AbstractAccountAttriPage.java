@@ -26,6 +26,7 @@ import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.User;
 
@@ -66,8 +67,9 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 				userData.put(k.substring(3), cp.getParameter(k));
 			}
 		}
+		final IAccountService aService = context.getAccountService();
 		context.getAccountService()
-				.doSave(cp.getParameter("ae_id"), cp.getParameter("ae_accountName"),
+				.doSave(aService.getBean(cp.getParameter("ae_id")), cp.getParameter("ae_accountName"),
 						cp.getParameter("ae_password"), null, null, userData);
 		return super.onSave(cp);
 	}
