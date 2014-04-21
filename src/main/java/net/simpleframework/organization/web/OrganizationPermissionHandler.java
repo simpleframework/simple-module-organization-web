@@ -47,7 +47,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (o instanceof String) {
 			final String s = (String) o;
 			if (s.contains("@")) {
-				return uService.getUserByMail(s);
+				return uService.getUserByEmail(s);
 			} else {
 				final Account account = context.getAccountService().getAccountByName(s);
 				if (account != null) {

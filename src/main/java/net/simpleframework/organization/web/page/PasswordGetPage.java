@@ -52,7 +52,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			final IModuleRef ref = ((IOrganizationWebContext) context).getMessageRef();
 			if (ref != null) {
 				final IUserService uService = context.getUserService();
-				final User user = uService.getUserByMail(cp.getParameter("val"));
+				final User user = uService.getUserByEmail(cp.getParameter("val"));
 				if (user == null) {
 					return new JavascriptForward("alert('").append($m("PasswordGetPage.6"))
 							.append("');");
