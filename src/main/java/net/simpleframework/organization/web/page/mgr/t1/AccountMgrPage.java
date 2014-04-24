@@ -273,11 +273,11 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			if (StringUtils.hasText(deptId)
 					&& (dept = context.getDepartmentService().getBean(deptId)) != null) {
 				cp.setRequestAttr("select_category", dept);
-				return context.getAccountService().query(dept);
+				return context.getAccountService().queryAccounts(dept);
 			} else {
 				final int type = Convert.toInt(cp.getParameter("type"), IAccountService.ALL);
 				cp.setRequestAttr("select_category", type);
-				return context.getAccountService().query(type);
+				return context.getAccountService().queryAccounts(type);
 			}
 		}
 

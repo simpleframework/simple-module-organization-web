@@ -129,7 +129,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	private String getPostfixText(final Object type) {
 		final int c;
 		if (type instanceof Integer) {
-			c = context.getAccountService().query((Integer) type).getCount();
+			c = context.getAccountService().queryAccounts((Integer) type).getCount();
 		} else {
 			c = context.getAccountService().count((Department) type);
 		}
