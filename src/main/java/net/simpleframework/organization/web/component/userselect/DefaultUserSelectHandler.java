@@ -74,7 +74,8 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public Collection<DepartmentWrapper> getDepartmentWrappers(final ComponentParameter cp) {
-		final Map<ID, Collection<Department>> depts = orgContext.getDepartmentService().queryAllTree();
+		final Map<ID, Collection<Department>> depts = orgContext.getDepartmentService()
+				.queryAllTree();
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
 		final IDataQuery<?> dq = getUsers(cp);
 		if (dq != null) {

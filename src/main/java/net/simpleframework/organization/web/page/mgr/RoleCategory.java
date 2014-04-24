@@ -151,8 +151,8 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		if (roleChart.getDepartmentId() == null) {
 			sb.append($m("RoleChartCategory.0")).append(SpanElement.NAV);
 		} else {
-			final Department dept = orgContext.getDepartmentService()
-					.getBean(roleChart.getDepartmentId());
+			final Department dept = orgContext.getDepartmentService().getBean(
+					roleChart.getDepartmentId());
 			if (dept != null) {
 				sb.append(dept.getText()).append(SpanElement.NAV);
 			}
