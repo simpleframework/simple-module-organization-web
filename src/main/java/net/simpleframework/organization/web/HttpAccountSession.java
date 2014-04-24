@@ -55,7 +55,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 			logout();
 		} else {
 			httpSession.setAttribute(LOGIN_KEY, login);
-			final IModuleRef ref = ((IOrganizationWebContext) context).getLogRef();
+			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
 				login.setAttr(
 						"logId",
@@ -70,7 +70,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 		Account login = null;
 		final String pwd = HttpUtils.getCookie(rRequest.request, "_account_pwd");
 		if (StringUtils.hasText(pwd) && getLogin() == null) {
-			login = context.getAccountService().getAccountByName(
+			login = orgContext.getAccountService().getAccountByName(
 					HttpUtils.getCookie(rRequest.request, "_account_name"));
 		}
 		return login != null ? new LoginObject(login.getId())
@@ -82,7 +82,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 		final LoginObject login = (LoginObject) httpSession.getAttribute(LOGIN_KEY);
 		if (login != null) {
 			httpSession.removeAttribute(LOGIN_KEY);
-			final IModuleRef ref = ((IOrganizationWebContext) context).getLogRef();
+			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
 				((OrganizationLogRef) ref).logLogout(login.getAttr("logId"));
 			}

@@ -49,9 +49,9 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 	public IForward doPost(final ComponentParameter cp) {
 		final String t = cp.getParameter("t");
 		if ("email".equals(t)) {
-			final IModuleRef ref = ((IOrganizationWebContext) context).getMessageRef();
+			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getMessageRef();
 			if (ref != null) {
-				final IUserService uService = context.getUserService();
+				final IUserService uService = orgContext.getUserService();
 				final User user = uService.getUserByEmail(cp.getParameter("val"));
 				if (user == null) {
 					return new JavascriptForward("alert('").append($m("PasswordGetPage.6"))
@@ -71,7 +71,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			if (!arr[0].equals(cp.getParameter("val"))) {
 				return new JavascriptForward("alert('").append($m("PasswordGetPage.8")).append("');");
 			}
-			final IAccountService aService = context.getAccountService();
+			final IAccountService aService = orgContext.getAccountService();
 			final Account account = aService.getBean(arr[1]);
 			if (account != null) {
 				final String password = ObjectUtils.hashStr(cp);

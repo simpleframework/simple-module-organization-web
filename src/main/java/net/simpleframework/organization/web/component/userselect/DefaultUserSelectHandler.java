@@ -30,13 +30,13 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public IDataQuery<?> getUsers(final ComponentParameter cp) {
-		return context.getUserService().queryAll();
+		return orgContext.getUserService().queryAll();
 	}
 
 	@Override
 	public Collection<Object> doSort(final ComponentParameter cp, final Set<Object> groups) {
 		final ArrayList<Object> _groups = new ArrayList<Object>(groups);
-		final IDepartmentService service = context.getDepartmentService();
+		final IDepartmentService service = orgContext.getDepartmentService();
 		Collections.sort(_groups, new Comparator<Object>() {
 			@Override
 			public int compare(final Object o1, final Object o2) {
@@ -62,7 +62,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public Object getDepartment(final Object key) {
-		final IDepartmentService service = context.getDepartmentService();
+		final IDepartmentService service = orgContext.getDepartmentService();
 		if (key instanceof Department) {
 			return key;
 		} else if (key instanceof User) {
@@ -74,7 +74,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public Collection<DepartmentWrapper> getDepartmentWrappers(final ComponentParameter cp) {
-		final Map<ID, Collection<Department>> depts = context.getDepartmentService().queryAllTree();
+		final Map<ID, Collection<Department>> depts = orgContext.getDepartmentService().queryAllTree();
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
 		final IDataQuery<?> dq = getUsers(cp);
 		if (dq != null) {

@@ -25,14 +25,14 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 		String nVal = val2;
 		if (nVal.length() > 0 && nVal.charAt(0) == '#') {
 			final ArrayList<String> al = new ArrayList<String>();
-			final IRoleChartService rcService = context.getRoleChartService();
+			final IRoleChartService rcService = orgContext.getRoleChartService();
 			nVal = nVal.substring(1);
 			final String[] arr = StringUtils.split(nVal, ":");
 			if (arr.length == 2) {
 				final RoleChart rChart = rcService.getRoleChartByName(arr[0]);
 				if (rChart != null) {
 					Role role;
-					final IDataQuery<Role> dq = context.getRoleService().queryRoles(rChart);
+					final IDataQuery<Role> dq = orgContext.getRoleService().queryRoles(rChart);
 					while ((role = dq.next()) != null) {
 						final String rn = role.getName();
 						if (rn.indexOf(arr[1]) > -1) {

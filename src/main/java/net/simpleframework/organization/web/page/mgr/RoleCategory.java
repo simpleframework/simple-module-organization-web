@@ -41,7 +41,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 
 	@Override
 	protected IRoleService getBeanService() {
-		return context.getRoleService();
+		return orgContext.getRoleService();
 	}
 
 	private RoleChart getRoleChart(final PageRequestResponse rRequest) {
@@ -49,9 +49,9 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		if (roleChart != null) {
 			return roleChart;
 		}
-		roleChart = context.getRoleChartService().getBean(rRequest.getParameter("chartId"));
+		roleChart = orgContext.getRoleChartService().getBean(rRequest.getParameter("chartId"));
 		if (roleChart == null) {
-			roleChart = context.getSystemChart();
+			roleChart = orgContext.getSystemChart();
 		}
 		rRequest.setRequestAttr("@chartId", roleChart);
 		return roleChart;
@@ -91,7 +91,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 				final Role role = (Role) o;
 				parent.setImage(RoleSelectUtils.icon_role(cp, role));
 				if (role.getRoleType() == ERoleType.normal) {
-					final int count = context.getRoleMemberService().queryMembers(role).getCount();
+					final int count = orgContext.getRoleMemberService().queryMembers(role).getCount();
 					if (count > 0) {
 						parent.setPostfixText("(" + count + ")");
 					}
@@ -151,7 +151,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		if (roleChart.getDepartmentId() == null) {
 			sb.append($m("RoleChartCategory.0")).append(SpanElement.NAV);
 		} else {
-			final Department dept = context.getDepartmentService()
+			final Department dept = orgContext.getDepartmentService()
 					.getBean(roleChart.getDepartmentId());
 			if (dept != null) {
 				sb.append(dept.getText()).append(SpanElement.NAV);

@@ -57,7 +57,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 
 	@Override
 	protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
-		final Role role = context.getRoleService().getBean(pp.getParameter("roleId"));
+		final Role role = orgContext.getRoleService().getBean(pp.getParameter("roleId"));
 		final PropField f1 = new PropField($m("AddMemberPage.0")).addComponents(
 				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
 						String.valueOf(role.getId())),
@@ -79,7 +79,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 	@Transaction(context = IOrganizationContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-		final IRoleService service = context.getRoleService();
+		final IRoleService service = orgContext.getRoleService();
 
 		final Role role = service.getBean(cp.getParameter("roleId"));
 		final ERoleMemberType mType = Convert.toEnum(ERoleMemberType.class,
@@ -87,9 +87,9 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 
 		final boolean primary = Convert.toBool(cp.getParameter("member_primary"));
 		final String description = cp.getParameter("member_description");
-		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? context.getUserService()
+		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? orgContext.getUserService()
 				: service);
-		final IRoleMemberService mService = context.getRoleMemberService();
+		final IRoleMemberService mService = orgContext.getRoleMemberService();
 		final ArrayList<RoleMember> beans = new ArrayList<RoleMember>();
 		for (final String id : StringUtils.split(cp.getParameter("member_id"), ",")) {
 			final ID mId = ((IIdBeanAware) mgr.getBean(id)).getId();

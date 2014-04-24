@@ -64,7 +64,7 @@ public class AccountPasswordPage extends AbstractAccountPage {
 	public IForward saveAction(final ComponentParameter cp) {
 		final JavascriptForward js = new JavascriptForward(
 				"Validation.clearInsert(['user_old_password']);");
-		final IAccountService service = context.getAccountService();
+		final IAccountService service = orgContext.getAccountService();
 		final Account account = getAccount(cp);
 		final String oldpassword = cp.getParameter("user_old_password");
 		if (!service.verifyPassword(account, oldpassword)) {
@@ -75,7 +75,7 @@ public class AccountPasswordPage extends AbstractAccountPage {
 			account.setPassword(Account.encrypt(password));
 			service.update(new String[] { "password" }, account);
 			if (cp.getBoolParameter("user_SendMail")) {
-				final IModuleRef ref = ((IOrganizationWebContext) context).getMessageRef();
+				final IModuleRef ref = ((IOrganizationWebContext) orgContext).getMessageRef();
 				if (ref != null) {
 					((OrganizationMessageWebRef) ref).doPasswordEditMessage(account, password);
 				}

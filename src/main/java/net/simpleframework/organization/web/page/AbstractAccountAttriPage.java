@@ -67,8 +67,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 				userData.put(k.substring(3), cp.getParameter(k));
 			}
 		}
-		final IAccountService aService = context.getAccountService();
-		context.getAccountService()
+		final IAccountService aService = orgContext.getAccountService();
+		orgContext.getAccountService()
 				.doSave(aService.getBean(cp.getParameter("ae_id")), cp.getParameter("ae_accountName"),
 						cp.getParameter("ae_password"), null, null, userData);
 		return super.onSave(cp);
@@ -79,7 +79,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		if (!StringUtils.hasObject(id)) {
 			id = pp.getLoginId();
 		}
-		return context.getAccountService().getBean(id);
+		return orgContext.getAccountService().getBean(id);
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			dataBinding.put("ae_accountName", account.getName());
 			dataBinding.put("ae_password", account.getPassword());
 
-			final User user = context.getAccountService().getUser(account.getId());
-			dept = context.getDepartmentService().getBean(user.getDepartmentId());
+			final User user = orgContext.getAccountService().getUser(account.getId());
+			dept = orgContext.getDepartmentService().getBean(user.getDepartmentId());
 			final Map<String, Object> kv = BeanUtils.toMap(user);
 			for (final String k : kv.keySet()) {
 				Object o = kv.get(k);
@@ -106,7 +106,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			selector.readonlySelector = "#ae_accountName";
 		}
 		if (dept == null) {
-			dept = context.getDepartmentService().getBean(pp.getParameter("deptId"));
+			dept = orgContext.getDepartmentService().getBean(pp.getParameter("deptId"));
 		}
 		if (dept != null) {
 			dataBinding.put("ue_departmentId", dept.getId());

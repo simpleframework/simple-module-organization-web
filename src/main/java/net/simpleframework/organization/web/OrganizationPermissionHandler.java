@@ -43,13 +43,13 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (o instanceof User) {
 			return (User) o;
 		}
-		final IUserService uService = context.getUserService();
+		final IUserService uService = orgContext.getUserService();
 		if (o instanceof String) {
 			final String s = (String) o;
 			if (s.contains("@")) {
 				return uService.getUserByEmail(s);
 			} else {
-				final Account account = context.getAccountService().getAccountByName(s);
+				final Account account = orgContext.getAccountService().getAccountByName(s);
 				if (account != null) {
 					o = account;
 				}
@@ -79,7 +79,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 					return (String) user;
 				}
 
-				final Account account = context.getAccountService().getBean(user);
+				final Account account = orgContext.getAccountService().getBean(user);
 				return account != null ? account.getName() : null;
 			}
 
@@ -110,7 +110,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public ID getOrgId() {
-				final IDepartmentService service = context.getDepartmentService();
+				final IDepartmentService service = orgContext.getDepartmentService();
 				Department org = service.getBean(oUser.getDepartmentId());
 				if (org == null) {
 					return null;
@@ -128,21 +128,21 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public String toOrgText() {
-				final Department org = context.getDepartmentService().getBean(getOrgId());
+				final Department org = orgContext.getDepartmentService().getBean(getOrgId());
 				return org != null ? org.toString() : null;
 			}
 
 			@Override
 			public InputStream getPhotoStream() {
-				return context.getUserService().getPhoto(oUser);
+				return orgContext.getUserService().getPhoto(oUser);
 			}
 
 			@Override
 			public ID getRoleId() {
-				return context.getRoleService().getPrimaryRole(oUser).getId();
+				return orgContext.getRoleService().getPrimaryRole(oUser).getId();
 			}
 
-			private final IRoleService rService = context.getRoleService();
+			private final IRoleService rService = orgContext.getRoleService();
 
 			@Override
 			public boolean isMember(final Object role, final Map<String, Object> variables) {
@@ -162,7 +162,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (o instanceof Role) {
 			return (Role) o;
 		}
-		final IRoleService service = context.getRoleService();
+		final IRoleService service = orgContext.getRoleService();
 		if (o instanceof String) {
 			return service.getRoleByName((String) o);
 		}
@@ -183,7 +183,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public String getName() {
-				return context.getRoleService().toUniqueName(oRole);
+				return orgContext.getRoleService().toUniqueName(oRole);
 			}
 
 			@Override
@@ -197,7 +197,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> users(final Object role, final Map<String, Object> variables) {
-		return new NestIterator<ID, User>(context.getRoleService().users(getRoleObject(role),
+		return new NestIterator<ID, User>(orgContext.getRoleService().users(getRoleObject(role),
 				variables)) {
 			@Override
 			protected ID change(final User n) {
@@ -208,7 +208,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> roles(final Object user, final Map<String, Object> variables) {
-		return new NestIterator<ID, Role>(context.getRoleService().roles(getUserObject(user),
+		return new NestIterator<ID, Role>(orgContext.getRoleService().roles(getUserObject(user),
 				variables)) {
 			@Override
 			protected ID change(final Role n) {
@@ -219,7 +219,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public ID getLoginId(final PageRequestResponse rRequest) {
-		return context.getAccountService().getLoginId(new HttpAccountSession(rRequest));
+		return orgContext.getAccountService().getLoginId(new HttpAccountSession(rRequest));
 	}
 
 	public static final String ACCOUNT_TYPE = "accountType";
@@ -228,7 +228,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	public void login(final PageRequestResponse rRequest, final String login, final String password,
 			final Map<String, Object> params) {
 		final HttpAccountSession accountSession = new HttpAccountSession(rRequest);
-		final IAccountService service = context.getAccountService();
+		final IAccountService service = orgContext.getAccountService();
 
 		EAccountType accountType = null;
 		if (params != null) {
@@ -271,7 +271,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
-		context.getAccountService().logout(new HttpAccountSession(rRequest));
+		orgContext.getAccountService().logout(new HttpAccountSession(rRequest));
 	}
 
 	@Override
@@ -286,7 +286,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	protected void doAutoLogin(final HttpAccountSession accountSession, final LoginObject loginObject) {
-		context.getAccountService().setLogin(accountSession, loginObject);
+		orgContext.getAccountService().setLogin(accountSession, loginObject);
 	}
 
 	@Override

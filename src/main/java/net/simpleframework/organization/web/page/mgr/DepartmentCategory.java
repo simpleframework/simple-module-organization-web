@@ -45,7 +45,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 
 	@Override
 	protected IDepartmentService getBeanService() {
-		return context.getDepartmentService();
+		return orgContext.getDepartmentService();
 	}
 
 	@Override
@@ -129,9 +129,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	private String getPostfixText(final Object type) {
 		final int c;
 		if (type instanceof Integer) {
-			c = context.getAccountService().queryAccounts((Integer) type).getCount();
+			c = orgContext.getAccountService().queryAccounts((Integer) type).getCount();
 		} else {
-			c = context.getAccountService().count((Department) type);
+			c = orgContext.getAccountService().count((Department) type);
 		}
 		return c > 0 ? "(" + c + ")" : null;
 	}

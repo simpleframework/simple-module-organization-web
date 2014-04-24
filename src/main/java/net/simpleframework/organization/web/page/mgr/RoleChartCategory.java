@@ -32,7 +32,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 
 	@Override
 	protected IRoleChartService getBeanService() {
-		return context.getRoleChartService();
+		return orgContext.getRoleChartService();
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	private TreeNodes rolecharts(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode parent, final Department dept) {
 		final String contextMenu = treeBean.getContextMenu();
-		final IRoleService service = context.getRoleService();
+		final IRoleService service = orgContext.getRoleService();
 		return RoleChartSelectUtils.rolecharts(cp, treeBean, parent,
 				DataQueryUtils.toList(getBeanService().query(dept)), new ITreeNodeAttributesCallback() {
 					@Override
@@ -96,7 +96,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	private TreeNodes departments(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode parent, final Department dept) {
 		return RoleChartSelectUtils.departments(cp, treeBean, parent,
-				DataQueryUtils.toList(context.getDepartmentService().queryChildren(dept)),
+				DataQueryUtils.toList(orgContext.getDepartmentService().queryChildren(dept)),
 				new ITreeNodeAttributesCallback() {
 					@Override
 					public void setAttributes(final TreeNode tn) {
@@ -114,7 +114,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	protected void onSave_setProperties(final ComponentParameter cp, final RoleChart roleChart,
 			final boolean insert) {
 		if (insert) {
-			final Department dept = context.getDepartmentService().getBean(
+			final Department dept = orgContext.getDepartmentService().getBean(
 					cp.getParameter(PARAM_CATEGORY_PARENTID));
 			if (dept != null) {
 				roleChart.setDepartmentId(dept.getId());

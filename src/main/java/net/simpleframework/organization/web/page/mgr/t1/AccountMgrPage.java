@@ -112,7 +112,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.setHandlerMethod("doDelete");
 
 		// 日志
-		final IModuleRef ref = ((IOrganizationWebContext) context).getLogRef();
+		final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 		if (ref != null) {
 			((OrganizationLogRef) ref).addLogComponent(pp);
 		}
@@ -129,40 +129,40 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return context.getManagerRole();
+		return orgContext.getManagerRole();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doLockAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		context.getAccountService().lock(ids);
+		orgContext.getAccountService().lock(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUnLockAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		context.getAccountService().unlock(ids);
+		orgContext.getAccountService().unlock(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		context.getAccountService().delete(ids);
+		orgContext.getAccountService().delete(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUndeleteAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		context.getAccountService().undelete(ids);
+		orgContext.getAccountService().undelete(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IUserService service = context.getUserService();
+		final IUserService service = orgContext.getUserService();
 		final User item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
 		final User item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
 		if (item != null && item2 != null) {
@@ -271,13 +271,13 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			final String deptId = cp.getParameter("deptId");
 			Department dept;
 			if (StringUtils.hasText(deptId)
-					&& (dept = context.getDepartmentService().getBean(deptId)) != null) {
+					&& (dept = orgContext.getDepartmentService().getBean(deptId)) != null) {
 				cp.setRequestAttr("select_category", dept);
-				return context.getAccountService().queryAccounts(dept);
+				return orgContext.getAccountService().queryAccounts(dept);
 			} else {
 				final int type = Convert.toInt(cp.getParameter("type"), IAccountService.ALL);
 				cp.setRequestAttr("select_category", type);
-				return context.getAccountService().queryAccounts(type);
+				return orgContext.getAccountService().queryAccounts(type);
 			}
 		}
 
@@ -321,7 +321,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final Account account = (Account) dataObject;
 			final ID id = account.getId();
-			final User user = context.getAccountService().getUser(account.getId());
+			final User user = orgContext.getAccountService().getUser(account.getId());
 			final KVMap kv = new KVMap();
 			kv.add("name", account.getName());
 			kv.add("lastLoginDate", account.getLastLoginDate());

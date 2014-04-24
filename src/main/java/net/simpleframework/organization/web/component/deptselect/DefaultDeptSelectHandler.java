@@ -27,7 +27,7 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
-		return DataQueryUtils.toList(context.getDepartmentService().queryChildren(parent));
+		return DataQueryUtils.toList(orgContext.getDepartmentService().queryChildren(parent));
 	}
 
 	@Override

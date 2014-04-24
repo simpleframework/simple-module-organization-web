@@ -44,7 +44,7 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 
 	@Override
 	protected Account getAccount(final PageParameter pp) {
-		return context.getAccountService().getBean(pp.getParameter("accountId"));
+		return orgContext.getAccountService().getBean(pp.getParameter("accountId"));
 	}
 
 	@Override

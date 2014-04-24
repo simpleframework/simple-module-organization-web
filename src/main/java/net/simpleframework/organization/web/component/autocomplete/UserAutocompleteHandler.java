@@ -23,7 +23,7 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 	@Override
 	public Object[] getData(final ComponentParameter cp, final String val, final String val2) {
 		final ArrayList<String> al = new ArrayList<String>();
-		final IDataQuery<Account> dq = context.getAccountService().queryByParams(
+		final IDataQuery<Account> dq = orgContext.getAccountService().queryByParams(
 				FilterItems.of(new FilterItem("name", EFilterRelation.like, val2)));
 		Account account;
 		while ((account = dq.next()) != null) {
