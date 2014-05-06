@@ -250,7 +250,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				throw OrganizationException.of($m("OrganizationPermission.0")).setCode(
 						OrganizationException.CODE_LOGGED);
 			}
-			if (!service.verifyPassword(account, password)) {
+			// 密码为空时不做校验
+			if (password != null && !service.verifyPassword(account, password)) {
 				throw OrganizationException.of($m("OrganizationPermission.2")).putVal("password",
 						Boolean.TRUE);
 			} else {
