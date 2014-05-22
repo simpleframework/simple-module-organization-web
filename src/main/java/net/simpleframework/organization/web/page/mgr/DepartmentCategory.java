@@ -12,7 +12,6 @@ import static net.simpleframework.organization.IAccountService.STATE_REGISTRATIO
 
 import java.util.Map;
 
-import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
@@ -46,11 +45,6 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	@Override
 	protected IDepartmentService getBeanService() {
 		return orgContext.getDepartmentService();
-	}
-
-	@Override
-	protected IDataQuery<?> categoryBeans(final ComponentParameter cp, final Object categoryId) {
-		return getBeanService().queryChildren(getBeanService().getBean(categoryId));
 	}
 
 	@Override
