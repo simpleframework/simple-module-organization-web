@@ -75,9 +75,9 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 							this,
 							lObj = new LoginObject(account.getId())
 									.setDescription($m("HttpAccountSession.1")));
-					rRequest.setRequestAttr("_jsessionid_login", Boolean.TRUE);
 				}
 			}
+			rRequest.setRequestAttr("_jsessionid_login", Boolean.TRUE);
 		}
 		return lObj;
 	}
