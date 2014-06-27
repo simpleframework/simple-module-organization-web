@@ -272,7 +272,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
-		orgContext.getAccountService().logout(new HttpAccountSession(rRequest));
+		orgContext.getAccountService().logout(new HttpAccountSession(rRequest), true);
 	}
 
 	@Override

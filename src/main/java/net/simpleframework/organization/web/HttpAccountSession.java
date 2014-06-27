@@ -70,7 +70,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 			if (StringUtils.hasText(jsessionid)) {
 				final IAccountService aService = orgContext.getAccountService();
 				final Account account = aService.getAccountBySessionid(jsessionid);
-				if (account != null && account.isLogin()) {
+				if (account != null) {
 					aService.setLogin(
 							this,
 							lObj = new LoginObject(account.getId())

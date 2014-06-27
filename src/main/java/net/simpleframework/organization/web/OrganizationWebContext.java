@@ -35,7 +35,7 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 
 			@Override
 			public void sessionDestroyed(final HttpSessionEvent event) {
-				getAccountService().logout(new HttpAccountSession(event.getSession()));
+				getAccountService().logout(new HttpAccountSession(event.getSession()), false);
 			}
 		});
 	}
