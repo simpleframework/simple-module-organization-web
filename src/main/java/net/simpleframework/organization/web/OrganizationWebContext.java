@@ -2,6 +2,7 @@ package net.simpleframework.organization.web;
 
 import static net.simpleframework.common.I18n.$m;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -35,9 +36,14 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 
 			@Override
 			public void sessionDestroyed(final HttpSessionEvent event) {
-				getAccountService().logout(new HttpAccountSession(event.getSession()), false);
+				doSessionDestroyed(event.getSession());
 			}
 		});
+	}
+
+	protected void doSessionDestroyed(final HttpSession httpSession) {
+		System.out.println("---sessionDestroyed: " + httpSession.getId());
+		getAccountService().logout(new HttpAccountSession(httpSession), false);
 	}
 
 	// protected IOrganizationContext getRemoteContext() {
