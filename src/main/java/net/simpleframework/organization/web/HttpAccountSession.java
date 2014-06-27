@@ -68,6 +68,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 				}
 			}
 			if (StringUtils.hasText(jsessionid)) {
+				System.out.println("jsessionid: " + jsessionid);
 				final IAccountService aService = orgContext.getAccountService();
 				final Account account = aService.getAccountBySessionid(jsessionid);
 				if (account != null) {
@@ -75,6 +76,7 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 							this,
 							lObj = new LoginObject(account.getId())
 									.setDescription($m("HttpAccountSession.1")));
+					System.out.println("auto login ok.");
 				}
 			}
 			rRequest.setRequestAttr("_jsessionid_login", Boolean.TRUE);
