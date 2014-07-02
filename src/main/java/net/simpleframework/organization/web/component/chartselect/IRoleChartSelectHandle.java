@@ -22,7 +22,7 @@ public interface IRoleChartSelectHandle extends IDictionaryHandle {
 	 * @param cParameter
 	 * @param treeBean
 	 * @param department
-	 *           department==null返回全局视图
+	 *        department==null返回全局视图
 	 * @return
 	 */
 	Collection<RoleChart> getRoleCharts(ComponentParameter cp, TreeBean treeBean,
