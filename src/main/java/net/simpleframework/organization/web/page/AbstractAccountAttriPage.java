@@ -52,7 +52,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 				.addValidators(
 						new Validator(EValidatorMethod.min_length, "#ae_accountName, #ue_text", "2"))
 				.addValidators(new Validator(EValidatorMethod.email, "#ue_email, #ue_msn"))
-				.addValidators(new Validator(EValidatorMethod.mobile_phone, "#ue_mobile"))
+				.addValidators(new Validator(EValidatorMethod.mobile_phone, "#ue_mobile, #ue_mobile2"))
 				.addValidators(new Validator(EValidatorMethod.phone, "#ue_homePhone, #ue_officePhone"))
 				.addValidators(new Validator(EValidatorMethod.date, "#ue_birthday", "yyyy-MM-dd"));
 	}
@@ -127,14 +127,14 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			new InputElement("ue_email")).setStarMark(true), new RowField($m("AccountEditPage.5"),
 			new InputElement("ue_mobile")));
 
-	protected final TableRow r4 = new TableRow(new RowField($m("AccountEditPage.6"), InputElement
+	protected final TableRow r4 = new TableRow(new RowField($m("AccountEditPage.18"),
+			new InputElement("ue_mobile2")), new RowField($m("AccountEditPage.9"), new InputElement(
+			"ue_postcode")));
+
+	protected final TableRow r5 = new TableRow(new RowField($m("AccountEditPage.6"), InputElement
 			.select("ue_sex").addElements(new Option($m("AccountEditPage.16")),
 					new Option($m("AccountEditPage.17")))), new RowField($m("AccountEditPage.7"),
 			new CalendarInput("ue_birthday").setCalendarComponent("cal_Birthday")));
-
-	protected final TableRow r5 = new TableRow(new RowField($m("AccountEditPage.8"),
-			new InputElement("ue_hometown")), new RowField($m("AccountEditPage.9"), new InputElement(
-			"ue_postcode")));
 
 	protected final TableRow r6 = new TableRow(new RowField($m("AccountEditPage.10"),
 			new InputElement("ue_homePhone")), new RowField($m("AccountEditPage.11"),
@@ -144,9 +144,12 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			new InputElement("ue_qq")), new RowField($m("AccountEditPage.13"), new InputElement(
 			"ue_msn")));
 
-	protected final TableRow r8 = new TableRow(new RowField($m("AccountEditPage.14"),
+	protected final TableRow r8 = new TableRow(new RowField($m("AccountEditPage.8"),
+			new InputElement("ue_hometown")));
+
+	protected final TableRow r9 = new TableRow(new RowField($m("AccountEditPage.14"),
 			new InputElement("ue_address")));
 
-	protected final TableRow r9 = new TableRow(new RowField($m("AccountEditPage.15"),
+	protected final TableRow r10 = new TableRow(new RowField($m("AccountEditPage.15"),
 			InputElement.textarea("ue_description")));
 }
