@@ -92,7 +92,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				url(AccountEditPage.class));
 		addComponentBean(pp, "AccountMgrPage_edit", WindowBean.class)
 				.setContentRef("AccountMgrPage_editPage").setTitle($m("AccountMgrPage.8"))
-				.setHeight(450).setWidth(640);
+				.setHeight(500).setWidth(640);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "AccountMgrPage_delete");
