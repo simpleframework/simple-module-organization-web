@@ -268,17 +268,24 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			IDataQuery<?> dq;
 			final String deptId = cp.getParameter("deptId");
 			Department dept;
 			if (StringUtils.hasText(deptId)
 					&& (dept = orgContext.getDepartmentService().getBean(deptId)) != null) {
 				cp.setRequestAttr("select_category", dept);
-				return orgContext.getAccountService().queryAccounts(dept);
+				dq = orgContext.getAccountService().queryAccounts(dept);
 			} else {
 				final int type = Convert.toInt(cp.getParameter("type"), IAccountService.ALL);
 				cp.setRequestAttr("select_category", type);
-				return orgContext.getAccountService().queryAccounts(type);
+				dq = orgContext.getAccountService().queryAccounts(type);
 			}
+			// //----------------------
+			int c = dq.getCount();
+			c = c > 5000 ? c + 100000 : c;
+			dq.setCount(c);
+			// //----------------------
+			return dq;
 		}
 
 		@Override
