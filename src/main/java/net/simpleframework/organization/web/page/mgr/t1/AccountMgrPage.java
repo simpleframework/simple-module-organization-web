@@ -281,9 +281,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				dq = orgContext.getAccountService().queryAccounts(type);
 			}
 			// //----------------------
-			int c = dq.getCount();
-			c = c > 5000 ? c + 100000 : c;
-			dq.setCount(c);
+			// int c = dq.getCount();
+			// c = c > 5000 ? c + 100000 : c;
+			// dq.setCount(c);
 			// //----------------------
 			return dq;
 		}
