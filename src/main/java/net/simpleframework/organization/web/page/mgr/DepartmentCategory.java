@@ -29,6 +29,7 @@ import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EDepartmentType;
+import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
@@ -123,7 +124,11 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	private String getPostfixText(final Object type) {
 		int c;
 		if (type instanceof Integer) {
-			c = orgContext.getAccountService().count((Integer) type);
+			final int iType = (Integer) type;
+			c = orgContext.getAccountService().count(iType);
+			if (iType == IAccountService.ONLINE_ID) {
+				c *= 10;
+			}
 		} else {
 			c = orgContext.getAccountService().count((Department) type);
 		}
