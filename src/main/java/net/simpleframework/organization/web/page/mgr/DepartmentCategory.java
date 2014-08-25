@@ -132,9 +132,6 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 		} else {
 			c = orgContext.getAccountService().count((Department) type);
 		}
-		// //----------------------
-		// c = c > 5000 ? 100000 + c : c;
-		// //----------------------
 		return c > 0 ? "(" + c + ")" : null;
 	}
 
