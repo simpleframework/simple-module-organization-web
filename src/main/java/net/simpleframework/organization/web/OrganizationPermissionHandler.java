@@ -243,28 +243,27 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			account = service.getAccountByName(login);
 		}
 		if (account == null) {
-			throw OrganizationException.of($m("OrganizationPermission.1"));
+			throw OrganizationException.of($m("OrganizationPermission.1")).setCode(2001);
 		} else {
 			final ID loginId = service.getLoginId(accountSession);
 			if (loginId != null && loginId.equals(account.getId())) {
-				throw OrganizationException.of($m("OrganizationPermission.0")).setCode(
-						OrganizationException.CODE_LOGGED);
+				throw OrganizationException.of($m("OrganizationPermission.0")).setCode(2002);
 			}
 			// 密码为空时不做校验
 			if (password != null && !service.verifyPassword(account, password)) {
-				throw OrganizationException.of($m("OrganizationPermission.2")).putVal("password",
-						Boolean.TRUE);
+				throw OrganizationException.of($m("OrganizationPermission.2"))
+						.putVal("password", Boolean.TRUE).setCode(2003);
 			} else {
 				final EAccountStatus status = account.getStatus();
 				if (status == EAccountStatus.normal) {
 					service.setLogin(accountSession, new LoginObject(account.getId())
 							.setDescription($m("OrganizationPermissionHandler.0")));
 				} else if (status == EAccountStatus.locked) {
-					throw OrganizationException.of($m("OrganizationPermission.3"));
+					throw OrganizationException.of($m("OrganizationPermission.3")).setCode(2004);
 				} else if (status == EAccountStatus.registration) {
-					throw OrganizationException.of($m("OrganizationPermission.4"));
+					throw OrganizationException.of($m("OrganizationPermission.4")).setCode(2005);
 				} else if (status == EAccountStatus.delete) {
-					throw OrganizationException.of($m("OrganizationPermission.5"));
+					throw OrganizationException.of($m("OrganizationPermission.5")).setCode(2006);
 				}
 			}
 		}

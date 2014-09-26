@@ -47,7 +47,7 @@ public class DefaultLoginHandler extends AbstractLoginHandler {
 			js.append("_save_cookie();");
 		} catch (final OrganizationException e) {
 			final int code = e.getCode();
-			if (code == OrganizationException.CODE_LOGGED) {
+			if (code == 2002) {
 				js.append("$Actions.loc('").append(loginForward).append("');");
 			} else {
 				final boolean password = Convert.toBool(e.getVal("password"));
