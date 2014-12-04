@@ -78,7 +78,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				if (user instanceof String) {
 					return (String) user;
 				}
-
 				final Account account = orgContext.getAccountService().getBean(user);
 				return account != null ? account.getName() : null;
 			}
@@ -109,27 +108,44 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			}
 
 			@Override
-			public ID getOrgId() {
-				final IDepartmentService service = orgContext.getDepartmentService();
-				Department org = service.getBean(oUser.getDepartmentId());
-				if (org == null) {
-					return null;
-				}
-				while (org.getDepartmentType() != EDepartmentType.organization) {
-					final Department org2 = service.getBean(org.getParentId());
-					if (org2 != null) {
-						org = org2;
-					} else {
-						break;
+			public ID getDeptId() {
+				ID deptId = super.getDeptId();
+				if (deptId == null) {
+					final Department dept = orgContext.getDepartmentService().getBean(
+							oUser.getDepartmentId());
+					if (dept != null) {
+						setDeptId(deptId = dept.getId());
 					}
 				}
-				return org.getId();
+				return deptId;
+			}
+
+			@Override
+			public String toDeptText() {
+				final Department dept = orgContext.getDepartmentService().getBean(getOrgId());
+				return dept != null ? dept.getText() : super.toDeptText();
+			}
+
+			@Override
+			public ID getOrgId() {
+				ID orgId = super.getOrgId();
+				if (orgId == null) {
+					final IDepartmentService service = orgContext.getDepartmentService();
+					Department org = service.getBean(oUser.getDepartmentId());
+					while (org != null && org.getDepartmentType() != EDepartmentType.organization) {
+						org = service.getBean(org.getParentId());
+					}
+					if (org != null) {
+						setOrgId(orgId = org.getId());
+					}
+				}
+				return orgId;
 			}
 
 			@Override
 			public String toOrgText() {
 				final Department org = orgContext.getDepartmentService().getBean(getOrgId());
-				return org != null ? org.toString() : null;
+				return org != null ? org.getText() : super.toOrgText();
 			}
 
 			@Override
