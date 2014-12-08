@@ -212,9 +212,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
-	public Iterator<ID> users(final Object role, final Map<String, Object> variables) {
+	public Iterator<ID> users(final Object role, final ID deptId, final Map<String, Object> variables) {
 		return new NestIterator<ID, User>(orgContext.getRoleService().users(getRoleObject(role),
-				variables)) {
+				deptId, variables)) {
 			@Override
 			protected ID change(final User n) {
 				return n.getId();
