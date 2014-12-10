@@ -29,6 +29,7 @@ import net.simpleframework.organization.IRoleMemberService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
+import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
 /**
@@ -92,15 +93,20 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 		final IRoleMemberService mService = orgContext.getRoleMemberService();
 		final ArrayList<RoleMember> beans = new ArrayList<RoleMember>();
 		for (final String id : StringUtils.split(cp.getParameter("member_id"), ",")) {
-			final ID mId = ((IIdBeanAware) mgr.getBean(id)).getId();
+			final IIdBeanAware bean = (IIdBeanAware) mgr.getBean(id);
+			final ID mId = bean.getId();
 			final RoleMember rm = mService.createBean();
 			rm.setRoleId(role.getId());
 			rm.setMemberType(mType);
 			rm.setMemberId(mId);
+			if (mType == ERoleMemberType.user) {
+				rm.setDeptId(((User) bean).getDepartmentId());
+			}
 			rm.setPrimaryRole(primary);
 			rm.setDescription(description);
 			beans.add(rm);
 		}
+
 		mService.insert(beans.toArray(new RoleMember[beans.size()]));
 
 		return super.onSave(cp).append("$Actions['ajaxRoleMemberVal']('roleId=").append(role.getId())
