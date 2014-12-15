@@ -20,6 +20,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -34,6 +35,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
@@ -43,6 +45,7 @@ import net.simpleframework.organization.IRoleMemberService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
+import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.page.mgr.AddMemberPage;
 
 /**
@@ -68,25 +71,26 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 
 		// 成员列表
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
-				TablePagerBean.class).setShowLineNo(true).setPagerBarLayout(EPagerBarLayout.none)
-				.setPageItems(Integer.MAX_VALUE).setContainerId("idMemberTable")
-				.setHandlerClass(MemberTable.class);
+				TablePagerBean.class).setShowLineNo(true).setPagerBarLayout(EPagerBarLayout.bottom)
+				.setContainerId("idMemberTable").setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("memberType", $m("RoleMemberPage.2"), 110)
+						new TablePagerColumn("memberType", $m("RoleMemberPage.2"), 65).setSort(false)
 								.setPropertyClass(ERoleMemberType.class))
 				.addColumn(
-						new TablePagerColumn("memberId", $m("RoleMemberPage.3"), 110).setFilter(false)
-								.setTextAlign(ETextAlign.left))
+						new TablePagerColumn("memberId", $m("RoleMemberPage.3"), 100).setSort(false)
+								.setFilter(false))
 				.addColumn(
-						new TablePagerColumn("primaryRole", $m("RoleMemberPage.4"), 100)
-								.setPropertyClass(Boolean.class).setTextAlign(ETextAlign.left))
+						new TablePagerColumn("primaryRole", $m("RoleMemberPage.4"), 65).setSort(false)
+								.setPropertyClass(Boolean.class))
+				.addColumn(
+						new TablePagerColumn("deptId", $m("RoleMemberPage.5"), 100).setSort(false)
+								.setFilter(false).setTextAlign(ETextAlign.left))
 				.addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 保存规则角色
 		addAjaxRequest(pp, "ajax_roleSave").setHandlerMethod("doRoleSave");
-
 		// 移动
 		addAjaxRequest(pp, "RoleMemberPage_Move").setHandlerMethod("doMove");
 	}
@@ -238,18 +242,22 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 			kv.put("memberType", mType);
 			final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? orgContext.getUserService()
 					: orgContext.getRoleService());
-			kv.put("memberId", mgr.getBean(rm.getMemberId()));
+			final Object bean = mgr.getBean(rm.getMemberId());
+			kv.put("memberId", bean);
 			if (mType == ERoleMemberType.user) {
-				final StringBuilder sb = new StringBuilder();
-				final boolean pr = rm.isPrimaryRole();
-				sb.append(pr ? $m("RoleMemberPage.5") : $m("RoleMemberPage.6"));
-				if (!pr) {
-					sb.append(SpanElement.SPACE).append(
-							new ButtonElement($m("RoleMemberPage.7"))
-									.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
+				kv.put("primaryRole", new Checkbox(null, null).setChecked(rm.isPrimaryRole())
+						.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
+				ID deptId = rm.getDeptId();
+				if (deptId == null) {
+					mgr.getBean(deptId);
+					deptId = ((User) bean).getDepartmentId();
 				}
-				kv.put("primaryRole", sb.toString());
+				final Department dept = orgContext.getDepartmentService().getBean(deptId);
+				if (dept != null) {
+					kv.put("deptId", dept);
+				}
 			}
+
 			kv.put(TablePagerColumn.DESCRIPTION, rm.getDescription());
 
 			final StringBuilder sb = new StringBuilder();
