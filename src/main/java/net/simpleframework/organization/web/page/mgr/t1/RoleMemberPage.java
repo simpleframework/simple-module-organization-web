@@ -62,7 +62,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 
 		addAjaxRequest(pp, "ajax_addMemberPage", AddMemberPage.class);
 		addComponentBean(pp, "addMemberWindow", WindowBean.class).setContentRef("ajax_addMemberPage")
-				.setTitle($m("RoleMemberPage.1")).setHeight(300).setWidth(320);
+				.setTitle($m("RoleMemberPage.1")).setHeight(340).setWidth(320);
 
 		// 删除成员
 		addDeleteAjaxRequest(pp, "ajax_deleteMember");

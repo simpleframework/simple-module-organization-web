@@ -22,6 +22,7 @@ import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
 import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
@@ -30,6 +31,7 @@ import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
+import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
 /**
@@ -54,6 +56,9 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 		// 角色选择字典
 		addComponentBean(pp, "dictRoleSelect", RoleSelectBean.class).setBindingId("member_id")
 				.setBindingText("member_val");
+		// 部门选择
+		addComponentBean(pp, "dictDeptSelect", DeptSelectBean.class).setBindingId("member_deptId")
+				.setBindingText("member_deptVal");
 	}
 
 	@Override
@@ -64,17 +69,26 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 						String.valueOf(role.getId())),
 				new InputComp("member_type").setType(EInputCompType.select).setDefaultValue(
 						ERoleMemberType.user, ERoleMemberType.role));
+
+		final String utype = ERoleMemberType.user.name();
 		final PropField f2 = new PropField($m("AddMemberPage.1")).addComponents(
 				new InputComp("member_id").setType(EInputCompType.hidden),
 				new InputComp("member_val").setType(EInputCompType.textButton).addEvent(
 						EElementEvent.click,
-						"$Actions[$F('member_type') == '" + ERoleMemberType.user.name()
+						"$Actions[$F('member_type') == '" + utype
 								+ "' ? 'dictUserSelect' : 'dictRoleSelect']();"));
 		final PropField f3 = new PropField($m("AddMemberPage.2")).addComponents(new InputComp(
 				"member_primary").setType(EInputCompType.checkbox));
-		final PropField f4 = new PropField($m("Description")).addComponents(new InputComp(
+		final PropField f4 = new PropField($m("AddMemberPage.3")).addComponents(
+				new InputComp("member_deptId").setType(EInputCompType.hidden),
+				new InputComp("member_deptVal").setType(EInputCompType.textButton).addEvent(
+						EElementEvent.click,
+						"if ($F('member_type') == '" + utype
+								+ "') $Actions['dictDeptSelect'](); else alert('" + $m("AddMemberPage.4")
+								+ "');"));
+		final PropField f5 = new PropField($m("Description")).addComponents(new InputComp(
 				"member_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
-		propEditor.getFormFields().append(f1, f2, f3, f4);
+		propEditor.getFormFields().append(f1, f2, f3, f4, f5);
 	}
 
 	@Transaction(context = IOrganizationContext.class)
@@ -87,6 +101,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 				cp.getParameter("member_type"));
 
 		final boolean primary = Convert.toBool(cp.getParameter("member_primary"));
+		final String deptId = cp.getParameter("member_deptId");
 		final String description = cp.getParameter("member_description");
 		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? orgContext.getUserService()
 				: service);
@@ -100,7 +115,14 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 			rm.setMemberType(mType);
 			rm.setMemberId(mId);
 			if (mType == ERoleMemberType.user) {
-				rm.setDeptId(((User) bean).getDepartmentId());
+				ID _deptId = null;
+				if (StringUtils.hasText(deptId)) {
+					final Department dept = orgContext.getDepartmentService().getBean(deptId);
+					if (dept != null) {
+						_deptId = dept.getId();
+					}
+				}
+				rm.setDeptId(_deptId != null ? _deptId : ((User) bean).getDepartmentId());
 			}
 			rm.setPrimaryRole(primary);
 			rm.setDescription(description);
