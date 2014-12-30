@@ -236,8 +236,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Dept getDept(final Object dept) {
-		return dept instanceof Dept ? (Dept) dept : new Dept(orgContext.getDepartmentService()
-				.getBean(dept));
+		if (dept instanceof Dept) {
+			return (Dept) dept;
+		}
+		final Department _dept = orgContext.getDepartmentService().getBean(dept);
+		return _dept == null ? null : new Dept(_dept);
 	}
 
 	@Override
