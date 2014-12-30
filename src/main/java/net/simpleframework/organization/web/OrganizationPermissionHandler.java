@@ -9,6 +9,7 @@ import java.util.Map;
 
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
+import net.simpleframework.ctx.permission.Dept;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -231,6 +232,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				return n.getId();
 			}
 		};
+	}
+
+	@Override
+	public Dept getDept(final Object dept) {
+		return dept instanceof Dept ? (Dept) dept : new Dept(orgContext.getDepartmentService()
+				.getBean(dept));
 	}
 
 	@Override

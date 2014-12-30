@@ -10,7 +10,7 @@ import java.util.Set;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
-import net.simpleframework.ctx.permission.DepartmentWrapper;
+import net.simpleframework.ctx.permission.Dept;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
@@ -73,7 +73,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	}
 
 	@Override
-	public Collection<DepartmentWrapper> getDepartmentWrappers(final ComponentParameter cp) {
+	public Collection<Dept> getDepartmentWrappers(final ComponentParameter cp) {
 		final Map<ID, Collection<Department>> depts = orgContext.getDepartmentService()
 				.queryAllTree();
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
@@ -97,13 +97,12 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	}
 
 	@SuppressWarnings("unchecked")
-	private Collection<DepartmentWrapper> createDepartmentColl(
-			final Map<ID, Collection<Department>> depts, final Map<ID, Collection<User>> users,
-			final Collection<Department> children) {
-		final Collection<DepartmentWrapper> wrappers = new ArrayList<DepartmentWrapper>();
+	private Collection<Dept> createDepartmentColl(final Map<ID, Collection<Department>> depts,
+			final Map<ID, Collection<User>> users, final Collection<Department> children) {
+		final Collection<Dept> wrappers = new ArrayList<Dept>();
 		if (children != null) {
 			for (final Department dept : children) {
-				final DepartmentWrapper wrapper = new DepartmentWrapper(dept);
+				final Dept wrapper = new Dept(dept);
 				final ID k = dept.getId();
 				final Collection<Department> v1 = depts.get(k);
 				final Collection<User> v2 = users.get(k);
