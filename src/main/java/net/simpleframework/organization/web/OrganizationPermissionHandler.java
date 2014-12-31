@@ -9,7 +9,7 @@ import java.util.Map;
 
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
-import net.simpleframework.ctx.permission.Dept;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
@@ -76,10 +76,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public String getName() {
-				if (user instanceof String) {
-					return (String) user;
-				}
-				final Account account = orgContext.getAccountService().getBean(user);
+				final Account account = orgContext.getUserService().getAccount(oUser.getId());
 				return account != null ? account.getName() : null;
 			}
 
@@ -109,44 +106,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			}
 
 			@Override
-			public ID getDeptId() {
-				ID deptId = super.getDeptId();
-				if (deptId == null) {
-					final Department dept = orgContext.getDepartmentService().getBean(
-							oUser.getDepartmentId());
-					if (dept != null) {
-						setDeptId(deptId = dept.getId());
-					}
+			public PermissionDept getDept() {
+				PermissionDept dept = super.getDept();
+				if (dept == null) {
+					setDept(dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
 				}
-				return deptId;
-			}
-
-			@Override
-			public String toDeptText() {
-				final Department dept = orgContext.getDepartmentService().getBean(getOrgId());
-				return dept != null ? dept.getText() : super.toDeptText();
-			}
-
-			@Override
-			public ID getOrgId() {
-				ID orgId = super.getOrgId();
-				if (orgId == null) {
-					final IDepartmentService service = orgContext.getDepartmentService();
-					Department org = service.getBean(oUser.getDepartmentId());
-					while (org != null && org.getDepartmentType() != EDepartmentType.organization) {
-						org = service.getBean(org.getParentId());
-					}
-					if (org != null) {
-						setOrgId(orgId = org.getId());
-					}
-				}
-				return orgId;
-			}
-
-			@Override
-			public String toOrgText() {
-				final Department org = orgContext.getDepartmentService().getBean(getOrgId());
-				return org != null ? org.getText() : super.toOrgText();
+				return dept;
 			}
 
 			@Override
@@ -175,15 +140,15 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		};
 	}
 
-	protected Role getRoleObject(final Object o) {
-		if (o instanceof Role) {
-			return (Role) o;
+	protected Role getRoleObject(final Object role) {
+		if (role instanceof Role) {
+			return (Role) role;
 		}
 		final IRoleService service = orgContext.getRoleService();
-		if (o instanceof String) {
-			return service.getRoleByName((String) o);
+		if (role instanceof String) {
+			return service.getRoleByName((String) role);
 		}
-		return service.getBean(o);
+		return service.getBean(role);
 	}
 
 	@Override
@@ -234,13 +199,60 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		};
 	}
 
-	@Override
-	public Dept getDept(final Object dept) {
-		if (dept instanceof Dept) {
-			return (Dept) dept;
+	protected Department getDepartmentObject(final Object dept) {
+		if (dept instanceof Department) {
+			return (Department) dept;
 		}
-		final Department _dept = orgContext.getDepartmentService().getBean(dept);
-		return _dept == null ? null : new Dept(_dept);
+		final IDepartmentService service = orgContext.getDepartmentService();
+		if (dept instanceof String) {
+			return service.getDepartmentByName((String) dept);
+		}
+		return service.getBean(dept);
+	}
+
+	@Override
+	public PermissionDept getDept(final Object dept) {
+		final Department oDept = getDepartmentObject(dept);
+		return new PermissionDept() {
+			@Override
+			public ID getId() {
+				return oDept.getId();
+			}
+
+			@Override
+			public String getName() {
+				return oDept.getName();
+			}
+
+			@Override
+			public String getText() {
+				return oDept.getText();
+			}
+
+			@Override
+			public ID getDomainId() {
+				ID domainId = super.getDomainId();
+				if (domainId == null) {
+					final IDepartmentService service = orgContext.getDepartmentService();
+					Department org = service.getBean(getId());
+					while (org != null && org.getDepartmentType() != EDepartmentType.organization) {
+						org = service.getBean(org.getParentId());
+					}
+					if (org != null) {
+						setDomainId(domainId = org.getId());
+					}
+				}
+				return domainId;
+			}
+
+			@Override
+			public String getDomainText() {
+				final Department org = orgContext.getDepartmentService().getBean(getDomainId());
+				return org != null ? org.getText() : super.getDomainText();
+			}
+
+			private static final long serialVersionUID = 3406269517390528431L;
+		};
 	}
 
 	@Override
