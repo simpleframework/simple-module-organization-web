@@ -2,9 +2,13 @@ package net.simpleframework.organization.web;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpSession;
 
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.object.ObjectFactory;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.IMVCConst;
@@ -49,6 +53,22 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 	@Override
 	public String getSessionId() {
 		return httpSession.getId();
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends IHttpAccountListener> void addHttpAccountListener(final Class<T> lClass) {
+		Set<Class<T>> listeners = (Set<Class<T>>) getHttpSession().getAttribute(
+				"_httpaccount_listeners");
+		if (listeners == null) {
+			getHttpSession().setAttribute("_httpaccount_listeners",
+					listeners = new LinkedHashSet<Class<T>>());
+		}
+		listeners.add(lClass);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T extends IHttpAccountListener> Set<Class<T>> getListeners() {
+		return (Set<Class<T>>) getHttpSession().getAttribute("_httpaccount_listeners");
 	}
 
 	@Override
@@ -97,6 +117,13 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 						((OrganizationLogRef) ref).logLogin(login.getAccountId(), getRemoteAddr(),
 								login.getDescription()));
 			}
+
+			final Set<Class<IHttpAccountListener>> set = getListeners();
+			if (set != null) {
+				for (final Class<IHttpAccountListener> lClass : set) {
+					ObjectFactory.singleton(lClass).login(this, login);
+				}
+			}
 		}
 	}
 
@@ -124,6 +151,13 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 		}
 		if (rRequest != null && rRequest.response != null) {
 			HttpUtils.addCookie(rRequest.response, "_account_pwd", null);
+		}
+
+		final Set<Class<IHttpAccountListener>> set = getListeners();
+		if (set != null) {
+			for (final Class<IHttpAccountListener> lClass : set) {
+				ObjectFactory.singleton(lClass).logout(this);
+			}
 		}
 	}
 
