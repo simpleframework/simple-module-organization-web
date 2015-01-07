@@ -79,6 +79,6 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 	}
 
 	public final WebModuleFunction FUNC_ACCOUNT_MGR = (WebModuleFunction) new WebModuleFunction(
-			AccountMgrPage.class).setName(MODULE_NAME + "-AccountMgrPage").setText(
+			this, AccountMgrPage.class).setName(MODULE_NAME + "-AccountMgrPage").setText(
 			$m("OrganizationWebContext.0"));
 }
