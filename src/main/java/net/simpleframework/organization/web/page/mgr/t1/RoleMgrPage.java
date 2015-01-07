@@ -55,7 +55,7 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return orgContext.getManagerRole();
+		return orgContext.getModule().getManagerRole();
 	}
 
 	@Override
