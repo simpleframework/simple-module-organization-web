@@ -26,10 +26,12 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
+import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountService;
+import net.simpleframework.organization.IAccountStatService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
@@ -122,15 +124,26 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	}
 
 	private String getPostfixText(final Object type) {
-		int c;
+		final IAccountStatService sService = orgContext.getAccountStatService();
+		int c = 0;
 		if (type instanceof Integer) {
+			final AccountStat stat = sService.getAccountStat();
 			final int iType = (Integer) type;
-			c = orgContext.getAccountService().count(iType);
-			if (iType == IAccountService.ONLINE_ID) {
-				c *= 10;
+			if (iType == IAccountService.ALL) {
+				c = stat.getNums();
+			} else if (iType == IAccountService.ONLINE_ID) {
+				c = stat.getOnline_nums();
+			} else if (iType == IAccountService.STATE_NORMAL_ID) {
+				c = stat.getState_normal();
+			} else if (iType == IAccountService.STATE_REGISTRATION_ID) {
+				c = stat.getState_registration();
+			} else if (iType == IAccountService.STATE_LOCKED_ID) {
+				c = stat.getState_locked();
+			} else if (iType == IAccountService.STATE_DELETE_ID) {
+				c = stat.getState_delete();
 			}
 		} else {
-			c = orgContext.getAccountService().count((Department) type);
+			c = sService.getAccountStat(type).getNums();
 		}
 		return c > 0 ? "(" + c + ")" : null;
 	}

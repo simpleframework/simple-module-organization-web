@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Map;
 
+import net.simpleframework.ctx.permission.IPermissionConst;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -20,6 +21,11 @@ import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
  *         http://www.simpleframework.net
  */
 public class UserAttriPage extends AbstractAccountAttriPage {
+
+	@Override
+	public String getRole(final PageParameter pp) {
+		return IPermissionConst.ROLE_ALL_ACCOUNT;
+	}
 
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {

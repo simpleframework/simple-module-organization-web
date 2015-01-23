@@ -6,6 +6,7 @@ import java.util.Map;
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.html.HtmlConst;
+import net.simpleframework.ctx.permission.IPermissionConst;
 import net.simpleframework.mvc.PageParameter;
 
 /**
@@ -15,6 +16,10 @@ import net.simpleframework.mvc.PageParameter;
  *         http://www.simpleframework.net
  */
 public class PhotoUploadResultPage extends AbstractAccountPage {
+	@Override
+	public String getRole(final PageParameter pp) {
+		return IPermissionConst.ROLE_ALL_ACCOUNT;
+	}
 
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,

@@ -3,6 +3,7 @@ package net.simpleframework.organization.web.page.attri;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.ctx.permission.IPermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -46,6 +47,11 @@ public class AccountPasswordPage extends AbstractAccountPage {
 
 		addAjaxRequest(pp, "ajaxEditPassword").setConfirmMessage($m("Confirm.Post"))
 				.setHandlerMethod("saveAction").setSelector(".AccountPasswordPage");
+	}
+
+	@Override
+	public String getRole(final PageParameter pp) {
+		return IPermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	@Override
