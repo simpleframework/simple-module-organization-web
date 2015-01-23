@@ -19,7 +19,6 @@ import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EAccountType;
-import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
@@ -234,10 +233,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				ID domainId = super.getDomainId();
 				if (domainId == null) {
 					final IDepartmentService service = orgContext.getDepartmentService();
-					Department org = service.getBean(getId());
-					while (org != null && org.getDepartmentType() != EDepartmentType.organization) {
-						org = service.getBean(org.getParentId());
-					}
+					final Department org = service.getOrg(service.getBean(getId()));
 					if (org != null) {
 						setDomainId(domainId = org.getId());
 					}
