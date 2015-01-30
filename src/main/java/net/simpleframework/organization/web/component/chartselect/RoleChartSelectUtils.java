@@ -10,6 +10,7 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.ERoleChartMark;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectUtils;
@@ -51,10 +52,13 @@ public abstract class RoleChartSelectUtils {
 
 	public static TreeNodes departments(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode parent, final Collection<Department> coll,
-			final ITreeNodeAttributesCallback callback) {
+			final EDepartmentType departmentType, final ITreeNodeAttributesCallback callback) {
 		final TreeNodes nodes = TreeNodes.of();
 		if (coll != null) {
 			for (final Department dept2 : coll) {
+				if (departmentType != null && dept2.getDepartmentType() != departmentType) {
+					continue;
+				}
 				final TreeNode tn = new TreeNode(treeBean, parent, dept2);
 				tn.setImage(DeptSelectUtils.icon_dept(cp, dept2));
 				if (callback != null) {

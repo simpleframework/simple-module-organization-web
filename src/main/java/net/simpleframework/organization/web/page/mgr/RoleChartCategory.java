@@ -15,6 +15,7 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
@@ -97,7 +98,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 			final TreeNode parent, final Department dept) {
 		return RoleChartSelectUtils.departments(cp, treeBean, parent,
 				DataQueryUtils.toList(orgContext.getDepartmentService().queryChildren(dept)),
-				new ITreeNodeAttributesCallback() {
+				EDepartmentType.organization, new ITreeNodeAttributesCallback() {
 					@Override
 					public void setAttributes(final TreeNode tn) {
 						tn.setContextMenu("roleChartCategory_DeptMenu");
@@ -125,7 +126,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	@Override
 	public KVMap categoryEdit_attri(final ComponentParameter cp) {
 		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("RoleMgrPage.1")).add(
-				window_height, 260);
+				window_height, 300);
 	}
 
 	@Override

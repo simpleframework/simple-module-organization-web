@@ -190,10 +190,13 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	@Override
 	protected AbstractComponentBean categoryEdit_createPropEditor(final ComponentParameter cp) {
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
-		editor.getFormFields().add(
-				1,
-				new PropField($m("DepartmentCategory.0")).addComponents(InputComp.select(
-						"department_type", EDepartmentType.class)));
+		final Department t = getBeanService().getBean(cp.getParameter(PARAM_CATEGORY_ID));
+		if (t == null) {
+			editor.getFormFields().add(
+					1,
+					new PropField($m("DepartmentCategory.0")).addComponents(InputComp.select(
+							"department_type", EDepartmentType.class)));
+		}
 		return editor;
 	}
 

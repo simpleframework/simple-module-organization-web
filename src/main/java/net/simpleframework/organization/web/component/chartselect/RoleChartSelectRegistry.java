@@ -76,14 +76,14 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 								hdl.getRoleCharts(cp, treeBean, null), null));
 					} else if (image.endsWith("chart_d.png")) {
 						nodes.addAll(RoleChartSelectUtils.departments(nCP, treeBean, parent,
-								hdl.getDepartments(nCP, treeBean, null), null));
+								hdl.getDepartments(nCP, treeBean, null), null, null));
 					} else {
 						final Object o = parent.getDataObject();
 						if (o instanceof Department) {
 							nodes.addAll(RoleChartSelectUtils.rolecharts(cp, treeBean, parent,
 									hdl.getRoleCharts(cp, treeBean, (Department) o), null));
 							nodes.addAll(RoleChartSelectUtils.departments(nCP, treeBean, parent,
-									hdl.getDepartments(nCP, treeBean, (Department) o), null));
+									hdl.getDepartments(nCP, treeBean, (Department) o), null, null));
 						}
 					}
 				}
