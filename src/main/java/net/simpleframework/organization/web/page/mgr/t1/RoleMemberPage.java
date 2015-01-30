@@ -11,7 +11,6 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.web.html.HtmlConst;
-import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
@@ -78,15 +77,14 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 						new TablePagerColumn("memberType", $m("RoleMemberPage.2"), 65).setSort(false)
 								.setPropertyClass(ERoleMemberType.class))
 				.addColumn(
-						new TablePagerColumn("memberId", $m("RoleMemberPage.3"), 100).setSort(false)
-								.setFilter(false))
+						new TablePagerColumn("memberId", $m("RoleMemberPage.3"), 150)
+								.setFilterSort(false).setTextAlign(ETextAlign.left))
 				.addColumn(
-						new TablePagerColumn("primaryRole", $m("RoleMemberPage.4"), 65).setSort(false)
-								.setPropertyClass(Boolean.class))
+						new TablePagerColumn("primaryRole", $m("RoleMemberPage.4"), 65).setFilterSort(
+								false).setPropertyClass(Boolean.class))
 				.addColumn(
-						new TablePagerColumn("deptId", $m("RoleMemberPage.5"), 100).setSort(false)
-								.setFilter(false).setTextAlign(ETextAlign.left))
-				.addColumn(TablePagerColumn.DESCRIPTION())
+						new TablePagerColumn("deptId", $m("RoleMemberPage.5"), 100).setFilterSort(false)
+								.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 保存规则角色
@@ -240,17 +238,14 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 			final KVMap kv = new KVMap();
 			final ERoleMemberType mType = rm.getMemberType();
 			kv.put("memberType", mType);
-			final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? orgContext.getUserService()
-					: orgContext.getRoleService());
-			final Object bean = mgr.getBean(rm.getMemberId());
-			kv.put("memberId", bean);
+			kv.put("memberId", rm.toString());
 			if (mType == ERoleMemberType.user) {
 				kv.put("primaryRole", new Checkbox(null, null).setChecked(rm.isPrimaryRole())
 						.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
 				ID deptId = rm.getDeptId();
 				if (deptId == null) {
-					mgr.getBean(deptId);
-					deptId = ((User) bean).getDepartmentId();
+					final User bean = orgContext.getUserService().getBean(rm.getMemberId());
+					deptId = bean.getDepartmentId();
 				}
 				final Department dept = orgContext.getDepartmentService().getBean(deptId);
 				if (dept != null) {
