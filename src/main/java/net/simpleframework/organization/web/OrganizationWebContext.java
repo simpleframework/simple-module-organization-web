@@ -59,6 +59,11 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 	// }
 
 	@Override
+	public OrganizationUrlsFactory getUrlsFactory() {
+		return singleton(OrganizationUrlsFactory.class);
+	}
+
+	@Override
 	public IModuleRef getLogRef() {
 		return getRef("net.simpleframework.organization.web.OrganizationLogRef");
 	}

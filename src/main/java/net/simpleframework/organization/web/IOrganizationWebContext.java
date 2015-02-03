@@ -18,4 +18,6 @@ public interface IOrganizationWebContext extends IOrganizationContext, IMVCConte
 	 * @return
 	 */
 	IModuleRef getLogRef();
+
+	OrganizationUrlsFactory getUrlsFactory();
 }
