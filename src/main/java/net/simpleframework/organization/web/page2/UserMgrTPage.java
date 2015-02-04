@@ -7,5 +7,4 @@ package net.simpleframework.organization.web.page2;
  *         http://www.simpleframework.net
  */
 public class UserMgrTPage extends AbstractMgrTPage {
-
 }

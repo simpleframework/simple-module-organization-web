@@ -1,7 +1,10 @@
 package net.simpleframework.organization.web.page2;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.template.lets.Tabs_BlankPage;
@@ -16,6 +19,22 @@ import net.simpleframework.organization.web.OrganizationUrlsFactory;
  *         http://www.simpleframework.net
  */
 public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrganizationContextAware {
+
+	@Override
+	protected void onForward(final PageParameter pp) {
+		super.onForward(pp);
+
+		pp.addImportCSS(AbstractMgrTPage.class, "/orgmgrt.css");
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final PermissionDept dept = pp.getLogin().getDept();
+		if (dept.getId() != null) {
+			return ElementList.of(new SpanElement(dept.getDomainText()).setClassName("org_txt"));
+		}
+		return super.getLeftElements(pp);
+	}
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
