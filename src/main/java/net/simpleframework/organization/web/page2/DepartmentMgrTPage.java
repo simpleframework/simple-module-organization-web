@@ -2,6 +2,7 @@ package net.simpleframework.organization.web.page2;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,6 @@ import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
-import net.simpleframework.organization.IDepartmentService;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -53,7 +53,8 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 	}
 
 	@Override
-	public String toContentHTML(final PageParameter pp) {
+	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
 		sb.append(ElementList.of(LinkButton.addBtn(), SpanElement.SPACE, LinkButton.deleteBtn()));
@@ -66,8 +67,8 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 	public static class DepartmentTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final IDepartmentService dService = orgContext.getDepartmentService();
-			final Department dept = dService.getBean(cp.getLogin().getDept().getDomainId());
+			final Department dept = orgContext.getDepartmentService().getBean(
+					cp.getLogin().getDept().getDomainId());
 			return new ListDataQuery<Department>(list(dept));
 		}
 
