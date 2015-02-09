@@ -274,7 +274,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			if (StringUtils.hasText(deptId)
 					&& (dept = orgContext.getDepartmentService().getBean(deptId)) != null) {
 				cp.setRequestAttr("select_category", dept);
-				dq = orgContext.getAccountService().queryAccounts(dept);
+				dq = orgContext.getUserService().queryUsers(dept, false);
 			} else {
 				final int type = Convert.toInt(cp.getParameter("type"), IAccountService.ALL);
 				cp.setRequestAttr("select_category", type);
@@ -321,9 +321,17 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final Account account = (Account) dataObject;
-			final ID id = account.getId();
-			final User user = orgContext.getAccountService().getUser(account.getId());
+			Account account;
+			User user;
+			ID id;
+			if (dataObject instanceof Account) {
+				account = (Account) dataObject;
+				user = orgContext.getAccountService().getUser(id = account.getId());
+			} else {
+				user = (User) dataObject;
+				account = orgContext.getUserService().getAccount(id = user.getId());
+			}
+
 			final KVMap kv = new KVMap();
 			kv.add("name", account.getName());
 			kv.add("lastLoginDate", account.getLastLoginDate());
@@ -333,6 +341,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			final String email = user.getEmail();
 			kv.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			kv.add("u.mobile", user.getMobile());
+
 			final StringBuilder sb = new StringBuilder();
 			final EAccountStatus status = account.getStatus();
 			final int type = Convert.toInt(getSelectedTreeNode(cp));

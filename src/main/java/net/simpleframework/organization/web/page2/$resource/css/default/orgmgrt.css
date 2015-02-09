@@ -8,16 +8,7 @@
   padding-top: 6px;
 }
 
-#idDepartmentMgrTPage_tbl {
-  padding: 8px 10px 10px;
-}
-
-#idUserMgrTPage_dept {
-  float: left;
-  width: 25%;
-}
-
+#idDepartmentMgrTPage_tbl,
 #idUserMgrTPage_tbl {
-  float: right;
-  width: 75%;
+  padding: 8px 10px 10px;
 }

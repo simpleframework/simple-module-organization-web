@@ -1,7 +1,17 @@
 package net.simpleframework.organization.web.page2;
 
+import static net.simpleframework.common.I18n.$m;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.Map;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -32,14 +42,32 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
 		tablePager
-		// .addColumn(
-		// new TablePagerColumn("text", $m("DepartmentMgrTPage.0")).setTextAlign(
-		// ETextAlign.left).setSort(false))
-		// .addColumn(
-		// new TablePagerColumn("name", $m("DepartmentMgrTPage.1"),
-		// 150).setTextAlign(
-		// ETextAlign.left).setSort(false))
+				.addColumn(
+						new TablePagerColumn("name", $m("AccountMgrPage.1"), 140)
+								.setTextAlign(ETextAlign.left))
+				.addColumn(
+						new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 140)
+								.setTextAlign(ETextAlign.left))
+				.addColumn(
+						new TablePagerColumn("lastLoginDate", $m("AccountMgrPage.3"), 120)
+								.setPropertyClass(Date.class))
+				.addColumn(new TablePagerColumn("status", $m("AccountMgrPage.4"), 70).setFilter(false))
+				.addColumn(new TablePagerColumn("loginTimes", $m("AccountMgrPage.5"), 70))
+				.addColumn(new TablePagerColumn("u.email", $m("AccountMgrPage.6")))
+				.addColumn(new TablePagerColumn("u.mobile", $m("AccountMgrPage.7")))
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
+	}
+
+	@Override
+	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+			final String currentVariable) throws IOException {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='tbar'>");
+		sb.append(ElementList.of(LinkButton.addBtn(), SpanElement.SPACE, LinkButton.deleteBtn()));
+		sb.append("</div>");
+		sb.append("<div id='idUserMgrTPage_tbl'>");
+		sb.append("</div>");
+		return sb.toString();
 	}
 
 	public static class DepartmentTree extends AbstractTreeHandler {
@@ -74,5 +102,9 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	}
 
 	public static class UserTbl extends AbstractDbTablePagerHandler {
+		@Override
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
+			return super.createDataObjectQuery(cp);
+		}
 	}
 }
