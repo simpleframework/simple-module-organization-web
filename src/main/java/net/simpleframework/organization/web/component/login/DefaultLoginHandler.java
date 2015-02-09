@@ -9,6 +9,7 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.login.AbstractLoginHandler;
+import net.simpleframework.mvc.component.ui.validatecode.ValidateCodeUtils;
 import net.simpleframework.organization.EAccountType;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
@@ -33,6 +34,16 @@ public class DefaultLoginHandler extends AbstractLoginHandler {
 	@Override
 	public IForward login(final ComponentParameter cp) {
 		final JavascriptForward js = new JavascriptForward();
+
+		final boolean showValidateCode = (Boolean) cp.getBeanProperty("showValidateCode");
+		if (showValidateCode && !ValidateCodeUtils.isValidateCode(cp.request, "vcode")) {
+			js.append("var code = $('#idLoginLoaded_vcode input');");
+			js.append("Validation.insertAfter('#idLoginLoaded_vcode input', '")
+					.append(ValidateCodeUtils.getErrorString()).append("');");
+			js.append("$Effect.shake(code.next());");
+			return js;
+		}
+
 		final String lastUrl = getLastUrl(cp);
 		final String loginForward = StringUtils.hasText(lastUrl) ? lastUrl : (String) cp
 				.getBeanProperty("loginForward");
