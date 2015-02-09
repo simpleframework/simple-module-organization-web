@@ -7,12 +7,14 @@ import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
@@ -20,9 +22,11 @@ import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
+import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IDepartmentService;
+import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -40,7 +44,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 				"idUserMgrTPage_dept").setHandlerClass(DepartmentTree.class);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
-				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
+				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idUserMgrTPage_tbl")
+				.setHandlerClass(UserTbl.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("name", $m("AccountMgrPage.1"), 140)
@@ -104,7 +109,17 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	public static class UserTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return super.createDataObjectQuery(cp);
+			final Department org = orgContext.getDepartmentService().getBean(
+					cp.getLogin().getDept().getDomainId());
+			return org != null ? orgContext.getUserService().queryUsers(org) : null;
+		}
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final KVMap data = new KVMap();
+			final User user = (User) dataObject;
+			data.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
+			return data;
 		}
 	}
 }
