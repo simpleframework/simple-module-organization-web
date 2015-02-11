@@ -1,14 +1,69 @@
+.Tabs_BlankPage .Tabs_tb {
+  background-color: #fff;
+}
+
+.Tabs_BlankPage ul.simple_tabs a.active {
+  background-image: none;
+  background-color: #eee;
+  border-bottom-color: #eee;
+}
+
 .Tabs_tb .org_txt {
   color: #654;
   font-size: 10.5pt;
 }
 
 .Tabs_cc .tbar {
-  padding-left: 10px;
-  padding-top: 6px;
+  padding: 8px;
+  border-bottom: 1px solid #bbb;
+  background-color: #eee;
 }
 
-#idDepartmentMgrTPage_tbl,
-#idUserMgrTPage_tbl {
-  padding: 8px 10px 10px;
+#idDepartmentMgrTPage_tbl, 
+#idUserMgrTPage_tbl,
+#idRoleMgrTPage_tbl {
+  padding: 8px;
+}
+
+.RoleMgrTPage {
+  background-color: #f1f1f1 !important;
+}
+
+.RoleMgrTPage .lnav {
+  padding: 41px 0 20px 0;
+  float: left;
+  width: 180px;
+  text-align: right;
+  position: relative;
+}
+
+.RoleMgrTPage .rtbl {
+  border-left: 1px solid #aaa;
+  float: left;
+  min-height: 480px;
+  width: 896px;
+  background-color: #fff;
+}
+
+.RoleMgrTPage .lnav .lbl {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 9.5pt;
+  color: #c30;
+}
+
+.RoleMgrTPage .lnav .litem {
+  padding: 8px;
+  cursor: pointer;
+  margin-right: -1px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.RoleMgrTPage .lnav .litem.active {
+  border-top-color: #bbb;
+  border-bottom-color: #bbb;
+  background-color: #fff;
+  font-weight: bold;
 }

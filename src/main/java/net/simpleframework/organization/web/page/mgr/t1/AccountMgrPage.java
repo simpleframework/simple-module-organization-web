@@ -2,7 +2,6 @@ package net.simpleframework.organization.web.page.mgr.t1;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
@@ -16,7 +15,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.LabelElement;
@@ -31,6 +29,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
@@ -71,21 +70,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addCategoryBean(pp, DepartmentCategory.class);
 
 		// 账号列表
-		addTablePagerBean(pp, AccountList.class)
-				.addColumn(
-						new TablePagerColumn("name", $m("AccountMgrPage.1"), 140)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 140)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("lastLoginDate", $m("AccountMgrPage.3"), 120)
-								.setPropertyClass(Date.class))
-				.addColumn(new TablePagerColumn("status", $m("AccountMgrPage.4"), 70).setFilter(false))
-				.addColumn(new TablePagerColumn("loginTimes", $m("AccountMgrPage.5"), 70))
-				.addColumn(new TablePagerColumn("u.email", $m("AccountMgrPage.6")))
-				.addColumn(new TablePagerColumn("u.mobile", $m("AccountMgrPage.7")))
-				.addColumn(TablePagerColumn.OPE().setWidth(135));
+		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
+		AccountMgrPageUtils.addAccountTblCols(tablePager);
 
 		// 添加账号
 		addComponentBean(pp, "AccountMgrPage_editPage", AjaxRequestBean.class).setUrlForward(
@@ -336,7 +322,15 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			kv.add("name", account.getName());
 			kv.add("lastLoginDate", account.getLastLoginDate());
 			kv.add("status", account.getStatus());
-			kv.add("loginTimes", account.getLoginTimes());
+
+			ID deptId;
+			if ((deptId = user.getDepartmentId()) != null) {
+				final Department dept = orgContext.getDepartmentService().getBean(deptId);
+				if (dept != null) {
+					kv.add("u.departmentId", dept.getText());
+				}
+			}
+
 			kv.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
 			final String email = user.getEmail();
 			kv.add("u.email", new LinkElement(email).setHref("mailto:" + email));

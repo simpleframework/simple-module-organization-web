@@ -1,19 +1,18 @@
 package net.simpleframework.organization.web.page2;
 
-import static net.simpleframework.common.I18n.$m;
-
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -23,10 +22,12 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.TemplateUtils;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.User;
+import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -44,23 +45,9 @@ public class UserMgrTPage extends AbstractMgrTPage {
 				"idUserMgrTPage_dept").setHandlerClass(DepartmentTree.class);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
-				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idUserMgrTPage_tbl")
-				.setHandlerClass(UserTbl.class);
-		tablePager
-				.addColumn(
-						new TablePagerColumn("name", $m("AccountMgrPage.1"), 140)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 140)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("lastLoginDate", $m("AccountMgrPage.3"), 120)
-								.setPropertyClass(Date.class))
-				.addColumn(new TablePagerColumn("status", $m("AccountMgrPage.4"), 70).setFilter(false))
-				.addColumn(new TablePagerColumn("loginTimes", $m("AccountMgrPage.5"), 70))
-				.addColumn(new TablePagerColumn("u.email", $m("AccountMgrPage.6")))
-				.addColumn(new TablePagerColumn("u.mobile", $m("AccountMgrPage.7")))
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
+				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
+		AccountMgrPageUtils.addAccountTblCols(tablePager);
 	}
 
 	@Override
@@ -118,7 +105,27 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final KVMap data = new KVMap();
 			final User user = (User) dataObject;
+			final Account account = orgContext.getUserService().getAccount(user.getId());
+			data.add("name", account.getName());
 			data.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
+
+			data.add("lastLoginDate", account.getLastLoginDate()).add("status", account.getStatus());
+
+			final String email = user.getEmail();
+			data.add("u.email", new LinkElement(email).setHref("mailto:" + email));
+			data.add("u.mobile", user.getMobile());
+
+			ID deptId;
+			if ((deptId = user.getDepartmentId()) != null) {
+				final Department dept = orgContext.getDepartmentService().getBean(deptId);
+				if (dept != null) {
+					data.add("u.departmentId", dept.getText());
+				}
+			}
+
+			final StringBuilder sb = new StringBuilder();
+			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			data.add(TablePagerColumn.OPE, sb.toString());
 			return data;
 		}
 	}
