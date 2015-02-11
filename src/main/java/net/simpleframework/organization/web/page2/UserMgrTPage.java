@@ -7,6 +7,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -124,6 +125,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			}
 
 			final StringBuilder sb = new StringBuilder();
+			sb.append(new ButtonElement("角色")).append(SpanElement.SPACE)
+					.append(ButtonElement.editBtn());
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			data.add(TablePagerColumn.OPE, sb.toString());
 			return data;

@@ -99,6 +99,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 				}
 			}
 			if (rchart != null) {
+				cp.addFormParameter("chartid", rchart.getId());
 				return new ListDataQuery<Role>(list(rchart, null));
 			}
 			return null;
