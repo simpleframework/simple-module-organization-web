@@ -11,10 +11,21 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean;
  */
 public class DeptSelectBean extends DictionaryBean {
 
+	private boolean org;
+
 	public DeptSelectBean() {
 		setTitle($m("DeptSelectBean.0"));
 		setWidth(280);
 		setHeight(360);
 		setHandlerClass(DefaultDeptSelectHandler.class);
+	}
+
+	public boolean isOrg() {
+		return org;
+	}
+
+	public DeptSelectBean setOrg(final boolean org) {
+		this.org = org;
+		return this;
 	}
 }

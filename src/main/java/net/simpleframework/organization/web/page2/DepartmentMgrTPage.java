@@ -67,9 +67,7 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 	public static class DepartmentTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Department dept = orgContext.getDepartmentService().getBean(
-					cp.getLogin().getDept().getDomainId());
-			return new ListDataQuery<Department>(list(dept));
+			return new ListDataQuery<Department>(list(getOrg(cp)));
 		}
 
 		private List<Department> list(final Department parent) {

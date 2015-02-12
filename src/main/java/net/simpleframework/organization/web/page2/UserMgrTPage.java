@@ -70,7 +70,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			final IDepartmentService dService = orgContext.getDepartmentService();
 			final TreeNodes nodes = TreeNodes.of();
 			if (parent == null) {
-				final Department org = dService.getBean(cp.getLogin().getDept().getDomainId());
+				final Department org = getOrg(cp);
 				if (org != null) {
 					final IDataQuery<Department> dq = dService.queryChildren(org,
 							EDepartmentType.department);
@@ -97,8 +97,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	public static class UserTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Department org = orgContext.getDepartmentService().getBean(
-					cp.getLogin().getDept().getDomainId());
+			final Department org = getOrg(cp);
 			return org != null ? orgContext.getUserService().queryUsers(org) : null;
 		}
 

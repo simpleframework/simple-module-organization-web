@@ -10,16 +10,20 @@ import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
@@ -47,7 +51,12 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 						new TablePagerColumn("name", "角色名", 120).setTextAlign(ETextAlign.left).setSort(
 								false)).addColumn(new TablePagerColumn("roletype", "角色类型", 80))
 				.addColumn(TablePagerColumn.DESCRIPTION())
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+				.addColumn(TablePagerColumn.OPE().setWidth(125));
+
+		// 成员窗口
+		addAjaxRequest(pp, "RoleMgrTPage_membersPage", MembersPage.class);
+		addWindowBean(pp, "RoleMgrTPage_members").setContentRef("RoleMgrTPage_membersPage")
+				.setWidth(800).setHeight(480);
 	}
 
 	@Override
@@ -57,8 +66,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		sb.append("<div class='RoleMgrTPage clearfix'>");
 		sb.append(" <div class='lnav'>");
 		sb.append("  <div class='lbl'>角色视图列表</div>");
-		final Department org = orgContext.getDepartmentService().getBean(
-				pp.getLogin().getDept().getDomainId());
+		final Department org = getOrg(pp);
 		if (org != null) {
 			final IRoleChartService cService = orgContext.getRoleChartService();
 			final RoleChart _chart = cService.getBean(pp.getParameter("chartid"));
@@ -67,7 +75,8 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			int i = 0;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");
-				if ((i++ == 0 && _chart == null) || chart.equals(_chart)) {
+				if ((i++ == 0 && (_chart == null || !_chart.getDepartmentId().equals(org.getId())))
+						|| chart.equals(_chart)) {
 					sb.append(" active");
 				}
 				sb.append("' onclick=\"location.href = location.href.addParameter('chartid=")
@@ -92,8 +101,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			final IRoleChartService cService = orgContext.getRoleChartService();
 			RoleChart rchart = cService.getBean(cp.getParameter("chartid"));
 			if (rchart == null) {
-				final Department org = orgContext.getDepartmentService().getBean(
-						cp.getLogin().getDept().getDomainId());
+				final Department org = getOrg(cp);
 				if (org != null) {
 					rchart = cService.query(org).next();
 				}
@@ -133,7 +141,22 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			txt.append(role.getText());
 			data.add("text", txt.toString());
 			data.add("name", rService.toUniqueName(role));
+
+			final StringBuilder sb = new StringBuilder();
+			sb.append(
+					new ButtonElement("成员").setOnclick("$Actions['RoleMgrTPage_members']('roleid="
+							+ role.getId() + "');")).append(SpanElement.SPACE)
+					.append(ButtonElement.editBtn());
+			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			data.add(TablePagerColumn.OPE, sb.toString());
 			return data;
+		}
+	}
+
+	public static class MembersPage extends OneTableTemplatePage {
+		@Override
+		public String getRole(final PageParameter pp) {
+			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
 	}
 }
