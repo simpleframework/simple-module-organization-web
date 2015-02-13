@@ -48,9 +48,9 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 				.setHandlerClass(RoleCategory.class);
 
 		addComponentBean(pp, "roleMemberVal", PageIncludeBean.class).setPageUrl(
-				url(RoleMemberPage.class)).setContainerId("idRoleMemberVal");
+				url(RoleMembersPage.class)).setContainerId("idRoleMemberVal");
 		addComponentBean(pp, "ajaxRoleMemberVal", AjaxRequestBean.class).setUrlForward(
-				url(RoleMemberPage.class)).setUpdateContainerId("idRoleMemberVal");
+				url(RoleMembersPage.class)).setUpdateContainerId("idRoleMemberVal");
 	}
 
 	@Override

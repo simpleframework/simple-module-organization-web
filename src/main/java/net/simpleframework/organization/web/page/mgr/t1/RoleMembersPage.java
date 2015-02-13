@@ -17,6 +17,7 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
@@ -53,7 +54,7 @@ import net.simpleframework.organization.web.page.mgr.AddMemberPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class RoleMemberPage extends AbstractTemplatePage implements IOrganizationContextAware {
+public class RoleMembersPage extends AbstractTemplatePage implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -61,7 +62,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 
 		addAjaxRequest(pp, "ajax_addMemberPage", AddMemberPage.class);
 		addComponentBean(pp, "addMemberWindow", WindowBean.class).setContentRef("ajax_addMemberPage")
-				.setTitle($m("RoleMemberPage.1")).setHeight(340).setWidth(320);
+				.setTitle($m("RoleMembersPage.1")).setHeight(340).setWidth(320);
 
 		// 删除成员
 		addDeleteAjaxRequest(pp, "ajax_deleteMember");
@@ -74,16 +75,16 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 				.setContainerId("idMemberTable").setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("memberType", $m("RoleMemberPage.2"), 65).setSort(false)
+						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 65).setSort(false)
 								.setPropertyClass(ERoleMemberType.class))
 				.addColumn(
-						new TablePagerColumn("memberId", $m("RoleMemberPage.3"), 150)
-								.setFilterSort(false).setTextAlign(ETextAlign.left))
+						new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150).setFilterSort(
+								false).setTextAlign(ETextAlign.left))
 				.addColumn(
-						new TablePagerColumn("primaryRole", $m("RoleMemberPage.4"), 65).setFilterSort(
+						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 65).setFilterSort(
 								false).setPropertyClass(Boolean.class))
 				.addColumn(
-						new TablePagerColumn("deptId", $m("RoleMemberPage.5"), 100).setFilterSort(false)
+						new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setFilterSort(false)
 								.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
@@ -120,7 +121,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 				role.setRuleScript(ruleValue);
 				service.update(new String[] { "rulescript" }, role);
 			}
-			return new JavascriptForward("alert('").append($m("RoleMemberPage.12")).append("');");
+			return new JavascriptForward("alert('").append($m("RoleMembersPage.12")).append("');");
 		} else {
 			return null;
 		}
@@ -138,17 +139,13 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
-	private Role roleCache(final PageRequestResponse rRequest) {
-		Role role = (Role) rRequest.getRequestAttr("@roleId");
-		if (role != null) {
-			return role;
-		}
-		final IRoleService service = orgContext.getRoleService();
-		role = service.getBean(rRequest.getParameter("roleId"));
-		if (role != null) {
-			rRequest.setRequestAttr("@roleId", role);
-		}
-		return role;
+	private Role getRoleCache(final PageRequestResponse rRequest) {
+		return rRequest.getCache("@roleId", new IVal<Role>() {
+			@Override
+			public Role get() {
+				return orgContext.getRoleService().getBean(rRequest.getParameter("roleId"));
+			}
+		});
 	}
 
 	@Override
@@ -157,14 +154,14 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tb'>");
 		sb.append("<div class='nav_arrow'>");
-		final Role role = roleCache(pp);
+		final Role role = getRoleCache(pp);
 		ERoleType rt = null;
 		if (role != null) {
 			rt = role.getRoleType();
 			sb.append(role.getText());
 			sb.append(SpanElement.shortText("(" + role.getName() + ")"));
 		} else {
-			sb.append("#(RoleMemberPage.0)");
+			sb.append("#(RoleMembersPage.0)");
 		}
 
 		sb.append("</div><div class='btn'>");
@@ -172,19 +169,19 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 		if (rt == ERoleType.normal) {
 			sb.append("<a class='").append(aClass)
 					.append("' onclick=\"$Actions['addMemberWindow']('roleId=").append(role.getId())
-					.append("');\">#(RoleMemberPage.1)</a>");
+					.append("');\">#(RoleMembersPage.1)</a>");
 			sb.append(HtmlConst.NBSP).append("<a class='").append(aClass)
 					.append("' onclick=\"this.up('.RoleMgrPage').deleteMember();\">#(Delete)</a>");
 		} else if (rt == ERoleType.handle) {
 			sb.append("<a class='").append(aClass).append("' onclick=\"")
 					.append("$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));")
-					.append("\">#(RoleMemberPage.8)</a>");
+					.append("\">#(RoleMembersPage.8)</a>");
 		} else if (rt == ERoleType.script) {
 			sb.append("<a class='").append(aClass).append("' onclick=\"")
 					.append("$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));")
-					.append("\">#(RoleMemberPage.8)</a>");
+					.append("\">#(RoleMembersPage.8)</a>");
 			sb.append(HtmlConst.NBSP).append("<a class='").append(aClass).append("' onclick=\"")
-					.append("\">#(RoleMemberPage.9)</a>");
+					.append("\">#(RoleMembersPage.9)</a>");
 		}
 		sb.append("</div>");
 		sb.append(BlockElement.CLEAR);
@@ -199,7 +196,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 				sb.append(role.getId()).append("' />");
 			}
 			if (rt == ERoleType.handle) {
-				sb.append("<div class='t'>#(RoleMemberPage.10)").append(HtmlConst.NBSP)
+				sb.append("<div class='t'>#(RoleMembersPage.10)").append(HtmlConst.NBSP)
 						.append(IRoleHandler.class.getName()).append("</div>");
 				sb.append("<div class='c'><textarea name='role_ruleValue' rows='1'>");
 				final IRoleHandler rHandler = orgContext.getRoleService().getRoleHandler(role);
@@ -208,7 +205,7 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 				}
 				sb.append("</textarea>");
 			} else if (rt == ERoleType.script) {
-				sb.append("<div class='t'>#(RoleMemberPage.11)</div>");
+				sb.append("<div class='t'>#(RoleMembersPage.11)</div>");
 				sb.append("<div class='c'><textarea name='role_ruleValue' rows='14'>");
 				sb.append(StringUtils.blank(role.getRuleScript())).append("</textarea>");
 			}
@@ -221,13 +218,13 @@ public class RoleMemberPage extends AbstractTemplatePage implements IOrganizatio
 
 		@Override
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
-			final Role role = AbstractMVCPage.get(RoleMemberPage.class).roleCache(cp);
+			final Role role = AbstractMVCPage.get(RoleMembersPage.class).getRoleCache(cp);
 			return ((KVMap) super.getFormParameters(cp)).add("roleId", role.getId());
 		}
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Role role = AbstractMVCPage.get(RoleMemberPage.class).roleCache(cp);
+			final Role role = AbstractMVCPage.get(RoleMembersPage.class).getRoleCache(cp);
 			return orgContext.getRoleService().members(role);
 		}
 

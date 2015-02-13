@@ -21,13 +21,12 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -54,9 +53,9 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 				.addColumn(TablePagerColumn.OPE().setWidth(125));
 
 		// 成员窗口
-		addAjaxRequest(pp, "RoleMgrTPage_membersPage", MembersPage.class);
+		addAjaxRequest(pp, "RoleMgrTPage_membersPage", _RoleMembersPage.class);
 		addWindowBean(pp, "RoleMgrTPage_members").setContentRef("RoleMgrTPage_membersPage")
-				.setWidth(800).setHeight(480);
+				.setTitle("角色成员").setWidth(800).setHeight(480);
 	}
 
 	@Override
@@ -144,7 +143,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 
 			final StringBuilder sb = new StringBuilder();
 			sb.append(
-					new ButtonElement("成员").setOnclick("$Actions['RoleMgrTPage_members']('roleid="
+					new ButtonElement("成员").setOnclick("$Actions['RoleMgrTPage_members']('roleId="
 							+ role.getId() + "');")).append(SpanElement.SPACE)
 					.append(ButtonElement.editBtn());
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
@@ -153,10 +152,11 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		}
 	}
 
-	public static class MembersPage extends OneTableTemplatePage {
+	public static class _RoleMembersPage extends RoleMembersPage {
 		@Override
-		public String getRole(final PageParameter pp) {
-			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		protected void onForward(final PageParameter pp) {
+			super.onForward(pp);
+
 		}
 	}
 }

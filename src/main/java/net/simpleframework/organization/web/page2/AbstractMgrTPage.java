@@ -11,6 +11,7 @@ import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.template.lets.Tabs_BlankPage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IDepartmentService;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationUrlsFactory;
@@ -35,6 +36,11 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 				.setClearAction("false")
 				.setJsSelectCallback(
 						"location.href = location.href.addParameter('orgid=' + selects[0].id); return false;");
+	}
+
+	@Override
+	public String getRole(final PageParameter pp) {
+		return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
 	protected static Department getOrg(final PageParameter pp) {
