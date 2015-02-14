@@ -67,6 +67,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (oUser == null) {
 			return super.getUser(user);
 		}
+		final IRoleService rService = orgContext.getRoleService();
 		return new PermissionUser() {
 			@Override
 			public ID getId() {
@@ -123,16 +124,22 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				return orgContext.getRoleService().getPrimaryRole(oUser).getId();
 			}
 
-			private final IRoleService rService = orgContext.getRoleService();
+			private Boolean _MEMBER, _MANAGER;
 
 			@Override
 			public boolean isMember(final Object role, final Map<String, Object> variables) {
-				return rService.isMember(oUser, getRoleObject(role), variables);
+				if (_MEMBER == null) {
+					_MEMBER = rService.isMember(oUser, getRoleObject(role), variables);
+				}
+				return _MEMBER;
 			}
 
 			@Override
 			public boolean isManager(final Map<String, Object> variables) {
-				return rService.isManager(oUser, variables);
+				if (_MANAGER == null) {
+					_MANAGER = rService.isManager(oUser, variables);
+				}
+				return _MANAGER;
 			}
 
 			private static final long serialVersionUID = -2824016565752293671L;

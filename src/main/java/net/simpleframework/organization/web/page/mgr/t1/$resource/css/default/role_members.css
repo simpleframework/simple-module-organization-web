@@ -1,0 +1,52 @@
+.RoleMembersPage .tb {
+  background: #eef;
+  border-bottom: 1px solid #aaa;
+  padding: 6px 10px;
+  overflow: hidden;
+  _zoom: 1;
+}
+
+.RoleMembersPage .tb .nav_arrow {
+  float: left;
+  line-height: 23px;
+  background-position: 0 6px;
+  min-height: 25px;
+}
+
+.RoleMembersPage .tb .nav_arrow .rt {
+  color: red;
+}
+
+.RoleMembersPage .tb .btn {
+  float: right;
+  margin-right: 10px;
+}
+
+.RoleMembersPage .rule {
+  margin: 8px;
+}
+
+.RoleMembersPage .rule .t {
+  padding-bottom: 6px;
+  color: #666;
+}
+
+.RoleMembersPage .rule .c {
+  padding: 2px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.RoleMembersPage .rule textarea {
+  border: 0 !important;
+  background: none !important;
+  width: 100%;
+  color: #400;
+  font-size: 10.5pt;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+#idMemberTable {
+  padding: 5px;
+}

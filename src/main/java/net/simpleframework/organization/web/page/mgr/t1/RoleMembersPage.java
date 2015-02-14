@@ -60,6 +60,8 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
+		pp.addImportCSS(RoleMembersPage.class, "/role_members.css");
+
 		addAjaxRequest(pp, "ajax_addMemberPage", AddMemberPage.class);
 		addComponentBean(pp, "addMemberWindow", WindowBean.class).setContentRef("ajax_addMemberPage")
 				.setTitle($m("RoleMembersPage.1")).setHeight(340).setWidth(320);
@@ -92,6 +94,10 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		addAjaxRequest(pp, "ajax_roleSave").setHandlerMethod("doRoleSave");
 		// 移动
 		addAjaxRequest(pp, "RoleMemberPage_Move").setHandlerMethod("doMove");
+	}
+
+	protected Department getOrg(final PageParameter pp) {
+		return null;
 	}
 
 	@Transaction(context = IOrganizationContext.class)
@@ -152,6 +158,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String variable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='RoleMembersPage'>");
 		sb.append("<div class='tb'>");
 		sb.append("<div class='nav_arrow'>");
 		final Role role = getRoleCache(pp);
@@ -211,6 +218,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			}
 			sb.append("</div></div>");
 		}
+		sb.append("</div>");
 		return sb.toString();
 	}
 

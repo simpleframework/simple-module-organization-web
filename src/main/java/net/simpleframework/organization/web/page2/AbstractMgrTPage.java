@@ -35,7 +35,7 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 				.setOrg(true)
 				.setClearAction("false")
 				.setJsSelectCallback(
-						"location.href = location.href.addParameter('orgid=' + selects[0].id); return false;");
+						"location.href = location.href.addParameter('orgId=' + selects[0].id); return false;");
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 		final IDepartmentService dService = orgContext.getDepartmentService();
 		Department org = null;
 		if (pp.getLogin().isManager()) {
-			org = dService.getBean(pp.getParameter("orgid"));
+			org = dService.getBean(pp.getParameter("orgId"));
 		}
 		if (org == null) {
 			org = dService.getBean(pp.getLogin().getDept().getDomainId());
@@ -57,7 +57,6 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-
 		SpanElement oele;
 		final Department org = getOrg(pp);
 		if (org != null) {
@@ -83,9 +82,9 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 		final OrganizationUrlsFactory urlsFactory = ((IOrganizationWebContext) orgContext)
 				.getUrlsFactory();
 		String params = null;
-		final String orgid = pp.getParameter("orgid");
+		final String orgid = pp.getParameter("orgId");
 		if (StringUtils.hasText(orgid)) {
-			params = "orgid=" + orgid;
+			params = "orgId=" + orgid;
 		}
 		return TabButtons.of(new TabButton($m("AbstractMgrTPage.0")).setHref(urlsFactory.getUrl(pp,
 				DepartmentMgrTPage.class, params)), new TabButton($m("AbstractMgrTPage.1"))

@@ -76,7 +76,7 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 				new InputComp("member_val").setType(EInputCompType.textButton).addEvent(
 						EElementEvent.click,
 						"$Actions[$F('member_type') == '" + utype
-								+ "' ? 'dictUserSelect' : 'dictRoleSelect']();"));
+								+ "' ? 'dictUserSelect' : 'dictRoleSelect']('orgId=');"));
 		final PropField f3 = new PropField($m("AddMemberPage.2")).addComponents(new InputComp(
 				"member_primary").setType(EInputCompType.checkbox));
 		final PropField f4 = new PropField($m("AddMemberPage.3")).addComponents(

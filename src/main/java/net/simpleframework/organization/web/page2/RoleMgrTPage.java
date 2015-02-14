@@ -68,7 +68,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		final Department org = getOrg(pp);
 		if (org != null) {
 			final IRoleChartService cService = orgContext.getRoleChartService();
-			final RoleChart _chart = cService.getBean(pp.getParameter("chartid"));
+			final RoleChart _chart = cService.getBean(pp.getParameter("chartId"));
 			final IDataQuery<RoleChart> dq = cService.query(org);
 			RoleChart chart;
 			int i = 0;
@@ -78,7 +78,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 						|| chart.equals(_chart)) {
 					sb.append(" active");
 				}
-				sb.append("' onclick=\"location.href = location.href.addParameter('chartid=")
+				sb.append("' onclick=\"location.href = location.href.addParameter('chartId=")
 						.append(chart.getId()).append("');\">").append(chart.getText()).append("</div>");
 			}
 		}
@@ -97,17 +97,18 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final IRoleChartService cService = orgContext.getRoleChartService();
-			RoleChart rchart = cService.getBean(cp.getParameter("chartid"));
-			if (rchart == null) {
-				final Department org = getOrg(cp);
-				if (org != null) {
+			final Department org = getOrg(cp);
+			if (org != null) {
+				final IRoleChartService cService = orgContext.getRoleChartService();
+				RoleChart rchart = cService.getBean(cp.getParameter("chartId"));
+				if (rchart == null) {
 					rchart = cService.query(org).next();
 				}
-			}
-			if (rchart != null) {
-				cp.addFormParameter("chartid", rchart.getId());
-				return new ListDataQuery<Role>(list(rchart, null));
+				if (rchart != null && rchart.getDepartmentId().equals(org.getId())) {
+					cp.addFormParameter("orgId", org.getId());
+					cp.addFormParameter("chartId", rchart.getId());
+					return new ListDataQuery<Role>(list(rchart, null));
+				}
 			}
 			return null;
 		}
@@ -157,6 +158,11 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		protected void onForward(final PageParameter pp) {
 			super.onForward(pp);
 
+		}
+
+		@Override
+		protected Department getOrg(final PageParameter pp) {
+			return AbstractMgrTPage.getOrg(pp);
 		}
 	}
 }

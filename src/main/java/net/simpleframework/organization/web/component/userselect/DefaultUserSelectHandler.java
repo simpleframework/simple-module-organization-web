@@ -30,7 +30,14 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public IDataQuery<?> getUsers(final ComponentParameter cp) {
-		return orgContext.getUserService().queryAll();
+		final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+		if (org != null) {
+			return orgContext.getUserService().queryUsers(org);
+		}
+		if (cp.getLogin().isManager()) {
+			return orgContext.getUserService().queryAll();
+		}
+		return null;
 	}
 
 	@Override
