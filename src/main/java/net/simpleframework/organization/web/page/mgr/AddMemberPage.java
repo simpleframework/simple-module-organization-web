@@ -29,6 +29,7 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleMemberService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
@@ -64,6 +65,9 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 	@Override
 	protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
 		final Role role = orgContext.getRoleService().getBean(pp.getParameter("roleId"));
+		final RoleChart _chart = orgContext.getRoleChartService().getBean(role.getRoleChartId());
+		final Object orgId = _chart.getDepartmentId();
+
 		final PropField f1 = new PropField($m("AddMemberPage.0")).addComponents(
 				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
 						String.valueOf(role.getId())),
@@ -76,18 +80,21 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 				new InputComp("member_val").setType(EInputCompType.textButton).addEvent(
 						EElementEvent.click,
 						"$Actions[$F('member_type') == '" + utype
-								+ "' ? 'dictUserSelect' : 'dictRoleSelect']('orgId=');"));
+								+ "' ? 'dictUserSelect' : 'dictRoleSelect']('orgId=" + orgId + "');"));
+
 		final PropField f3 = new PropField($m("AddMemberPage.2")).addComponents(new InputComp(
 				"member_primary").setType(EInputCompType.checkbox));
+
 		final PropField f4 = new PropField($m("AddMemberPage.3")).addComponents(
 				new InputComp("member_deptId").setType(EInputCompType.hidden),
 				new InputComp("member_deptVal").setType(EInputCompType.textButton).addEvent(
 						EElementEvent.click,
-						"if ($F('member_type') == '" + utype
-								+ "') $Actions['dictDeptSelect'](); else alert('" + $m("AddMemberPage.4")
-								+ "');"));
+						"if ($F('member_type') == '" + utype + "') $Actions['dictDeptSelect']('orgId="
+								+ orgId + "'); else alert('" + $m("AddMemberPage.4") + "');"));
+
 		final PropField f5 = new PropField($m("Description")).addComponents(new InputComp(
 				"member_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
+
 		propEditor.getFormFields().append(f1, f2, f3, f4, f5);
 	}
 

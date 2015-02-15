@@ -73,20 +73,21 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 		// 成员列表
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
-				TablePagerBean.class).setShowLineNo(true).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setContainerId("idMemberTable").setHandlerClass(MemberTable.class);
+				TablePagerBean.class).setShowFilterBar(false).setShowLineNo(true)
+				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idMemberTable")
+				.setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 65).setSort(false)
 								.setPropertyClass(ERoleMemberType.class))
 				.addColumn(
-						new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150).setFilterSort(
-								false).setTextAlign(ETextAlign.left))
+						new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150).setSort(false)
+								.setTextAlign(ETextAlign.left))
 				.addColumn(
-						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 65).setFilterSort(
-								false).setPropertyClass(Boolean.class))
+						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 65).setSort(false)
+								.setPropertyClass(Boolean.class))
 				.addColumn(
-						new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setFilterSort(false)
+						new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setSort(false)
 								.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 

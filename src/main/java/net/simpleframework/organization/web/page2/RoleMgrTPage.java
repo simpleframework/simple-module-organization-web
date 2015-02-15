@@ -22,6 +22,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
@@ -48,8 +49,10 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 								false))
 				.addColumn(
 						new TablePagerColumn("name", "角色名", 120).setTextAlign(ETextAlign.left).setSort(
-								false)).addColumn(new TablePagerColumn("roletype", "角色类型", 80))
-				.addColumn(TablePagerColumn.DESCRIPTION())
+								false))
+				.addColumn(
+						new TablePagerColumn("roletype", "角色类型", 90).setTextAlign(ETextAlign.left)
+								.setSort(false)).addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(125));
 
 		// 成员窗口
@@ -141,6 +144,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			txt.append(role.getText());
 			data.add("text", txt.toString());
 			data.add("name", rService.toUniqueName(role));
+			data.add("roletype", role.getRoleType());
 
 			final StringBuilder sb = new StringBuilder();
 			sb.append(
@@ -155,9 +159,8 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 
 	public static class _RoleMembersPage extends RoleMembersPage {
 		@Override
-		protected void onForward(final PageParameter pp) {
-			super.onForward(pp);
-
+		public String getRole(final PageParameter pp) {
+			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
 
 		@Override

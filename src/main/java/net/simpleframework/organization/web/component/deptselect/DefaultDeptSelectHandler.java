@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Collection;
 
 import net.simpleframework.ado.query.DataQueryUtils;
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -28,9 +29,17 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
-		final boolean org = (Boolean) cp.getBeanProperty("org");
-		return DataQueryUtils.toList(orgContext.getDepartmentService().queryChildren(parent,
-				org ? EDepartmentType.organization : null));
+		IDataQuery<Department> dq;
+		Department org;
+		if (parent == null
+				&& (org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"))) != null) {
+			dq = orgContext.getDepartmentService().queryChildren(org, EDepartmentType.department);
+		} else {
+			final boolean borg = (Boolean) cp.getBeanProperty("org");
+			dq = orgContext.getDepartmentService().queryChildren(parent,
+					borg ? EDepartmentType.organization : null);
+		}
+		return DataQueryUtils.toList(dq);
 	}
 
 	@Override

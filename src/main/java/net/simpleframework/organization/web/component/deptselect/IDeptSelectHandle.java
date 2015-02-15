@@ -18,7 +18,7 @@ public interface IDeptSelectHandle extends IDictionaryHandle {
 	/**
 	 * 获取机构树数据
 	 * 
-	 * @param cParameter
+	 * @param cp
 	 * @param treeBean
 	 * @param parent
 	 * @return

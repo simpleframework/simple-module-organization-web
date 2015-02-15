@@ -10,6 +10,7 @@ import java.util.Set;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.userselect.DepartmentW;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
@@ -38,6 +39,16 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 			return orgContext.getUserService().queryAll();
 		}
 		return null;
+	}
+
+	@Override
+	public Map<String, Object> getFormParameters(final ComponentParameter cp) {
+		final KVMap kv = new KVMap();
+		final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+		if (org != null) {
+			kv.put("orgId", org.getId());
+		}
+		return kv;
 	}
 
 	@Override
