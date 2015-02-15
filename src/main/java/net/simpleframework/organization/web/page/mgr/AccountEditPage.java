@@ -1,13 +1,20 @@
 package net.simpleframework.organization.web.page.mgr;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.Convert;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.EInputType;
+import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.RowField;
+import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
+import net.simpleframework.mvc.common.element.TextButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
 import net.simpleframework.organization.Account;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
@@ -24,6 +31,7 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
+		// 部门字典
 		addComponentBean(pp, "AccountEditPage_deptDict", DeptSelectBean.class).setBindingId(
 				"ue_departmentId").setBindingText("id_departmentText");
 	}
@@ -32,8 +40,12 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 	@Transaction(context = IOrganizationContext.class)
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		super.onSave(cp);
+		return toJavascriptForward(cp);
+	}
+
+	protected JavascriptForward toJavascriptForward(final PageParameter pp) {
 		final JavascriptForward js = CategoryTableLCTemplatePage.createTableRefresh();
-		if (Convert.toBool(cp.getParameter(OPT_NEXT))) {
+		if (Convert.toBool(pp.getParameter(OPT_NEXT))) {
 			js.append("$('").append(getFormSelector()).append("').down('form').reset();");
 			js.append("$('ae_accountName').focus();");
 		} else {
@@ -48,12 +60,23 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 	}
 
 	@Override
-	protected boolean show_opt_next(final PageParameter pp) {
+	protected boolean isShowOptNext(final PageParameter pp) {
 		return getAccount(pp) == null;
 	}
 
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
-		return TableRows.of(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10);
+		final Department org = getOrg(pp);
+		String dept_click = "$Actions['AccountEditPage_deptDict'](";
+		if (org != null) {
+			dept_click += "'orgId=" + org.getId() + "'";
+		}
+		dept_click += ");";
+		final TableRow r2 = new TableRow(new RowField($m("AccountEditPage.2"), new InputElement(
+				"ae_password", EInputType.password)).setStarMark(true), new RowField(
+				$m("AccountEditPage.3"), new TextButton("id_departmentText").setHiddenField(
+						"ue_departmentId").setOnclick(dept_click)));
+		return TableRows.of(r1(pp), r2, r3(pp), r4(pp), r5(pp), r6(pp), r7(pp), r8(pp), r9(pp),
+				r10(pp));
 	}
 }

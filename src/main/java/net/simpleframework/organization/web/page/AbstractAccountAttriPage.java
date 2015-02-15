@@ -14,12 +14,10 @@ import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.CalendarInput;
-import net.simpleframework.mvc.common.element.EInputType;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.Option;
 import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.TableRow;
-import net.simpleframework.mvc.common.element.TextButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
@@ -58,6 +56,15 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
+	public boolean isButtonsOnTop(final PageParameter pp) {
+		return true;
+	}
+
+	protected Department getOrg(final PageParameter pp) {
+		return null;
+	}
+
+	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		final KVMap userData = new KVMap();
 		final Enumeration<?> e = cp.getParameterNames();
@@ -67,6 +74,11 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 				userData.put(k.substring(3), cp.getParameter(k));
 			}
 		}
+		final Department org = getOrg(cp);
+		if (org != null) {
+			userData.put("orgId", org.getId());
+		}
+
 		final IAccountService aService = orgContext.getAccountService();
 		orgContext.getAccountService()
 				.doSave(aService.getBean(cp.getParameter("ae_id")), cp.getParameter("ae_accountName"),
@@ -114,42 +126,50 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		}
 	}
 
-	protected final TableRow r1 = new TableRow(new RowField($m("AccountEditPage.0"),
-			InputElement.hidden("ae_id"), new InputElement("ae_accountName")).setStarMark(true),
-			new RowField($m("AccountEditPage.1"), new InputElement("ue_text")).setStarMark(true));
+	protected final TableRow r1(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.0"), InputElement.hidden("ae_id"),
+				new InputElement("ae_accountName")).setStarMark(true), new RowField(
+				$m("AccountEditPage.1"), new InputElement("ue_text")).setStarMark(true));
+	}
 
-	protected final TableRow r2 = new TableRow(new RowField($m("AccountEditPage.2"),
-			new InputElement("ae_password", EInputType.password)).setStarMark(true), new RowField(
-			$m("AccountEditPage.3"), new TextButton("id_departmentText").setHiddenField(
-					"ue_departmentId").setOnclick("$Actions['AccountEditPage_deptDict']();")));
+	protected final TableRow r3(final PageParameter pp) {
+		return new TableRow(
+				new RowField($m("AccountEditPage.4"), new InputElement("ue_email")).setStarMark(true),
+				new RowField($m("AccountEditPage.5"), new InputElement("ue_mobile")));
+	}
 
-	protected final TableRow r3 = new TableRow(new RowField($m("AccountEditPage.4"),
-			new InputElement("ue_email")).setStarMark(true), new RowField($m("AccountEditPage.5"),
-			new InputElement("ue_mobile")));
+	protected final TableRow r4(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.18"), new InputElement("ue_mobile2")),
+				new RowField($m("AccountEditPage.9"), new InputElement("ue_postcode")));
+	}
 
-	protected final TableRow r4 = new TableRow(new RowField($m("AccountEditPage.18"),
-			new InputElement("ue_mobile2")), new RowField($m("AccountEditPage.9"), new InputElement(
-			"ue_postcode")));
+	protected final TableRow r5(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.6"),
+				InputElement.select("ue_sex").addElements(new Option($m("AccountEditPage.16")),
+						new Option($m("AccountEditPage.17")))), new RowField($m("AccountEditPage.7"),
+				new CalendarInput("ue_birthday").setCalendarComponent("cal_Birthday")));
+	}
 
-	protected final TableRow r5 = new TableRow(new RowField($m("AccountEditPage.6"), InputElement
-			.select("ue_sex").addElements(new Option($m("AccountEditPage.16")),
-					new Option($m("AccountEditPage.17")))), new RowField($m("AccountEditPage.7"),
-			new CalendarInput("ue_birthday").setCalendarComponent("cal_Birthday")));
+	protected final TableRow r6(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.10"), new InputElement("ue_homePhone")),
+				new RowField($m("AccountEditPage.11"), new InputElement("ue_officePhone")));
+	}
 
-	protected final TableRow r6 = new TableRow(new RowField($m("AccountEditPage.10"),
-			new InputElement("ue_homePhone")), new RowField($m("AccountEditPage.11"),
-			new InputElement("ue_officePhone")));
+	protected final TableRow r7(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.12"), new InputElement("ue_qq")),
+				new RowField($m("AccountEditPage.13"), new InputElement("ue_msn")));
+	}
 
-	protected final TableRow r7 = new TableRow(new RowField($m("AccountEditPage.12"),
-			new InputElement("ue_qq")), new RowField($m("AccountEditPage.13"), new InputElement(
-			"ue_msn")));
+	protected final TableRow r8(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.8"), new InputElement("ue_hometown")));
+	}
 
-	protected final TableRow r8 = new TableRow(new RowField($m("AccountEditPage.8"),
-			new InputElement("ue_hometown")));
+	protected final TableRow r9(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.14"), new InputElement("ue_address")));
+	}
 
-	protected final TableRow r9 = new TableRow(new RowField($m("AccountEditPage.14"),
-			new InputElement("ue_address")));
-
-	protected final TableRow r10 = new TableRow(new RowField($m("AccountEditPage.15"),
-			InputElement.textarea("ue_description")));
+	protected final TableRow r10(final PageParameter pp) {
+		return new TableRow(new RowField($m("AccountEditPage.15"), InputElement.textarea(
+				"ue_description").setRows(3)));
+	}
 }

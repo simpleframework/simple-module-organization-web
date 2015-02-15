@@ -1,11 +1,15 @@
 package net.simpleframework.organization.web.page2;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -22,12 +26,15 @@ import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
+import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IDepartmentService;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
+import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 
 /**
@@ -42,8 +49,16 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		addComponentBean(pp, "UserMgrTPage_dept", TreeBean.class).setContainerId(
-				"idUserMgrTPage_dept").setHandlerClass(DepartmentTree.class);
+		//
+		// addComponentBean(pp, "UserMgrTPage_dept",
+		// TreeBean.class).setContainerId(
+		// "idUserMgrTPage_dept").setHandlerClass(DepartmentTree.class);
+
+		// 添加用户
+		addAjaxRequest(pp, "UserMgrTPage_editPage", _AccountEditPage.class);
+		addComponentBean(pp, "UserMgrTPage_edit", WindowBean.class)
+				.setContentRef("UserMgrTPage_editPage").setTitle($m("AccountMgrPage.8")).setHeight(500)
+				.setWidth(620);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
@@ -56,7 +71,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn(), SpanElement.SPACE, LinkButton.deleteBtn()));
+		sb.append(ElementList.of(LinkButton.addBtn().setOnclick("$Actions['UserMgrTPage_edit']();"),
+				SpanElement.SPACE, LinkButton.deleteBtn()));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'>");
 		sb.append("</div>");
@@ -129,6 +145,30 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			data.add(TablePagerColumn.OPE, sb.toString());
 			return data;
+		}
+	}
+
+	public static class _AccountEditPage extends AccountEditPage {
+		@Override
+		public String getRole(final PageParameter pp) {
+			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		}
+
+		@Override
+		protected JavascriptForward toJavascriptForward(final PageParameter pp) {
+			final JavascriptForward js = new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
+			if (Convert.toBool(pp.getParameter(OPT_NEXT))) {
+				js.append("$('").append(getFormSelector()).append("').down('form').reset();");
+				js.append("$('ae_accountName').focus();");
+			} else {
+				js.append("$Actions['UserMgrTPage_edit'].close();");
+			}
+			return js;
+		}
+
+		@Override
+		protected Department getOrg(final PageParameter pp) {
+			return AbstractMgrTPage.getOrg(pp);
 		}
 	}
 }

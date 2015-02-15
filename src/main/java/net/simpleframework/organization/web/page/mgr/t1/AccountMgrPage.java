@@ -24,7 +24,6 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -74,11 +73,10 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		AccountMgrPageUtils.addAccountTblCols(tablePager);
 
 		// 添加账号
-		addComponentBean(pp, "AccountMgrPage_editPage", AjaxRequestBean.class).setUrlForward(
-				url(AccountEditPage.class));
+		addAjaxRequest(pp, "AccountMgrPage_editPage", AccountEditPage.class);
 		addComponentBean(pp, "AccountMgrPage_edit", WindowBean.class)
 				.setContentRef("AccountMgrPage_editPage").setTitle($m("AccountMgrPage.8"))
-				.setHeight(500).setWidth(640);
+				.setHeight(500).setWidth(620);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "AccountMgrPage_delete");

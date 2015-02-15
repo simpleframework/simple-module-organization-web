@@ -97,10 +97,6 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		addAjaxRequest(pp, "RoleMemberPage_Move").setHandlerMethod("doMove");
 	}
 
-	protected Department getOrg(final PageParameter pp) {
-		return null;
-	}
-
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("mId"), ";");

@@ -162,10 +162,5 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		public String getRole(final PageParameter pp) {
 			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
-
-		@Override
-		protected Department getOrg(final PageParameter pp) {
-			return AbstractMgrTPage.getOrg(pp);
-		}
 	}
 }

@@ -41,11 +41,6 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	}
 
 	@Override
-	public boolean isButtonsOnTop(final PageParameter pp) {
-		return true;
-	}
-
-	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		return ElementList.of(SpanElement.strongText($m("UserAttriPage.1")));
 	}
@@ -57,6 +52,6 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
-		return TableRows.of(r1, r3, r4, r5, r6, r7, r8, r9, r10);
+		return TableRows.of(r1(pp), r3(pp), r4(pp), r5(pp), r6(pp), r7(pp), r8(pp), r9(pp), r10(pp));
 	}
 }
