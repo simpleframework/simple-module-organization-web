@@ -4,6 +4,7 @@ import net.simpleframework.mvc.common.UrlsCache;
 import net.simpleframework.organization.web.page2.DepartmentMgrTPage;
 import net.simpleframework.organization.web.page2.RoleMgrTPage;
 import net.simpleframework.organization.web.page2.UserMgrTPage;
+import net.simpleframework.organization.web.page2.UserMgr_DelTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -17,5 +18,6 @@ public class OrganizationUrlsFactory extends UrlsCache {
 		put(DepartmentMgrTPage.class);
 		put(RoleMgrTPage.class);
 		put(UserMgrTPage.class);
+		put(UserMgr_DelTPage.class);
 	}
 }

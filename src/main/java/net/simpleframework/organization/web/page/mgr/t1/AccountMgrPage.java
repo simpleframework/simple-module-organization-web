@@ -31,7 +31,6 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
-import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
@@ -46,8 +45,6 @@ import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
-import net.simpleframework.organization.web.page.attri.AccountStatPage;
-import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.DepartmentCategory;
 
 /**
@@ -72,11 +69,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
 		AccountMgrPageUtils.addAccountTblCols(tablePager);
 
-		// 添加账号
-		addAjaxRequest(pp, "AccountMgrPage_editPage", AccountEditPage.class);
-		addComponentBean(pp, "AccountMgrPage_edit", WindowBean.class)
-				.setContentRef("AccountMgrPage_editPage").setTitle($m("AccountMgrPage.8"))
-				.setHeight(500).setWidth(620);
+		AccountMgrPageUtils.addAccountComponents(pp, "AccountMgrPage");
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "AccountMgrPage_delete");
@@ -94,21 +87,14 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		// 注销
 		addAjaxRequest(pp, "AccountMgrPage_logout").setConfirmMessage($m("AccountMgrPage.17"))
 				.setHandlerMethod("doDelete");
+		// 移动
+		addAjaxRequest(pp, "AccountMgrPage_Move").setHandlerMethod("doMove");
 
 		// 日志
 		final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 		if (ref != null) {
 			((OrganizationLogRef) ref).addLogComponent(pp);
 		}
-
-		// 帐号信息
-		addAjaxRequest(pp, "AccountMgrPage_accountPage", AccountStatPage.class);
-		addComponentBean(pp, "AccountMgrPage_accountWin", WindowBean.class)
-				.setContentRef("AccountMgrPage_accountPage").setTitle($m("AccountMgrPage.18"))
-				.setHeight(450).setWidth(380);
-
-		// 移动
-		addAjaxRequest(pp, "AccountMgrPage_Move").setHandlerMethod("doMove");
 	}
 
 	@Override
@@ -218,36 +204,36 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			if (menuItem == null) {
-				final MenuItems items = MenuItems.of(MenuItem.itemEdit().setOnclick_act(
-						"AccountMgrPage_edit", "accountId"));
-				final int type = Convert.toInt(getSelectedTreeNode(cp));
-				if (type != IAccountService.ONLINE_ID) {
-					items.add(MenuItem.itemDelete().setOnclick_act("AccountMgrPage_delete", "id"));
-				}
-				items.add(MenuItem.sep());
-				items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act(
-						"AccountMgrPage_accountWin", "accountId"));
-				items.add(MenuItem.sep());
-				items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
-				items.add(MenuItem.sep());
-				items.append(MenuItem
-						.of($m("Menu.move"))
-						.addChild(
-								MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-										"$pager_action(item).move(true, 'AccountMgrPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-										"$pager_action(item).move2(true, 'AccountMgrPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-										"$pager_action(item).move(false, 'AccountMgrPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-										"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
-				return items;
+			if (menuItem != null) {
+				return null;
 			}
-			return null;
+			final MenuItems items = MenuItems.of();
+			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("AccountMgrPage_accountWin",
+					"accountId"));
+			items.add(MenuItem.sep());
+			items.add(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
+			final int type = Convert.toInt(getSelectedTreeNode(cp));
+			if (type != IAccountService.ONLINE_ID) {
+				items.add(MenuItem.itemDelete().setOnclick_act("AccountMgrPage_delete", "id"));
+			}
+			items.add(MenuItem.sep());
+			items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
+			items.add(MenuItem.sep());
+			items.append(MenuItem
+					.of($m("Menu.move"))
+					.addChild(
+							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
+									"$pager_action(item).move(true, 'AccountMgrPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
+									"$pager_action(item).move2(true, 'AccountMgrPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
+									"$pager_action(item).move(false, 'AccountMgrPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
+									"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
+			return items;
 		}
 
 		@Override

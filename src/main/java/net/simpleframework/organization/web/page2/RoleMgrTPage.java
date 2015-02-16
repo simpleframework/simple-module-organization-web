@@ -1,5 +1,7 @@
 package net.simpleframework.organization.web.page2;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +47,14 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("text", "显示名", 210).setTextAlign(ETextAlign.left).setSort(
-								false))
+						new TablePagerColumn("text", $m("RoleMgrTPage.0"), 210).setTextAlign(
+								ETextAlign.left).setSort(false))
 				.addColumn(
-						new TablePagerColumn("name", "角色名", 120).setTextAlign(ETextAlign.left).setSort(
-								false))
+						new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setTextAlign(
+								ETextAlign.left).setSort(false))
 				.addColumn(
-						new TablePagerColumn("roletype", "角色类型", 90).setTextAlign(ETextAlign.left)
-								.setSort(false)).addColumn(TablePagerColumn.DESCRIPTION())
+						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setTextAlign(
+								ETextAlign.left).setSort(false)).addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(125));
 
 		// 成员窗口
@@ -67,7 +69,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='RoleMgrTPage clearfix'>");
 		sb.append(" <div class='lnav'>");
-		sb.append("  <div class='lbl'>角色视图列表</div>");
+		sb.append("  <div class='lbl'>#(RoleMgrTPage.3)</div>");
 		final Department org = getOrg(pp);
 		if (org != null) {
 			final IRoleChartService cService = orgContext.getRoleChartService();
@@ -148,9 +150,9 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 
 			final StringBuilder sb = new StringBuilder();
 			sb.append(
-					new ButtonElement("成员").setOnclick("$Actions['RoleMgrTPage_members']('roleId="
-							+ role.getId() + "');")).append(SpanElement.SPACE)
-					.append(ButtonElement.editBtn());
+					new ButtonElement($m("RoleMgrTPage.4"))
+							.setOnclick("$Actions['RoleMgrTPage_members']('roleId=" + role.getId() + "');"))
+					.append(SpanElement.SPACE).append(ButtonElement.editBtn());
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			data.add(TablePagerColumn.OPE, sb.toString());
 			return data;

@@ -4,9 +4,15 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Date;
 
+import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.window.WindowBean;
+import net.simpleframework.organization.web.page.attri.AccountStatPage;
+import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -15,6 +21,21 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
  *         http://www.simpleframework.net
  */
 public abstract class AccountMgrPageUtils {
+
+	public static void addAccountComponents(final PageParameter pp, final String key) {
+		// 添加账号
+		AjaxRequestBean ajaxRequest = pp.addComponentBean(key + "_editPage", AjaxRequestBean.class)
+				.setUrlForward(AbstractMVCPage.url(AccountEditPage.class));
+		pp.addComponentBean(key + "_edit", WindowBean.class).setContentRef(ajaxRequest.getName())
+				.setTitle($m("AccountMgrPage.8")).setHeight(500).setWidth(620);
+
+		// 帐号信息
+		ajaxRequest = pp.addComponentBean(key + "_accountPage", AjaxRequestBean.class).setUrlForward(
+				AbstractMVCPage.url(AccountStatPage.class));
+		pp.addComponentBean(key + "_accountWin", WindowBean.class)
+				.setContentRef(ajaxRequest.getName()).setTitle($m("AccountMgrPage.18")).setHeight(450)
+				.setWidth(380);
+	}
 
 	public static void addAccountTblCols(final TablePagerBean tablePager) {
 		tablePager

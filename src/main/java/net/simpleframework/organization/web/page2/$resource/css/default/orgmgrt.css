@@ -3,9 +3,9 @@
 }
 
 .Tabs_BlankPage ul.simple_tabs a.active {
-  background-image: none;
   background-color: #f5f5f5;
   border-bottom-color: #f5f5f5;
+  background-image: none;
 }
 
 .Tabs_tb .le .org_txt {
@@ -21,6 +21,23 @@
   padding: 8px;
   border-bottom: 1px solid #bbb;
   background-color: #f5f5f5;
+  position: relative;
+}
+
+.tbar.UserMgrTPage_tbar .simple_tabs {
+  bottom: 0;
+  position: absolute;
+  right: 10px;
+}
+
+.tbar.UserMgrTPage_tbar .simple_tabs a {
+  background-color: #eee;  
+}
+
+.tbar.UserMgrTPage_tbar .simple_tabs a.active {
+  background-color: #fff;
+  border-bottom-color: #fff;
+  background-image: none;
 }
 
 #idDepartmentMgrTPage_tbl, 

@@ -3,6 +3,7 @@ package net.simpleframework.organization.web.page2;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ETabMatch;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -67,12 +68,13 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 			}
 			oele = new SpanElement(txt);
 		} else {
-			oele = new SpanElement("当前用户没有机构信息");
+			oele = new SpanElement($m("AbstractMgrTPage.3"));
 		}
 		final ElementList el = ElementList.of(oele.setClassName("org_txt"));
 		if (pp.getLogin().isManager()) {
 			el.append(SpanElement.SPACE).append(
-					new LinkElement("选择机构").setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
+					new LinkElement($m("AbstractMgrTPage.4"))
+							.setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
 		}
 		return el;
 	}
@@ -86,9 +88,12 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 		if (StringUtils.hasText(orgid)) {
 			params = "orgId=" + orgid;
 		}
-		return TabButtons.of(new TabButton($m("AbstractMgrTPage.0")).setHref(urlsFactory.getUrl(pp,
-				DepartmentMgrTPage.class, params)), new TabButton($m("AbstractMgrTPage.1"))
-				.setHref(urlsFactory.getUrl(pp, UserMgrTPage.class, params)), new TabButton(
-				$m("AbstractMgrTPage.2")).setHref(urlsFactory.getUrl(pp, RoleMgrTPage.class, params)));
+		return TabButtons.of(
+				new TabButton($m("AbstractMgrTPage.0")).setHref(urlsFactory.getUrl(pp,
+						DepartmentMgrTPage.class, params)),
+				new TabButton($m("AbstractMgrTPage.1")).setHref(
+						urlsFactory.getUrl(pp, UserMgrTPage.class, params)).setTabMatch(
+						ETabMatch.url_contains), new TabButton($m("AbstractMgrTPage.2"))
+						.setHref(urlsFactory.getUrl(pp, RoleMgrTPage.class, params)));
 	}
 }
