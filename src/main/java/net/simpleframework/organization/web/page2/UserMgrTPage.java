@@ -105,7 +105,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			if (parent == null) {
 				final Department org = getOrg(cp);
 				if (org != null) {
-					final IDataQuery<Department> dq = dService.queryChildren(org,
+					final IDataQuery<Department> dq = dService.queryDepartments(org,
 							EDepartmentType.department);
 					Department dept;
 					while ((dept = dq.next()) != null) {
@@ -115,7 +115,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 				}
 			} else {
 				final Department _dept = (Department) parent.getDataObject();
-				final IDataQuery<Department> dq = dService.queryChildren(_dept,
+				final IDataQuery<Department> dq = dService.queryDepartments(_dept,
 						EDepartmentType.department);
 				Department dept;
 				while ((dept = dq.next()) != null) {
@@ -131,7 +131,11 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Department org = getOrg(cp);
-			return org != null ? orgContext.getUserService().queryUsers(org) : null;
+			if (org != null) {
+				cp.addFormParameter("orgId", org.getId());
+				return orgContext.getUserService().queryUsers(org);
+			}
+			return null;
 		}
 
 		@Override

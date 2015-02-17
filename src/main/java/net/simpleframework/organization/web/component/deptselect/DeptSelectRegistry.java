@@ -34,8 +34,9 @@ public class DeptSelectRegistry extends DictionaryRegistry {
 
 		final String deptSelectName = nCP.getComponentName();
 
-		final TreeBean treeBean = (TreeBean) pp.addComponentBean(deptSelectName + "_tree",
-				TreeBean.class).setHandlerClass(DeptTree.class);
+		final TreeBean treeBean = (TreeBean) pp
+				.addComponentBean(deptSelectName + "_tree", TreeBean.class).setCookies(false)
+				.setHandlerClass(DeptTree.class);
 
 		deptSelect.addTreeRef(nCP, treeBean.getName());
 		treeBean.setAttr("__deptSelect", deptSelect);
@@ -62,6 +63,7 @@ public class DeptSelectRegistry extends DictionaryRegistry {
 					final TreeNode n = new TreeNode(treeBean, treeNode, d);
 					n.setImage(DeptSelectUtils.icon_dept(nCP, d));
 					n.setDynamicLoading(treeNode != null);
+					n.setOpened(treeNode == null);
 					nodes.add(n);
 				}
 				return nodes;

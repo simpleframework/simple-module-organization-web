@@ -24,8 +24,11 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Department org = getOrg(cp);
-			return org != null ? orgContext.getUserService().queryUsers(org, EAccountStatus.delete)
-					: null;
+			if (org != null) {
+				cp.addFormParameter("orgId", org.getId());
+				return orgContext.getUserService().queryUsers(org, EAccountStatus.delete);
+			}
+			return null;
 		}
 	}
 }

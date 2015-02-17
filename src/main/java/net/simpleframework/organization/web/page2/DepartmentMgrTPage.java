@@ -73,7 +73,7 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 		private List<Department> list(final Department parent) {
 			final List<Department> l = new ArrayList<Department>();
 			if (parent != null) {
-				final IDataQuery<Department> dq = orgContext.getDepartmentService().queryChildren(
+				final IDataQuery<Department> dq = orgContext.getDepartmentService().queryDepartments(
 						parent, EDepartmentType.department);
 				Department dept;
 				while ((dept = dq.next()) != null) {

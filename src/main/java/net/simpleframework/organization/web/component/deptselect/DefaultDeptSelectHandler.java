@@ -30,14 +30,19 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
 		IDataQuery<Department> dq;
-		Department org;
-		if (parent == null
-				&& (org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"))) != null) {
-			dq = orgContext.getDepartmentService().queryChildren(org, EDepartmentType.department);
+		final boolean borg = (Boolean) cp.getBeanProperty("org");
+		if (borg) {
+			dq = orgContext.getDepartmentService().queryDepartments(parent,
+					EDepartmentType.organization);
 		} else {
-			final boolean borg = (Boolean) cp.getBeanProperty("org");
-			dq = orgContext.getDepartmentService().queryChildren(parent,
-					borg ? EDepartmentType.organization : null);
+			Department org;
+			if (parent == null
+					&& (org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"))) != null) {
+				dq = orgContext.getDepartmentService()
+						.queryDepartments(org, EDepartmentType.department);
+			} else {
+				dq = orgContext.getDepartmentService().queryDepartments(parent, null);
+			}
 		}
 		return DataQueryUtils.toList(dq);
 	}
