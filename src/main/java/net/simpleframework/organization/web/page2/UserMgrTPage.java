@@ -8,6 +8,7 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -58,13 +59,17 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		// addComponentBean(pp, "UserMgrTPage_dept",
 		// TreeBean.class).setContainerId(
 		// "idUserMgrTPage_dept").setHandlerClass(DepartmentTree.class);
+		addTablePagerBean(pp);
 
+		AccountMgrPageUtils.addAccountComponents(pp, "UserMgrTPage");
+	}
+
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
 		AccountMgrPageUtils.addAccountTblCols(tablePager);
-
-		AccountMgrPageUtils.addAccountComponents(pp, "UserMgrTPage");
+		return tablePager;
 	}
 
 	@Override
@@ -75,11 +80,16 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		sb.append(ElementList.of(LinkButton.addBtn().setOnclick("$Actions['UserMgrTPage_edit']();"),
 				SpanElement.SPACE, LinkButton.deleteBtn()));
 
+		String params = null;
+		final String orgid = pp.getParameter("orgId");
+		if (StringUtils.hasText(orgid)) {
+			params = "orgId=" + orgid;
+		}
 		final OrganizationUrlsFactory urlsFactory = ((IOrganizationWebContext) orgContext)
 				.getUrlsFactory();
 		sb.append(TabButtons.of(
-				new TabButton("所有用户").setHref(urlsFactory.getUrl(pp, UserMgrTPage.class)),
-				new TabButton("已删除用户").setHref(urlsFactory.getUrl(pp, UserMgr_DelTPage.class)))
+				new TabButton("所有用户").setHref(urlsFactory.getUrl(pp, UserMgrTPage.class, params)),
+				new TabButton("已删除用户").setHref(urlsFactory.getUrl(pp, UserMgr_DelTPage.class, params)))
 				.toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
