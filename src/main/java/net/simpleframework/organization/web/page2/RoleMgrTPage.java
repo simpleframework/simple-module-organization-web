@@ -54,7 +54,8 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 								ETextAlign.left).setSort(false))
 				.addColumn(
 						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setTextAlign(
-								ETextAlign.left).setSort(false)).addColumn(TablePagerColumn.DESCRIPTION())
+								ETextAlign.left).setFilterSort(false))
+				.addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(125));
 
 		// 成员窗口
