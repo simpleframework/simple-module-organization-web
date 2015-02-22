@@ -7,6 +7,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.RoleChart;
 
@@ -28,6 +29,7 @@ public class DefaultRoleChartSelectHandler extends AbstractDictionaryHandler imp
 	@Override
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
-		return DataQueryUtils.toList(orgContext.getDepartmentService().queryChildren(parent));
+		return DataQueryUtils.toList(orgContext.getDepartmentService().queryDepartments(parent,
+				EDepartmentType.organization));
 	}
 }
