@@ -10,9 +10,13 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionDept;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -41,6 +45,7 @@ import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationUrlsFactory;
+import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 
@@ -62,14 +67,51 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		addTablePagerBean(pp);
 
 		AccountMgrPageUtils.addAccountComponents(pp, "UserMgrTPage");
+
+		// 删除账号
+		addDeleteAjaxRequest(pp, "UserMgrTPage_delete");
+
+		// 部门选取
+		addComponentBean(pp, "UserMgrTPage_deptSelect", DeptSelectBean.class)
+				.setMultiple(false)
+				.setClearAction("false")
+				.setJsSelectCallback(
+						"$Actions['UserMgrTPage_tbl']('filter_cur_col=u.departmentId&filter=%3D;' + selects[0].id);return true;");
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final Department org = getOrg(pp);
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
-		AccountMgrPageUtils.addAccountTblCols(tablePager);
+		tablePager
+				.addColumn(
+						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
+							@Override
+							public String getFilterVal(final String val) {
+								if (val == null) {
+									return null;
+								}
+								final PermissionDept dept = pp.getPermission().getDept(ID.of(val));
+								return dept.getId() != null ? dept.getText() : val;
+							}
+						}.setFilterAdvClick(
+								"$Actions['UserMgrTPage_deptSelect']("
+										+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");")
+								.setTextAlign(ETextAlign.left)).addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_EMAIL())
+				.addColumn(AccountMgrPageUtils.TC_MOBILE())
+				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
+				.addColumn(AccountMgrPageUtils.TC_STATUS())
+				.addColumn(TablePagerColumn.OPE().setWidth(122));
 		return tablePager;
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doDelete(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("id"));
+		orgContext.getAccountService().delete(ids);
+		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 	}
 
 	@Override
@@ -148,8 +190,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("UserMgrTPage_accountWin",
 					"accountId"));
 			items.add(MenuItem.sep());
-			items.add(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
-			items.add(MenuItem.itemDelete().setOnclick_act("AccountMgrPage_delete", "id"));
+			items.add(MenuItem.itemEdit().setOnclick_act("UserMgrTPage_edit", "accountId"));
+			items.add(MenuItem.itemDelete().setOnclick_act("UserMgrTPage_delete", "id"));
 			items.add(MenuItem.sep());
 			items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
 			items.add(MenuItem.sep());
