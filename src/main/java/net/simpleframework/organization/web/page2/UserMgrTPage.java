@@ -24,6 +24,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -32,21 +33,17 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
-import net.simpleframework.mvc.component.ui.tree.TreeBean;
-import net.simpleframework.mvc.component.ui.tree.TreeNode;
-import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationUrlsFactory;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
+import net.simpleframework.organization.web.page.attri.AccountStatPage;
 import net.simpleframework.organization.web.page.mgr.AccountEditPage;
+import net.simpleframework.organization.web.page.mgr.UserRolesPage;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 
 /**
@@ -61,12 +58,21 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		// addComponentBean(pp, "UserMgrTPage_dept",
-		// TreeBean.class).setContainerId(
-		// "idUserMgrTPage_dept").setHandlerClass(DepartmentTree.class);
 		addTablePagerBean(pp);
 
-		AccountMgrPageUtils.addAccountComponents(pp, "UserMgrTPage");
+		// 添加账号
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_editPage",
+				_AccountEditPage.class);
+		addWindowBean(pp, "UserMgrTPage_edit", ajaxRequest).setTitle($m("AccountMgrPage.8"))
+				.setHeight(500).setWidth(620);
+		// 帐号信息
+		ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_accountPage", AccountStatPage.class);
+		addWindowBean(pp, "UserMgrTPage_accountWin", ajaxRequest).setTitle($m("AccountMgrPage.18"))
+				.setHeight(450).setWidth(380);
+
+		// 添加角色
+		ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_rolePage", _UserRolesPage.class);
+		addWindowBean(pp, "UserMgrTPage_roleWin", ajaxRequest);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "UserMgrTPage_delete");
@@ -139,37 +145,6 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		return sb.toString();
 	}
 
-	public static class DepartmentTree extends AbstractTreeHandler {
-		@Override
-		public TreeNodes getTreenodes(final ComponentParameter cp, final TreeNode parent) {
-			final TreeBean treeBean = (TreeBean) cp.componentBean;
-			final IDepartmentService dService = orgContext.getDepartmentService();
-			final TreeNodes nodes = TreeNodes.of();
-			if (parent == null) {
-				final Department org = getOrg(cp);
-				if (org != null) {
-					final IDataQuery<Department> dq = dService.queryDepartments(org,
-							EDepartmentType.department);
-					Department dept;
-					while ((dept = dq.next()) != null) {
-						final TreeNode node = new TreeNode(treeBean, parent, dept);
-						nodes.add(node);
-					}
-				}
-			} else {
-				final Department _dept = (Department) parent.getDataObject();
-				final IDataQuery<Department> dq = dService.queryDepartments(_dept,
-						EDepartmentType.department);
-				Department dept;
-				while ((dept = dq.next()) != null) {
-					final TreeNode node = new TreeNode(treeBean, parent, dept);
-					nodes.add(node);
-				}
-			}
-			return nodes;
-		}
-	}
-
 	public static class UserTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -235,12 +210,15 @@ public class UserMgrTPage extends AbstractMgrTPage {
 				}
 			}
 
+			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("UserMgrTPage.0")))
+			sb.append(
+					new ButtonElement($m("UserMgrTPage.0"))
+							.setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id + "');"))
 					.append(SpanElement.SPACE)
 					.append(
 							ButtonElement.editBtn().setOnclick(
-									"$Actions['UserMgrTPage_edit']('accountId=" + user.getId() + "');"));
+									"$Actions['UserMgrTPage_edit']('accountId=" + id + "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			data.add(TablePagerColumn.OPE, sb.toString());
 			return data;
@@ -269,5 +247,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			}
 			return js;
 		}
+	}
+
+	public static class _UserRolesPage extends UserRolesPage {
 	}
 }

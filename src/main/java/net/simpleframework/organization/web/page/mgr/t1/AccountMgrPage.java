@@ -25,6 +25,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -46,6 +47,8 @@ import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
+import net.simpleframework.organization.web.page.attri.AccountStatPage;
+import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.DepartmentCategory;
 
 /**
@@ -78,7 +81,15 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.addColumn(AccountMgrPageUtils.TC_STATUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(122));
 
-		AccountMgrPageUtils.addAccountComponents(pp, "AccountMgrPage");
+		// 添加账号
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_editPage",
+				AccountEditPage.class);
+		addWindowBean(pp, "AccountMgrPage_edit", ajaxRequest).setTitle($m("AccountMgrPage.8"))
+				.setHeight(500).setWidth(620);
+		// 帐号信息
+		ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_accountPage", AccountStatPage.class);
+		addWindowBean(pp, "UserMgrTPage_accountWin", ajaxRequest).setTitle($m("AccountMgrPage.18"))
+				.setHeight(450).setWidth(380);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "AccountMgrPage_delete");
