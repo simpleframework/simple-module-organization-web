@@ -130,9 +130,10 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		final OrganizationUrlsFactory urlsFactory = ((IOrganizationWebContext) orgContext)
 				.getUrlsFactory();
 		sb.append(TabButtons.of(
-				new TabButton("所有用户").setHref(urlsFactory.getUrl(pp, UserMgrTPage.class, params)),
-				new TabButton("已删除用户").setHref(urlsFactory.getUrl(pp, UserMgr_DelTPage.class, params)))
-				.toString(pp));
+				new TabButton($m("UserMgrTPage.1")).setHref(urlsFactory.getUrl(pp, UserMgrTPage.class,
+						params)),
+				new TabButton($m("UserMgrTPage.2")).setHref(urlsFactory.getUrl(pp,
+						UserMgr_DelTPage.class, params))).toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
 		return sb.toString();
@@ -253,6 +254,11 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		}
 
 		@Override
+		protected Department getOrg(final PageParameter pp) {
+			return AbstractMgrTPage.getOrg(pp);
+		}
+
+		@Override
 		protected JavascriptForward toJavascriptForward(final PageParameter pp) {
 			final JavascriptForward js = new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 			if (Convert.toBool(pp.getParameter(OPT_NEXT))) {
@@ -262,11 +268,6 @@ public class UserMgrTPage extends AbstractMgrTPage {
 				js.append("$Actions['UserMgrTPage_edit'].close();");
 			}
 			return js;
-		}
-
-		@Override
-		protected Department getOrg(final PageParameter pp) {
-			return AbstractMgrTPage.getOrg(pp);
 		}
 	}
 }
