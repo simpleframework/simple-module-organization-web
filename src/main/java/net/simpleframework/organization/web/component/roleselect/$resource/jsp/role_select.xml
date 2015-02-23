@@ -2,6 +2,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xsi:noNamespaceSchemaLocation="http://simpleframework.net/xsd/default/simple.xsd">
   <handlerClass>
-		net.simpleframework.organization.web.component.roleselect.RoleSelectLoaded
-	</handlerClass>
+    net.simpleframework.organization.web.component.roleselect.RoleSelectLoaded
+  </handlerClass>
 </page>

@@ -13,17 +13,17 @@
     <input type="hidden" name="<%=RoleSelectUtils.BEAN_ID%>" value="<%=hashId%>" />
   </form>
   <div class="tb">
-    <span class="icon"></span> <a class="chart"
-      onclick="var act=$Actions['<%=name%>_chart']; act.a = this; act();"><%=RoleSelectUtils.getRoleChart(nCP)%></a>
+    <span class="icon"></span> <a class="chart" 
+      onclick="var act=$Actions['<%=name%>_chart']; act.a = this; act();"><%=RoleSelectUtils.toChartHTML(nCP)%></a>
   </div>
   <div class="ct">
     <div id="container_<%=hashId%>"></div>
   </div>
-  <div class="bottom">
-    <div style="float: right;">
+  <div class="bottom clearfix">
+    <div class="right">
       <input type="button" value="#(Button.Cancel)" onclick="$Actions['<%=name%>'].close();" />
     </div>
-    <div style="float: left;"><%=DictionaryRender.getActions(nCP)%></div>
+    <div class="left"><%=DictionaryRender.getActions(nCP)%></div>
   </div>
 </div>
 <script type="text/javascript">

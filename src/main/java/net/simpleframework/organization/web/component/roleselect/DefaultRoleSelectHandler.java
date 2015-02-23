@@ -3,6 +3,7 @@ package net.simpleframework.organization.web.component.roleselect;
 import java.util.Collection;
 
 import net.simpleframework.ado.query.DataQueryUtils;
+import net.simpleframework.common.coll.CollectionUtils;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.organization.IOrganizationContextAware;
@@ -21,6 +22,9 @@ public class DefaultRoleSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Collection<Role> roles(final ComponentParameter cp, final RoleChart roleChart,
 			final Role parent) {
+		if (roleChart == null) {
+			return CollectionUtils.EMPTY_LIST();
+		}
 		return DataQueryUtils.toList(parent == null ? orgContext.getRoleService()
 				.queryRoot(roleChart) : orgContext.getRoleService().queryChildren(parent));
 	}

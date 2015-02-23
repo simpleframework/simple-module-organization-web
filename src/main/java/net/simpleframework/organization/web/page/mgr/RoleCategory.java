@@ -89,7 +89,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 			final Object o = parent.getDataObject();
 			if (o instanceof Role) {
 				final Role role = (Role) o;
-				parent.setImage(RoleSelectUtils.icon_role(cp, role));
+				parent.setImage(RoleSelectUtils.getRoleIcon(cp, role));
 				if (role.getRoleType() == ERoleType.normal) {
 					final int count = orgContext.getRoleMemberService().queryMembers(role).getCount();
 					if (count > 0) {
@@ -108,7 +108,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 			final TreeNode treeNode) {
 		Object o;
 		if (treeNode != null && (o = treeNode.getDataObject()) instanceof Role) {
-			treeNode.setImage(RoleSelectUtils.icon_role(cp, (Role) o));
+			treeNode.setImage(RoleSelectUtils.getRoleIcon(cp, (Role) o));
 		}
 		return super.getCategoryTreenodes(cp, treeBean, treeNode);
 	}

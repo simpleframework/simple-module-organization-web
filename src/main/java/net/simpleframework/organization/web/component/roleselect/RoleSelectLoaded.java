@@ -65,7 +65,7 @@ public class RoleSelectLoaded extends DefaultPageHandler implements IOrganizatio
 				final String name = nCP.getComponentName();
 				for (final Role r : coll) {
 					final TreeNode tn = new TreeNode((TreeBean) cp.componentBean, parent, r);
-					tn.setImage(RoleSelectUtils.icon_role(nCP, r));
+					tn.setImage(RoleSelectUtils.getRoleIcon(nCP, r));
 					tn.setJsDblclickCallback("selected_" + name + "(branch, ev);");
 					nodes.add(tn);
 				}

@@ -33,16 +33,24 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 		return ComponentParameter.get(request, response, BEAN_ID);
 	}
 
-	public static RoleChart getRoleChart(final ComponentParameter cp) {
+	public static String toChartHTML(final ComponentParameter cp) {
+		final RoleChart chart = getRoleChart(cp);
+		if (chart != null) {
+			return chart.getText() + " (" + chart.getName() + ")";
+		}
+		return "选择角色视图";
+	}
+
+	static RoleChart getRoleChart(final ComponentParameter cp) {
 		final IRoleChartService service = orgContext.getRoleChartService();
 		RoleChart roleChart = service.getBean(cp.getParameter("chartId"));
 		if (roleChart == null) {
 			roleChart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
 		}
-		return roleChart != null ? roleChart : orgContext.getSystemChart();
+		return roleChart != null ? roleChart : null;// orgContext.getSystemChart();
 	}
 
-	public static String icon_role(final PageParameter pp, final Role role) {
+	public static String getRoleIcon(final PageParameter pp, final Role role) {
 		final String imgBase = ComponentUtils.getCssResourceHomePath(pp, RoleSelectBean.class)
 				+ "/images/";
 		String img;

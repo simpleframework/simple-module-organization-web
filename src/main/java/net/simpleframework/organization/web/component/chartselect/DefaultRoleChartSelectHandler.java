@@ -22,8 +22,8 @@ public class DefaultRoleChartSelectHandler extends AbstractDictionaryHandler imp
 
 	@Override
 	public Collection<RoleChart> getRoleCharts(final ComponentParameter cp, final TreeBean treeBean,
-			final Department department) {
-		return DataQueryUtils.toList(orgContext.getRoleChartService().query(department));
+			final Department dept) {
+		return DataQueryUtils.toList(orgContext.getRoleChartService().query(dept));
 	}
 
 	@Override
