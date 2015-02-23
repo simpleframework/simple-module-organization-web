@@ -7,6 +7,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMark;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContextAware;
@@ -47,7 +48,17 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 		if (roleChart == null) {
 			roleChart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
 		}
-		return roleChart != null ? roleChart : null;// orgContext.getSystemChart();
+		if (roleChart == null) {
+			final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+			if (org != null) {
+				roleChart = orgContext.getRoleChartService().query(org).next();
+			} else {
+				if (cp.getLogin().isManager()) {
+					roleChart = orgContext.getSystemChart();
+				}
+			}
+		}
+		return roleChart;
 	}
 
 	public static String getRoleIcon(final PageParameter pp, final Role role) {

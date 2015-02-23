@@ -24,6 +24,7 @@ import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -33,7 +34,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
@@ -46,7 +46,7 @@ import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
-import net.simpleframework.organization.web.page.mgr.AddMemberPage;
+import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -62,9 +62,11 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 		pp.addImportCSS(RoleMembersPage.class, "/role_members.css");
 
-		addAjaxRequest(pp, "ajax_addMemberPage", AddMemberPage.class);
-		addComponentBean(pp, "addMemberWindow", WindowBean.class).setContentRef("ajax_addMemberPage")
-				.setTitle($m("RoleMembersPage.1")).setHeight(340).setWidth(320);
+		// 添加成员
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ajax_addMemberPage",
+				getAddMembersPageClass());
+		addWindowBean(pp, "addMemberWindow", ajaxRequest).setTitle($m("RoleMembersPage.1"))
+				.setHeight(340).setWidth(320);
 
 		// 删除成员
 		addDeleteAjaxRequest(pp, "ajax_deleteMember");
@@ -95,6 +97,10 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		addAjaxRequest(pp, "ajax_roleSave").setHandlerMethod("doRoleSave");
 		// 移动
 		addAjaxRequest(pp, "RoleMemberPage_Move").setHandlerMethod("doMove");
+	}
+
+	protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
+		return AddMembersPage.class;
 	}
 
 	@Transaction(context = IOrganizationContext.class)

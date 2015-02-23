@@ -11,6 +11,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
@@ -23,12 +24,14 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
 
 /**
@@ -164,6 +167,19 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		@Override
 		public String getRole(final PageParameter pp) {
 			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		}
+
+		@Override
+		protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
+			return _AddMembersPage.class;
+		}
+	}
+
+	public static class _AddMembersPage extends AddMembersPage {
+
+		@Override
+		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
+			return new JavascriptForward().append("$Actions['RoleMemberPage_tbl']();");
 		}
 	}
 }

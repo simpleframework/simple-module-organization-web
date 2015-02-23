@@ -41,7 +41,7 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AddMemberPage extends FormPropEditorTemplatePage implements IOrganizationContextAware {
+public class AddMembersPage extends FormPropEditorTemplatePage implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -68,29 +68,29 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 		final RoleChart _chart = orgContext.getRoleChartService().getBean(role.getRoleChartId());
 		final Object orgId = _chart.getDepartmentId();
 
-		final PropField f1 = new PropField($m("AddMemberPage.0")).addComponents(
+		final PropField f1 = new PropField($m("AddMembersPage.0")).addComponents(
 				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
 						String.valueOf(role.getId())),
 				new InputComp("member_type").setType(EInputCompType.select).setDefaultValue(
 						ERoleMemberType.user, ERoleMemberType.role));
 
 		final String utype = ERoleMemberType.user.name();
-		final PropField f2 = new PropField($m("AddMemberPage.1")).addComponents(
+		final PropField f2 = new PropField($m("AddMembersPage.1")).addComponents(
 				new InputComp("member_id").setType(EInputCompType.hidden),
 				new InputComp("member_val").setType(EInputCompType.textButton).addEvent(
 						EElementEvent.click,
 						"$Actions[$F('member_type') == '" + utype
 								+ "' ? 'dictUserSelect' : 'dictRoleSelect']('orgId=" + orgId + "');"));
 
-		final PropField f3 = new PropField($m("AddMemberPage.2")).addComponents(new InputComp(
+		final PropField f3 = new PropField($m("AddMembersPage.2")).addComponents(new InputComp(
 				"member_primary").setType(EInputCompType.checkbox));
 
-		final PropField f4 = new PropField($m("AddMemberPage.3")).addComponents(
+		final PropField f4 = new PropField($m("AddMembersPage.3")).addComponents(
 				new InputComp("member_deptId").setType(EInputCompType.hidden),
 				new InputComp("member_deptVal").setType(EInputCompType.textButton).addEvent(
 						EElementEvent.click,
 						"if ($F('member_type') == '" + utype + "') $Actions['dictDeptSelect']('orgId="
-								+ orgId + "'); else alert('" + $m("AddMemberPage.4") + "');"));
+								+ orgId + "'); else alert('" + $m("AddMembersPage.4") + "');"));
 
 		final PropField f5 = new PropField($m("Description")).addComponents(new InputComp(
 				"member_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
@@ -101,6 +101,8 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 	@Transaction(context = IOrganizationContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
+		final JavascriptForward js = super.onSave(cp);
+
 		final IRoleService service = orgContext.getRoleService();
 
 		final Role role = service.getBean(cp.getParameter("roleId"));
@@ -138,7 +140,11 @@ public class AddMemberPage extends FormPropEditorTemplatePage implements IOrgani
 
 		mService.insert(beans.toArray(new RoleMember[beans.size()]));
 
-		return super.onSave(cp).append("$Actions['ajaxRoleMemberVal']('roleId=").append(role.getId())
-				.append("')");
+		return js.append(toJavascriptForward(cp, role));
+	}
+
+	protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
+		return new JavascriptForward().append("$Actions['ajaxRoleMemberVal']('roleId=")
+				.append(role.getId()).append("')");
 	}
 }
