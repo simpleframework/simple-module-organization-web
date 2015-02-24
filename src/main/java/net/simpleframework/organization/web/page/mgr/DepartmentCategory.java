@@ -143,7 +143,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				c = stat.getState_delete();
 			}
 		} else {
-			c = sService.getAccountStat(type).getNums();
+			final AccountStat stat = sService.getAccountStat(type);
+			c = stat.getNums() - stat.getState_delete();
 		}
 		return c > 0 ? "(" + c + ")" : null;
 	}

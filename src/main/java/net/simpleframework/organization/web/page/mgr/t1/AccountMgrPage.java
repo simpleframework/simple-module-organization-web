@@ -106,7 +106,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 		// 注销
 		addAjaxRequest(pp, "AccountMgrPage_logout").setConfirmMessage($m("AccountMgrPage.17"))
-				.setHandlerMethod("doDelete");
+				.setHandlerMethod("doLogout");
 		// 移动
 		addAjaxRequest(pp, "AccountMgrPage_Move").setHandlerMethod("doMove");
 
@@ -140,6 +140,13 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		orgContext.getAccountService().delete(ids);
+		return createTableRefresh();
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doLogout(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("id"));
+		orgContext.getAccountService().logout(ids);
 		return createTableRefresh();
 	}
 

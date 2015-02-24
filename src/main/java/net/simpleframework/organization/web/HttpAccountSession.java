@@ -162,8 +162,8 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 	}
 
 	@Override
-	public long getOnlineMillis() {
-		return System.currentTimeMillis() - httpSession.getLastAccessedTime();
+	public long getLastAccessedTime() {
+		return httpSession.getLastAccessedTime();
 	}
 
 	@Override

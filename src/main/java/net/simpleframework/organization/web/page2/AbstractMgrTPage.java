@@ -10,6 +10,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.template.lets.Tabs_BlankPage;
+import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
@@ -62,7 +63,8 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 		final Department org = getOrg(pp);
 		if (org != null) {
 			String txt = org.getText();
-			final int nums = orgContext.getAccountStatService().getOrgCount(org, "nums");
+			final AccountStat stat = orgContext.getAccountStatService().getAccountStat(org);
+			final int nums = stat.getNums() - stat.getState_delete();
 			if (nums > 0) {
 				txt += " (" + nums + ")";
 			}
