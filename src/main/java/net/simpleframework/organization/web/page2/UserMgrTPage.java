@@ -72,7 +72,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 
 		// 添加角色
 		ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_rolePage", _UserRolesPage.class);
-		addWindowBean(pp, "UserMgrTPage_roleWin", ajaxRequest);
+		addWindowBean(pp, "UserMgrTPage_roleWin", ajaxRequest).setTitle($m("AccountMgrPage.19"))
+				.setHeight(480).setWidth(800);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "UserMgrTPage_delete");
@@ -202,13 +203,9 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			data.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			data.add("u.mobile", user.getMobile());
 
-			ID deptId;
-			if ((deptId = user.getDepartmentId()) != null) {
-				final Department dept = orgContext.getDepartmentService().getBean(deptId);
-				if (dept != null) {
-					data.add("u.departmentId", dept.getText());
-				}
-			}
+			final Department dept = orgContext.getDepartmentService().getBean(user.getDepartmentId());
+			data.add("u.departmentId", dept != null ? dept.getText() : new SpanElement(
+					$m("AccountMgrPage.20")).setColor("#999"));
 
 			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();

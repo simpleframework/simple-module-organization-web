@@ -73,10 +73,10 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5"), 180).setFilter(
-								false).setTextAlign(ETextAlign.left))
-				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
-				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
+						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false)
+								.setTextAlign(ETextAlign.left)).addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_EMAIL())
+				.addColumn(AccountMgrPageUtils.TC_MOBILE())
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
 				.addColumn(AccountMgrPageUtils.TC_STATUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(122));
@@ -334,13 +334,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			kv.add("lastLoginDate", account.getLastLoginDate());
 			kv.add("status", account.getStatus());
 
-			ID deptId;
-			if ((deptId = user.getDepartmentId()) != null) {
-				final Department dept = orgContext.getDepartmentService().getBean(deptId);
-				if (dept != null) {
-					kv.add("u.departmentId", dept.getText());
-				}
-			}
+			final Department dept = orgContext.getDepartmentService().getBean(user.getDepartmentId());
+			kv.add("u.departmentId", dept != null ? dept.getText() : new SpanElement(
+					$m("AccountMgrPage.20")).setColor("#999"));
 
 			kv.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
 			final String email = user.getEmail();
