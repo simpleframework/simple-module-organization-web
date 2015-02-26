@@ -203,9 +203,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			data.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			data.add("u.mobile", user.getMobile());
 
-			final Department dept = orgContext.getDepartmentService().getBean(user.getDepartmentId());
-			data.add("u.departmentId", dept != null ? dept.getText() : new SpanElement(
-					$m("AccountMgrPage.20")).setColor("#999"));
+			data.add("u.departmentId", AccountMgrPageUtils.toDepartmentText(user.getDepartmentId()));
 
 			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();

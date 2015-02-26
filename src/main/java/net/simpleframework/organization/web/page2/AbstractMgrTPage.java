@@ -63,7 +63,7 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 		final Department org = getOrg(pp);
 		if (org != null) {
 			String txt = org.getText();
-			final AccountStat stat = orgContext.getAccountStatService().getAccountStat(org);
+			final AccountStat stat = orgContext.getAccountStatService().getOrgAccountStat(org);
 			final int nums = stat.getNums() - stat.getState_delete();
 			if (nums > 0) {
 				txt += " (" + nums + ")";

@@ -96,7 +96,7 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 				txt.append(i == 0 ? "| --- " : " --- ");
 			}
 			txt.append(dept.getText());
-			final AccountStat stat = sService.getAccountStat(dept);
+			final AccountStat stat = sService.getDeptAccountStat(dept);
 			final int nums = stat.getNums();
 			if (nums > 0) {
 				txt.append(" (").append(nums).append(")");

@@ -127,7 +127,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 		final IAccountStatService sService = orgContext.getAccountStatService();
 		int c = 0;
 		if (type instanceof Integer) {
-			final AccountStat stat = sService.getAccountStat();
+			final AccountStat stat = sService.getAllAccountStat();
 			final int iType = (Integer) type;
 			if (iType == IAccountService.ALL) {
 				c = stat.getNums();
@@ -143,8 +143,16 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				c = stat.getState_delete();
 			}
 		} else {
-			final AccountStat stat = sService.getAccountStat(type);
-			c = stat.getNums() - stat.getState_delete();
+			final Department dept = orgContext.getDepartmentService().getBean(type);
+			if (dept != null) {
+				AccountStat stat;
+				if (dept.getDepartmentType() == EDepartmentType.department) {
+					stat = sService.getDeptAccountStat(type);
+				} else {
+					stat = sService.getOrgAccountStat(type);
+				}
+				c = stat.getNums() - stat.getState_delete();
+			}
 		}
 		return c > 0 ? "(" + c + ")" : null;
 	}
