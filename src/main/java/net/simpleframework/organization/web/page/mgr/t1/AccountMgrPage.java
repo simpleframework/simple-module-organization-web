@@ -30,6 +30,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
+import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
@@ -70,7 +71,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addCategoryBean(pp, DepartmentCategory.class);
 
 		// 账号列表
-		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, AccountList.class)
+				.setPagerBarLayout(EPagerBarLayout.bottom);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false)
@@ -171,6 +173,29 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
+		final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage."
+				+ IAccountService.ALL)).setOnclick(createTableRefresh(
+				"deptId=&type=" + IAccountService.ALL).toString()));
+		final Object s = getSelectedTreeNode(pp);
+		if (s instanceof Department) {
+			eles.append(SpanElement.NAV).append(new LabelElement(s));
+		} else {
+			final int type = Convert.toInt(s, IAccountService.ALL);
+			if (type != IAccountService.ALL) {
+				eles.append(SpanElement.NAV);
+				if (type >= IAccountService.STATE_DELETE_ID && type <= IAccountService.STATE_NORMAL_ID) {
+					eles.append(new LabelElement(EAccountStatus.values()[IAccountService.STATE_NORMAL_ID
+							- type]));
+				} else {
+					eles.append(new LabelElement($m("AccountMgrPage." + type)));
+				}
+			}
+		}
+		return eles;
+	}
+
+	@Override
+	public ElementList getRightElements(final PageParameter pp) {
 		final Object s = getSelectedTreeNode(pp);
 		final LinkButton add = new LinkButton($m("AccountMgrPage.10"));
 		final ElementList btns = ElementList.of(add);
@@ -292,29 +317,10 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			return m;
 		}
 
-		@Override
-		protected ElementList getNavigationTitle(final ComponentParameter cp) {
-			final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage."
-					+ IAccountService.ALL)).setOnclick(createTableRefresh(
-					"deptId=&type=" + IAccountService.ALL).toString()));
+		// @Override
+		// protected ElementList getNavigationTitle(final ComponentParameter cp) {
 
-			final Object s = getSelectedTreeNode(cp);
-			if (s instanceof Department) {
-				eles.append(new LabelElement(s));
-			} else {
-				final int type = (Integer) s;
-				if (type != IAccountService.ALL) {
-					if (type >= IAccountService.STATE_DELETE_ID
-							&& type <= IAccountService.STATE_NORMAL_ID) {
-						eles.append(new LabelElement(
-								EAccountStatus.values()[IAccountService.STATE_NORMAL_ID - type]));
-					} else {
-						eles.append(new LabelElement($m("AccountMgrPage." + type)));
-					}
-				}
-			}
-			return eles;
-		}
+		// }
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {

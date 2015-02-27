@@ -6,3 +6,7 @@
 .ui-window .AccountStatPage {
   padding: 3px;
 }
+
+.tool_bar .le {
+  line-height: 2;
+}
