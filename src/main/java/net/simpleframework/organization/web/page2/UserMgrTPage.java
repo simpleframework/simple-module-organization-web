@@ -245,5 +245,9 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	}
 
 	public static class _UserRolesPage extends UserRolesPage {
+		@Override
+		protected Department getOrg(final PageParameter pp) {
+			return AbstractMgrTPage.getOrg(pp);
+		}
 	}
 }

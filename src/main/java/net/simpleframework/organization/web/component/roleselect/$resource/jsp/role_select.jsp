@@ -21,7 +21,8 @@
   </div>
   <div class="bottom clearfix">
     <div class="right">
-      <input type="button" value="#(Button.Cancel)" onclick="$Actions['<%=name%>'].close();" />
+      <input type="button" class="button2" value="#(Button.Ok)" onclick="selected_<%=name%>();" /> <input type="button" value="#(Button.Cancel)"
+        onclick="$Actions['<%=name%>'].close();" />
     </div>
     <div class="left"><%=DictionaryRender.getActions(nCP)%></div>
   </div>
@@ -31,6 +32,8 @@
     var selects = $tree_getSelects($Actions['<%=name%>_tree'].tree, branch, ev);
     if (selects && selects.length > 0) {
       <%=DictionaryRender.genSelectCallback(nCP, "selects")%>
+    } else {
+      alert('#(okcancel_inc.jsp.0)');
     }
   }
   

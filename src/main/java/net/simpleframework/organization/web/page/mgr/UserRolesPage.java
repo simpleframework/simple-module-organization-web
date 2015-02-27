@@ -8,7 +8,10 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.IteratorDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -19,6 +22,7 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.User;
+import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -46,10 +50,22 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 								ETextAlign.left).setFilterSort(false))
 				.addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
+
+		// 角色选取
+		addComponentBean(pp, "UserRolesPage_roleSelect", RoleSelectBean.class)
+				.setClearAction("false").setJsSelectCallback("alert(1);");
 	}
 
 	protected Department getOrg(final PageParameter pp) {
 		return null;
+	}
+
+	@Override
+	public ElementList getLeftElements(final PageParameter pp) {
+		final Department org = getOrg(pp);
+		return ElementList.of(LinkButton.addBtn().setOnclick(
+				"$Actions['UserRolesPage_roleSelect']("
+						+ (org != null ? "'orgId=" + org.getId() + "'" : "") + ");"));
 	}
 
 	public static class UserRolesTbl extends AbstractDbTablePagerHandler {
@@ -61,7 +77,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 			final User user = orgContext.getUserService().getBean(cp.getParameter("accountId"));
 			if (user != null) {
 				cp.addFormParameter("accountId", user.getId());
-				return new IteratorDataQuery<Role>(rService.roles(user));
+				return new IteratorDataQuery<Role>(rService.roles(user, new KVMap().add("inOrg", true)));
 			}
 			return null;
 		}
@@ -73,6 +89,10 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 			kv.add("rolename", rService.toUniqueName(r));
 			kv.add("roletext", r.getText());
 			kv.add("roletype", r.getRoleType());
+
+			final StringBuilder sb = new StringBuilder();
+			sb.append(ButtonElement.deleteBtn());
+			kv.add(TablePagerColumn.OPE, sb.toString());
 			return kv;
 		}
 	}
