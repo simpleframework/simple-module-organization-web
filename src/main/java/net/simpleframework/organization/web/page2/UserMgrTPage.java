@@ -204,7 +204,11 @@ public class UserMgrTPage extends AbstractMgrTPage {
 			data.add("u.mobile", user.getMobile());
 
 			data.add("u.departmentId", AccountMgrPageUtils.toDepartmentText(user.getDepartmentId()));
+			data.add(TablePagerColumn.OPE, toOpeHTML(cp, user));
+			return data;
+		}
 
+		protected String toOpeHTML(final ComponentParameter cp, final User user) {
 			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();
 			sb.append(
@@ -215,8 +219,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 							ButtonElement.editBtn().setOnclick(
 									"$Actions['UserMgrTPage_edit']('accountId=" + id + "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			data.add(TablePagerColumn.OPE, sb.toString());
-			return data;
+			return sb.toString();
 		}
 	}
 

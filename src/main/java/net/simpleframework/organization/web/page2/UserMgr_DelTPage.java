@@ -6,6 +6,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
+import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,6 +30,11 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 				return orgContext.getUserService().queryUsers(org, EAccountStatus.delete);
 			}
 			return null;
+		}
+
+		@Override
+		protected String toOpeHTML(final ComponentParameter cp, final User user) {
+			return super.toOpeHTML(cp, user);
 		}
 	}
 }
