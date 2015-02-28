@@ -1,5 +1,7 @@
 package net.simpleframework.organization.web.component.roleselect;
 
+import static net.simpleframework.common.I18n.$m;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -39,7 +41,7 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 		if (chart != null) {
 			return chart.getText() + " (" + chart.getName() + ")";
 		}
-		return "选择角色视图";
+		return $m("RoleSelectUtils.0");
 	}
 
 	static RoleChart getRoleChart(final ComponentParameter cp) {
