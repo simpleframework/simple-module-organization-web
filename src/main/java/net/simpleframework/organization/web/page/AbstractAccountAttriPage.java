@@ -20,6 +20,7 @@ import net.simpleframework.mvc.common.element.RowField;
 import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
+import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.organization.Account;
@@ -43,10 +44,16 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 
 		addCalendarBean(pp, "cal_Birthday");
 
-		addFormValidationBean(pp)
+		addFormValidationBean(pp);
+	}
+
+	@Override
+	protected ValidationBean addFormValidationBean(final PageParameter pp) {
+		return super
+				.addFormValidationBean(pp)
 				.addValidators(
 						new Validator(EValidatorMethod.required,
-								"#ae_accountName, #ae_password, #ue_text, #ue_email"))
+								"#ae_accountName, #ae_password, #ue_text"))
 				.addValidators(
 						new Validator(EValidatorMethod.min_length, "#ae_accountName, #ue_text", "2"))
 				.addValidators(new Validator(EValidatorMethod.email, "#ue_email, #ue_msn"))
@@ -133,8 +140,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	protected final TableRow r3(final PageParameter pp) {
-		return new TableRow(
-				new RowField($m("AccountEditPage.4"), new InputElement("ue_email")).setStarMark(true),
+		return new TableRow(new RowField($m("AccountEditPage.4"), new InputElement("ue_email")),
 				new RowField($m("AccountEditPage.5"), new InputElement("ue_mobile")));
 	}
 

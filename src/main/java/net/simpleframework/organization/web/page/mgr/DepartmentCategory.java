@@ -192,8 +192,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 
 	@Override
 	public KVMap categoryEdit_attri(final ComponentParameter cp) {
-		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("AccountMgrPage.9")).add(
-				window_height, 340);
+		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("AccountMgrPage.9"))
+				.add(window_height, 360).add(window_width, 340);
 	}
 
 	@Override

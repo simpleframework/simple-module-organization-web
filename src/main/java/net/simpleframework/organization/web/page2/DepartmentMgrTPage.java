@@ -12,19 +12,26 @@ import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.EElementEvent;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
+import net.simpleframework.mvc.component.ui.propeditor.InputComp;
+import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
+import net.simpleframework.mvc.component.ui.propeditor.PropField;
+import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
+import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -50,6 +57,12 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 						new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150).setTextAlign(
 								ETextAlign.left).setSort(false))
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
+
+		// 添加部门
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_editPage",
+				DepartmentEditPage.class);
+		addWindowBean(pp, "DepartmentMgrTPage_editWin", ajaxRequest)
+				.setTitle($m("DepartmentMgrTPage.2")).setHeight(320).setWidth(340);
 	}
 
 	@Override
@@ -57,7 +70,8 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn(), SpanElement.SPACE, LinkButton.deleteBtn()));
+		sb.append(ElementList.of(LinkButton.addBtn().setOnclick(
+				"$Actions['DepartmentMgrTPage_editWin']();")));
 		sb.append("</div>");
 		sb.append("<div id='idDepartmentMgrTPage_tbl'>");
 		sb.append("</div>");
@@ -104,6 +118,32 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 			data.add("text", txt.toString());
 			data.add("name", dept.getName());
 			return data;
+		}
+	}
+
+	public static class DepartmentEditPage extends FormPropEditorTemplatePage {
+		@Override
+		protected void onForward(final PageParameter pp) {
+			super.onForward(pp);
+
+			// 部门选取字典
+			addComponentBean(pp, "DepartmentEditPage_deptSelect", DeptSelectBean.class).setMultiple(
+					false);
+		}
+
+		@Override
+		protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
+			final PropField f1 = new PropField($m("category_edit.0")).addComponents(new InputComp(
+					"category_id").setType(EInputCompType.hidden), new InputComp("category_text"));
+			final PropField f2 = new PropField($m("category_edit.1")).addComponents(new InputComp(
+					"category_name"));
+			final PropField f3 = new PropField($m("category_edit.2")).addComponents(new InputComp(
+					"category_parentId").setType(EInputCompType.hidden), new InputComp(
+					"category_parentText").setType(EInputCompType.textButton).setAttributes("readonly")
+					.addEvent(EElementEvent.click, "$Actions['DepartmentEditPage_deptSelect']();"));
+			final PropField f4 = new PropField($m("Description")).addComponents(new InputComp(
+					"category_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
+			propEditor.getFormFields().append(f1, f2, f3, f4);
 		}
 	}
 }

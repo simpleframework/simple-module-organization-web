@@ -35,7 +35,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
@@ -255,10 +254,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 					final User bean = orgContext.getUserService().getBean(rm.getMemberId());
 					deptId = bean.getDepartmentId();
 				}
-				final Department dept = orgContext.getDepartmentService().getBean(deptId);
-				if (dept != null) {
-					kv.put("deptId", dept);
-				}
+				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(deptId));
 			}
 
 			kv.put(TablePagerColumn.DESCRIPTION, rm.getDescription());
