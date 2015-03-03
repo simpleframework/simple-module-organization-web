@@ -15,6 +15,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.EElementEvent;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
+import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
@@ -48,8 +49,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		super.onForward(pp);
 
 		// 验证
-		addFormValidationBean(pp).addValidators(
-				new Validator(EValidatorMethod.required, "#member_val"));
+		addFormValidationBean(pp);
 
 		// 用户选择字典
 		addComponentBean(pp, "dictUserSelect", UserSelectBean.class).setMultiple(true)
@@ -60,6 +60,12 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		// 部门选择
 		addComponentBean(pp, "dictDeptSelect", DeptSelectBean.class).setBindingId("member_deptId")
 				.setBindingText("member_deptVal");
+	}
+
+	@Override
+	protected ValidationBean addFormValidationBean(final PageParameter pp) {
+		return super.addFormValidationBean(pp).addValidators(
+				new Validator(EValidatorMethod.required, "#member_val"));
 	}
 
 	@Override
