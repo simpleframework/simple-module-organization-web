@@ -51,6 +51,7 @@ import net.simpleframework.organization.web.OrganizationLogRef;
 import net.simpleframework.organization.web.page.attri.AccountStatPage;
 import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.DepartmentCategory;
+import net.simpleframework.organization.web.page.mgr.UserRolesPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -81,7 +82,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.addColumn(AccountMgrPageUtils.TC_MOBILE())
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
 				.addColumn(AccountMgrPageUtils.TC_STATUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(122));
+				.addColumn(TablePagerColumn.OPE().setWidth(125));
 
 		// 添加账号
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_editPage",
@@ -89,9 +90,14 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addWindowBean(pp, "AccountMgrPage_edit", ajaxRequest).setTitle($m("AccountMgrPage.8"))
 				.setHeight(500).setWidth(620);
 		// 帐号信息
-		ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_accountPage", AccountStatPage.class);
-		addWindowBean(pp, "UserMgrTPage_accountWin", ajaxRequest).setTitle($m("AccountMgrPage.18"))
+		ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_accountPage", AccountStatPage.class);
+		addWindowBean(pp, "AccountMgrPage_accountWin", ajaxRequest).setTitle($m("AccountMgrPage.18"))
 				.setHeight(450).setWidth(380);
+
+		// 添加角色
+		ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_rolePage", UserRolesPage.class);
+		addWindowBean(pp, "AccountMgrPage_roleWin", ajaxRequest).setTitle($m("AccountMgrPage.19"))
+				.setHeight(480).setWidth(800);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "AccountMgrPage_delete");
@@ -115,7 +121,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		// 日志
 		final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 		if (ref != null) {
-			((OrganizationLogRef) ref).addLogComponent(pp);
+			((OrganizationLogRef) ref).addLogComponent(pp, AccountMgrPage.class);
 		}
 	}
 
@@ -259,32 +265,51 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			if (menuItem != null) {
 				return null;
 			}
+
 			final MenuItems items = MenuItems.of();
 			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("AccountMgrPage_accountWin",
 					"accountId"));
-			items.add(MenuItem.sep());
-			items.add(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
+
 			final int type = Convert.toInt(getSelectedTreeNode(cp));
-			if (type != IAccountService.ONLINE_ID) {
-				items.add(MenuItem.itemDelete().setOnclick_act("AccountMgrPage_delete", "id"));
+			if (type != IAccountService.STATE_DELETE_ID) {
+				items.add(MenuItem.sep());
+				items.add(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("AccountMgrPage_roleWin",
+						"accountId"));
+				items.add(MenuItem.sep());
+				items.add(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
 			}
+
+			if (type != IAccountService.ONLINE_ID) {
+				items.add(MenuItem.sep());
+				MenuItem itemDelete;
+				if (type == IAccountService.STATE_DELETE_ID) {
+					itemDelete = MenuItem.of($m("AccountMgrPage.21"));
+				} else {
+					itemDelete = MenuItem.itemDelete();
+				}
+				items.add(itemDelete.setOnclick_act("AccountMgrPage_delete", "id"));
+			}
+
 			items.add(MenuItem.sep());
 			items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
-			items.add(MenuItem.sep());
-			items.append(MenuItem
-					.of($m("Menu.move"))
-					.addChild(
-							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-									"$pager_action(item).move(true, 'AccountMgrPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-									"$pager_action(item).move2(true, 'AccountMgrPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-									"$pager_action(item).move(false, 'AccountMgrPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-									"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
+
+			if (type != IAccountService.STATE_DELETE_ID) {
+				items.add(MenuItem.sep());
+				items.append(MenuItem
+						.of($m("Menu.move"))
+						.addChild(
+								MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
+										"$pager_action(item).move(true, 'AccountMgrPage_Move');"))
+						.addChild(
+								MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
+										"$pager_action(item).move2(true, 'AccountMgrPage_Move');"))
+						.addChild(
+								MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
+										"$pager_action(item).move(false, 'AccountMgrPage_Move');"))
+						.addChild(
+								MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
+										"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
+			}
 			return items;
 		}
 
@@ -316,11 +341,6 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			}
 			return m;
 		}
-
-		// @Override
-		// protected ElementList getNavigationTitle(final ComponentParameter cp) {
-
-		// }
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {

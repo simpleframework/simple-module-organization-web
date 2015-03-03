@@ -1,11 +1,23 @@
 package net.simpleframework.organization.web.page2;
 
+import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
+import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 
 /**
@@ -15,6 +27,19 @@ import net.simpleframework.organization.User;
  *         http://www.simpleframework.net
  */
 public class UserMgr_DelTPage extends UserMgrTPage {
+	@Override
+	protected void addComponentsBean(final PageParameter pp) {
+		// 取消删除
+		addAjaxRequest(pp, "UserMgr_DelTPage_undelete").setConfirmMessage($m("AccountMgrPage.14"))
+				.setHandlerMethod("doUndeleteAccount");
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doUndeleteAccount(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("id"));
+		orgContext.getAccountService().undelete(ids);
+		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
+	}
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -33,8 +58,28 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 		}
 
 		@Override
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
+			if (menuItem != null) {
+				return null;
+			}
+			final MenuItems items = MenuItems.of();
+			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("UserMgrTPage_accountWin",
+					"accountId"));
+			items.add(MenuItem.sep());
+			items.add(MenuItem.of($m("AccountMgrPage.21")).setOnclick_act("UserMgrTPage_delete", "id"));
+			items.add(MenuItem.sep());
+			items.add(MenuItem.itemLog().setOnclick_act("UserMgrTPage_logWin", "beanId"));
+			return items;
+		}
+
+		@Override
 		protected String toOpeHTML(final ComponentParameter cp, final User user) {
-			return super.toOpeHTML(cp, user);
+			final StringBuilder sb = new StringBuilder();
+			sb.append(new ButtonElement($m("AccountMgrPage.11"))
+					.setOnclick("$Actions['UserMgr_DelTPage_undelete']('id=" + user.getId() + "');"));
+			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			return sb.toString();
 		}
 	}
 }

@@ -19,11 +19,12 @@ import net.simpleframework.organization.IOrganizationContextAware;
  */
 public class OrganizationLogRef extends LogRef implements IOrganizationContextAware {
 
-	public void addLogComponent(final PageParameter pp) {
-		pp.addComponentBean("AccountMgrPage_logPage", AjaxRequestBean.class).setUrlForward(
-				AbstractMVCPage.url(AccountLogPage.class));
-		pp.addComponentBean("AccountMgrPage_logWin", WindowBean.class)
-				.setContentRef("AccountMgrPage_logPage").setHeight(600).setWidth(960);
+	public void addLogComponent(final PageParameter pp, final Class<?> cls) {
+		final String clsn = cls.getSimpleName();
+		final AjaxRequestBean ajaxRequest = pp.addComponentBean(clsn + "_logPage",
+				AjaxRequestBean.class).setUrlForward(AbstractMVCPage.url(AccountLogPage.class));
+		pp.addComponentBean(clsn + "_logWin", WindowBean.class).setContentRef(ajaxRequest.getName())
+				.setHeight(600).setWidth(960);
 	}
 
 	public static class AccountLogPage extends EntityUpdateLogPage {
