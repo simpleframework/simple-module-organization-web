@@ -10,8 +10,10 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -77,6 +79,16 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 				DepartmentEditPage.class);
 		addWindowBean(pp, "DepartmentMgrTPage_editWin", ajaxRequest)
 				.setTitle($m("DepartmentMgrTPage.2")).setHeight(320).setWidth(340);
+
+		// 删除账号
+		addDeleteAjaxRequest(pp, "DepartmentMgrTPage_delete");
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doDelete(final ComponentParameter cp) {
+		final Object[] ids = StringUtils.split(cp.getParameter("id"));
+		orgContext.getDepartmentService().delete(ids);
+		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
 	}
 
 	@Override
@@ -116,7 +128,12 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 		@Override
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
-			return super.getContextMenu(cp, menuBean, menuItem);
+			if (menuItem != null) {
+				return null;
+			}
+			final MenuItems items = MenuItems.of();
+			items.add(MenuItem.itemDelete().setOnclick_act("DepartmentMgrTPage_delete", "id"));
+			return items;
 		}
 
 		private final IAccountStatService sService = orgContext.getAccountStatService();
