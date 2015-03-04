@@ -19,12 +19,15 @@ import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
@@ -62,9 +65,15 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 				.addColumn(TablePagerColumn.OPE().setWidth(125));
 
 		// 成员窗口
-		addAjaxRequest(pp, "RoleMgrTPage_membersPage", _RoleMembersPage.class);
-		addWindowBean(pp, "RoleMgrTPage_members").setContentRef("RoleMgrTPage_membersPage")
-				.setTitle("角色成员").setWidth(800).setHeight(480);
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "RoleMgrTPage_membersPage",
+				_RoleMembersPage.class);
+		addWindowBean(pp, "RoleMgrTPage_members", ajaxRequest).setTitle($m("RoleMgrTPage.5"))
+				.setWidth(800).setHeight(480);
+
+		// 添加角色
+		ajaxRequest = addAjaxRequest(pp, "RoleMgrTPage_rolePage", RoleEditPage.class);
+		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.6"))
+				.setWidth(800).setHeight(480);
 	}
 
 	@Override
@@ -94,7 +103,9 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		sb.append(" </div>");
 		sb.append(" <div class='rtbl'>");
 		sb.append("  <div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn(), SpanElement.SPACE, LinkButton.deleteBtn()));
+		sb.append(ElementList.of(LinkButton.addBtn()
+				.setOnclick("$Actions['RoleMgrTPage_roleWin']();"), SpanElement.SPACE, LinkButton
+				.deleteBtn()));
 		sb.append("  </div>");
 		sb.append("  <div id='idRoleMgrTPage_tbl'></div>");
 		sb.append(" </div>");
@@ -151,15 +162,19 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			data.add("text", txt.toString());
 			data.add("name", rService.toUniqueName(role));
 			data.add("roletype", role.getRoleType());
+			data.add(TablePagerColumn.OPE, toOpeHTML(cp, role));
+			return data;
+		}
 
+		protected String toOpeHTML(final ComponentParameter cp, final Role role) {
+			final Object id = role.getId();
 			final StringBuilder sb = new StringBuilder();
 			sb.append(
 					new ButtonElement($m("RoleMgrTPage.4"))
-							.setOnclick("$Actions['RoleMgrTPage_members']('roleId=" + role.getId() + "');"))
+							.setOnclick("$Actions['RoleMgrTPage_members']('roleId=" + id + "');"))
 					.append(SpanElement.SPACE).append(ButtonElement.editBtn());
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			data.add(TablePagerColumn.OPE, sb.toString());
-			return data;
+			return sb.toString();
 		}
 	}
 
@@ -176,10 +191,15 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 	}
 
 	public static class _AddMembersPage extends AddMembersPage {
-
 		@Override
 		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
 			return new JavascriptForward().append("$Actions['RoleMemberPage_tbl']();");
+		}
+	}
+
+	public static class RoleEditPage extends FormPropEditorTemplatePage {
+		@Override
+		protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
 		}
 	}
 }

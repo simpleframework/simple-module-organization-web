@@ -62,16 +62,19 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"DepartmentMgrTPage_tbl").setShowFilterBar(false)
+				"DepartmentMgrTPage_tbl").setShowFilterBar(false).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idDepartmentMgrTPage_tbl")
 				.setHandlerClass(DepartmentTbl.class);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("text", $m("DepartmentMgrTPage.0")).setTextAlign(
-								ETextAlign.left).setSort(false))
+						new TablePagerColumn("text", $m("DepartmentMgrTPage.0"))
+								.setTextAlign(ETextAlign.left))
 				.addColumn(
-						new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150).setTextAlign(
-								ETextAlign.left).setSort(false))
+						new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150)
+								.setTextAlign(ETextAlign.left))
+				.addColumn(
+						new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210)
+								.setTextAlign(ETextAlign.left))
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 添加部门
@@ -137,6 +140,7 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 		}
 
 		private final IAccountStatService sService = orgContext.getAccountStatService();
+		private final IDepartmentService dService = orgContext.getDepartmentService();
 
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
@@ -154,6 +158,10 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 			}
 			data.add("text", txt.toString());
 			data.add("name", dept.getName());
+			final Department parent = dService.getBean(dept.getParentId());
+			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
+				data.add("parentId", SpanElement.grey999(dept.getText()));
+			}
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;
 		}

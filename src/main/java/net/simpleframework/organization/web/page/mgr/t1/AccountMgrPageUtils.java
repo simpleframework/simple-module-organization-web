@@ -52,6 +52,6 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 	public static String toDepartmentText(final ID deptId) {
 		final Department dept = orgContext.getDepartmentService().getBean(deptId);
 		return dept != null && dept.getDepartmentType() == EDepartmentType.department ? dept
-				.getText() : new SpanElement($m("AccountMgrPage.20")).setColor("#999").toString();
+				.getText() : SpanElement.grey999($m("AccountMgrPage.20")).toString();
 	}
 }
