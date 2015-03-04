@@ -175,7 +175,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 
 	@Override
 	public KVMap categoryEdit_attri(final ComponentParameter cp) {
-		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("RoleCategory.3")).add(
-				window_height, 360);
+		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("RoleCategory.3"))
+				.add(window_height, 360).add(window_width, 340);
 	}
 }

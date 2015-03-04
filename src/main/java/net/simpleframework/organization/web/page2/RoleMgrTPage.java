@@ -73,7 +73,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		// 添加角色
 		ajaxRequest = addAjaxRequest(pp, "RoleMgrTPage_rolePage", RoleEditPage.class);
 		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.6"))
-				.setWidth(800).setHeight(480);
+				.setWidth(340).setHeight(360);
 	}
 
 	@Override

@@ -160,7 +160,7 @@ public class DepartmentMgrTPage extends AbstractMgrTPage {
 			data.add("name", dept.getName());
 			final Department parent = dService.getBean(dept.getParentId());
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
-				data.add("parentId", SpanElement.grey999(dept.getText()));
+				data.add("parentId", SpanElement.grey999(parent.getText()));
 			}
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;

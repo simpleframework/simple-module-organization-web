@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
 import net.simpleframework.ctx.permission.PermissionDept;
@@ -124,15 +126,22 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				return orgContext.getRoleService().getPrimaryRole(oUser).getId();
 			}
 
-			private Boolean _MEMBER, _MANAGER;
+			private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
 
 			@Override
 			public boolean isMember(final Object role, final Map<String, Object> variables) {
-				if (_MEMBER == null) {
-					_MEMBER = rService.isMember(oUser, getRoleObject(role), variables);
+				if (role == null) {
+					return rService.isMember(oUser, (Role) null, variables);
 				}
-				return _MEMBER;
+				final String rkey = Convert.toString(role);
+				Boolean b = _MEMBERs.get(rkey);
+				if (b == null) {
+					_MEMBERs.put(rkey, b = rService.isMember(oUser, getRoleObject(role), variables));
+				}
+				return b;
 			}
+
+			private Boolean _MANAGER;
 
 			@Override
 			public boolean isManager(final Map<String, Object> variables) {
