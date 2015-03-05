@@ -3,6 +3,7 @@ package net.simpleframework.organization.web.page2;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ETabMatch;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -46,15 +47,20 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 	}
 
 	protected static Department getOrg(final PageParameter pp) {
-		final IDepartmentService dService = orgContext.getDepartmentService();
-		Department org = null;
-		if (pp.getLogin().isManager()) {
-			org = dService.getBean(pp.getParameter("orgId"));
-		}
-		if (org == null) {
-			org = dService.getBean(pp.getLogin().getDept().getDomainId());
-		}
-		return org;
+		return pp.getCache("@org", new IVal<Department>() {
+			@Override
+			public Department get() {
+				final IDepartmentService dService = orgContext.getDepartmentService();
+				Department org = null;
+				if (pp.getLogin().isManager()) {
+					org = dService.getBean(pp.getParameter("orgId"));
+				}
+				if (org == null) {
+					org = dService.getBean(pp.getLogin().getDept().getDomainId());
+				}
+				return org;
+			}
+		});
 	}
 
 	@Override

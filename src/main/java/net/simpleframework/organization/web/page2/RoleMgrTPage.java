@@ -95,17 +95,13 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		sb.append("<div class='RoleMgrTPage clearfix'>");
 		sb.append(" <div class='lnav'>");
 		sb.append("  <div class='lbl'>#(RoleMgrTPage.3)</div>");
-		final Department org = getOrg(pp);
-		if (org != null) {
-			final IRoleChartService cService = orgContext.getRoleChartService();
-			final RoleChart _chart = cService.getBean(pp.getParameter("chartId"));
-			final IDataQuery<RoleChart> dq = cService.query(org);
+		final RoleChart _chart = _getRoleChart(pp);
+		if (_chart != null) {
+			final IDataQuery<RoleChart> dq = orgContext.getRoleChartService().query(getOrg(pp));
 			RoleChart chart;
-			int i = 0;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");
-				if ((i++ == 0 && (_chart == null || !_chart.getDepartmentId().equals(org.getId())))
-						|| chart.equals(_chart)) {
+				if (chart.equals(_chart)) {
 					sb.append(" active");
 				}
 				sb.append("' onclick=\"location.href = location.href.addParameter('chartId=")
@@ -114,32 +110,21 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		}
 		sb.append(" </div>");
 		sb.append(" <div class='rtbl'>");
-		sb.append("  <div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn()
-				.setOnclick("$Actions['RoleMgrTPage_roleWin']();"), SpanElement.SPACE, LinkButton
-				.deleteBtn()));
-		sb.append("  </div>");
+		if (_chart != null) {
+			sb.append("  <div class='tbar'>");
+			sb.append(ElementList.of(
+					LinkButton.addBtn().setOnclick(
+							"$Actions['RoleMgrTPage_roleWin']('roleId=" + _chart.getId() + "');"),
+					SpanElement.SPACE, LinkButton.deleteBtn()));
+			sb.append("  </div>");
+		}
 		sb.append("  <div id='idRoleMgrTPage_tbl'></div>");
 		sb.append(" </div>");
 		sb.append("</div>");
 		return sb.toString();
 	}
 
-	private static RoleChart _getRoleChart(final PageParameter pp) {
-		final Department org = getOrg(pp);
-		RoleChart rchart = null;
-		if (org != null) {
-			final IRoleChartService cService = orgContext.getRoleChartService();
-			rchart = cService.getBean(pp.getParameter("chartId"));
-			if (rchart == null || !rchart.getDepartmentId().equals(org.getId())) {
-				rchart = cService.query(org).next();
-			}
-		}
-		return rchart;
-	}
-
 	public static class RoleTbl extends AbstractDbTablePagerHandler {
-
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final RoleChart rchart = _getRoleChart(cp);
@@ -297,16 +282,16 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 							: InputComp.label(r.getRoleType()));
 
 			final RoleChart rchart = _getRoleChart(pp);
-			final PropField f5 = new PropField($m("category_edit.2")).addComponents(
-					new InputComp("category_parentId").setType(EInputCompType.hidden),
-					new InputComp("category_parentText")
-							.setType(EInputCompType.textButton)
-							.setAttributes("readonly")
-							.addEvent(
-									EElementEvent.click,
-									"$Actions['RoleEditPage_roleSelect']("
-											+ (rchart != null ? "'chartId=" + rchart.getId() + "'" : "")
-											+ ");"));
+			final PropField f5 = new PropField($m("category_edit.2"))
+					.addComponents(
+							new InputComp("category_parentId").setType(EInputCompType.hidden),
+							new InputComp("category_parentText")
+									.setType(EInputCompType.textButton)
+									.setAttributes("readonly")
+									.addEvent(
+											EElementEvent.click,
+											"$Actions['RoleEditPage_roleSelect']('chartId=" + rchart.getId()
+													+ "');"));
 			final PropField f6 = new PropField($m("Description")).addComponents(new InputComp(
 					"category_description").setType(EInputCompType.textarea).setAttributes("rows:5"));
 			propEditor.getFormFields().append(f1, f2, f3, f4, f5, f6);
@@ -316,7 +301,27 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 	public static class _RoleSelectDict extends DefaultRoleSelectHandler {
 		@Override
 		public RoleChart getRoleChart(final ComponentParameter cp) {
-			return _getRoleChart(cp);
+			RoleChart rchart = _getRoleChart(cp);
+			if (rchart == null) {
+				final Role r = orgContext.getRoleService().getBean(cp.getParameter("roleId"));
+				if (r != null) {
+					rchart = orgContext.getRoleChartService().getBean(r.getRoleChartId());
+				}
+			}
+			return rchart;
 		}
+	}
+
+	private static RoleChart _getRoleChart(final PageParameter pp) {
+		final Department org = getOrg(pp);
+		RoleChart rchart = null;
+		if (org != null) {
+			final IRoleChartService cService = orgContext.getRoleChartService();
+			rchart = cService.getBean(pp.getParameter("chartId"));
+			if (rchart == null || !rchart.getDepartmentId().equals(org.getId())) {
+				rchart = cService.query(org).next();
+			}
+		}
+		return rchart;
 	}
 }
