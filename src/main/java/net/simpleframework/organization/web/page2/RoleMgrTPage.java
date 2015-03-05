@@ -11,24 +11,34 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.EElementEvent;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
+import net.simpleframework.mvc.component.base.validation.ValidationBean;
+import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
+import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
+import net.simpleframework.mvc.component.ui.propeditor.PropField;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
@@ -172,7 +182,10 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			sb.append(
 					new ButtonElement($m("RoleMgrTPage.4"))
 							.setOnclick("$Actions['RoleMgrTPage_members']('roleId=" + id + "');"))
-					.append(SpanElement.SPACE).append(ButtonElement.editBtn());
+					.append(SpanElement.SPACE)
+					.append(
+							ButtonElement.editBtn().setOnclick(
+									"$Actions['RoleMgrTPage_roleWin']('roleId=" + id + "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
@@ -199,7 +212,51 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 
 	public static class RoleEditPage extends FormPropEditorTemplatePage {
 		@Override
+		protected void onForward(final PageParameter pp) {
+			super.onForward(pp);
+
+			addFormValidationBean(pp);
+		}
+
+		@Override
+		protected ValidationBean addFormValidationBean(final PageParameter pp) {
+			return super.addFormValidationBean(pp).addValidators(
+					new Validator(EValidatorMethod.required, "#category_name, #category_text"));
+		}
+
+		@Override
+		public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
+				final PageSelector selector) {
+			super.onLoad(pp, dataBinding, selector);
+		}
+
+		@Transaction(context = IOrganizationContext.class)
+		@Override
+		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
+			return super.onSave(cp);
+		}
+
+		@Override
 		protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
+			final PropField f1 = new PropField($m("category_edit.0")).addComponents(new InputComp(
+					"category_id").setType(EInputCompType.hidden), new InputComp("category_text"));
+			final PropField f2 = new PropField($m("category_edit.1")).addComponents(new InputComp(
+					"category_name"));
+
+			final PropField f3 = new PropField($m("RoleCategory.4")).addComponents(InputComp
+					.checkbox("role_isUserRole"));
+			final Role r = orgContext.getRoleService().getBean(pp.getParameter("roleId"));
+			final PropField f4 = new PropField($m("RoleCategory.2"))
+					.addComponents(r == null ? InputComp.select("role_type", ERoleType.class)
+							: InputComp.label(r.getRoleType()));
+
+			final PropField f5 = new PropField($m("category_edit.2")).addComponents(new InputComp(
+					"category_parentId").setType(EInputCompType.hidden), new InputComp(
+					"category_parentText").setType(EInputCompType.textButton).setAttributes("readonly")
+					.addEvent(EElementEvent.click, "$Actions['_dict']();"));
+			final PropField f6 = new PropField($m("Description")).addComponents(new InputComp(
+					"category_description").setType(EInputCompType.textarea).setAttributes("rows:5"));
+			propEditor.getFormFields().append(f1, f2, f3, f4, f5, f6);
 		}
 	}
 }
