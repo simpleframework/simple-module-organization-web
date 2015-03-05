@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="net.simpleframework.organization.web.component.roleselect.RoleSelectUtils"%>
 <%@ page import="net.simpleframework.mvc.component.ComponentParameter"%>
+<%@ page import="net.simpleframework.organization.web.component.roleselect.IRoleSelectHandle"%>
 <%@ page import="net.simpleframework.mvc.component.ui.dictionary.DictionaryRender"%>
 <%
 	final ComponentParameter nCP = RoleSelectUtils.get(request,
 			response);
+	final IRoleSelectHandle rcHandle = (IRoleSelectHandle) nCP
+			.getComponentHandler();
 	final String hashId = nCP.hashId();
 	final String name = (String) nCP.getComponentName();
 %>
@@ -12,10 +15,16 @@
   <form>
     <input type="hidden" name="<%=RoleSelectUtils.BEAN_ID%>" value="<%=hashId%>" />
   </form>
+  <%
+  	if (rcHandle.getRoleChart(nCP) == null) {
+  %>
   <div class="tb">
     <span class="icon"></span> <a class="chart" 
       onclick="var act=$Actions['<%=name%>_chart']; act.a = this; act();"><%=RoleSelectUtils.toChartHTML(nCP)%></a>
   </div>
+  <%
+  	}
+  %>
   <div class="ct">
     <div id="container_<%=hashId%>"></div>
   </div>

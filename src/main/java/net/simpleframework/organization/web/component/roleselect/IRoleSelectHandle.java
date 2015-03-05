@@ -16,6 +16,14 @@ import net.simpleframework.organization.RoleChart;
 public interface IRoleSelectHandle extends IDictionaryHandle {
 
 	/**
+	 * 获取当前的角色视图，如果为null，则允许用户切换视图
+	 * 
+	 * @param cp
+	 * @return
+	 */
+	RoleChart getRoleChart(ComponentParameter cp);
+
+	/**
 	 * 获取指定视图的角色列表
 	 * 
 	 * @param cParameter

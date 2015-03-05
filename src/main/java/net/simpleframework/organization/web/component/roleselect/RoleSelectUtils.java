@@ -45,22 +45,26 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 	}
 
 	static RoleChart getRoleChart(final ComponentParameter cp) {
-		final IRoleChartService service = orgContext.getRoleChartService();
-		RoleChart roleChart = service.getBean(cp.getParameter("chartId"));
-		if (roleChart == null) {
-			roleChart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
+		RoleChart rchart = ((IRoleSelectHandle) cp.getComponentHandler()).getRoleChart(cp);
+		if (rchart != null) {
+			return rchart;
 		}
-		if (roleChart == null) {
+		final IRoleChartService service = orgContext.getRoleChartService();
+		rchart = service.getBean(cp.getParameter("chartId"));
+		if (rchart == null) {
+			rchart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
+		}
+		if (rchart == null) {
 			final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
 			if (org != null) {
-				roleChart = orgContext.getRoleChartService().query(org).next();
+				rchart = orgContext.getRoleChartService().query(org).next();
 			} else {
 				if (cp.getLogin().isManager()) {
-					roleChart = orgContext.getSystemChart();
+					rchart = orgContext.getSystemChart();
 				}
 			}
 		}
-		return roleChart;
+		return rchart;
 	}
 
 	public static String getRoleIcon(final PageParameter pp, final Role role) {
