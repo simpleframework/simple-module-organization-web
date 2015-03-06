@@ -46,7 +46,7 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 		return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
-	protected static Department getOrg(final PageParameter pp) {
+	static Department getOrg(final PageParameter pp) {
 		return pp.getCache("@org", new IVal<Department>() {
 			@Override
 			public Department get() {

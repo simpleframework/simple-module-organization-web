@@ -77,7 +77,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		final PropField f1 = new PropField($m("AddMembersPage.0")).addComponents(
 				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
 						String.valueOf(role.getId())),
-				new InputComp("member_type").setType(EInputCompType.select).setDefaultValue(
+				new InputComp("member_type").setType(EInputCompType.select).setDefaultEnumValue(
 						ERoleMemberType.user, ERoleMemberType.role));
 
 		final String utype = ERoleMemberType.user.name();
