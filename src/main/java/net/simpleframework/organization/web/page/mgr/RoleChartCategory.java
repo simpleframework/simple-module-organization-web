@@ -2,6 +2,7 @@ package net.simpleframework.organization.web.page.mgr;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.DataQueryUtils;
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.component.AbstractComponentBean;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -78,8 +79,10 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 			final TreeNode parent, final Department dept) {
 		final String contextMenu = treeBean.getContextMenu();
 		final IRoleService service = orgContext.getRoleService();
-		return RoleChartSelectUtils.rolecharts(cp, treeBean, parent,
-				DataQueryUtils.toList(getBeanService().query(dept)), new ITreeNodeAttributesCallback() {
+		final IDataQuery<RoleChart> dq = dept == null ? getBeanService().queryGlobalCharts()
+				: getBeanService().queryOrgCharts(dept);
+		return RoleChartSelectUtils.rolecharts(cp, treeBean, parent, DataQueryUtils.toList(dq),
+				new ITreeNodeAttributesCallback() {
 					@Override
 					public void setAttributes(final TreeNode tn) {
 						tn.setContextMenu(contextMenu);

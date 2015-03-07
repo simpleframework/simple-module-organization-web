@@ -87,7 +87,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		sb.append("  <div class='lbl'>#(RoleMgrTPage.3)</div>");
 		final RoleChart _chart = _getRoleChart(pp);
 		if (_chart != null) {
-			final IDataQuery<RoleChart> dq = orgContext.getRoleChartService().query(
+			final IDataQuery<RoleChart> dq = orgContext.getRoleChartService().queryOrgCharts(
 					orgContext.getDepartmentService().getBean(_chart.getDepartmentId()));
 			RoleChart chart;
 			while ((chart = dq.next()) != null) {
@@ -120,7 +120,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 			final IRoleChartService cService = orgContext.getRoleChartService();
 			RoleChart rchart = cService.getBean(pp.getParameter("chartId"));
 			if (rchart == null || !rchart.getDepartmentId().equals(org.getId())) {
-				rchart = cService.query(org).next();
+				rchart = cService.queryOrgCharts(org).next();
 			}
 			return rchart;
 		}
