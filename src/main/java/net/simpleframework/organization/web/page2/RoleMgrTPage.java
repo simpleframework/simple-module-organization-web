@@ -20,6 +20,9 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ui.menu.MenuBean;
+import net.simpleframework.mvc.component.ui.menu.MenuItem;
+import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -154,6 +157,32 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		}
 
 		@Override
+		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
+				final MenuItem menuItem) {
+			if (menuItem != null) {
+				return null;
+			}
+			final MenuItems items = MenuItems.of();
+			items.add(MenuItem.itemDelete().setOnclick_act("RoleMgrTPage_delete", "id"));
+			items.add(MenuItem.sep());
+			items.append(MenuItem
+					.of($m("Menu.move"))
+					.addChild(
+							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
+									"$pager_action(item).move(true, 'RoleMgrTPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
+									"$pager_action(item).move2(true, 'RoleMgrTPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
+									"$pager_action(item).move(false, 'RoleMgrTPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
+									"$pager_action(item).move2(false, 'RoleMgrTPage_Move');")));
+			return items;
+		}
+
+		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final Role role = (Role) dataObject;
 			final KVMap data = new KVMap();
@@ -194,12 +223,13 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
 			return _AddMembersPage.class;
 		}
-	}
 
-	public static class _AddMembersPage extends AddMembersPage {
-		@Override
-		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
-			return new JavascriptForward().append("$Actions['RoleMemberPage_tbl']();");
+		public static class _AddMembersPage extends AddMembersPage {
+			@Override
+			protected JavascriptForward toJavascriptForward(final ComponentParameter cp,
+					final Role role) {
+				return new JavascriptForward().append("$Actions['RoleMemberPage_tbl']();");
+			}
 		}
 	}
 }
