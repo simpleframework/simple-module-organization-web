@@ -1,10 +1,10 @@
 package net.simpleframework.organization.web;
 
 import net.simpleframework.mvc.common.UrlsCache;
-import net.simpleframework.organization.web.page2.DepartmentMgrTPage;
-import net.simpleframework.organization.web.page2.RoleMgrTPage;
-import net.simpleframework.organization.web.page2.UserMgrTPage;
-import net.simpleframework.organization.web.page2.UserMgr_DelTPage;
+import net.simpleframework.organization.web.page.mgr.org2.DepartmentMgrTPage;
+import net.simpleframework.organization.web.page.mgr.org2.RoleMgrTPage;
+import net.simpleframework.organization.web.page.mgr.org2.UserMgrTPage;
+import net.simpleframework.organization.web.page.mgr.org2.UserMgr_DelTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0

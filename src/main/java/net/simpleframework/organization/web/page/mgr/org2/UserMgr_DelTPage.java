@@ -1,4 +1,4 @@
-package net.simpleframework.organization.web.page2;
+package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
