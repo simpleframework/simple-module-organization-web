@@ -29,6 +29,7 @@ import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RolenameConst;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.page.LoginWindowRedirect;
 
@@ -136,7 +137,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				final String rkey = Convert.toString(role);
 				Boolean b = _MEMBERs.get(rkey);
 				if (b == null) {
-					_MEMBERs.put(rkey, b = rService.isMember(oUser, getRoleObject(role), variables));
+					_MEMBERs.put(rkey,
+							b = rService.isMember(oUser, getRoleObject(role, variables), variables));
 				}
 				return b;
 			}
@@ -155,20 +157,32 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		};
 	}
 
-	protected Role getRoleObject(final Object role) {
+	protected Role getRoleObject(final Object role, final Map<String, Object> variables) {
 		if (role instanceof Role) {
 			return (Role) role;
 		}
-		final IRoleService service = orgContext.getRoleService();
+		final IRoleService rService = orgContext.getRoleService();
 		if (role instanceof String) {
-			return service.getRoleByName((String) role);
+			Role r = rService.getRoleByName((String) role);
+			Object login;
+			if (r == null
+					&& (variables != null && (login = variables.get("login")) instanceof PermissionUser)) {
+				final String[] arr = RolenameConst.split((String) role);
+				if (arr.length == 2) {
+					final Department org = orgContext.getDepartmentService().getBean(
+							((PermissionUser) login).getDept().getDomainId());
+					r = rService.getRoleByName(
+							orgContext.getRoleChartService().getRoleChartByName(org, arr[0]), arr[1]);
+				}
+			}
+			return r;
 		}
-		return service.getBean(role);
+		return rService.getBean(role);
 	}
 
 	@Override
 	public PermissionRole getRole(final Object role) {
-		final Role oRole = getRoleObject(role);
+		final Role oRole = getRoleObject(role, null);
 		if (oRole == null) {
 			return super.getRole(role);
 		}
@@ -194,8 +208,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> users(final Object role, final ID deptId, final Map<String, Object> variables) {
-		return new NestIterator<ID, User>(orgContext.getRoleService().users(getRoleObject(role),
-				deptId, variables)) {
+		return new NestIterator<ID, User>(orgContext.getRoleService().users(
+				getRoleObject(role, variables), deptId, variables)) {
 			@Override
 			protected ID change(final User n) {
 				return n.getId();
