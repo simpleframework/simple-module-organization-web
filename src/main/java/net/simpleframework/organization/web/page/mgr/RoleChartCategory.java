@@ -121,7 +121,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 			final Department dept = orgContext.getDepartmentService().getBean(
 					cp.getParameter(PARAM_CATEGORY_PARENTID));
 			if (dept != null) {
-				roleChart.setDepartmentId(dept.getId());
+				roleChart.setOrgId(dept.getId());
 			}
 		}
 	}

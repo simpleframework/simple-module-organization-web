@@ -88,7 +88,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		final RoleChart _chart = _getRoleChart(pp);
 		if (_chart != null) {
 			final IDataQuery<RoleChart> dq = orgContext.getRoleChartService().queryOrgCharts(
-					orgContext.getDepartmentService().getBean(_chart.getDepartmentId()));
+					orgContext.getDepartmentService().getBean(_chart.getOrgId()));
 			RoleChart chart;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");
@@ -119,7 +119,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		if (org != null) {
 			final IRoleChartService cService = orgContext.getRoleChartService();
 			RoleChart rchart = cService.getBean(pp.getParameter("chartId"));
-			if (rchart == null || !rchart.getDepartmentId().equals(org.getId())) {
+			if (rchart == null || !rchart.getOrgId().equals(org.getId())) {
 				rchart = cService.queryOrgCharts(org).next();
 			}
 			return rchart;
@@ -132,7 +132,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final RoleChart rchart = _getRoleChart(cp);
 			if (rchart != null) {
-				cp.addFormParameter("orgId", rchart.getDepartmentId());
+				cp.addFormParameter("orgId", rchart.getOrgId());
 				cp.addFormParameter("chartId", rchart.getId());
 				return new ListDataQuery<Role>(list(rchart, null));
 			}

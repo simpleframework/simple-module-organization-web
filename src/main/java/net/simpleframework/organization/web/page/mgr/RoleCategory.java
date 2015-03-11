@@ -144,11 +144,10 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		final RoleChart roleChart = getRoleChart(cp);
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='nav_arrow'>");
-		if (roleChart.getDepartmentId() == null) {
+		if (roleChart.getOrgId() == null) {
 			sb.append($m("RoleChartCategory.0")).append(SpanElement.NAV);
 		} else {
-			final Department dept = orgContext.getDepartmentService().getBean(
-					roleChart.getDepartmentId());
+			final Department dept = orgContext.getDepartmentService().getBean(roleChart.getOrgId());
 			if (dept != null) {
 				sb.append(dept.getText()).append(SpanElement.NAV);
 			}

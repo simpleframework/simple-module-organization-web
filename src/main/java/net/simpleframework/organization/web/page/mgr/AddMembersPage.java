@@ -72,7 +72,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 	protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
 		final Role role = orgContext.getRoleService().getBean(pp.getParameter("roleId"));
 		final RoleChart _chart = orgContext.getRoleChartService().getBean(role.getRoleChartId());
-		final Object orgId = _chart.getDepartmentId();
+		final Object orgId = _chart.getOrgId();
 
 		final PropField f1 = new PropField($m("AddMembersPage.0")).addComponents(
 				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
