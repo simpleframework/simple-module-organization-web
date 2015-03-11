@@ -3,7 +3,7 @@ package net.simpleframework.organization.web.page.attri.t2;
 import java.io.IOException;
 import java.util.Map;
 
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
@@ -35,7 +35,7 @@ public abstract class AbstractAttriPage extends T2TemplatePage {
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ALL_ACCOUNT;
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	@PageMapping(url = "/my/user")

@@ -12,7 +12,7 @@ import java.io.InputStream;
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.ImageUtils;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.AbstractUrlForward;
@@ -54,7 +54,7 @@ public class PhotoUploadPage extends AbstractAccountPage {
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ALL_ACCOUNT;
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	@Transaction(context = IOrganizationContext.class)

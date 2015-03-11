@@ -5,7 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Map;
 
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.window.WindowBean;
@@ -40,6 +40,6 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ANONYMOUS;
+		return PermissionConst.ROLE_ANONYMOUS;
 	}
 }

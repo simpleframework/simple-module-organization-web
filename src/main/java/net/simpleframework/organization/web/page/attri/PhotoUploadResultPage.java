@@ -6,7 +6,7 @@ import java.util.Map;
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.web.html.HtmlConst;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 
 /**
@@ -18,7 +18,7 @@ import net.simpleframework.mvc.PageParameter;
 public class PhotoUploadResultPage extends AbstractAccountPage {
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ALL_ACCOUNT;
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	@Override

@@ -30,11 +30,11 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.RolenameConst;
 import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
 
@@ -216,7 +216,7 @@ public class RoleMgrTPage extends AbstractMgrTPage {
 	public static class _RoleMembersPage extends RoleMembersPage {
 		@Override
 		public String getRole(final PageParameter pp) {
-			return IOrganizationContext.ROLE_ORGANIZATION_MANAGER;
+			return RolenameConst.ROLE_ORGANIZATION_MANAGER;
 		}
 
 		@Override

@@ -3,7 +3,7 @@ package net.simpleframework.organization.web.page;
 import java.util.Map;
 
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.permission.IPermissionConst;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ext.login.LoginBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
@@ -20,7 +20,7 @@ public class LoginWindowRedirectPage extends AbstractTemplatePage {
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return IPermissionConst.ROLE_ANONYMOUS;
+		return PermissionConst.ROLE_ANONYMOUS;
 	}
 
 	@Override
