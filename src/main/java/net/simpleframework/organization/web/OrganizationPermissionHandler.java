@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
@@ -164,13 +165,14 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		final IRoleService rService = orgContext.getRoleService();
 		if (role instanceof String) {
 			Role r = rService.getRoleByName((String) role);
-			Object login;
+			String[] arr;
+			Object userId;
 			if (r == null
-					&& (variables != null && (login = variables.get("login")) instanceof PermissionUser)) {
-				final String[] arr = RolenameConst.split((String) role);
-				if (arr.length == 2) {
-					final Department org = orgContext.getDepartmentService().getBean(
-							((PermissionUser) login).getDept().getDomainId());
+					&& (variables != null && (userId = variables.get(PermissionConst.VAL_USERID)) != null)
+					&& (arr = RolenameConst.split((String) role)).length == 2) {
+				final User user = orgContext.getUserService().getBean(userId);
+				if (user != null) {
+					final Department org = orgContext.getDepartmentService().getBean(user.getOrgId());
 					r = rService.getRoleByName(
 							orgContext.getRoleChartService().getRoleChartByName(org, arr[0]), arr[1]);
 				}
@@ -181,10 +183,10 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	@Override
-	public PermissionRole getRole(final Object role) {
-		final Role oRole = getRoleObject(role, null);
+	public PermissionRole getRole(final Object role, final Map<String, Object> variables) {
+		final Role oRole = getRoleObject(role, variables);
 		if (oRole == null) {
-			return super.getRole(role);
+			return super.getRole(role, variables);
 		}
 		return new PermissionRole() {
 			@Override
