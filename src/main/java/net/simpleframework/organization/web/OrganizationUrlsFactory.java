@@ -5,6 +5,7 @@ import net.simpleframework.organization.web.page.mgr.org2.DepartmentMgrTPage;
 import net.simpleframework.organization.web.page.mgr.org2.RoleMgrTPage;
 import net.simpleframework.organization.web.page.mgr.org2.UserMgrTPage;
 import net.simpleframework.organization.web.page.mgr.org2.UserMgr_DelTPage;
+import net.simpleframework.organization.web.page.mgr.org2.UserMgr_OnlineTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -19,5 +20,6 @@ public class OrganizationUrlsFactory extends UrlsCache {
 		put(RoleMgrTPage.class);
 		put(UserMgrTPage.class);
 		put(UserMgr_DelTPage.class);
+		put(UserMgr_OnlineTPage.class);
 	}
 }

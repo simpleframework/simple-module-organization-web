@@ -43,10 +43,10 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(_UserTbl.class);
+		return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(UserTbl_Del.class);
 	}
 
-	public static class _UserTbl extends UserTbl {
+	public static class UserTbl_Del extends UserTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Department org = getOrg(cp);

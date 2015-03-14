@@ -172,6 +172,8 @@ public class UserMgrTPage extends AbstractMgrTPage {
 				new TabButton($m("UserMgrTPage.0")).setHref(urlsFactory.getUrl(pp, UserMgrTPage.class,
 						params)),
 				new TabButton($m("UserMgrTPage.1")).setHref(urlsFactory.getUrl(pp,
+						UserMgr_OnlineTPage.class, params)),
+				new TabButton($m("UserMgrTPage.2")).setHref(urlsFactory.getUrl(pp,
 						UserMgr_DelTPage.class, params))).toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
