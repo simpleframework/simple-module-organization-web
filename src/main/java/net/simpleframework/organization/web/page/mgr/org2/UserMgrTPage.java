@@ -124,14 +124,15 @@ public class UserMgrTPage extends AbstractMgrTPage {
 						}.setFilterAdvClick(
 								"$Actions['UserMgrTPage_deptSelect']("
 										+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");")
-								.setTextAlign(ETextAlign.left))
-				.addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(AccountMgrPageUtils.TC_TEXT())
-				.addColumn(AccountMgrPageUtils.TC_EMAIL())
+								.setTextAlign(ETextAlign.left)).addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_EMAIL())
 				.addColumn(AccountMgrPageUtils.TC_MOBILE())
-				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
-				.addColumn(AccountMgrPageUtils.TC_STATUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(this instanceof UserMgr_DelTPage ? 85 : 125));
+				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE());
+		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
+		if (self) {
+			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS());
+		}
+		tablePager.addColumn(TablePagerColumn.OPE().setWidth(self ? 125 : 85));
 		return tablePager;
 	}
 
@@ -229,8 +230,16 @@ public class UserMgrTPage extends AbstractMgrTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final KVMap data = new KVMap();
-			final User user = (User) dataObject;
-			final Account account = orgContext.getUserService().getAccount(user.getId());
+			User user;
+			Account account;
+			if (dataObject instanceof User) {
+				user = (User) dataObject;
+				account = orgContext.getUserService().getAccount(user.getId());
+			} else {
+				account = (Account) dataObject;
+				user = orgContext.getAccountService().getUser(account.getId());
+			}
+
 			data.add("name", account.getName());
 			data.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
 

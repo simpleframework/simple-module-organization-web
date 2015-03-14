@@ -1,14 +1,6 @@
 package net.simpleframework.organization.web.page.mgr;
 
 import static net.simpleframework.common.I18n.$m;
-import static net.simpleframework.organization.IAccountService.ALL;
-import static net.simpleframework.organization.IAccountService.DEPARTMENT_ID;
-import static net.simpleframework.organization.IAccountService.NO_DEPARTMENT_ID;
-import static net.simpleframework.organization.IAccountService.ONLINE_ID;
-import static net.simpleframework.organization.IAccountService.STATE_DELETE_ID;
-import static net.simpleframework.organization.IAccountService.STATE_LOCKED_ID;
-import static net.simpleframework.organization.IAccountService.STATE_NORMAL_ID;
-import static net.simpleframework.organization.IAccountService.STATE_REGISTRATION_ID;
 
 import java.util.Map;
 
@@ -26,11 +18,11 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IAccountStatService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
@@ -58,9 +50,10 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 			final String[] images = new String[] { "/users.png", "/user_online.png",
 					"/users_nodept.png", "/dept_root.png" };
 			int i = 0;
-			for (final int id : new int[] { ALL, ONLINE_ID, NO_DEPARTMENT_ID, DEPARTMENT_ID }) {
+			for (final int id : new int[] { Account.ALL, Account.ONLINE_ID, Account.NO_DEPARTMENT_ID,
+					Account.DEPARTMENT_ID }) {
 				String text = $m("AccountMgrPage." + id);
-				if (id == DEPARTMENT_ID) {
+				if (id == Account.DEPARTMENT_ID) {
 					text += "<br />" + new LinkAddCategoryNode();
 				}
 				final TreeNode treeNode2 = new TreeNode(treeBean, treeNode, text);
@@ -70,17 +63,17 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				treeNode2.setImage(images[i++]);
 				treeNode2.setPostfixText(getPostfixText(id));
 				treeNode2.setContextMenu("none");
-				treeNode2.setSelect(id == ALL);
-				treeNode2.setOpened(id == ALL || id == DEPARTMENT_ID);
+				treeNode2.setSelect(id == Account.ALL);
+				treeNode2.setOpened(id == Account.ALL || id == Account.DEPARTMENT_ID);
 				treeNodes.add(treeNode2);
 			}
 		} else {
-			if (treeNode.getId().equals(String.valueOf(ALL))) {
+			if (treeNode.getId().equals(String.valueOf(Account.ALL))) {
 				final String[] images = new String[] { "/users_normal.png", "/users_regist.png",
 						"/users_locked.png", "/users_delete.png" };
 				int i = 0;
-				for (final int id : new int[] { STATE_NORMAL_ID, STATE_REGISTRATION_ID,
-						STATE_LOCKED_ID, STATE_DELETE_ID }) {
+				for (final int id : new int[] { Account.STATE_NORMAL_ID, Account.STATE_REGISTRATION_ID,
+						Account.STATE_LOCKED_ID, Account.STATE_DELETE_ID }) {
 					final TreeNode treeNode2 = new TreeNode(treeBean, treeNode,
 							EAccountStatus.values()[i]);
 					treeNode2.setId(String.valueOf(id));
@@ -91,7 +84,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 					treeNode2.setContextMenu("none");
 					treeNodes.add(treeNode2);
 				}
-			} else if (treeNode.getId().equals(String.valueOf(DEPARTMENT_ID))) {
+			} else if (treeNode.getId().equals(String.valueOf(Account.DEPARTMENT_ID))) {
 				treeNode.setAcceptdrop(true);
 				final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, null);
 				if (nodes != null) {
@@ -129,17 +122,17 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 		if (type instanceof Integer) {
 			final AccountStat stat = sService.getAllAccountStat();
 			final int iType = (Integer) type;
-			if (iType == IAccountService.ALL) {
+			if (iType == Account.ALL) {
 				c = stat.getNums();
-			} else if (iType == IAccountService.ONLINE_ID) {
+			} else if (iType == Account.ONLINE_ID) {
 				c = stat.getOnline_nums();
-			} else if (iType == IAccountService.STATE_NORMAL_ID) {
+			} else if (iType == Account.STATE_NORMAL_ID) {
 				c = stat.getState_normal();
-			} else if (iType == IAccountService.STATE_REGISTRATION_ID) {
+			} else if (iType == Account.STATE_REGISTRATION_ID) {
 				c = stat.getState_registration();
-			} else if (iType == IAccountService.STATE_LOCKED_ID) {
+			} else if (iType == Account.STATE_LOCKED_ID) {
 				c = stat.getState_locked();
-			} else if (iType == IAccountService.STATE_DELETE_ID) {
+			} else if (iType == Account.STATE_DELETE_ID) {
 				c = stat.getState_delete();
 			}
 		} else {
