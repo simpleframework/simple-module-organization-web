@@ -15,7 +15,7 @@ import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.RolenameConst;
+import net.simpleframework.organization.RolenameW;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationUrlsFactory;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
@@ -43,7 +43,7 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 
 	@Override
 	public String getRole(final PageParameter pp) {
-		return RolenameConst.ROLE_ORGANIZATION_MANAGER;
+		return RolenameW.ROLE_ORGANIZATION_MANAGER;
 	}
 
 	static Department getOrg(final PageParameter pp) {

@@ -40,7 +40,7 @@ import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IUserService;
-import net.simpleframework.organization.RolenameConst;
+import net.simpleframework.organization.RolenameW;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
@@ -272,7 +272,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	public static class _AccountEditPage extends AccountEditPage {
 		@Override
 		public String getRole(final PageParameter pp) {
-			return RolenameConst.ROLE_ORGANIZATION_MANAGER;
+			return RolenameW.ROLE_ORGANIZATION_MANAGER;
 		}
 
 		@Override

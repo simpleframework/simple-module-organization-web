@@ -30,7 +30,7 @@ import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
-import net.simpleframework.organization.RolenameConst;
+import net.simpleframework.organization.RolenameW;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.page.LoginWindowRedirect;
 
@@ -169,7 +169,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			Object userId;
 			if (r == null
 					&& (variables != null && (userId = variables.get(PermissionConst.VAL_USERID)) != null)
-					&& (arr = RolenameConst.split((String) role)).length == 2) {
+					&& (arr = RolenameW.split((String) role)).length == 2) {
 				final User user = orgContext.getUserService().getBean(userId);
 				if (user != null) {
 					final Department org = orgContext.getDepartmentService().getBean(user.getOrgId());
