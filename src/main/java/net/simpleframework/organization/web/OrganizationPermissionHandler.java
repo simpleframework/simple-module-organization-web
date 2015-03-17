@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
@@ -132,6 +133,14 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public boolean isMember(final Object role, final Map<String, Object> variables) {
+				String[] arr;
+				if (role instanceof String && (arr = StringUtils.split((String) role, ";")).length > 1) {
+					for (final String r : arr) {
+						if (isMember(r, variables)) {
+							return true;
+						}
+					}
+				}
 				if (role == null) {
 					return rService.isMember(oUser, (Role) null, variables);
 				}
