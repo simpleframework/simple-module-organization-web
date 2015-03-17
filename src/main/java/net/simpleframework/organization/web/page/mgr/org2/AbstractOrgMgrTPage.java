@@ -26,13 +26,14 @@ import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrganizationContextAware {
+public abstract class AbstractOrgMgrTPage extends Tabs_BlankPage implements
+		IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		pp.addImportCSS(AbstractMgrTPage.class, "/orgmgrt.css");
+		pp.addImportCSS(AbstractOrgMgrTPage.class, "/orgmgrt.css");
 
 		addComponentBean(pp, "AbstractMgrTPage_orgSelect", DeptSelectBean.class)
 				.setOrg(true)
@@ -76,12 +77,12 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 			}
 			oele = new SpanElement(txt);
 		} else {
-			oele = new SpanElement($m("AbstractMgrTPage.3"));
+			oele = new SpanElement($m("AbstractOrgMgrTPage.3"));
 		}
 		final ElementList el = ElementList.of(oele.setClassName("org_txt"));
 		if (pp.getLogin().isManager()) {
 			el.append(SpanElement.SPACE).append(
-					new LinkElement($m("AbstractMgrTPage.4"))
+					new LinkElement($m("AbstractOrgMgrTPage.4"))
 							.setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
 		}
 		return el;
@@ -97,11 +98,11 @@ public abstract class AbstractMgrTPage extends Tabs_BlankPage implements IOrgani
 			params = "orgId=" + orgid;
 		}
 		return TabButtons.of(
-				new TabButton($m("AbstractMgrTPage.0")).setHref(urlsFactory.getUrl(pp,
+				new TabButton($m("AbstractOrgMgrTPage.0")).setHref(urlsFactory.getUrl(pp,
 						DepartmentMgrTPage.class, params)),
-				new TabButton($m("AbstractMgrTPage.1")).setHref(
+				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(
 						urlsFactory.getUrl(pp, UserMgrTPage.class, params)).setTabMatch(
-						ETabMatch.url_contains), new TabButton($m("AbstractMgrTPage.2"))
+						ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
 						.setHref(urlsFactory.getUrl(pp, RoleMgrTPage.class, params)));
 	}
 }

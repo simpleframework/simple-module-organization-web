@@ -44,7 +44,7 @@ import net.simpleframework.organization.IOrganizationContext;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DepartmentMgrTPage extends AbstractMgrTPage {
+public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {

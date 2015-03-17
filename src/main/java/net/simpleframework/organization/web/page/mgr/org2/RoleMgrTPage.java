@@ -44,7 +44,7 @@ import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class RoleMgrTPage extends AbstractMgrTPage {
+public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	@Override
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);

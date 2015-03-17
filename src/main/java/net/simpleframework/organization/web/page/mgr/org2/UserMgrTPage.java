@@ -57,7 +57,7 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class UserMgrTPage extends AbstractMgrTPage {
+public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) {
@@ -277,7 +277,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 
 		@Override
 		protected Department getOrg(final PageParameter pp) {
-			return AbstractMgrTPage.getOrg(pp);
+			return AbstractOrgMgrTPage.getOrg(pp);
 		}
 
 		@Override
@@ -296,7 +296,7 @@ public class UserMgrTPage extends AbstractMgrTPage {
 	public static class _UserRolesPage extends UserRolesPage {
 		@Override
 		protected Department getOrg(final PageParameter pp) {
-			return AbstractMgrTPage.getOrg(pp);
+			return AbstractOrgMgrTPage.getOrg(pp);
 		}
 	}
 }
