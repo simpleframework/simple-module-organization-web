@@ -49,7 +49,7 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 	public static class UserTbl_Del extends UserTbl {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Department org = getOrg(cp);
+			final Department org = getOrg2(cp);
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
 				return orgContext.getUserService().queryUsers(org, EAccountStatus.delete);

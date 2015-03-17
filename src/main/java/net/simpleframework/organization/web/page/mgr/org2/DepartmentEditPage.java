@@ -95,7 +95,7 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 
 	@Override
 	protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
-		final Department org = AbstractOrgMgrTPage.getOrg(pp);
+		final Department org = AbstractOrgMgrTPage.getOrg2(pp);
 		if (org == null) {
 			return;
 		}

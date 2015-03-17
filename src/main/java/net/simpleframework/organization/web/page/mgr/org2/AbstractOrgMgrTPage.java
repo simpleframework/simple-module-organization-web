@@ -2,18 +2,16 @@ package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.ctx.permission.PermissionDept;
+import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ETabMatch;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
-import net.simpleframework.mvc.template.lets.Tabs_BlankPage;
-import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
@@ -26,7 +24,7 @@ import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractOrgMgrTPage extends Tabs_BlankPage implements
+public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 		IOrganizationContextAware {
 
 	@Override
@@ -47,42 +45,28 @@ public abstract class AbstractOrgMgrTPage extends Tabs_BlankPage implements
 		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
-	static Department getOrg(final PageParameter pp) {
-		return pp.getCache("@org", new IVal<Department>() {
-			@Override
-			public Department get() {
-				final IDepartmentService dService = orgContext.getDepartmentService();
-				Department org = null;
-				if (pp.getLogin().isManager()) {
-					org = dService.getBean(pp.getParameter("orgId"));
-				}
-				if (org == null) {
-					org = dService.getBean(pp.getLogin().getDept().getDomainId());
-				}
-				return org;
-			}
-		});
+	static Department getOrg2(final PageParameter pp) {
+		return orgContext.getDepartmentService().getBean(getOrg(pp).getId());
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		SpanElement oele;
-		final Department org = getOrg(pp);
+		final PermissionDept org = getOrg(pp);
 		if (org != null) {
 			String txt = org.getText();
-			final AccountStat stat = orgContext.getAccountStatService().getOrgAccountStat(org);
-			final int nums = stat.getNums() - stat.getState_delete();
+			final int nums = org.getUsers();
 			if (nums > 0) {
 				txt += " (" + nums + ")";
 			}
 			oele = new SpanElement(txt);
 		} else {
-			oele = new SpanElement($m("AbstractOrgMgrTPage.3"));
+			oele = new SpanElement($m("AbstractMgrTPage.0"));
 		}
 		final ElementList el = ElementList.of(oele.setClassName("org_txt"));
 		if (pp.getLogin().isManager()) {
 			el.append(SpanElement.SPACE).append(
-					new LinkElement($m("AbstractOrgMgrTPage.4"))
+					new LinkElement($m("AbstractMgrTPage.1"))
 							.setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
 		}
 		return el;

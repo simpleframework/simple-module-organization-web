@@ -106,7 +106,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final Department org = getOrg(pp);
+		final Department org = getOrg2(pp);
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
@@ -184,7 +184,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	public static class UserTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Department org = getOrg(cp);
+			final Department org = getOrg2(cp);
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
 				return orgContext.getUserService().queryUsers(org);
@@ -277,7 +277,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 		@Override
 		protected Department getOrg(final PageParameter pp) {
-			return AbstractOrgMgrTPage.getOrg(pp);
+			return AbstractOrgMgrTPage.getOrg2(pp);
 		}
 
 		@Override
@@ -296,7 +296,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	public static class _UserRolesPage extends UserRolesPage {
 		@Override
 		protected Department getOrg(final PageParameter pp) {
-			return AbstractOrgMgrTPage.getOrg(pp);
+			return AbstractOrgMgrTPage.getOrg2(pp);
 		}
 	}
 }

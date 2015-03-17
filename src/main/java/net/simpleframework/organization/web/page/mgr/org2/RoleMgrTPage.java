@@ -115,7 +115,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	}
 
 	private static RoleChart _getRoleChart(final PageParameter pp) {
-		final Department org = getOrg(pp);
+		final Department org = getOrg2(pp);
 		if (org != null) {
 			final IRoleChartService cService = orgContext.getRoleChartService();
 			RoleChart rchart = cService.getBean(pp.getParameter("chartId"));

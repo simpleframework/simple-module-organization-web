@@ -20,6 +20,7 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.ctx.permission.DefaultPagePermissionHandler;
 import net.simpleframework.organization.Account;
+import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EAccountType;
@@ -270,6 +271,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			@Override
 			public String getText() {
 				return oDept.getText();
+			}
+
+			@Override
+			public int getUsers() {
+				final AccountStat stat = orgContext.getAccountStatService().getOrgAccountStat(getId());
+				return stat.getNums() - stat.getState_delete();
 			}
 
 			@Override
