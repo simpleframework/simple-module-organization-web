@@ -1,4 +1,8 @@
-.Tabs_tb .le .org_txt {
+.Tabs_BlankPage .Tabs_tb .le * {
+  vertical-align: middle;
+}
+
+.Tabs_BlankPage .Tabs_tb .le .org_txt {
   color: #654;
   font-size: 11.5pt;
 }
