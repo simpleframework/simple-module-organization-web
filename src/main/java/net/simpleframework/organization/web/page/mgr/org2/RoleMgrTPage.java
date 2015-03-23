@@ -14,7 +14,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -53,15 +52,10 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
 		tablePager
+				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0"), 210).setSort(false))
+				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setSort(false))
 				.addColumn(
-						new TablePagerColumn("text", $m("RoleMgrTPage.0"), 210).setTextAlign(
-								ETextAlign.left).setSort(false))
-				.addColumn(
-						new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setTextAlign(
-								ETextAlign.left).setSort(false))
-				.addColumn(
-						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setTextAlign(
-								ETextAlign.left).setFilterSort(false))
+						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
 				.addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(125));
 

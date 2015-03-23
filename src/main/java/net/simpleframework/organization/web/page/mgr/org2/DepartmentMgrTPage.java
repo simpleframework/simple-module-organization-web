@@ -17,7 +17,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -54,16 +53,9 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				"DepartmentMgrTPage_tbl").setShowFilterBar(false).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idDepartmentMgrTPage_tbl")
 				.setHandlerClass(DepartmentTbl.class);
-		tablePager
-				.addColumn(
-						new TablePagerColumn("text", $m("DepartmentMgrTPage.0"))
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210)
-								.setTextAlign(ETextAlign.left))
+		tablePager.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
+				.addColumn(new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150))
+				.addColumn(new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210))
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 添加部门

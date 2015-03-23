@@ -5,7 +5,6 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Date;
 
 import net.simpleframework.common.ID;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.organization.Department;
@@ -21,23 +20,19 @@ import net.simpleframework.organization.IOrganizationContextAware;
 public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 
 	public static TablePagerColumn TC_NAME() {
-		return new TablePagerColumn("name", $m("AccountMgrPage.1"), 125)
-				.setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("name", $m("AccountMgrPage.1"), 125);
 	}
 
 	public static TablePagerColumn TC_TEXT() {
-		return new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 125)
-				.setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 125);
 	}
 
 	public static TablePagerColumn TC_EMAIL() {
-		return new TablePagerColumn("u.email", $m("AccountMgrPage.6"), 125)
-				.setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("u.email", $m("AccountMgrPage.6"), 125);
 	}
 
 	public static TablePagerColumn TC_MOBILE() {
-		return new TablePagerColumn("u.mobile", $m("AccountMgrPage.7"), 125)
-				.setTextAlign(ETextAlign.left);
+		return new TablePagerColumn("u.mobile", $m("AccountMgrPage.7"), 125);
 	}
 
 	public static TablePagerColumn TC_LASTLOGINDATE() {

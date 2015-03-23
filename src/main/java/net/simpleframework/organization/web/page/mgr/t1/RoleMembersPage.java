@@ -21,7 +21,6 @@ import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -82,14 +81,12 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 65).setSort(false)
 								.setPropertyClass(ERoleMemberType.class))
 				.addColumn(
-						new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150).setSort(false)
-								.setTextAlign(ETextAlign.left))
+						new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150).setSort(false))
 				.addColumn(
 						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 65).setSort(false)
 								.setPropertyClass(Boolean.class))
-				.addColumn(
-						new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setSort(false)
-								.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.DESCRIPTION())
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setSort(false))
+				.addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 保存规则角色

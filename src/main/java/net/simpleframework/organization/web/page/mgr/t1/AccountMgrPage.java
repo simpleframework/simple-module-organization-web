@@ -15,7 +15,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.Icon;
 import net.simpleframework.mvc.common.element.LabelElement;
@@ -75,10 +74,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.setPagerBarLayout(EPagerBarLayout.bottom);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false)
-								.setTextAlign(ETextAlign.left)).addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_EMAIL())
-				.addColumn(AccountMgrPageUtils.TC_MOBILE())
+						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false))
+				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
+				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
 				.addColumn(AccountMgrPageUtils.TC_STATUS())
 				.addColumn(TablePagerColumn.OPE().setWidth(125));

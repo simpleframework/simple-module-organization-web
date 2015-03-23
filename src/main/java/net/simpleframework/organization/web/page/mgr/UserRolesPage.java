@@ -12,7 +12,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -44,16 +43,10 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "UserRolesPage_tbl",
 				UserRolesTbl.class).setShowFilterBar(false).setSort(false);
-		tablePager
-				.addColumn(
-						new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 180)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("rolename", $m("RoleMgrTPage.1"), 120)
-								.setTextAlign(ETextAlign.left))
-				.addColumn(
-						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90)
-								.setTextAlign(ETextAlign.left)).addColumn(TablePagerColumn.DESCRIPTION())
+		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 180))
+				.addColumn(new TablePagerColumn("rolename", $m("RoleMgrTPage.1"), 120))
+				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90))
+				.addColumn(TablePagerColumn.DESCRIPTION())
 				.addColumn(TablePagerColumn.OPE().setWidth(80));
 
 		// 角色选取

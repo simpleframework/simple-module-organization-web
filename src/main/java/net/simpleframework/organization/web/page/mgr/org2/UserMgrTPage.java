@@ -17,7 +17,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
@@ -121,12 +120,10 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 								final PermissionDept dept = pp.getPermission().getDept(ID.of(val));
 								return dept.getId() != null ? dept.getText() : val;
 							}
-						}.setFilterAdvClick(
-								"$Actions['UserMgrTPage_deptSelect']("
-										+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");")
-								.setTextAlign(ETextAlign.left)).addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_EMAIL())
-				.addColumn(AccountMgrPageUtils.TC_MOBILE())
+						}.setFilterAdvClick("$Actions['UserMgrTPage_deptSelect']("
+								+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");"))
+				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
+				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE());
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
 		if (self) {
