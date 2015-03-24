@@ -46,13 +46,13 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	}
 
 	static Department getOrg2(final PageParameter pp) {
-		return orgContext.getDepartmentService().getBean(getOrg(pp).getId());
+		return orgContext.getDepartmentService().getBean(getPermissionOrg(pp).getId());
 	}
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		SpanElement oele;
-		final PermissionDept org = getOrg(pp);
+		final PermissionDept org = getPermissionOrg(pp);
 		if (org != null) {
 			String txt = org.getText();
 			final int nums = org.getUsers();
