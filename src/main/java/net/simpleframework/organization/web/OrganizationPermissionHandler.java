@@ -114,7 +114,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			@Override
 			public PermissionDept getDept() {
 				PermissionDept dept = super.getDept();
-				if (dept == null) {
+				if (dept == null || dept.getId() == null) {
 					setDept(dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
 				}
 				return dept;
