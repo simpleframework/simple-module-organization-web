@@ -17,7 +17,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse;
-import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
@@ -145,7 +144,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	}
 
 	private Role getRoleCache(final PageRequestResponse rRequest) {
-		return rRequest.getCache("@roleId", new IVal<Role>() {
+		return rRequest.getRequestCache("@roleId", new IVal<Role>() {
 			@Override
 			public Role get() {
 				return orgContext.getRoleService().getBean(rRequest.getParameter("roleId"));

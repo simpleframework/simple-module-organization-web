@@ -10,7 +10,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse.IVal;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -89,7 +88,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 	}
 
 	private static User getUser(final PageParameter pp) {
-		return pp.getCache("_user", new IVal<User>() {
+		return pp.getRequestCache("_user", new IVal<User>() {
 			@Override
 			public User get() {
 				return orgContext.getUserService().getBean(pp.getParameter("accountId"));
