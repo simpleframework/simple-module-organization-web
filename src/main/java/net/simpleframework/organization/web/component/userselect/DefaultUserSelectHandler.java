@@ -11,6 +11,7 @@ import java.util.Set;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.userselect.DepartmentW;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
@@ -31,12 +32,19 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public IDataQuery<?> getUsers(final ComponentParameter cp) {
-		final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+		final IDepartmentService dService = orgContext.getDepartmentService();
+		Department org = dService.getBean(cp.getParameter("orgId"));
 		if (org != null) {
 			return orgContext.getUserService().queryUsers(org);
 		}
-		if (cp.getLogin().isManager()) {
+		final PermissionUser login = cp.getLogin();
+		if (login.isManager()) {
 			return orgContext.getUserService().queryAll();
+		} else {
+			org = dService.getBean(login.getDept().getId());
+			if (org != null) {
+				return orgContext.getUserService().queryUsers(org);
+			}
 		}
 		return null;
 	}
