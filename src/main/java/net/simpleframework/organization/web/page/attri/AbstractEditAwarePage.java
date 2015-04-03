@@ -8,7 +8,6 @@ import net.simpleframework.mvc.common.element.ImageElement;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ui.tabs.TabItem;
 import net.simpleframework.mvc.component.ui.tabs.TabsBean;
-import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.IOrganizationContextAware;
 
@@ -41,9 +40,8 @@ public abstract class AbstractEditAwarePage extends AbstractTemplatePage impleme
 						new TabItem($m("AbstractEditAwarePage.3")).setContentRef("taAttri_4").setCache(
 								true));
 
-		addComponentBean(pp, "AbstractEditAwarePage_editUserWin", WindowBean.class)
-				.setContentRef("taAttri").setTitle($m("AbstractEditAwarePage.4")).setHeight(480)
-				.setWidth(640);
+		addWindowBean(pp, "AbstractEditAwarePage_editUserWin").setContentRef("taAttri")
+				.setTitle($m("AbstractEditAwarePage.4")).setHeight(480).setWidth(640);
 	}
 
 	public AbstractElement<?> str_Login(final PageParameter pp) {

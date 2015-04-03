@@ -8,7 +8,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
-import net.simpleframework.mvc.component.ui.window.WindowBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 
 /**
@@ -25,10 +24,9 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		addComponentBean(pp, COMPONENT_PREFIX + "Page", AjaxRequestBean.class).setUrlForward(
-				url(LoginWindowRedirectPage.class));
-		addComponentBean(pp, COMPONENT_PREFIX + "Window", WindowBean.class)
-				.setContentRef(COMPONENT_PREFIX + "Page").setWidth(420).setHeight(320)
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, COMPONENT_PREFIX + "Page",
+				LoginWindowRedirectPage.class);
+		addWindowBean(pp, COMPONENT_PREFIX + "Window", ajaxRequest).setWidth(420).setHeight(320)
 				.setResizable(false).setTitle($m("LoginWindowRedirect.0"));
 	}
 
