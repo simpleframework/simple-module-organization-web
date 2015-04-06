@@ -41,7 +41,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 		if (login.isManager()) {
 			return orgContext.getUserService().queryAll();
 		} else {
-			org = dService.getBean(login.getDept().getId());
+			org = dService.getBean(login.getDept().getDomainId());
 			if (org != null) {
 				return orgContext.getUserService().queryUsers(org);
 			}
