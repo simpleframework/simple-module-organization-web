@@ -22,6 +22,7 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 
 /**
@@ -42,6 +43,11 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		addComponentBean(pp, "DepartmentEditPage_deptSelect", DeptSelectBean.class)
 				.setMultiple(false).setBindingId("category_parentId")
 				.setBindingText("category_parentText");
+	}
+
+	@Override
+	public String getRole(final PageParameter pp) {
+		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
 	@Override
@@ -83,6 +89,8 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		final Department parent = dService.getBean(cp.getParameter("category_parentId"));
 		if (parent != null) {
 			dept.setParentId(parent.getId());
+		} else {
+			dept.setParentId(cp.getLogin().getDomainId());
 		}
 		dept.setDescription(cp.getParameter("category_description"));
 		if (insert) {
