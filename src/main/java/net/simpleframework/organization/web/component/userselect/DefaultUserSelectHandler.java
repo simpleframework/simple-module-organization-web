@@ -11,7 +11,6 @@ import java.util.Set;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.userselect.DepartmentW;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
@@ -37,11 +36,11 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 		if (org != null) {
 			return orgContext.getUserService().queryUsers(org);
 		}
-		final PermissionUser login = cp.getLogin();
-		if (login.isManager()) {
+
+		if (cp.isLmanager()) {
 			return orgContext.getUserService().queryAll();
 		} else {
-			org = dService.getBean(login.getDept().getDomainId());
+			org = dService.getBean(cp.getLogin().getDept().getDomainId());
 			if (org != null) {
 				return orgContext.getUserService().queryUsers(org);
 			}

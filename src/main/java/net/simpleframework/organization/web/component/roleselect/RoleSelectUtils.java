@@ -59,7 +59,7 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 			if (org != null) {
 				rchart = orgContext.getRoleChartService().queryOrgCharts(org).next();
 			} else {
-				if (cp.getLogin().isManager()) {
+				if (cp.isLmanager()) {
 					rchart = orgContext.getSystemChart();
 				}
 			}

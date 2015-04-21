@@ -178,7 +178,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			String[] arr;
 			Object userId;
 			if (r == null
-					&& (variables != null && (userId = variables.get(PermissionConst.VAL_USERID)) != null)
+					&& (variables != null && (userId = variables.get(PermissionConst.VAR_USERID)) != null)
 					&& (arr = RolenameW.split((String) role)).length == 2) {
 				final User user = orgContext.getUserService().getBean(userId);
 				if (user != null) {

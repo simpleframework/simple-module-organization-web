@@ -64,7 +64,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 			oele = new SpanElement($m("AbstractMgrTPage.0"));
 		}
 		final ElementList el = ElementList.of(oele.setClassName("org_txt"));
-		if (pp.getLogin().isManager()) {
+		if (pp.isLmanager()) {
 			el.append(SpanElement.SPACE).append(
 					new LinkElement($m("AbstractMgrTPage.1"))
 							.setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
