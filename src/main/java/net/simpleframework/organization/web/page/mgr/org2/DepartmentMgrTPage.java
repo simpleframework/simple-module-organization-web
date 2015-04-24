@@ -17,8 +17,10 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -30,7 +32,6 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
@@ -53,10 +54,14 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				"DepartmentMgrTPage_tbl").setShowFilterBar(false).setSort(false)
 				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idDepartmentMgrTPage_tbl")
 				.setHandlerClass(DepartmentTbl.class);
-		tablePager.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
+		tablePager
+				.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
 				.addColumn(new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150))
 				.addColumn(new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210))
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+				.addColumn(
+						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60)
+								.setTextAlign(ETextAlign.center))
+				.addColumn(TablePagerColumn.OPE().setWidth(150));
 
 		// 添加部门
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_editPage",
@@ -123,26 +128,26 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		private final IAccountStatService sService = orgContext.getAccountStatService();
 		private final IDepartmentService dService = orgContext.getDepartmentService();
 
+		private static String[] L_COLORs = new String[] { "#333", "#666", "#999" };
+
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final Department dept = (Department) dataObject;
 			final KVMap data = new KVMap();
 			final StringBuilder txt = new StringBuilder();
-			for (int i = 0; i < Convert.toInt(dept.getAttr("_margin")); i++) {
+			final int margin = Convert.toInt(dept.getAttr("_margin"));
+			for (int i = 0; i < margin; i++) {
 				txt.append(i == 0 ? "| --- " : " --- ");
 			}
 			txt.append(dept.getText());
-			final AccountStat stat = sService.getDeptAccountStat(dept);
-			final int nums = stat.getNums();
-			if (nums > 0) {
-				txt.append(" (").append(nums).append(")");
-			}
-			data.add("text", txt.toString());
+			data.add("text", new SpanElement(txt).setColor(L_COLORs[Math.min(margin - 1, 2)]));
 			data.add("name", dept.getName());
 			final Department parent = dService.getBean(dept.getParentId());
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
-				data.add("parentId", SpanElement.grey999(parent.getText()));
+				data.add("parentId", SpanElement.grey777(parent.getText()));
 			}
+			final LinkElement le = new LinkElement(sService.getDeptAccountStat(dept).getNums());
+			data.add("users", le);
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;
 		}
@@ -150,6 +155,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final Department dept) {
 			final Object id = dept.getId();
 			final StringBuilder sb = new StringBuilder();
+			sb.append(new ButtonElement($m("DepartmentMgrTPage.5")).setOnclick(""));
+			sb.append(SpanElement.SPACE);
 			sb.append(ButtonElement.editBtn().setOnclick(
 					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
