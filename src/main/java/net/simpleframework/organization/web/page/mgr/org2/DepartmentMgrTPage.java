@@ -24,6 +24,7 @@ import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
@@ -64,19 +65,31 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				.addColumn(TablePagerColumn.OPE().setWidth(150));
 
 		// 添加部门
-		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_editPage",
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_editPage",
 				DepartmentEditPage.class);
 		addWindowBean(pp, "DepartmentMgrTPage_editWin", ajaxRequest)
 				.setTitle($m("DepartmentMgrTPage.2")).setHeight(320).setWidth(340);
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "DepartmentMgrTPage_delete");
+
+		// 用户选取
+		pp.addComponentBean("DepartmentMgrTPage_userSelect", UserSelectBean.class).setMultiple(true)
+				.setJsSelectCallback("$Actions['DepartmentMgrTPage_userSelect_OK'](); return true;")
+				.setPopup(false).setModal(true).setDestroyOnClose(true);
+		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK").setHandlerMethod(
+				"doUserSelect");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		orgContext.getDepartmentService().delete(ids);
+		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doUserSelect(final ComponentParameter cp) {
 		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
 	}
 
@@ -155,7 +168,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final Department dept) {
 			final Object id = dept.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("DepartmentMgrTPage.5")).setOnclick(""));
+			sb.append(new ButtonElement($m("DepartmentMgrTPage.5"))
+					.setOnclick("$Actions['DepartmentMgrTPage_userSelect']('deptId=" + id + "');"));
 			sb.append(SpanElement.SPACE);
 			sb.append(ButtonElement.editBtn().setOnclick(
 					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
