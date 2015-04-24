@@ -220,6 +220,11 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 		public static class _AddMembersPage extends AddMembersPage {
 			@Override
+			public String getRole(final PageParameter pp) {
+				return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+			}
+
+			@Override
 			protected JavascriptForward toJavascriptForward(final ComponentParameter cp,
 					final Role role) {
 				return new JavascriptForward().append("$Actions['RoleMemberPage_tbl']();");

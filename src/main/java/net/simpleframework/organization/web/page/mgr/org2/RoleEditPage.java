@@ -25,6 +25,7 @@ import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.component.roleselect.DefaultRoleSelectHandler;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
@@ -45,6 +46,11 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 		addComponentBean(pp, "RoleEditPage_roleSelect", RoleSelectBean.class)
 				.setBindingId("category_parentId").setBindingText("category_parentText")
 				.setHandlerClass(_RoleSelectDict.class);
+	}
+
+	@Override
+	public String getRole(final PageParameter pp) {
+		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
 	@Override
