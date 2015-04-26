@@ -124,7 +124,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 								+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");"))
 				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
 				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
-				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE());
+				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilter(false));
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
 		if (self) {
 			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS());
@@ -295,5 +295,14 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		protected Department getOrg(final PageParameter pp) {
 			return AbstractOrgMgrTPage.getOrg2(pp);
 		}
+	}
+
+	static Department getDept(final PageParameter pp) {
+		return pp.getRequestCache("_Department", new IVal<Department>() {
+			@Override
+			public Department get() {
+				return orgContext.getDepartmentService().getBean(pp.getParameter("deptId"));
+			}
+		});
 	}
 }

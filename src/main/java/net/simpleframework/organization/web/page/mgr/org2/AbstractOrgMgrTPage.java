@@ -72,6 +72,9 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 		return el;
 	}
 
+	protected static OrganizationUrlsFactory uFactory = ((IOrganizationWebContext) orgContext)
+			.getUrlsFactory();
+
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
 		final OrganizationUrlsFactory urlsFactory = ((IOrganizationWebContext) orgContext)
