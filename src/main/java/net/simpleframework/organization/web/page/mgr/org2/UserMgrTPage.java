@@ -139,11 +139,11 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IUserService service = orgContext.getUserService();
-		final User item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final User item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		final IUserService uService = orgContext.getUserService();
+		final User item = uService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final User item2 = uService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
 		if (item != null && item2 != null) {
-			service.exchange(item, item2,
+			uService.exchange(item, item2,
 					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
 		}
 		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");

@@ -28,6 +28,7 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
@@ -67,6 +68,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 		// 删除角色
 		addDeleteAjaxRequest(pp, "RoleMgrTPage_delete");
+		// 移动
+		addAjaxRequest(pp, "RoleMgrTPage_Move").setHandlerMethod("doMove");
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
@@ -86,6 +89,18 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		orgContext.getRoleService().delete(cp.getParameter("id"));
+		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doMove(final ComponentParameter cp) {
+		final IRoleService rService = orgContext.getRoleService();
+		final Role item = rService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final Role item2 = rService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		if (item != null && item2 != null) {
+			rService.exchange(item, item2,
+					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
+		}
 		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
 	}
 
