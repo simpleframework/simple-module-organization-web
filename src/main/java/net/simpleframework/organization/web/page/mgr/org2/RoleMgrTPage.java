@@ -11,6 +11,8 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
@@ -29,6 +31,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
@@ -48,16 +51,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "RoleMgrTPage_tbl")
-				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
-				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
-		tablePager
-				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0"), 210).setSort(false))
-				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setSort(false))
-				.addColumn(
-						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
-				.addColumn(TablePagerColumn.DESCRIPTION())
-				.addColumn(TablePagerColumn.OPE().setWidth(125));
+		addTablePagerBean(pp);
 
 		// 成员窗口
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "RoleMgrTPage_membersPage",
@@ -70,6 +64,29 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				RoleEditPage.class).setSelector("#idRoleMgrTPage_tbl .parameters");
 		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.6"))
 				.setWidth(340).setHeight(360);
+
+		// 删除角色
+		addDeleteAjaxRequest(pp, "RoleMgrTPage_delete");
+	}
+
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "RoleMgrTPage_tbl")
+				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
+				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
+		tablePager
+				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0"), 210).setSort(false))
+				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setSort(false))
+				.addColumn(
+						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
+				.addColumn(TablePagerColumn.DESCRIPTION())
+				.addColumn(TablePagerColumn.OPE().setWidth(125));
+		return tablePager;
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doDelete(final ComponentParameter cp) {
+		orgContext.getRoleService().delete(cp.getParameter("id"));
+		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
 	}
 
 	@Override
