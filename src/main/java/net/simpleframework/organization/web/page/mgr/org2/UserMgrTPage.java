@@ -121,14 +121,17 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 								final PermissionDept dept = pp.getPermission().getDept(ID.of(val));
 								return dept.getId() != null ? dept.getText() : val;
 							}
-						}.setFilterAdvClick("$Actions['UserMgrTPage_deptSelect']("
-								+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");"))
-				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
-				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
-				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilter(false));
+						}.setFilterAdvClick(
+								"$Actions['UserMgrTPage_deptSelect']("
+										+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");").setSort(
+								false)).addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_TEXT())
+				.addColumn(AccountMgrPageUtils.TC_EMAIL().setSort(false))
+				.addColumn(AccountMgrPageUtils.TC_MOBILE().setSort(false))
+				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilterSort(false));
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
 		if (self) {
-			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS());
+			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS().setFilterSort(false));
 		}
 		tablePager.addColumn(TablePagerColumn.OPE().setWidth(self ? 125 : 85));
 		return tablePager;
