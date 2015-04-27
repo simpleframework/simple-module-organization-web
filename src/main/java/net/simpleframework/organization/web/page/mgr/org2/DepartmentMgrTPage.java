@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
@@ -38,6 +39,7 @@ import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
+import net.simpleframework.organization.web.component.userselect.DefaultUserSelectHandler;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -76,7 +78,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		// 用户选取
 		pp.addComponentBean("DepartmentMgrTPage_userSelect", UserSelectBean.class).setMultiple(true)
 				.setJsSelectCallback("$Actions['DepartmentMgrTPage_userSelect_OK'](); return true;")
-				.setPopup(false).setModal(true).setDestroyOnClose(true);
+				.setPopup(false).setModal(true).setDestroyOnClose(true)
+				.setHandlerClass(_UserSelectHandler.class);
 		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK").setHandlerMethod(
 				"doUserSelect");
 	}
@@ -177,6 +180,28 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
 			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
+		}
+	}
+
+	public static class _UserSelectHandler extends DefaultUserSelectHandler {
+		@Override
+		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
+			final KVMap kv = new KVMap();
+			final Department dept = UserMgrTPage.getDept(cp);
+			if (dept != null) {
+				kv.add("deptId", dept.getId());
+			}
+			return kv;
+		}
+
+		@Override
+		public IDataQuery<?> getUsers(final ComponentParameter cp) {
+			final Department dept = UserMgrTPage.getDept(cp);
+			if (dept == null) {
+				return DataQueryUtils.nullQuery();
+			}
+			return orgContext.getUserService().queryUsers(
+					orgContext.getDepartmentService().getOrg(dept), null, false);
 		}
 	}
 }

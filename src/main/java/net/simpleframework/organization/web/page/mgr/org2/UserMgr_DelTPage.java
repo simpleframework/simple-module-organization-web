@@ -52,7 +52,7 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 			final Department org = getOrg2(cp);
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
-				return orgContext.getUserService().queryUsers(org, EAccountStatus.delete);
+				return orgContext.getUserService().queryUsers(org, EAccountStatus.delete, true);
 			}
 			return null;
 		}
