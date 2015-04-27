@@ -10,6 +10,7 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.trans.Transaction;
@@ -175,6 +176,12 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 						UserMgr_DelTPage.class, params))).toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
+		final Department dept = getDept(pp);
+		if (dept != null) {
+			sb.append(JavascriptUtils.wrapScriptTag(
+					"$Actions['UserMgrTPage_tbl']('filter_cur_col=u.departmentId&filter=%3D;"
+							+ dept.getId() + "');", true));
+		}
 		return sb.toString();
 	}
 
