@@ -50,8 +50,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 			final String[] images = new String[] { "/users.png", "/user_online.png",
 					"/users_nodept.png", "/dept_root.png" };
 			int i = 0;
-			for (final int id : new int[] { Account.TYPE_ALL, Account.TYPE_ONLINE, Account.TYPE_NO_DEPT,
-					Account.TYPE_DEPT }) {
+			for (final int id : new int[] { Account.TYPE_ALL, Account.TYPE_ONLINE,
+					Account.TYPE_NO_DEPT, Account.TYPE_DEPT }) {
 				String text = $m("AccountMgrPage." + id);
 				if (id == Account.TYPE_DEPT) {
 					text += "<br />" + new LinkAddCategoryNode();
@@ -72,8 +72,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				final String[] images = new String[] { "/users_normal.png", "/users_regist.png",
 						"/users_locked.png", "/users_delete.png" };
 				int i = 0;
-				for (final int id : new int[] { Account.TYPE_STATE_NORMAL, Account.TYPE_STATE_REGISTRATION,
-						Account.TYPE_STATE_LOCKED, Account.TYPE_STATE_DELETE }) {
+				for (final int id : new int[] { Account.TYPE_STATE_NORMAL,
+						Account.TYPE_STATE_REGISTRATION, Account.TYPE_STATE_LOCKED,
+						Account.TYPE_STATE_DELETE }) {
 					final TreeNode treeNode2 = new TreeNode(treeBean, treeNode,
 							EAccountStatus.values()[i]);
 					treeNode2.setId(String.valueOf(id));

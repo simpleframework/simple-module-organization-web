@@ -176,8 +176,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage." + Account.TYPE_ALL))
-				.setOnclick(createTableRefresh("deptId=&type=" + Account.TYPE_ALL).toString()));
+		final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage."
+				+ Account.TYPE_ALL)).setOnclick(createTableRefresh("deptId=&type=" + Account.TYPE_ALL)
+				.toString()));
 		final Object s = getSelectedTreeNode(pp);
 		if (s instanceof Department) {
 			eles.append(SpanElement.NAV).append(new LabelElement(s));
@@ -186,7 +187,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			if (type != Account.TYPE_ALL) {
 				eles.append(SpanElement.NAV);
 				if (type >= Account.TYPE_STATE_DELETE && type <= Account.TYPE_STATE_NORMAL) {
-					eles.append(new LabelElement(EAccountStatus.values()[Account.TYPE_STATE_NORMAL - type]));
+					eles.append(new LabelElement(EAccountStatus.values()[Account.TYPE_STATE_NORMAL
+							- type]));
 				} else {
 					eles.append(new LabelElement($m("AccountMgrPage." + type)));
 				}

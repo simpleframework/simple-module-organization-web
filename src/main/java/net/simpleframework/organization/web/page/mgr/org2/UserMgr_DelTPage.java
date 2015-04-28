@@ -15,8 +15,8 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 
@@ -52,7 +52,7 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 			final Department org = getOrg2(cp);
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
-				return orgContext.getUserService().queryUsers(org, EAccountStatus.delete, true);
+				return orgContext.getUserService().queryUsers(org, Account.TYPE_STATE_DELETE);
 			}
 			return null;
 		}

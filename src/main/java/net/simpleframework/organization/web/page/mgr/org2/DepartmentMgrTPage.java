@@ -34,6 +34,7 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
@@ -201,7 +202,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				return DataQueryUtils.nullQuery();
 			}
 			return orgContext.getUserService().queryUsers(
-					orgContext.getDepartmentService().getOrg(dept), null, false);
+					orgContext.getDepartmentService().getOrg(dept), Account.TYPE_NO_DEPT);
 		}
 	}
 }
