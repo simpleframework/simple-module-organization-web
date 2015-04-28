@@ -50,10 +50,10 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 			final String[] images = new String[] { "/users.png", "/user_online.png",
 					"/users_nodept.png", "/dept_root.png" };
 			int i = 0;
-			for (final int id : new int[] { Account.ALL, Account.ONLINE_ID, Account.NO_DEPARTMENT_ID,
-					Account.DEPARTMENT_ID }) {
+			for (final int id : new int[] { Account.TYPE_ALL, Account.TYPE_ONLINE, Account.TYPE_NO_DEPT,
+					Account.TYPE_DEPT }) {
 				String text = $m("AccountMgrPage." + id);
-				if (id == Account.DEPARTMENT_ID) {
+				if (id == Account.TYPE_DEPT) {
 					text += "<br />" + new LinkAddCategoryNode();
 				}
 				final TreeNode treeNode2 = new TreeNode(treeBean, treeNode, text);
@@ -63,17 +63,17 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				treeNode2.setImage(images[i++]);
 				treeNode2.setPostfixText(getPostfixText(id));
 				treeNode2.setContextMenu("none");
-				treeNode2.setSelect(id == Account.ALL);
-				treeNode2.setOpened(id == Account.ALL || id == Account.DEPARTMENT_ID);
+				treeNode2.setSelect(id == Account.TYPE_ALL);
+				treeNode2.setOpened(id == Account.TYPE_ALL || id == Account.TYPE_DEPT);
 				treeNodes.add(treeNode2);
 			}
 		} else {
-			if (treeNode.getId().equals(String.valueOf(Account.ALL))) {
+			if (treeNode.getId().equals(String.valueOf(Account.TYPE_ALL))) {
 				final String[] images = new String[] { "/users_normal.png", "/users_regist.png",
 						"/users_locked.png", "/users_delete.png" };
 				int i = 0;
-				for (final int id : new int[] { Account.STATE_NORMAL_ID, Account.STATE_REGISTRATION_ID,
-						Account.STATE_LOCKED_ID, Account.STATE_DELETE_ID }) {
+				for (final int id : new int[] { Account.TYPE_STATE_NORMAL, Account.TYPE_STATE_REGISTRATION,
+						Account.TYPE_STATE_LOCKED, Account.TYPE_STATE_DELETE }) {
 					final TreeNode treeNode2 = new TreeNode(treeBean, treeNode,
 							EAccountStatus.values()[i]);
 					treeNode2.setId(String.valueOf(id));
@@ -84,7 +84,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 					treeNode2.setContextMenu("none");
 					treeNodes.add(treeNode2);
 				}
-			} else if (treeNode.getId().equals(String.valueOf(Account.DEPARTMENT_ID))) {
+			} else if (treeNode.getId().equals(String.valueOf(Account.TYPE_DEPT))) {
 				treeNode.setAcceptdrop(true);
 				final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, null);
 				if (nodes != null) {
@@ -122,17 +122,17 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 		if (type instanceof Integer) {
 			final AccountStat stat = sService.getAllAccountStat();
 			final int iType = (Integer) type;
-			if (iType == Account.ALL) {
+			if (iType == Account.TYPE_ALL) {
 				c = stat.getNums();
-			} else if (iType == Account.ONLINE_ID) {
+			} else if (iType == Account.TYPE_ONLINE) {
 				c = stat.getOnline_nums();
-			} else if (iType == Account.STATE_NORMAL_ID) {
+			} else if (iType == Account.TYPE_STATE_NORMAL) {
 				c = stat.getState_normal();
-			} else if (iType == Account.STATE_REGISTRATION_ID) {
+			} else if (iType == Account.TYPE_STATE_REGISTRATION) {
 				c = stat.getState_registration();
-			} else if (iType == Account.STATE_LOCKED_ID) {
+			} else if (iType == Account.TYPE_STATE_LOCKED) {
 				c = stat.getState_locked();
-			} else if (iType == Account.STATE_DELETE_ID) {
+			} else if (iType == Account.TYPE_STATE_DELETE) {
 				c = stat.getState_delete();
 			}
 		} else {

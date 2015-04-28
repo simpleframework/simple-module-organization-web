@@ -149,7 +149,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	}
 
 	private Role getRoleCache(final PageRequestResponse rRequest) {
-		return rRequest.getRequestCache("@roleId", new IVal<Role>() {
+		return rRequest.getRequestCache("@roleId", new CacheV<Role>() {
 			@Override
 			public Role get() {
 				return orgContext.getRoleService().getBean(rRequest.getParameter("roleId"));

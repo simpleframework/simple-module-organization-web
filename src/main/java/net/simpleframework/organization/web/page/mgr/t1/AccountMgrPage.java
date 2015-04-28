@@ -176,17 +176,17 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage." + Account.ALL))
-				.setOnclick(createTableRefresh("deptId=&type=" + Account.ALL).toString()));
+		final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage." + Account.TYPE_ALL))
+				.setOnclick(createTableRefresh("deptId=&type=" + Account.TYPE_ALL).toString()));
 		final Object s = getSelectedTreeNode(pp);
 		if (s instanceof Department) {
 			eles.append(SpanElement.NAV).append(new LabelElement(s));
 		} else {
-			final int type = Convert.toInt(s, Account.ALL);
-			if (type != Account.ALL) {
+			final int type = Convert.toInt(s, Account.TYPE_ALL);
+			if (type != Account.TYPE_ALL) {
 				eles.append(SpanElement.NAV);
-				if (type >= Account.STATE_DELETE_ID && type <= Account.STATE_NORMAL_ID) {
-					eles.append(new LabelElement(EAccountStatus.values()[Account.STATE_NORMAL_ID - type]));
+				if (type >= Account.TYPE_STATE_DELETE && type <= Account.TYPE_STATE_NORMAL) {
+					eles.append(new LabelElement(EAccountStatus.values()[Account.TYPE_STATE_NORMAL - type]));
 				} else {
 					eles.append(new LabelElement($m("AccountMgrPage." + type)));
 				}
@@ -202,14 +202,14 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		final ElementList btns = ElementList.of(add);
 		final int type = Convert.toInt(s);
 		LinkButton del;
-		if (type == Account.ONLINE_ID) {
+		if (type == Account.TYPE_ONLINE) {
 			del = act_btn("AccountMgrPage_logout", $m("AccountMgrPage.13")).setIconClass(Icon.user);
 		} else {
 			del = delete_btn("AccountMgrPage_delete");
 		}
 		btns.append(del);
-		if (type != Account.STATE_REGISTRATION_ID && type != Account.STATE_DELETE_ID) {
-			if (type == Account.STATE_LOCKED_ID) {
+		if (type != Account.TYPE_STATE_REGISTRATION && type != Account.TYPE_STATE_DELETE) {
+			if (type == Account.TYPE_STATE_LOCKED) {
 				btns.append(
 						SpanElement.SPACE,
 						act_btn("AccountMgrPage_unlock", $m("AccountMgrPage.12")).setIconClass(
@@ -227,7 +227,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 					+ "');");
 		} else {
 			add.setOnclick("$Actions['AccountMgrPage_edit']();");
-			if (type == Account.STATE_DELETE_ID) {
+			if (type == Account.TYPE_STATE_DELETE) {
 				btns.append(
 						SpanElement.SPACE,
 						act_btn("AccountMgrPage_undelete", $m("AccountMgrPage.11")).setIconClass(
@@ -266,7 +266,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 					"accountId"));
 
 			final int type = Convert.toInt(getSelectedTreeNode(cp));
-			if (type != Account.STATE_DELETE_ID) {
+			if (type != Account.TYPE_STATE_DELETE) {
 				items.add(MenuItem.sep());
 				items.add(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("AccountMgrPage_roleWin",
 						"accountId"));
@@ -274,10 +274,10 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				items.add(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
 			}
 
-			if (type != Account.ONLINE_ID) {
+			if (type != Account.TYPE_ONLINE) {
 				items.add(MenuItem.sep());
 				MenuItem itemDelete;
-				if (type == Account.STATE_DELETE_ID) {
+				if (type == Account.TYPE_STATE_DELETE) {
 					itemDelete = MenuItem.of($m("AccountMgrPage.21"));
 				} else {
 					itemDelete = MenuItem.itemDelete();
@@ -288,7 +288,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			items.add(MenuItem.sep());
 			items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
 
-			if (type != Account.STATE_DELETE_ID) {
+			if (type != Account.TYPE_STATE_DELETE) {
 				items.add(MenuItem.sep());
 				items.append(MenuItem
 						.of($m("Menu.move"))
@@ -318,7 +318,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				cp.setRequestAttr("select_category", dept);
 				dq = orgContext.getUserService().queryUsers(dept);
 			} else {
-				final int type = Convert.toInt(cp.getParameter("type"), Account.ALL);
+				final int type = Convert.toInt(cp.getParameter("type"), Account.TYPE_ALL);
 				cp.setRequestAttr("select_category", type);
 				dq = orgContext.getAccountService().queryAccounts(null, type);
 			}
@@ -365,7 +365,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			final StringBuilder sb = new StringBuilder();
 			final EAccountStatus status = account.getStatus();
 			final int type = Convert.toInt(getSelectedTreeNode(cp));
-			if (type == Account.ONLINE_ID) {
+			if (type == Account.TYPE_ONLINE) {
 				sb.append(new ButtonElement($m("AccountMgrPage.13"))
 						.setOnclick("$Actions['AccountMgrPage_logout']('id=" + id + "');"));
 			} else if (status == EAccountStatus.locked) {

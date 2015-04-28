@@ -308,7 +308,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	}
 
 	static Department getDept(final PageParameter pp) {
-		return pp.getRequestCache("_Department", new IVal<Department>() {
+		return pp.getRequestCache("_Department", new CacheV<Department>() {
 			@Override
 			public Department get() {
 				return orgContext.getDepartmentService().getBean(pp.getParameter("deptId"));
