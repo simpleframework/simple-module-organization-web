@@ -40,6 +40,8 @@ import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
+import net.simpleframework.organization.IUserService;
+import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.userselect.DefaultUserSelectHandler;
 
 /**
@@ -82,7 +84,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				.setShowTreeOpt(false)
 				.setMultiple(true)
 				.setJsSelectCallback(
-						"$Actions['DepartmentMgrTPage_userSelect_OK']('selectIds='); return true;")
+						"$Actions['DepartmentMgrTPage_userSelect_OK']('deptId=' + $F('.user_select #deptId') + '&selectIds=' + selects.pluck('id').join(';')); return true;")
 				.setPopup(false).setModal(true).setDestroyOnClose(true)
 				.setHandlerClass(_UserSelectHandler.class);
 		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK").setHandlerMethod(
@@ -98,6 +100,15 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUserSelect(final ComponentParameter cp) {
+		final Department dept = UserMgrTPage.getDept(cp);
+		final IUserService uService = orgContext.getUserService();
+		for (final String id : StringUtils.split(cp.getParameter("selectIds"))) {
+			final User user = uService.getBean(id);
+			if (user != null) {
+				user.setDepartmentId(dept.getId());
+				uService.update(new String[] { "departmentId" }, user);
+			}
+		}
 		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
 	}
 
