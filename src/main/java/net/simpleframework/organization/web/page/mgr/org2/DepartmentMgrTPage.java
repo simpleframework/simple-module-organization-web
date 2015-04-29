@@ -78,8 +78,11 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 		// 用户选取
 		pp.addComponentBean("DepartmentMgrTPage_userSelect", UserSelectBean.class)
-				.setShowGroupOpt(false).setShowTreeOpt(false).setMultiple(true)
-				.setJsSelectCallback("$Actions['DepartmentMgrTPage_userSelect_OK'](); return true;")
+				.setShowGroupOpt(false)
+				.setShowTreeOpt(false)
+				.setMultiple(true)
+				.setJsSelectCallback(
+						"$Actions['DepartmentMgrTPage_userSelect_OK']('selectIds='); return true;")
 				.setPopup(false).setModal(true).setDestroyOnClose(true)
 				.setHandlerClass(_UserSelectHandler.class);
 		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK").setHandlerMethod(
