@@ -56,7 +56,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 								"#ae_accountName, #ae_password, #ue_text"))
 				.addValidators(
 						new Validator(EValidatorMethod.min_length, "#ae_accountName, #ue_text", "2"))
-				.addValidators(new Validator(EValidatorMethod.email, "#ue_email, #ue_msn"))
+				.addValidators(new Validator(EValidatorMethod.number, "#ue_oorder"))
+				.addValidators(new Validator(EValidatorMethod.email, "#ue_email"))
 				.addValidators(new Validator(EValidatorMethod.mobile_phone, "#ue_mobile, #ue_mobile2"))
 				.addValidators(new Validator(EValidatorMethod.phone, "#ue_homePhone")) // ,
 																												// #ue_officePhone
@@ -164,7 +165,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 
 	protected final TableRow r7(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.12"), new InputElement("ue_qq")),
-				new RowField($m("AccountEditPage.13"), new InputElement("ue_msn")));
+				new RowField($m("AccountEditPage.13"), new InputElement("ue_oorder")));
 	}
 
 	protected final TableRow r8(final PageParameter pp) {
