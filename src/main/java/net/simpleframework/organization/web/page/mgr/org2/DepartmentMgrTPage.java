@@ -56,18 +56,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 	protected void onForward(final PageParameter pp) {
 		super.onForward(pp);
 
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"DepartmentMgrTPage_tbl").setShowFilterBar(false).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idDepartmentMgrTPage_tbl")
-				.setHandlerClass(DepartmentTbl.class);
-		tablePager
-				.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
-				.addColumn(new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150))
-				.addColumn(new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210))
-				.addColumn(
-						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60)
-								.setTextAlign(ETextAlign.center))
-				.addColumn(TablePagerColumn.OPE().setWidth(150));
+		addTablePagerBean(pp);
 
 		// 添加部门
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_editPage",
@@ -89,6 +78,23 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				.setHandlerClass(_UserSelectHandler.class);
 		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK").setHandlerMethod(
 				"doUserSelect");
+	}
+
+	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
+				"DepartmentMgrTPage_tbl").setSort(false).setPagerBarLayout(EPagerBarLayout.none)
+				.setContainerId("idDepartmentMgrTPage_tbl").setHandlerClass(DepartmentTbl.class);
+		tablePager
+				.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
+				.addColumn(new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150))
+				.addColumn(
+						new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210)
+								.setFilter(false))
+				.addColumn(
+						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).setTextAlign(
+								ETextAlign.center).setFilter(false))
+				.addColumn(TablePagerColumn.OPE().setWidth(150));
+		return tablePager;
 	}
 
 	@Transaction(context = IOrganizationContext.class)
