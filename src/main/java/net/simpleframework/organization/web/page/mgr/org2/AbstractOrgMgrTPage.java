@@ -77,19 +77,17 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		final OrganizationUrlsFactory urlsFactory = ((IOrganizationWebContext) orgContext)
-				.getUrlsFactory();
 		String params = null;
 		final String orgid = pp.getParameter("orgId");
 		if (StringUtils.hasText(orgid)) {
 			params = "orgId=" + orgid;
 		}
 		return TabButtons.of(
-				new TabButton($m("AbstractOrgMgrTPage.0")).setHref(urlsFactory.getUrl(pp,
+				new TabButton($m("AbstractOrgMgrTPage.0")).setHref(uFactory.getUrl(pp,
 						DepartmentMgrTPage.class, params)),
 				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(
-						urlsFactory.getUrl(pp, UserMgrTPage.class, params)).setTabMatch(
+						uFactory.getUrl(pp, UserMgrTPage.class, params)).setTabMatch(
 						ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
-						.setHref(urlsFactory.getUrl(pp, RoleMgrTPage.class, params)));
+						.setHref(uFactory.getUrl(pp, RoleMgrTPage.class, params)));
 	}
 }

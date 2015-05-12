@@ -44,7 +44,6 @@ import net.simpleframework.organization.User;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
-import net.simpleframework.organization.web.OrganizationUrlsFactory;
 import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.page.attri.AccountStatPage;
 import net.simpleframework.organization.web.page.mgr.AccountEditPage;
@@ -168,15 +167,13 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		if (StringUtils.hasText(orgid)) {
 			params = "orgId=" + orgid;
 		}
-		final OrganizationUrlsFactory urlsFactory = ((IOrganizationWebContext) orgContext)
-				.getUrlsFactory();
 		sb.append(TabButtons.of(
-				new TabButton($m("UserMgrTPage.0")).setHref(urlsFactory.getUrl(pp, UserMgrTPage.class,
+				new TabButton($m("UserMgrTPage.0")).setHref(uFactory.getUrl(pp, UserMgrTPage.class,
 						params)),
-				new TabButton($m("UserMgrTPage.1")).setHref(urlsFactory.getUrl(pp,
+				new TabButton($m("UserMgrTPage.1")).setHref(uFactory.getUrl(pp,
 						UserMgr_OnlineTPage.class, params)),
-				new TabButton($m("UserMgrTPage.2")).setHref(urlsFactory.getUrl(pp,
-						UserMgr_DelTPage.class, params))).toString(pp));
+				new TabButton($m("UserMgrTPage.2")).setHref(uFactory.getUrl(pp, UserMgr_DelTPage.class,
+						params))).toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
 		final Department dept = getDept(pp);
