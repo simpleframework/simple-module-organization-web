@@ -3,11 +3,14 @@ package net.simpleframework.organization.web;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
@@ -257,49 +260,80 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (oDept == null) {
 			return super.getDept(dept);
 		}
-		return new PermissionDept() {
-			@Override
-			public ID getId() {
-				return oDept.getId();
-			}
+		return new _PermissionDept(oDept);
+	}
 
-			@Override
-			public String getName() {
-				return oDept.getName();
-			}
+	class _PermissionDept extends PermissionDept {
+		final IDepartmentService dService = orgContext.getDepartmentService();
 
-			@Override
-			public String getText() {
-				return oDept.getText();
-			}
+		private final Department oDept;
 
-			@Override
-			public int getUsers() {
-				final AccountStat stat = orgContext.getAccountStatService().getOrgAccountStat(getId());
-				return stat.getNums() - stat.getState_delete();
-			}
+		_PermissionDept(final Department oDept) {
+			this.oDept = oDept;
+		}
 
-			@Override
-			public ID getDomainId() {
-				ID domainId = super.getDomainId();
-				if (domainId == null) {
-					final IDepartmentService service = orgContext.getDepartmentService();
-					final Department org = service.getOrg(service.getBean(getId()));
-					if (org != null) {
-						setDomainId(domainId = org.getId());
-					}
+		@Override
+		public ID getId() {
+			return oDept.getId();
+		}
+
+		@Override
+		public String getName() {
+			return oDept.getName();
+		}
+
+		@Override
+		public String getText() {
+			return oDept.getText();
+		}
+
+		@Override
+		public int getUsers() {
+			final AccountStat stat = orgContext.getAccountStatService().getOrgAccountStat(getId());
+			return stat.getNums() - stat.getState_delete();
+		}
+
+		@Override
+		public PermissionDept getParent() {
+			final Department dept = dService.getBean(oDept.getParentId());
+			return dept == null ? super.getParent() : new _PermissionDept(dept);
+		}
+
+		@Override
+		public boolean hasChild() {
+			return dService.hasChild(oDept);
+		}
+
+		@Override
+		public List<PermissionDept> getChildren() {
+			final List<PermissionDept> l = new ArrayList<PermissionDept>();
+			final IDataQuery<Department> dq = dService.queryChildren(oDept);
+			Department dept;
+			while ((dept = dq.next()) != null) {
+				l.add(new _PermissionDept(dept));
+			}
+			return l;
+		}
+
+		@Override
+		public ID getDomainId() {
+			ID domainId = super.getDomainId();
+			if (domainId == null) {
+				final Department org = dService.getOrg(dService.getBean(getId()));
+				if (org != null) {
+					setDomainId(domainId = org.getId());
 				}
-				return domainId;
 			}
+			return domainId;
+		}
 
-			@Override
-			public String getDomainText() {
-				final Department org = orgContext.getDepartmentService().getBean(getDomainId());
-				return org != null ? org.getText() : super.getDomainText();
-			}
+		@Override
+		public String getDomainText() {
+			final Department org = dService.getBean(getDomainId());
+			return org != null ? org.getText() : super.getDomainText();
+		}
 
-			private static final long serialVersionUID = 3406269517390528431L;
-		};
+		private static final long serialVersionUID = 3406269517390528431L;
 	}
 
 	@Override
