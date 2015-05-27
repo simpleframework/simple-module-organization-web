@@ -180,8 +180,10 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	@Override
 	protected void onSave_setProperties(final ComponentParameter cp, final Department dept,
 			final boolean insert) {
-		dept.setDepartmentType(Convert.toEnum(EDepartmentType.class,
-				cp.getParameter("department_type")));
+		if (insert) {
+			dept.setDepartmentType(Convert.toEnum(EDepartmentType.class,
+					cp.getParameter("department_type")));
+		}
 	}
 
 	@Override
