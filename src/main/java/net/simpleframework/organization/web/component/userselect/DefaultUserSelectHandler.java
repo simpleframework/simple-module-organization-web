@@ -18,6 +18,7 @@ import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 
 /**
@@ -29,20 +30,21 @@ import net.simpleframework.organization.User;
 public class DefaultUserSelectHandler extends AbstractDictionaryHandler implements
 		IUserSelectHandler, IOrganizationContextAware {
 
+	protected IUserService uService = orgContext.getUserService();
+
+	protected IDepartmentService dService = orgContext.getDepartmentService();
+
 	@Override
 	public IDataQuery<?> getUsers(final ComponentParameter cp) {
-		final IDepartmentService dService = orgContext.getDepartmentService();
-		Department org = dService.getBean(cp.getParameter("orgId"));
-		if (org != null) {
-			return orgContext.getUserService().queryUsers(org);
-		}
-
 		if (cp.isLmanager()) {
-			return orgContext.getUserService().queryAll();
+			return uService.queryAll();
 		} else {
-			org = dService.getBean(cp.getLdept().getDomainId());
+			Department org = dService.getBean(cp.getParameter("orgId"));
+			if (org == null) {
+				org = dService.getBean(cp.getLdept().getDomainId());
+			}
 			if (org != null) {
-				return orgContext.getUserService().queryUsers(org);
+				return uService.queryUsers(org);
 			}
 		}
 		return null;
@@ -51,7 +53,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Map<String, Object> getFormParameters(final ComponentParameter cp) {
 		final KVMap kv = new KVMap();
-		final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+		final Department org = dService.getBean(cp.getParameter("orgId"));
 		if (org != null) {
 			kv.put("orgId", org.getId());
 		}
@@ -61,7 +63,6 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Collection<Object> doSort(final ComponentParameter cp, final Set<Object> groups) {
 		final ArrayList<Object> _groups = new ArrayList<Object>(groups);
-		final IDepartmentService service = orgContext.getDepartmentService();
 		Collections.sort(_groups, new Comparator<Object>() {
 			@Override
 			public int compare(final Object o1, final Object o2) {
@@ -73,8 +74,8 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 				}
 				final Department d1 = (Department) o1;
 				final Department d2 = (Department) o2;
-				final int l1 = service.getLevel(d1);
-				final int l2 = service.getLevel(d2);
+				final int l1 = dService.getLevel(d1);
+				final int l2 = dService.getLevel(d2);
 				if (l1 == l2) {
 					return d2.getOorder() - d1.getOorder();
 				} else {
@@ -87,20 +88,18 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public Object getDepartment(final Object key) {
-		final IDepartmentService service = orgContext.getDepartmentService();
 		if (key instanceof Department) {
 			return key;
 		} else if (key instanceof User) {
-			return service.getBean(((User) key).getDepartmentId());
+			return dService.getBean(((User) key).getDepartmentId());
 		} else {
-			return service.getBean(key);
+			return dService.getBean(key);
 		}
 	}
 
 	@Override
 	public Collection<DepartmentW> getDepartmentWrappers(final ComponentParameter cp) {
-		final Map<ID, Collection<Department>> depts = orgContext.getDepartmentService()
-				.queryAllTree();
+		final Map<ID, Collection<Department>> dTreemap = dService.queryAllTree();
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
 		final IDataQuery<?> dq = getUsers(cp);
 		if (dq != null) {
@@ -118,7 +117,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 				l.add(user);
 			}
 		}
-		return createDepartmentColl(depts, users, depts.get(ID.NULL_ID));
+		return createDepartmentColl(dTreemap, users, dTreemap.get(ID.NULL_ID));
 	}
 
 	@SuppressWarnings("unchecked")

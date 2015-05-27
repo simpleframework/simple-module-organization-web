@@ -46,7 +46,15 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 
 	public static String toDepartmentText(final ID deptId) {
 		final Department dept = orgContext.getDepartmentService().getBean(deptId);
-		return dept != null && dept.getDepartmentType() == EDepartmentType.department ? dept
-				.getText() : SpanElement.grey999($m("AccountMgrPage.20")).toString();
+		if (dept != null) {
+			if (dept.getDepartmentType() == EDepartmentType.department) {
+				return dept.getText();
+			} else {
+				return SpanElement.grey777(dept.getText() + " (" + EDepartmentType.organization + ")")
+						.setItalic(true).toString();
+			}
+		} else {
+			return SpanElement.grey999($m("AccountMgrPage.20")).toString();
+		}
 	}
 }

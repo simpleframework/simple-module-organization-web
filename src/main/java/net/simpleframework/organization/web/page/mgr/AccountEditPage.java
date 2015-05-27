@@ -32,8 +32,9 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 		super.onForward(pp);
 
 		// 部门字典
-		addComponentBean(pp, "AccountEditPage_deptDict", DeptSelectBean.class).setBindingId(
-				"ue_departmentId").setBindingText("id_departmentText");
+		addComponentBean(pp, "AccountEditPage_deptDict", DeptSelectBean.class)
+				.setRefreshAction("false").setBindingId("ue_departmentId")
+				.setBindingText("id_departmentText");
 	}
 
 	@Override

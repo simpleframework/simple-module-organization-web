@@ -2,6 +2,7 @@ package net.simpleframework.organization.web.component.deptselect;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import net.simpleframework.ado.query.DataQueryUtils;
@@ -15,6 +16,7 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean.Dictionary
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
+import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
@@ -26,22 +28,27 @@ import net.simpleframework.organization.IOrganizationContextAware;
 public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implements
 		IDeptSelectHandle, IOrganizationContextAware {
 
+	protected final IDepartmentService dService = orgContext.getDepartmentService();
+
 	@Override
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
-		IDataQuery<Department> dq;
+		IDataQuery<Department> dq = null;
+		// 仅显示机构
 		final boolean borg = (Boolean) cp.getBeanProperty("org");
 		if (borg) {
-			dq = orgContext.getDepartmentService().queryDepartments(parent,
-					EDepartmentType.organization);
+			dq = dService.queryDepartments(parent, EDepartmentType.organization);
 		} else {
 			Department org;
-			if (parent == null
-					&& (org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"))) != null) {
-				dq = orgContext.getDepartmentService()
-						.queryDepartments(org, EDepartmentType.department);
+			if (!cp.isLmanager() && (org = dService.getBean(cp.getParameter("orgId"))) != null) {
+				// 单机构
+				if (parent == null) {
+					return Arrays.asList(org);
+				} else {
+					dq = dService.queryDepartments(parent, EDepartmentType.department);
+				}
 			} else {
-				dq = orgContext.getDepartmentService().queryDepartments(parent, null);
+				dq = dService.queryDepartments(parent, null);
 			}
 		}
 		return DataQueryUtils.toList(dq);
