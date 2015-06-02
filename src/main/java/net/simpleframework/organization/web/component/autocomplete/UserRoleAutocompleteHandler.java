@@ -2,8 +2,6 @@ package net.simpleframework.organization.web.component.autocomplete;
 
 import java.util.ArrayList;
 
-import net.simpleframework.ado.EFilterRelation;
-import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
@@ -41,8 +39,8 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 					}
 				}
 			} else {
-				final IDataQuery<RoleChart> dq = rcService.queryByParams(FilterItems.of(new FilterItem(
-						"name", EFilterRelation.like, nVal)));
+				final IDataQuery<RoleChart> dq = rcService.queryByParams(FilterItems.of().addLike(
+						"name", nVal));
 				RoleChart rChart;
 				while ((rChart = dq.next()) != null) {
 					al.add("#" + rChart.getName());

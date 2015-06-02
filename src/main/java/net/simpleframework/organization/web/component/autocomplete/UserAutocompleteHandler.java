@@ -2,8 +2,6 @@ package net.simpleframework.organization.web.component.autocomplete;
 
 import java.util.ArrayList;
 
-import net.simpleframework.ado.EFilterRelation;
-import net.simpleframework.ado.FilterItem;
 import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -24,7 +22,7 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 	public Object[] getData(final ComponentParameter cp, final String val, final String val2) {
 		final ArrayList<String> al = new ArrayList<String>();
 		final IDataQuery<Account> dq = orgContext.getAccountService().queryByParams(
-				FilterItems.of(new FilterItem("name", EFilterRelation.like, val2)));
+				FilterItems.of().addLike("name", val2));
 		Account account;
 		while ((account = dq.next()) != null) {
 			al.add(account.getName());
