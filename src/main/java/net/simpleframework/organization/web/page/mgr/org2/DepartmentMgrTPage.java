@@ -184,9 +184,14 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
 				data.add("parentId", SpanElement.grey777(parent.getText()));
 			}
+			// String params = ;
+			// final String orgid = cp.getParameter("orgId");
+			// if (StringUtils.hasText(orgid)) {
+			// params += "&orgId=" + orgid;
+			// }
 			final LinkElement le = new LinkElement(sService.getDeptAccountStat(dept).getNums())
 					.setClassName("simple_btn2").setHref(
-							uFactory.getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
+							getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
 			data.add("users", le);
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;

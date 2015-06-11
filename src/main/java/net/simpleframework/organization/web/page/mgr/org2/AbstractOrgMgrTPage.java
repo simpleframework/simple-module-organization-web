@@ -75,19 +75,30 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	protected static OrganizationUrlsFactory uFactory = ((IOrganizationWebContext) orgContext)
 			.getUrlsFactory();
 
-	@Override
-	public TabButtons getTabButtons(final PageParameter pp) {
-		String params = null;
+	protected static String getUrl(final PageParameter pp,
+			final Class<? extends AbstractOrgMgrTPage> pClass) {
+		return getUrl(pp, pClass, null);
+	}
+
+	protected static String getUrl(final PageParameter pp,
+			final Class<? extends AbstractOrgMgrTPage> pClass, String params) {
 		final String orgid = pp.getParameter("orgId");
 		if (StringUtils.hasText(orgid)) {
-			params = "orgId=" + orgid;
+			if (params != null) {
+				params += "&orgId=" + orgid;
+			} else {
+				params = "orgId=" + orgid;
+			}
 		}
-		return TabButtons.of(
-				new TabButton($m("AbstractOrgMgrTPage.0")).setHref(uFactory.getUrl(pp,
-						DepartmentMgrTPage.class, params)),
-				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(
-						uFactory.getUrl(pp, UserMgrTPage.class, params)).setTabMatch(
-						ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
-						.setHref(uFactory.getUrl(pp, RoleMgrTPage.class, params)));
+		return uFactory.getUrl(pp, pClass, params);
+	}
+
+	@Override
+	public TabButtons getTabButtons(final PageParameter pp) {
+		return TabButtons.of(new TabButton($m("AbstractOrgMgrTPage.0")).setHref(getUrl(pp,
+				DepartmentMgrTPage.class)),
+				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(getUrl(pp, UserMgrTPage.class))
+						.setTabMatch(ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
+						.setHref(getUrl(pp, RoleMgrTPage.class)));
 	}
 }

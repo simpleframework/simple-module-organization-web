@@ -161,19 +161,11 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar UserMgrTPage_tbar'>");
 		sb.append(ElementList.of(LinkButton.addBtn().setOnclick("$Actions['UserMgrTPage_edit']();")));
-
-		String params = null;
-		final String orgid = pp.getParameter("orgId");
-		if (StringUtils.hasText(orgid)) {
-			params = "orgId=" + orgid;
-		}
 		sb.append(TabButtons.of(
-				new TabButton($m("UserMgrTPage.0")).setHref(uFactory.getUrl(pp, UserMgrTPage.class,
-						params)),
-				new TabButton($m("UserMgrTPage.1")).setHref(uFactory.getUrl(pp,
-						UserMgr_OnlineTPage.class, params)),
-				new TabButton($m("UserMgrTPage.2")).setHref(uFactory.getUrl(pp, UserMgr_DelTPage.class,
-						params))).toString(pp));
+				new TabButton($m("UserMgrTPage.0")).setHref(getUrl(pp, UserMgrTPage.class)),
+				new TabButton($m("UserMgrTPage.1")).setHref(getUrl(pp, UserMgr_OnlineTPage.class)),
+				new TabButton($m("UserMgrTPage.2")).setHref(getUrl(pp, UserMgr_DelTPage.class)))
+				.toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
 		final Department dept = getDept(pp);
