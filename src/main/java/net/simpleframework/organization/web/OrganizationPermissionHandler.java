@@ -377,6 +377,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				if (status == EAccountStatus.normal) {
 					service.setLogin(accountSession, new LoginObject(account.getId())
 							.setDescription($m("OrganizationPermissionHandler.0")));
+					rRequest.removeRequestAttr("_getLogin");
 				} else if (status == EAccountStatus.locked) {
 					throw OrganizationException.of($m("OrganizationPermission.3")).setCode(2004);
 				} else if (status == EAccountStatus.registration) {
