@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.object.ObjectEx;
 import net.simpleframework.common.object.ObjectFactory;
 import net.simpleframework.common.web.HttpUtils;
 import net.simpleframework.ctx.IModuleRef;
@@ -26,8 +27,8 @@ import net.simpleframework.organization.LoginObject;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class HttpAccountSession implements IAccountSession, IOrganizationContextAware, IMVCConst,
-		IMVCContextVar {
+public class HttpAccountSession extends ObjectEx implements IAccountSession,
+		IOrganizationContextAware, IMVCConst, IMVCContextVar {
 
 	private PageRequestResponse rRequest;
 
@@ -95,8 +96,8 @@ public class HttpAccountSession implements IAccountSession, IOrganizationContext
 							this,
 							lObj = new LoginObject(account.getId())
 									.setDescription($m("HttpAccountSession.1")));
-					System.out.println("jsessionid: " + jsessionid);
-					System.out.println("auto login ok.");
+					oprintln("jsessionid: " + jsessionid);
+					oprintln("auto login ok.");
 				}
 			}
 			rRequest.setRequestAttr("_jsessionid_login", Boolean.TRUE);
