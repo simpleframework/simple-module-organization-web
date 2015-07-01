@@ -41,9 +41,10 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 	}
 
 	protected void doSessionDestroyed(final HttpSession httpSession) {
-		System.out.println("[sessionDestroyed] - ["
-				+ (System.currentTimeMillis() - httpSession.getCreationTime()) / 1000 + "s] - "
-				+ httpSession.getId() + "");
+		// System.out.println("[sessionDestroyed] - ["
+		// + (System.currentTimeMillis() - httpSession.getCreationTime()) / 1000 +
+		// "s] - "
+		// + httpSession.getId() + "");
 		getAccountService().logout(new HttpAccountSession(httpSession), false);
 	}
 
