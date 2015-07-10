@@ -32,7 +32,7 @@ import net.simpleframework.organization.web.OrganizationMessageWebRef;
 public class AccountPasswordPage extends AbstractAccountPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addComponentBean(pp, "userpwdValidation", ValidationBean.class)

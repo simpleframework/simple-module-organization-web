@@ -28,7 +28,7 @@ import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 public class AccountEditPage extends AbstractAccountAttriPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		// 部门字典

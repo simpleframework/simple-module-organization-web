@@ -49,7 +49,7 @@ import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
  */
 public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);

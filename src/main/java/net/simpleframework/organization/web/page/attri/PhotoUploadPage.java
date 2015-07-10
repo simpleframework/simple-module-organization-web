@@ -40,7 +40,7 @@ import net.simpleframework.organization.User;
 public class PhotoUploadPage extends AbstractAccountPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addComponentBean(pp, "uploadPhoto", SubmitBean.class).setFormName("uploadPhoto")

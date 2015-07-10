@@ -53,7 +53,7 @@ import net.simpleframework.organization.web.component.userselect.DefaultUserSele
 public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);

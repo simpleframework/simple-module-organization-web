@@ -28,7 +28,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 		IOrganizationContextAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		pp.addImportCSS(AbstractOrgMgrTPage.class, "/orgmgrt.css");

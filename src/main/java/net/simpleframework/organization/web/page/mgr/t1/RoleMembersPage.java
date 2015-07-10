@@ -54,7 +54,7 @@ import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 public class RoleMembersPage extends AbstractTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		pp.addImportCSS(RoleMembersPage.class, "/role_members.css");

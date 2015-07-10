@@ -34,7 +34,7 @@ import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		IOrganizationContextAware {
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		// 验证

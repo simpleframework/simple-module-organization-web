@@ -31,7 +31,7 @@ import net.simpleframework.organization.web.page.mgr.RoleChartCategory.DeptConte
 public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		pp.addImportCSS(RoleMgrPage.class, "/role_mgr.css");

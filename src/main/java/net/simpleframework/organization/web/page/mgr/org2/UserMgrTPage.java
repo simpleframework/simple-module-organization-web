@@ -59,7 +59,7 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addTablePagerBean(pp);

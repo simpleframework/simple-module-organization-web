@@ -21,7 +21,7 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 	static final String COMPONENT_PREFIX = "LoginWindowRedirect_";
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, COMPONENT_PREFIX + "Page",

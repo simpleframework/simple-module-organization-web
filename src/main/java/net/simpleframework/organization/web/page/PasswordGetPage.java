@@ -29,7 +29,7 @@ import net.simpleframework.organization.web.OrganizationMessageWebRef;
 public class PasswordGetPage extends AbstractTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addComponentBean(pp, "PasswordGetPage_validation", ValidationBean.class)

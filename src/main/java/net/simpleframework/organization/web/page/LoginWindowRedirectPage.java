@@ -24,7 +24,7 @@ public class LoginWindowRedirectPage extends AbstractTemplatePage {
 	}
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		pp.addComponentBean(COMPONENT_PREFIX + "Login", LoginBean.class)

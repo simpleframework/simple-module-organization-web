@@ -37,7 +37,7 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
  */
 public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganizationContextAware {
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		addFormValidationBean(pp);

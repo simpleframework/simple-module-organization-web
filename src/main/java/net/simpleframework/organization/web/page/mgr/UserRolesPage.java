@@ -37,7 +37,7 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 public class UserRolesPage extends OneTableTemplatePage implements IOrganizationContextAware {
 
 	@Override
-	protected void onForward(final PageParameter pp) {
+	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "UserRolesPage_tbl",
