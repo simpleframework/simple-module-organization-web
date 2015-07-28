@@ -31,14 +31,14 @@ public class OrganizationLogRef extends LogRef implements IOrganizationContextAw
 
 		@Override
 		protected IDbBeanService<?> getBeanService() {
-			return orgContext.getAccountService();
+			return _accountService;
 		}
 
 		@Override
 		public String getTitle(final PageParameter pp) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append($m("AccountMgrPage.0")).append(" - ");
-			sb.append(orgContext.getAccountService().getUser(((AbstractIdBean) getBean(pp)).getId()));
+			sb.append(_accountService.getUser(((AbstractIdBean) getBean(pp)).getId()));
 			return sb.toString();
 		}
 	}

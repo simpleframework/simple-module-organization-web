@@ -18,7 +18,6 @@ import net.simpleframework.mvc.component.base.validation.EWarnType;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.organization.Account;
-import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationMessageWebRef;
@@ -70,16 +69,15 @@ public class AccountPasswordPage extends AbstractAccountPage {
 	public IForward saveAction(final ComponentParameter cp) {
 		final JavascriptForward js = new JavascriptForward(
 				"Validation.clearInsert(['user_old_password']);");
-		final IAccountService service = orgContext.getAccountService();
 		final Account account = getAccount(cp);
 		final String oldpassword = cp.getParameter("user_old_password");
-		if (!service.verifyPassword(account, oldpassword)) {
+		if (!_accountService.verifyPassword(account, oldpassword)) {
 			js.append("Validation.insertAfter('user_old_password', '")
 					.append($m("AccountPasswordPage.6")).append("');");
 		} else {
 			final String password = cp.getParameter("user_password");
 			account.setPassword(Account.encrypt(password));
-			service.update(new String[] { "password" }, account);
+			_accountService.update(new String[] { "password" }, account);
 			if (cp.getBoolParameter("user_SendMail")) {
 				final IModuleRef ref = ((IOrganizationWebContext) orgContext).getMessageRef();
 				if (ref != null) {

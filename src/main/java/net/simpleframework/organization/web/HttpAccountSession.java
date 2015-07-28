@@ -16,7 +16,6 @@ import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.IMVCContextVar;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.organization.Account;
-import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IAccountSession;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.LoginObject;
@@ -89,10 +88,9 @@ public class HttpAccountSession extends ObjectEx implements IAccountSession,
 				}
 			}
 			if (StringUtils.hasText(jsessionid)) {
-				final IAccountService aService = orgContext.getAccountService();
-				final Account account = aService.getAccountBySessionid(jsessionid);
+				final Account account = _accountService.getAccountBySessionid(jsessionid);
 				if (account != null) {
-					aService.setLogin(
+					_accountService.setLogin(
 							this,
 							lObj = new LoginObject(account.getId())
 									.setDescription($m("HttpAccountSession.1")));
@@ -133,8 +131,8 @@ public class HttpAccountSession extends ObjectEx implements IAccountSession,
 		Account login = null;
 		final String pwd = HttpUtils.getCookie(rRequest.request, "_account_pwd");
 		if (StringUtils.hasText(pwd) && getLogin() == null) {
-			login = orgContext.getAccountService().getAccountByName(
-					HttpUtils.getCookie(rRequest.request, "_account_name"));
+			login = _accountService.getAccountByName(HttpUtils.getCookie(rRequest.request,
+					"_account_name"));
 		}
 		return login != null ? new LoginObject(login.getId())
 				.setDescription($m("HttpAccountSession.0")) : null;

@@ -57,7 +57,7 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 			final ComponentParameter nCP = ComponentParameter.get(cp,
 					(RoleChartSelectBean) treeBean.getAttr("__roleChart"));
 			final IRoleChartSelectHandle hdl = (IRoleChartSelectHandle) nCP.getComponentHandler();
-			final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+			final Department org = _deptService.getBean(cp.getParameter("orgId"));
 			if (org != null) {
 				if (parent == null) {
 					nodes.addAll(RoleChartSelectUtils.rolecharts(cp, treeBean, parent,

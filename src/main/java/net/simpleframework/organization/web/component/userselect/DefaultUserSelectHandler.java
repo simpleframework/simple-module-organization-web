@@ -16,9 +16,7 @@ import net.simpleframework.mvc.component.ext.userselect.DepartmentW;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 
 /**
@@ -30,21 +28,17 @@ import net.simpleframework.organization.User;
 public class DefaultUserSelectHandler extends AbstractDictionaryHandler implements
 		IUserSelectHandler, IOrganizationContextAware {
 
-	protected IUserService uService = orgContext.getUserService();
-
-	protected IDepartmentService dService = orgContext.getDepartmentService();
-
 	@Override
 	public IDataQuery<?> getUsers(final ComponentParameter cp) {
 		if (cp.isLmanager()) {
-			return uService.queryAll();
+			return _userService.queryAll();
 		} else {
-			Department org = dService.getBean(cp.getParameter("orgId"));
+			Department org = _deptService.getBean(cp.getParameter("orgId"));
 			if (org == null) {
-				org = dService.getBean(cp.getLdept().getDomainId());
+				org = _deptService.getBean(cp.getLdept().getDomainId());
 			}
 			if (org != null) {
-				return uService.queryUsers(org);
+				return _userService.queryUsers(org);
 			}
 		}
 		return null;
@@ -53,7 +47,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Map<String, Object> getFormParameters(final ComponentParameter cp) {
 		final KVMap kv = new KVMap();
-		final Department org = dService.getBean(cp.getParameter("orgId"));
+		final Department org = _deptService.getBean(cp.getParameter("orgId"));
 		if (org != null) {
 			kv.put("orgId", org.getId());
 		}
@@ -74,8 +68,8 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 				}
 				final Department d1 = (Department) o1;
 				final Department d2 = (Department) o2;
-				final int l1 = dService.getLevel(d1);
-				final int l2 = dService.getLevel(d2);
+				final int l1 = _deptService.getLevel(d1);
+				final int l2 = _deptService.getLevel(d2);
 				if (l1 == l2) {
 					return d2.getOorder() - d1.getOorder();
 				} else {
@@ -91,15 +85,15 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 		if (key instanceof Department) {
 			return key;
 		} else if (key instanceof User) {
-			return dService.getBean(((User) key).getDepartmentId());
+			return _deptService.getBean(((User) key).getDepartmentId());
 		} else {
-			return dService.getBean(key);
+			return _deptService.getBean(key);
 		}
 	}
 
 	@Override
 	public Collection<DepartmentW> getDepartmentWrappers(final ComponentParameter cp) {
-		final Map<ID, Collection<Department>> dTreemap = dService.queryAllTree();
+		final Map<ID, Collection<Department>> dTreemap = _deptService.queryAllTree();
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
 		final IDataQuery<?> dq = getUsers(cp);
 		if (dq != null) {

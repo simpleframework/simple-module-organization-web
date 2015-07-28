@@ -33,14 +33,13 @@ import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IAccountStatService;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.userselect.DefaultUserSelectHandler;
 
@@ -66,6 +65,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 		// 删除账号
 		addDeleteAjaxRequest(pp, "DepartmentMgrTPage_delete");
+		// 移动
+		addAjaxRequest(pp, "DepartmentMgrTPage_Move").setHandlerMethod("doMove");
 
 		// 用户选取
 		pp.addComponentBean("DepartmentMgrTPage_userSelect", UserSelectBean.class)
@@ -100,19 +101,31 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getDepartmentService().delete(ids);
+		_deptService.delete(ids);
+		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
+	}
+
+	@Transaction(context = IOrganizationContext.class)
+	public IForward doMove(final ComponentParameter cp) {
+		final Department item = _deptService.getBean(cp
+				.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final Department item2 = _deptService.getBean(cp
+				.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		if (item != null && item2 != null) {
+			_deptService.exchange(item, item2,
+					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
+		}
 		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUserSelect(final ComponentParameter cp) {
 		final Department dept = UserMgrTPage.getDept(cp);
-		final IUserService uService = orgContext.getUserService();
 		for (final String id : StringUtils.split(cp.getParameter("selectIds"))) {
-			final User user = uService.getBean(id);
+			final User user = _userService.getBean(id);
 			if (user != null) {
 				user.setDepartmentId(dept.getId());
-				uService.update(new String[] { "departmentId" }, user);
+				_userService.update(new String[] { "departmentId" }, user);
 			}
 		}
 		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
@@ -140,8 +153,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		private List<Department> list(final Department parent) {
 			final List<Department> l = new ArrayList<Department>();
 			if (parent != null) {
-				final IDataQuery<Department> dq = orgContext.getDepartmentService().queryDepartments(
-						parent, EDepartmentType.department);
+				final IDataQuery<Department> dq = _deptService.queryDepartments(parent,
+						EDepartmentType.department);
 				Department dept;
 				while ((dept = dq.next()) != null) {
 					l.add(dept);
@@ -160,11 +173,25 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			}
 			final MenuItems items = MenuItems.of();
 			items.add(MenuItem.itemDelete().setOnclick_act("DepartmentMgrTPage_delete", "id"));
+			items.add(MenuItem.sep());
+			items.append(MenuItem
+					.of($m("Menu.move"))
+					.addChild(
+							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
+									"$pager_action(item).move(true, 'DepartmentMgrTPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
+									"$pager_action(item).move2(true, 'DepartmentMgrTPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
+									"$pager_action(item).move(false, 'DepartmentMgrTPage_Move');"))
+					.addChild(
+							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
+									"$pager_action(item).move2(false, 'DepartmentMgrTPage_Move');")));
 			return items;
 		}
 
 		private final IAccountStatService sService = orgContext.getAccountStatService();
-		private final IDepartmentService dService = orgContext.getDepartmentService();
 
 		private static String[] L_COLORs = new String[] { "#333", "#666", "#999" };
 
@@ -180,7 +207,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			txt.append(dept.getText());
 			data.add("text", new SpanElement(txt).setColor(L_COLORs[Math.min(margin - 1, 2)]));
 			data.add("name", dept.getName());
-			final Department parent = dService.getBean(dept.getParentId());
+			final Department parent = _deptService.getBean(dept.getParentId());
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
 				data.add("parentId", SpanElement.grey777(parent.getText()));
 			}
@@ -227,8 +254,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			if (dept == null) {
 				return DataQueryUtils.nullQuery();
 			}
-			return orgContext.getUserService().queryUsers(
-					orgContext.getDepartmentService().getOrg(dept), Account.TYPE_NO_DEPT);
+			return _userService.queryUsers(_deptService.getOrg(dept), Account.TYPE_NO_DEPT);
 		}
 	}
 }

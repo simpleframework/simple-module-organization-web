@@ -35,7 +35,7 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 		if (!StringUtils.hasObject(id)) {
 			id = pp.getLoginId();
 		}
-		return orgContext.getAccountService().getBean(id);
+		return _accountService.getBean(id);
 	}
 
 	@Override

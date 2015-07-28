@@ -46,7 +46,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	}
 
 	static Department getOrg2(final PageParameter pp) {
-		return orgContext.getDepartmentService().getBean(getPermissionOrg(pp).getId());
+		return _deptService.getBean(getPermissionOrg(pp).getId());
 	}
 
 	@Override

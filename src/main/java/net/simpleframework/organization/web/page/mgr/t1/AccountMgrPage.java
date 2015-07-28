@@ -42,7 +42,6 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
@@ -130,45 +129,44 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doLockAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().lock(ids);
+		_accountService.lock(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUnLockAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().unlock(ids);
+		_accountService.unlock(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().delete(ids);
+		_accountService.delete(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doLogout(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().logout(ids);
+		_accountService.logout(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUndeleteAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().undelete(ids);
+		_accountService.undelete(ids);
 		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IUserService service = orgContext.getUserService();
-		final User item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final User item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		final User item = _userService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final User item2 = _userService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
 		if (item != null && item2 != null) {
-			service.exchange(item, item2,
+			_userService.exchange(item, item2,
 					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
 		}
 		return createTableRefresh();
@@ -315,14 +313,13 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			IDataQuery<?> dq;
 			final String deptId = cp.getParameter("deptId");
 			Department dept;
-			if (StringUtils.hasText(deptId)
-					&& (dept = orgContext.getDepartmentService().getBean(deptId)) != null) {
+			if (StringUtils.hasText(deptId) && (dept = _deptService.getBean(deptId)) != null) {
 				cp.setRequestAttr("select_category", dept);
-				dq = orgContext.getUserService().queryUsers(dept);
+				dq = _userService.queryUsers(dept);
 			} else {
 				final int type = Convert.toInt(cp.getParameter("type"), Account.TYPE_ALL);
 				cp.setRequestAttr("select_category", type);
-				dq = orgContext.getAccountService().queryAccounts(null, type);
+				dq = _accountService.queryAccounts(null, type);
 			}
 			return dq;
 		}
@@ -346,10 +343,10 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			ID id;
 			if (dataObject instanceof Account) {
 				account = (Account) dataObject;
-				user = orgContext.getAccountService().getUser(id = account.getId());
+				user = _accountService.getUser(id = account.getId());
 			} else {
 				user = (User) dataObject;
-				account = orgContext.getUserService().getAccount(id = user.getId());
+				account = _userService.getAccount(id = user.getId());
 			}
 
 			final KVMap kv = new KVMap();

@@ -27,11 +27,8 @@ import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EAccountType;
-import net.simpleframework.organization.IAccountService;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
@@ -52,13 +49,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (o instanceof User) {
 			return (User) o;
 		}
-		final IUserService uService = orgContext.getUserService();
 		if (o instanceof String) {
 			final String s = (String) o;
 			if (s.contains("@")) {
-				return uService.getUserByEmail(s);
+				return _userService.getUserByEmail(s);
 			} else {
-				final Account account = orgContext.getAccountService().getAccountByName(s);
+				final Account account = _accountService.getAccountByName(s);
 				if (account != null) {
 					o = account;
 				}
@@ -67,7 +63,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (o instanceof Account) {
 			o = ((Account) o).getId();
 		}
-		return uService.getBean(o);
+		return _userService.getBean(o);
 	}
 
 	@Override
@@ -85,7 +81,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public String getName() {
-				final Account account = orgContext.getUserService().getAccount(oUser.getId());
+				final Account account = _userService.getAccount(oUser.getId());
 				return account != null ? account.getName() : null;
 			}
 
@@ -125,7 +121,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public InputStream getPhotoStream() {
-				return orgContext.getUserService().getPhoto(oUser);
+				return _userService.getPhoto(oUser);
 			}
 
 			@Override
@@ -183,9 +179,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			if (r == null
 					&& (variables != null && (userId = variables.get(PermissionConst.VAR_USERID)) != null)
 					&& (arr = RolenameW.split((String) role)).length == 2) {
-				final User user = orgContext.getUserService().getBean(userId);
+				final User user = _userService.getBean(userId);
 				if (user != null) {
-					final Department org = orgContext.getDepartmentService().getBean(user.getOrgId());
+					final Department org = _deptService.getBean(user.getOrgId());
 					r = rService.getRoleByName(
 							orgContext.getRoleChartService().getRoleChartByName(org, arr[0]), arr[1]);
 				}
@@ -247,11 +243,10 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (dept instanceof Department) {
 			return (Department) dept;
 		}
-		final IDepartmentService service = orgContext.getDepartmentService();
 		if (dept instanceof String) {
-			return service.getDepartmentByName((String) dept);
+			return _deptService.getDepartmentByName((String) dept);
 		}
-		return service.getBean(dept);
+		return _deptService.getBean(dept);
 	}
 
 	@Override
@@ -264,7 +259,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	class _PermissionDept extends PermissionDept {
-		final IDepartmentService dService = orgContext.getDepartmentService();
 
 		private final Department oDept;
 
@@ -295,19 +289,19 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public PermissionDept getParent() {
-			final Department dept = dService.getBean(oDept.getParentId());
+			final Department dept = _deptService.getBean(oDept.getParentId());
 			return dept == null ? super.getParent() : new _PermissionDept(dept);
 		}
 
 		@Override
 		public boolean hasChild() {
-			return dService.hasChild(oDept);
+			return _deptService.hasChild(oDept);
 		}
 
 		@Override
 		public List<PermissionDept> getChildren() {
 			final List<PermissionDept> l = new ArrayList<PermissionDept>();
-			final IDataQuery<Department> dq = dService.queryChildren(oDept);
+			final IDataQuery<Department> dq = _deptService.queryChildren(oDept);
 			Department dept;
 			while ((dept = dq.next()) != null) {
 				l.add(new _PermissionDept(dept));
@@ -319,7 +313,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		public ID getDomainId() {
 			ID domainId = super.getDomainId();
 			if (domainId == null) {
-				final Department org = dService.getOrg(dService.getBean(getId()));
+				final Department org = _deptService.getOrg(_deptService.getBean(getId()));
 				if (org != null) {
 					setDomainId(domainId = org.getId());
 				}
@@ -329,7 +323,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public String getDomainText() {
-			final Department org = dService.getBean(getDomainId());
+			final Department org = _deptService.getBean(getDomainId());
 			return org != null ? org.getText() : super.getDomainText();
 		}
 
@@ -338,7 +332,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public ID getLoginId(final PageRequestResponse rRequest) {
-		return orgContext.getAccountService().getLoginId(new HttpAccountSession(rRequest));
+		return _accountService.getLoginId(new HttpAccountSession(rRequest));
 	}
 
 	public static final String ACCOUNT_TYPE = "accountType";
@@ -347,7 +341,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	public void login(final PageRequestResponse rRequest, final String login, final String password,
 			final Map<String, Object> params) {
 		final HttpAccountSession accountSession = new HttpAccountSession(rRequest);
-		final IAccountService service = orgContext.getAccountService();
 
 		EAccountType accountType = null;
 		if (params != null) {
@@ -359,23 +352,23 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		Account account = null;
 		if (accountType == EAccountType.normal) {
-			account = service.getAccountByName(login);
+			account = _accountService.getAccountByName(login);
 		}
 		if (account == null) {
 			throw OrganizationException.of($m("OrganizationPermission.1")).setCode(2001);
 		} else {
-			final ID loginId = service.getLoginId(accountSession);
+			final ID loginId = _accountService.getLoginId(accountSession);
 			if (loginId != null && loginId.equals(account.getId())) {
 				throw OrganizationException.of($m("OrganizationPermission.0")).setCode(2002);
 			}
 			// 密码为空时不做校验
-			if (password != null && !service.verifyPassword(account, password)) {
+			if (password != null && !_accountService.verifyPassword(account, password)) {
 				throw OrganizationException.of($m("OrganizationPermission.2"))
 						.putVal("password", Boolean.TRUE).setCode(2003);
 			} else {
 				final EAccountStatus status = account.getStatus();
 				if (status == EAccountStatus.normal) {
-					service.setLogin(accountSession, new LoginObject(account.getId())
+					_accountService.setLogin(accountSession, new LoginObject(account.getId())
 							.setDescription($m("OrganizationPermissionHandler.0")));
 					rRequest.removeRequestAttr("_getLogin");
 				} else if (status == EAccountStatus.locked) {
@@ -391,7 +384,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
-		orgContext.getAccountService().logout(new HttpAccountSession(rRequest), true);
+		_accountService.logout(new HttpAccountSession(rRequest), true);
 	}
 
 	@Override
@@ -406,7 +399,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	}
 
 	protected void doAutoLogin(final HttpAccountSession accountSession, final LoginObject loginObject) {
-		orgContext.getAccountService().setLogin(accountSession, loginObject);
+		_accountService.setLogin(accountSession, loginObject);
 	}
 
 	@Override

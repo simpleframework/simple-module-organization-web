@@ -91,7 +91,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 		return pp.getRequestCache("_user", new CacheV<User>() {
 			@Override
 			public User get() {
-				return orgContext.getUserService().getBean(pp.getParameter("accountId"));
+				return _userService.getBean(pp.getParameter("accountId"));
 			}
 		});
 	}

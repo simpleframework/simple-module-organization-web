@@ -114,7 +114,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		final RoleChart _chart = _getRoleChart(pp);
 		if (_chart != null) {
 			final IDataQuery<RoleChart> dq = orgContext.getRoleChartService().queryOrgCharts(
-					orgContext.getDepartmentService().getBean(_chart.getOrgId()));
+					_deptService.getBean(_chart.getOrgId()));
 			RoleChart chart;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");

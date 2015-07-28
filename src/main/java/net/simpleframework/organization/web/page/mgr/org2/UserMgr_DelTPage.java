@@ -37,7 +37,7 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doUndeleteAccount(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().undelete(ids);
+		_accountService.undelete(ids);
 		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 	}
 
@@ -52,7 +52,7 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 			final Department org = getOrg2(cp);
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
-				return orgContext.getUserService().queryUsers(org, Account.TYPE_STATE_DELETE);
+				return _userService.queryUsers(org, Account.TYPE_STATE_DELETE);
 			}
 			return null;
 		}

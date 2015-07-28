@@ -25,7 +25,6 @@ import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.User;
 
@@ -88,10 +87,10 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			userData.put("orgId", org.getId());
 		}
 
-		final IAccountService aService = orgContext.getAccountService();
-		orgContext.getAccountService()
-				.doSave(aService.getBean(cp.getParameter("ae_id")), cp.getParameter("ae_accountName"),
-						cp.getParameter("ae_password"), null, null, userData);
+		_accountService
+				.doSave(_accountService.getBean(cp.getParameter("ae_id")),
+						cp.getParameter("ae_accountName"), cp.getParameter("ae_password"), null, null,
+						userData);
 		return super.onSave(cp);
 	}
 
@@ -100,7 +99,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		if (!StringUtils.hasObject(id)) {
 			id = pp.getLoginId();
 		}
-		return orgContext.getAccountService().getBean(id);
+		return _accountService.getBean(id);
 	}
 
 	@Override
@@ -113,8 +112,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			dataBinding.put("ae_accountName", account.getName());
 			dataBinding.put("ae_password", account.getPassword());
 
-			final User user = orgContext.getAccountService().getUser(account.getId());
-			dept = orgContext.getDepartmentService().getBean(user.getDepartmentId());
+			final User user = _accountService.getUser(account.getId());
+			dept = _deptService.getBean(user.getDepartmentId());
 			final Map<String, Object> kv = BeanUtils.toMap(user);
 			for (final String k : kv.keySet()) {
 				Object o = kv.get(k);
@@ -127,7 +126,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			selector.readonlySelector = "#ae_accountName";
 		}
 		if (dept == null) {
-			dept = orgContext.getDepartmentService().getBean(pp.getParameter("deptId"));
+			dept = _deptService.getBean(pp.getParameter("deptId"));
 		}
 		if (dept != null) {
 			dataBinding.put("ue_departmentId", dept.getId());

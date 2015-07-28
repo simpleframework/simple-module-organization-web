@@ -252,7 +252,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 						.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
 				ID deptId = rm.getDeptId();
 				if (deptId == null) {
-					final User bean = orgContext.getUserService().getBean(rm.getMemberId());
+					final User bean = _userService.getBean(rm.getMemberId());
 					deptId = bean.getDepartmentId();
 				}
 				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(deptId));

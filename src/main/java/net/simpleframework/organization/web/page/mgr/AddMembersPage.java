@@ -118,8 +118,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		final boolean primary = Convert.toBool(cp.getParameter("member_primary"));
 		final String deptId = cp.getParameter("member_deptId");
 		final String description = cp.getParameter("member_description");
-		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? orgContext.getUserService()
-				: service);
+		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? _userService : service);
 		final IRoleMemberService mService = orgContext.getRoleMemberService();
 		final ArrayList<RoleMember> beans = new ArrayList<RoleMember>();
 		for (final String id : StringUtils.split(cp.getParameter("member_id"), ",")) {
@@ -132,7 +131,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 			if (mType == ERoleMemberType.user) {
 				ID _deptId = null;
 				if (StringUtils.hasText(deptId)) {
-					final Department dept = orgContext.getDepartmentService().getBean(deptId);
+					final Department dept = _deptService.getBean(deptId);
 					if (dept != null) {
 						_deptId = dept.getId();
 					}

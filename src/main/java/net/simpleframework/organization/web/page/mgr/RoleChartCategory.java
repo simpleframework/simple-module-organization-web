@@ -100,8 +100,8 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	private TreeNodes departments(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode parent, final Department dept) {
 		return RoleChartSelectUtils.departments(cp, treeBean, parent,
-				DataQueryUtils.toList(orgContext.getDepartmentService().queryChildren(dept)),
-				EDepartmentType.organization, new ITreeNodeAttributesCallback() {
+				DataQueryUtils.toList(_deptService.queryChildren(dept)), EDepartmentType.organization,
+				new ITreeNodeAttributesCallback() {
 					@Override
 					public void setAttributes(final TreeNode tn) {
 						tn.setContextMenu("roleChartCategory_DeptMenu");
@@ -118,8 +118,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	protected void onSave_setProperties(final ComponentParameter cp, final RoleChart roleChart,
 			final boolean insert) {
 		if (insert) {
-			final Department dept = orgContext.getDepartmentService().getBean(
-					cp.getParameter(PARAM_CATEGORY_PARENTID));
+			final Department dept = _deptService.getBean(cp.getParameter(PARAM_CATEGORY_PARENTID));
 			if (dept != null) {
 				roleChart.setOrgId(dept.getId());
 			}

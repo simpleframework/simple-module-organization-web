@@ -39,7 +39,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 
 	@Override
 	protected IDepartmentService getBeanService() {
-		return orgContext.getDepartmentService();
+		return _deptService;
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				c = stat.getState_delete();
 			}
 		} else {
-			final Department dept = orgContext.getDepartmentService().getBean(type);
+			final Department dept = _deptService.getBean(type);
 			if (dept != null) {
 				AccountStat stat;
 				if (dept.getDepartmentType() == EDepartmentType.department) {

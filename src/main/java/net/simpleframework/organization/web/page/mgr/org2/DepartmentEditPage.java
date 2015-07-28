@@ -19,7 +19,6 @@ import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
 import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -60,13 +59,12 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 	public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
 			final PageSelector selector) {
 		super.onLoad(pp, dataBinding, selector);
-		final IDepartmentService dService = orgContext.getDepartmentService();
-		final Department dept = dService.getBean(pp.getParameter("deptId"));
+		final Department dept = _deptService.getBean(pp.getParameter("deptId"));
 		if (dept != null) {
 			dataBinding.put("category_id", dept.getId());
 			dataBinding.put("category_name", dept.getName());
 			dataBinding.put("category_text", dept.getText());
-			final Department parent = dService.getBean(dept.getParentId());
+			final Department parent = _deptService.getBean(dept.getParentId());
 			if (parent != null) {
 				dataBinding.put("category_parentId", parent.getId());
 				dataBinding.put("category_parentText", parent.getText());
@@ -78,15 +76,14 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 	@Transaction(context = IOrganizationContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-		final IDepartmentService dService = orgContext.getDepartmentService();
-		Department dept = dService.getBean(cp.getParameter("category_id"));
+		Department dept = _deptService.getBean(cp.getParameter("category_id"));
 		final boolean insert = dept == null;
 		if (insert) {
-			dept = dService.createBean();
+			dept = _deptService.createBean();
 		}
 		dept.setName(cp.getParameter("category_name"));
 		dept.setText(cp.getParameter("category_text"));
-		final Department parent = dService.getBean(cp.getParameter("category_parentId"));
+		final Department parent = _deptService.getBean(cp.getParameter("category_parentId"));
 		if (parent != null) {
 			dept.setParentId(parent.getId());
 		} else {
@@ -94,9 +91,9 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		}
 		dept.setDescription(cp.getParameter("category_description"));
 		if (insert) {
-			dService.insert(dept);
+			_deptService.insert(dept);
 		} else {
-			dService.update(dept);
+			_deptService.update(dept);
 		}
 		return super.onSave(cp).append("$Actions['DepartmentMgrTPage_tbl']();");
 	}

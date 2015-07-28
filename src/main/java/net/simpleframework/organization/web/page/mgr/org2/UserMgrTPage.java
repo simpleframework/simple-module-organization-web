@@ -39,7 +39,6 @@ import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
@@ -100,6 +99,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 				_AccountEditPage.class);
 		addWindowBean(pp, "UserMgrTPage_edit", ajaxRequest).setTitle($m("AccountMgrPage.8"))
 				.setHeight(500).setWidth(620);
+
 		// 移动
 		addAjaxRequest(pp, "UserMgrTPage_Move").setHandlerMethod("doMove");
 	}
@@ -138,11 +138,10 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IUserService uService = orgContext.getUserService();
-		final User item = uService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final User item2 = uService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
+		final User item = _userService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
+		final User item2 = _userService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
 		if (item != null && item2 != null) {
-			uService.exchange(item, item2,
+			_userService.exchange(item, item2,
 					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
 		}
 		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
@@ -151,7 +150,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
-		orgContext.getAccountService().delete(ids);
+		_accountService.delete(ids);
 		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 	}
 
@@ -183,7 +182,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			final Department org = getOrg2(cp);
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
-				return orgContext.getUserService().queryUsers(org);
+				return _userService.queryUsers(org);
 			}
 			return null;
 		}
@@ -230,10 +229,10 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			Account account;
 			if (dataObject instanceof User) {
 				user = (User) dataObject;
-				account = orgContext.getUserService().getAccount(user.getId());
+				account = _userService.getAccount(user.getId());
 			} else {
 				account = (Account) dataObject;
-				user = orgContext.getAccountService().getUser(account.getId());
+				user = _accountService.getUser(account.getId());
 			}
 
 			data.add("name", account.getName());
@@ -300,7 +299,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		return pp.getRequestCache("_Department", new CacheV<Department>() {
 			@Override
 			public Department get() {
-				return orgContext.getDepartmentService().getBean(pp.getParameter("deptId"));
+				return _deptService.getBean(pp.getParameter("deptId"));
 			}
 		});
 	}

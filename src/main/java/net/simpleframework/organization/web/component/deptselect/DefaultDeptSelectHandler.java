@@ -16,7 +16,6 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean.Dictionary
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
@@ -28,8 +27,6 @@ import net.simpleframework.organization.IOrganizationContextAware;
 public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implements
 		IDeptSelectHandle, IOrganizationContextAware {
 
-	protected final IDepartmentService dService = orgContext.getDepartmentService();
-
 	@Override
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
@@ -37,18 +34,18 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 		// 仅显示机构
 		final boolean borg = (Boolean) cp.getBeanProperty("org");
 		if (borg) {
-			dq = dService.queryDepartments(parent, EDepartmentType.organization);
+			dq = _deptService.queryDepartments(parent, EDepartmentType.organization);
 		} else {
 			Department org;
-			if (!cp.isLmanager() && (org = dService.getBean(cp.getParameter("orgId"))) != null) {
+			if (!cp.isLmanager() && (org = _deptService.getBean(cp.getParameter("orgId"))) != null) {
 				// 单机构
 				if (parent == null) {
 					return Arrays.asList(org);
 				} else {
-					dq = dService.queryDepartments(parent, EDepartmentType.department);
+					dq = _deptService.queryDepartments(parent, EDepartmentType.department);
 				}
 			} else {
-				dq = dService.queryDepartments(parent, null);
+				dq = _deptService.queryDepartments(parent, null);
 			}
 		}
 		return DataQueryUtils.toList(dq);

@@ -69,16 +69,15 @@ public class PhotoUploadPage extends AbstractAccountPage {
 					+ accountId + "&error=size"));
 		} else {
 			try {
-				final User user = orgContext.getAccountService().getUser(accountId);
+				final User user = _accountService.getUser(accountId);
 				final InputStream inputStream = multipart.getInputStream();
 				if (inputStream != null) {
 					final ByteArrayOutputStream os = new ByteArrayOutputStream();
 					final double l = Math.min(102400d / Math.abs(size - 102400), 1d);
 					ImageUtils.thumbnail(inputStream, l, os);
-					orgContext.getUserService().updatePhoto(user,
-							new ByteArrayInputStream(os.toByteArray()));
+					_userService.updatePhoto(user, new ByteArrayInputStream(os.toByteArray()));
 				} else {
-					orgContext.getUserService().updatePhoto(user, null);
+					_userService.updatePhoto(user, null);
 				}
 				deletePhoto(cp, accountId);
 				return new UrlForward(url(

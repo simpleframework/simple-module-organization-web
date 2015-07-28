@@ -13,9 +13,7 @@ import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Account;
-import net.simpleframework.organization.IAccountService;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IUserService;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationMessageWebRef;
@@ -51,15 +49,15 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 		if ("email".equals(t)) {
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getMessageRef();
 			if (ref != null) {
-				final IUserService uService = orgContext.getUserService();
-				final User user = uService.getUserByEmail(cp.getParameter("val"));
+				final User user = _userService.getUserByEmail(cp.getParameter("val"));
 				if (user == null) {
 					return new JavascriptForward("alert('").append($m("PasswordGetPage.6"))
 							.append("');");
 				}
 				final Object id = user.getId();
 				final String code = ObjectUtils.hashStr(cp);
-				((OrganizationMessageWebRef) ref).doPasswordGetMessage(uService.getAccount(id), code);
+				((OrganizationMessageWebRef) ref).doPasswordGetMessage(_userService.getAccount(id),
+						code);
 				cp.setSessionAttr("password_get_code", new Object[] { code, id });
 				return new JavascriptForward("alert('").append($m("PasswordGetPage.9")).append("');");
 			}
@@ -71,12 +69,12 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			if (!arr[0].equals(cp.getParameter("val"))) {
 				return new JavascriptForward("alert('").append($m("PasswordGetPage.8")).append("');");
 			}
-			final IAccountService aService = orgContext.getAccountService();
-			final Account account = aService.getBean(arr[1]);
+
+			final Account account = _accountService.getBean(arr[1]);
 			if (account != null) {
 				final String password = ObjectUtils.hashStr(cp);
 				account.setPassword(Account.encrypt(password));
-				aService.update(new String[] { "password" }, account);
+				_accountService.update(new String[] { "password" }, account);
 				final JavascriptForward js = new JavascriptForward();
 				js.append("var np=$('idNewPassword');");
 				js.append("np.innerHTML='")

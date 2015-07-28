@@ -55,7 +55,7 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 			rchart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
 		}
 		if (rchart == null) {
-			final Department org = orgContext.getDepartmentService().getBean(cp.getParameter("orgId"));
+			final Department org = _deptService.getBean(cp.getParameter("orgId"));
 			if (org != null) {
 				rchart = orgContext.getRoleChartService().queryOrgCharts(org).next();
 			} else {
