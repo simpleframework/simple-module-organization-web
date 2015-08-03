@@ -20,6 +20,7 @@ import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
+import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.ctx.permission.DefaultPagePermissionHandler;
 import net.simpleframework.organization.Account;
@@ -385,6 +386,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
 		_accountService.logout(new HttpAccountSession(rRequest), true);
+		rRequest.removeSessionAttr(IMVCConst.SESSION_ATTRI_LASTURL);
 	}
 
 	@Override
