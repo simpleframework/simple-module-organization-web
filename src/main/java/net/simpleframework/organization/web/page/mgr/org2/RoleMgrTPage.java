@@ -121,8 +121,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				if (chart.equals(_chart)) {
 					sb.append(" active");
 				}
-				sb.append("' onclick=\"location.href = location.href.addParameter('chartId=")
-						.append(chart.getId()).append("');\">").append(chart.getText()).append("</div>");
+				sb.append("' onclick=\"$Actions.reloc('chartId=").append(chart.getId())
+						.append("');\">").append(chart.getText()).append("</div>");
 			}
 		}
 		sb.append(" </div>");

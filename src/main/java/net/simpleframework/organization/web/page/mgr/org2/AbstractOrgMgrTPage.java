@@ -33,11 +33,9 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 
 		pp.addImportCSS(AbstractOrgMgrTPage.class, "/orgmgrt.css");
 
-		addComponentBean(pp, "AbstractMgrTPage_orgSelect", DeptSelectBean.class)
-				.setOrg(true)
+		addComponentBean(pp, "AbstractMgrTPage_orgSelect", DeptSelectBean.class).setOrg(true)
 				.setClearAction("false")
-				.setJsSelectCallback(
-						"location.href = location.href.addParameter('orgId=' + selects[0].id); return false;");
+				.setJsSelectCallback("$Actions.reloc('orgId=' + selects[0].id); return false;");
 	}
 
 	@Override
