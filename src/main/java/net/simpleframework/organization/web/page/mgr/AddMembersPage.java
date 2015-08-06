@@ -149,7 +149,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 	}
 
 	protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
-		return new JavascriptForward().append("$Actions['ajaxRoleMemberVal']('roleId=")
-				.append(role.getId()).append("')");
+		return new JavascriptForward("$Actions['ajaxRoleMemberVal']('roleId=").append(role.getId())
+				.append("')");
 	}
 }

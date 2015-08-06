@@ -259,7 +259,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 			@Override
 			protected JavascriptForward toJavascriptForward(final ComponentParameter cp,
 					final Role role) {
-				return new JavascriptForward().append("$Actions['RoleMemberPage_tbl']();");
+				return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 			}
 		}
 	}

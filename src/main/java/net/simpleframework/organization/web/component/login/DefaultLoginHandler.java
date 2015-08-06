@@ -7,6 +7,7 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageRequestResponse;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.login.AbstractLoginHandler;
 import net.simpleframework.mvc.component.ui.validatecode.ValidateCodeUtils;
@@ -53,13 +54,13 @@ public class DefaultLoginHandler extends AbstractLoginHandler {
 			if (StringUtils.hasText(loginCallback)) {
 				js.append(loginCallback);
 			} else {
-				js.append("$Actions.loc('").append(loginForward).append("');");
+				js.append(JS.loc(loginForward));
 			}
 			js.append("_save_cookie();");
 		} catch (final OrganizationException e) {
 			final int code = e.getCode();
 			if (code == 2002) {
-				js.append("$Actions.loc('").append(loginForward).append("');");
+				js.append(JS.loc(loginForward));
 			} else {
 				final boolean password = Convert.toBool(e.getVal("password"));
 				js.append("Validation.insertAfter('");
