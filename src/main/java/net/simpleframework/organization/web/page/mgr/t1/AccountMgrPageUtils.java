@@ -1,9 +1,6 @@
 package net.simpleframework.organization.web.page.mgr.t1;
 
 import static net.simpleframework.common.I18n.$m;
-
-import java.util.Date;
-
 import net.simpleframework.common.ID;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -36,8 +33,7 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 	}
 
 	public static TablePagerColumn TC_LASTLOGINDATE() {
-		return new TablePagerColumn("lastLoginDate", $m("AccountMgrPage.3"), 115)
-				.setPropertyClass(Date.class);
+		return TablePagerColumn.DATE("lastLoginDate", $m("AccountMgrPage.3"));
 	}
 
 	public static TablePagerColumn TC_STATUS() {
