@@ -5,6 +5,7 @@ import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
 import net.simpleframework.mvc.common.element.ImageElement;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.component.ui.tabs.TabItem;
 import net.simpleframework.mvc.component.ui.tabs.TabsBean;
@@ -45,8 +46,8 @@ public abstract class AbstractEditAwarePage extends AbstractTemplatePage impleme
 	}
 
 	public AbstractElement<?> str_Login(final PageParameter pp) {
-		return new LinkElement($m("AbstractEditAwarePage.5")).setOnclick("$Actions.loc('"
-				+ MVCUtils.getLocationPath() + "');");
+		return new LinkElement($m("AbstractEditAwarePage.5")).setOnclick(JS.loc(MVCUtils
+				.getLocationPath()));
 	}
 
 	public AbstractElement<?> str_Logout(final PageParameter pp) {
