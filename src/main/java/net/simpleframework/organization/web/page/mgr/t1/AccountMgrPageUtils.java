@@ -50,11 +50,11 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 			if (dept.getDepartmentType() == EDepartmentType.department) {
 				return dept.getText();
 			} else {
-				return SpanElement.grey777(dept.getText() + " (" + EDepartmentType.organization + ")")
+				return SpanElement.color777(dept.getText() + " (" + EDepartmentType.organization + ")")
 						.setItalic(true).toString();
 			}
 		} else {
-			return SpanElement.grey999($m("AccountMgrPage.20")).toString();
+			return SpanElement.color999($m("AccountMgrPage.20")).toString();
 		}
 	}
 }

@@ -209,7 +209,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			data.add("name", dept.getName());
 			final Department parent = _deptService.getBean(dept.getParentId());
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
-				data.add("parentId", SpanElement.grey777(parent.getText()));
+				data.add("parentId", SpanElement.color777(parent.getText()));
 			}
 			// String params = ;
 			// final String orgid = cp.getParameter("orgId");
