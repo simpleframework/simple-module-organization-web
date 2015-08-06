@@ -216,9 +216,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			// if (StringUtils.hasText(orgid)) {
 			// params += "&orgId=" + orgid;
 			// }
-			final LinkElement le = new LinkElement(sService.getDeptAccountStat(dept).getNums())
-					.setClassName("simple_btn2").setHref(
-							getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
+			final LinkElement le = LinkElement.style2(sService.getDeptAccountStat(dept).getNums())
+					.setHref(getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
 			data.add("users", le);
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;
