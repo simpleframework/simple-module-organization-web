@@ -8,7 +8,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -78,7 +77,7 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 			final StringBuilder sb = new StringBuilder();
 			sb.append(new ButtonElement($m("AccountMgrPage.11"))
 					.setOnclick("$Actions['UserMgr_DelTPage_undelete']('id=" + user.getId() + "');"));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}

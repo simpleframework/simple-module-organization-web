@@ -4,7 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
@@ -41,7 +40,7 @@ public class UserMgr_OnlineTPage extends UserMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final User user) {
 			final StringBuilder sb = new StringBuilder();
 			sb.append(new ButtonElement($m("AccountMgrPage.13")));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}

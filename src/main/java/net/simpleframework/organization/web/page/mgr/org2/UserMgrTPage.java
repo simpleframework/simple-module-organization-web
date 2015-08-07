@@ -110,6 +110,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
 		tablePager
+				.addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_TEXT())
 				.addColumn(
 						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
 							@Override
@@ -123,9 +125,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 						}.setFilterAdvClick(
 								"$Actions['UserMgrTPage_deptSelect']("
 										+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");").setSort(
-								false)).addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(AccountMgrPageUtils.TC_TEXT())
-				.addColumn(AccountMgrPageUtils.TC_EMAIL().setSort(false))
+								false)).addColumn(AccountMgrPageUtils.TC_EMAIL().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_MOBILE().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilterSort(false));
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
@@ -259,7 +259,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 					.append(
 							ButtonElement.editBtn().setOnclick(
 									"$Actions['UserMgrTPage_edit']('accountId=" + id + "');"));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}

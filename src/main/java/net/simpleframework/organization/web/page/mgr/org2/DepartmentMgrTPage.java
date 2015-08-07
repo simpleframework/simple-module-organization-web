@@ -230,7 +230,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			sb.append(SpanElement.SPACE);
 			sb.append(ButtonElement.editBtn().setOnclick(
 					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}

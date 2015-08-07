@@ -262,7 +262,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			final StringBuilder sb = new StringBuilder();
 			sb.append(ButtonElement.deleteBtn().setOnclick(
 					"$Actions['ajax_deleteMember']('mId=" + id + "');"));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			kv.put(TablePagerColumn.OPE, sb.toString());
 			return kv;
 		}

@@ -379,7 +379,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			sb.append(SpanElement.SPACE).append(
 					ButtonElement.logBtn().setOnclick(
 							"$Actions['AccountMgrPage_logWin']('beanId=" + id + "');"));
-			sb.append(SpanElement.SPACE).append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			kv.add(TablePagerColumn.OPE, sb.toString());
 			return kv;
 		}
