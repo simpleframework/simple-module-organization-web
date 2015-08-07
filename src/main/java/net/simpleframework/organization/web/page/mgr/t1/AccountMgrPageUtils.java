@@ -25,11 +25,11 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 	}
 
 	public static TablePagerColumn TC_EMAIL() {
-		return new TablePagerColumn("u.email", $m("AccountMgrPage.6"), 125);
+		return new TablePagerColumn("u.email", $m("AccountMgrPage.6"), 120);
 	}
 
 	public static TablePagerColumn TC_MOBILE() {
-		return new TablePagerColumn("u.mobile", $m("AccountMgrPage.7"), 125);
+		return new TablePagerColumn("u.mobile", $m("AccountMgrPage.7"), 120);
 	}
 
 	public static TablePagerColumn TC_LASTLOGINDATE() {
