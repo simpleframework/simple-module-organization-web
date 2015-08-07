@@ -132,7 +132,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		if (self) {
 			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS().setFilterSort(false));
 		}
-		tablePager.addColumn(TablePagerColumn.OPE().setWidth(self ? 125 : 85));
+		tablePager.addColumn(TablePagerColumn.OPE(self ? 125 : 85));
 		return tablePager;
 	}
 

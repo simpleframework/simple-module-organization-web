@@ -45,8 +45,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 180))
 				.addColumn(new TablePagerColumn("rolename", $m("RoleMgrTPage.1"), 120))
 				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90))
-				.addColumn(TablePagerColumn.DESCRIPTION())
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(80));
 
 		// 角色选取
 		final User user = getUser(pp);

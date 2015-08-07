@@ -94,8 +94,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 65).setSort(false)
 								.setPropertyClass(Boolean.class))
 				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setSort(false))
-				.addColumn(TablePagerColumn.DESCRIPTION())
-				.addColumn(TablePagerColumn.OPE().setWidth(80));
+				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(80));
 		return tablePager;
 	}
 

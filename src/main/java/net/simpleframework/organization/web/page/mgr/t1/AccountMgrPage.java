@@ -77,8 +77,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
 				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
-				.addColumn(AccountMgrPageUtils.TC_STATUS())
-				.addColumn(TablePagerColumn.OPE().setWidth(125));
+				.addColumn(AccountMgrPageUtils.TC_STATUS()).addColumn(TablePagerColumn.OPE(125));
 
 		// 添加账号
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_editPage",

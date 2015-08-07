@@ -81,8 +81,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setSort(false))
 				.addColumn(
 						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
-				.addColumn(TablePagerColumn.DESCRIPTION())
-				.addColumn(TablePagerColumn.OPE().setWidth(125));
+				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(125));
 		return tablePager;
 	}
 
