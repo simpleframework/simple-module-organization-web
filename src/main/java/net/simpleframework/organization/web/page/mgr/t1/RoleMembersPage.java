@@ -82,7 +82,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
 				TablePagerBean.class).setShowFilterBar(false).setShowLineNo(true)
-				.setPagerBarLayout(EPagerBarLayout.bottom).setContainerId("idMemberTable")
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idMemberTable")
 				.setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(

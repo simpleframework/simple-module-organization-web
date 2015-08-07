@@ -16,8 +16,10 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -77,11 +79,14 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
 		tablePager
-				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0"), 210).setSort(false))
-				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 120).setSort(false))
+				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0")).setSort(false))
+				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 150).setSort(false))
 				.addColumn(
 						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
-				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(125));
+				.addColumn(
+						new TablePagerColumn("members", $m("RoleMgrTPage.4"), 50).setTextAlign(
+								ETextAlign.center).setFilterSort(false))
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -216,23 +221,20 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				txt.append(i == 0 ? "| -- " : " -- ");
 			}
 			txt.append(role.getText());
-			data.add("text", txt.toString());
-			data.add("name", rService.toUniqueName(role));
+			data.add("text", txt).add("name", rService.toUniqueName(role));
+			data.put(
+					"members",
+					LinkElement.style2(role.getMembers()).setOnclick(
+							"$Actions['RoleMgrTPage_members']('roleId=" + role.getId() + "');"));
 			data.add("roletype", role.getRoleType());
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, role));
 			return data;
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final Role role) {
-			final Object id = role.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(
-					new ButtonElement($m("RoleMgrTPage.4"))
-							.setOnclick("$Actions['RoleMgrTPage_members']('roleId=" + id + "');"))
-					.append(SpanElement.SPACE)
-					.append(
-							ButtonElement.editBtn().setOnclick(
-									"$Actions['RoleMgrTPage_roleWin']('roleId=" + id + "');"));
+			sb.append(ButtonElement.editBtn().setOnclick(
+					"$Actions['RoleMgrTPage_roleWin']('roleId=" + role.getId() + "');"));
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
