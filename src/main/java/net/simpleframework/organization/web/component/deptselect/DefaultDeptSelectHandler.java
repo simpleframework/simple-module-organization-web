@@ -21,7 +21,7 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.web._PermissionDept;
+import net.simpleframework.organization.web.OrganizationPermissionHandler._PermissionDept;
 
 /**
  * Licensed under the Apache License, Version 2.0
