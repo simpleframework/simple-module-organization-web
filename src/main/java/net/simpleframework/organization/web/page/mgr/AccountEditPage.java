@@ -12,11 +12,11 @@ import net.simpleframework.mvc.common.element.TableRow;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.common.element.TextButton;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 
 /**

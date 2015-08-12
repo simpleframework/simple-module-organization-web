@@ -13,7 +13,6 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.mvc.component.ext.userselect.DepartmentW;
 import net.simpleframework.mvc.component.ext.userselect.IUserSelectHandler;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.organization.Department;

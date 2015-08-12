@@ -2,21 +2,26 @@ package net.simpleframework.organization.web.component.deptselect;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
-import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
+import net.simpleframework.mvc.component.ext.deptselect.IDeptSelectHandle;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean.DictionaryTreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.web._PermissionDept;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -28,27 +33,37 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 		IDeptSelectHandle, IOrganizationContextAware {
 
 	@Override
-	public Collection<Department> getDepartments(final ComponentParameter cp,
-			final TreeBean treeBean, final Department parent) {
+	public Collection<PermissionDept> getDepartments(final ComponentParameter cp,
+			final TreeBean treeBean, final PermissionDept parent) {
+		final Department pdept = parent != null ? (Department) ((_PermissionDept) parent)
+				.getDepartment() : null;
 		IDataQuery<Department> dq = null;
 		// 仅显示机构
 		final boolean borg = (Boolean) cp.getBeanProperty("org");
 		if (borg) {
-			dq = _deptService.queryDepartments(parent, EDepartmentType.organization);
+			dq = _deptService.queryDepartments(pdept, EDepartmentType.organization);
 		} else {
 			Department org;
 			if (!cp.isLmanager() && (org = _deptService.getBean(cp.getParameter("orgId"))) != null) {
 				// 单机构
 				if (parent == null) {
-					return Arrays.asList(org);
+					final PermissionDept _dept = new _PermissionDept(org);
+					return Arrays.asList(_dept);
 				} else {
-					dq = _deptService.queryDepartments(parent, EDepartmentType.department);
+					dq = _deptService.queryDepartments(pdept, EDepartmentType.department);
 				}
 			} else {
-				dq = _deptService.queryDepartments(parent, null);
+				dq = _deptService.queryDepartments(pdept, null);
 			}
 		}
-		return DataQueryUtils.toList(dq);
+
+		final List<PermissionDept> al = new ArrayList<PermissionDept>();
+		Department dept;
+		while ((dept = dq.next()) != null) {
+			final PermissionDept _dept = new _PermissionDept(dept);
+			al.add(_dept);
+		}
+		return al;
 	}
 
 	@Override

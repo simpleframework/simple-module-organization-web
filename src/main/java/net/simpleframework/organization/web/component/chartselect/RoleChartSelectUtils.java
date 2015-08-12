@@ -5,6 +5,7 @@ import java.util.Collection;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
+import net.simpleframework.mvc.component.ext.deptselect.DeptSelectUtils;
 import net.simpleframework.mvc.component.ui.tree.ITreeNodeAttributesCallback;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
@@ -13,7 +14,6 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.ERoleChartMark;
 import net.simpleframework.organization.RoleChart;
-import net.simpleframework.organization.web.component.deptselect.DeptSelectUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -60,7 +60,8 @@ public abstract class RoleChartSelectUtils {
 					continue;
 				}
 				final TreeNode tn = new TreeNode(treeBean, parent, dept2);
-				tn.setImage(DeptSelectUtils.icon_dept(cp, dept2));
+				tn.setImage(DeptSelectUtils.getIconPath(cp,
+						dept2.getDepartmentType() == EDepartmentType.organization));
 				if (callback != null) {
 					callback.setAttributes(tn);
 				}

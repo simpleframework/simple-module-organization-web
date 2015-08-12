@@ -11,12 +11,12 @@ import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
+import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationUrlsFactory;
-import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 
 /**
  * Licensed under the Apache License, Version 2.0

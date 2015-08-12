@@ -17,6 +17,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
+import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
 import net.simpleframework.mvc.component.ext.userselect.UserSelectBean;
 import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
 import net.simpleframework.mvc.component.ui.propeditor.InputComp;
@@ -33,7 +34,6 @@ import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
-import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
 /**

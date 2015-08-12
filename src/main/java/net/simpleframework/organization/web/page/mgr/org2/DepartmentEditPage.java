@@ -13,6 +13,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
+import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
 import net.simpleframework.mvc.component.ui.propeditor.EInputCompType;
 import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
@@ -22,7 +23,6 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.impl.OrganizationContext;
-import net.simpleframework.organization.web.component.deptselect.DeptSelectBean;
 
 /**
  * Licensed under the Apache License, Version 2.0
