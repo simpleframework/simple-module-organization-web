@@ -290,6 +290,11 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	public static class _UserRolesPage extends UserRolesPage {
 		@Override
+		public String getRole(final PageParameter pp) {
+			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		}
+
+		@Override
 		protected Department getOrg(final PageParameter pp) {
 			return AbstractOrgMgrTPage.getOrg2(pp);
 		}
