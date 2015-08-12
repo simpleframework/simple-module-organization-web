@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
@@ -93,7 +94,8 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 
 	@Override
 	public Collection<DepartmentW> getDepartmentWrappers(final ComponentParameter cp) {
-		final Map<ID, Collection<Department>> dTreemap = _deptService.queryAllTree();
+		final Map<ID, Collection<Department>> dTreemap = DataQueryUtils.toTreeMap(_deptService
+				.queryAll());
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
 		final IDataQuery<?> dq = getUsers(cp);
 		if (dq != null) {
