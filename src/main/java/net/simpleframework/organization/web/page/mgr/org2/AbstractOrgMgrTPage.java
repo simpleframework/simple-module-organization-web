@@ -6,12 +6,9 @@ import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETabMatch;
-import net.simpleframework.mvc.common.element.ElementList;
-import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
-import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -32,10 +29,6 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 		super.onForward(pp);
 
 		pp.addImportCSS(AbstractOrgMgrTPage.class, "/orgmgrt.css");
-
-		addComponentBean(pp, "AbstractMgrTPage_orgSelect", DeptSelectBean.class).setOrg(true)
-				.setClearAction("false")
-				.setJsSelectCallback("$Actions.reloc('orgId=' + selects[0].id); return false;");
 	}
 
 	@Override
@@ -45,29 +38,6 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 
 	static Department getOrg2(final PageParameter pp) {
 		return _deptService.getBean(getPermissionOrg(pp).getId());
-	}
-
-	@Override
-	public ElementList getLeftElements(final PageParameter pp) {
-		SpanElement oele;
-		final PermissionDept org = getPermissionOrg(pp);
-		if (org != null) {
-			String txt = org.getText();
-			final int nums = org.getUsers();
-			if (nums > 0) {
-				txt += " (" + nums + ")";
-			}
-			oele = new SpanElement(txt);
-		} else {
-			oele = new SpanElement($m("AbstractMgrTPage.0"));
-		}
-		final ElementList el = ElementList.of(oele.setClassName("org_txt"));
-		if (pp.isLmanager()) {
-			el.append(SpanElement.SPACE).append(
-					new LinkElement($m("AbstractMgrTPage.1"))
-							.setOnclick("$Actions['AbstractMgrTPage_orgSelect']();"));
-		}
-		return el;
 	}
 
 	protected static OrganizationUrlsFactory uFactory = ((IOrganizationWebContext) orgContext)
@@ -98,5 +68,20 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(getUrl(pp, UserMgrTPage.class))
 						.setTabMatch(ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
 						.setHref(getUrl(pp, RoleMgrTPage.class)));
+	}
+
+	@Override
+	protected SpanElement createOrgElement(final PageParameter pp) {
+		final SpanElement ele = super.createOrgElement(pp);
+		final PermissionDept org = getPermissionOrg(pp);
+		if (org != null) {
+			String txt = org.getText();
+			final int nums = org.getUsers();
+			if (nums > 0) {
+				txt += " (" + nums + ")";
+			}
+			ele.setText(txt);
+		}
+		return ele;
 	}
 }
