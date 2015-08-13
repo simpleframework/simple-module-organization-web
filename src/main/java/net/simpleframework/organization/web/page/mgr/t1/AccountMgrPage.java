@@ -29,7 +29,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
-import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
@@ -69,8 +68,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addCategoryBean(pp, DepartmentCategory.class);
 
 		// 账号列表
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, AccountList.class)
-				.setPagerBarLayout(EPagerBarLayout.bottom);
+		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false))
