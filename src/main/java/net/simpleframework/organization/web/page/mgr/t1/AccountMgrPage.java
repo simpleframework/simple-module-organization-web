@@ -31,6 +31,7 @@ import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.mvc.component.ui.pager.TablePagerColumns;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.mvc.template.struct.NavigationButtons;
@@ -70,12 +71,13 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		// 账号列表
 		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
 		tablePager
+				.addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_TEXT())
 				.addColumn(
 						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false))
-				.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
 				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE())
-				.addColumn(AccountMgrPageUtils.TC_STATUS()).addColumn(TablePagerColumn.OPE(125));
+				.addColumn(AccountMgrPageUtils.TC_STATUS()).addColumn(TablePagerColumn.OPE(120));
 
 		// 添加账号
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_editPage",
@@ -262,7 +264,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("AccountMgrPage_accountWin",
 					"accountId"));
 
-			final int type = Convert.toInt(getSelectedTreeNode(cp));
+			final Object obj = getSelectedTreeNode(cp);
+			final int type = Convert.toInt(obj);
 			if (type != Account.TYPE_STATE_DELETE) {
 				items.add(MenuItem.sep());
 				items.add(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("AccountMgrPage_roleWin",
@@ -285,7 +288,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			items.add(MenuItem.sep());
 			items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
 
-			if (type != Account.TYPE_STATE_DELETE) {
+			if (obj instanceof Department) {
 				items.add(MenuItem.sep());
 				items.append(MenuItem
 						.of($m("Menu.move"))
@@ -303,6 +306,17 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 										"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
 			}
 			return items;
+		}
+
+		@Override
+		public AbstractTablePagerSchema createTablePagerSchema() {
+
+			return new DefaultTablePagerSchema() {
+				@Override
+				public TablePagerColumns getTablePagerColumns(final ComponentParameter cp) {
+					return super.getTablePagerColumns(cp);
+				}
+			};
 		}
 
 		@Override
