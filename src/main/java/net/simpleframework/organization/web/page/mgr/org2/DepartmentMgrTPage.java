@@ -146,7 +146,11 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 	public static class DepartmentTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return new ListDataQuery<Department>(list(getOrg2(cp)));
+			final Department org = getOrg2(cp);
+			if (org != null) {
+				cp.addFormParameter("orgId", org.getId());
+			}
+			return new ListDataQuery<Department>(list(org));
 		}
 
 		private List<Department> list(final Department parent) {
