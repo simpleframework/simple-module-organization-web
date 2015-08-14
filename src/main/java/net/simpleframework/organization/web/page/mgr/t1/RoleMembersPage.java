@@ -20,6 +20,7 @@ import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -31,8 +32,9 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
-import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
@@ -81,20 +83,19 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
-				TablePagerBean.class).setShowFilterBar(false).setShowLineNo(true)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idMemberTable")
-				.setHandlerClass(MemberTable.class);
+				TablePagerBean.class).setShowFilterBar(false).setShowLineNo(true).setSort(false)
+				.setGroupColumn("deptId").setPagerBarLayout(EPagerBarLayout.none)
+				.setContainerId("idMemberTable").setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
-						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 65).setSort(false)
+						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60)
 								.setPropertyClass(ERoleMemberType.class))
+				.addColumn(new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150))
 				.addColumn(
-						new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150).setSort(false))
-				.addColumn(
-						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 65).setSort(false)
-								.setPropertyClass(Boolean.class))
-				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100).setSort(false))
-				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(80));
+						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 60)
+								.setPropertyClass(Boolean.class).setTextAlign(ETextAlign.center))
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100))
+				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -224,7 +225,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		return sb.toString();
 	}
 
-	public static class MemberTable extends AbstractDbTablePagerHandler {
+	public static class MemberTable extends GroupDbTablePagerHandler {
 
 		@Override
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
@@ -238,6 +239,24 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			return orgContext.getRoleService().members(role);
 		}
 
+		private Department getDepartment(final RoleMember rm) {
+			Object deptId = rm.getDeptId();
+			if (deptId == null && rm.getMemberType() == ERoleMemberType.user) {
+				final User user = _userService.getBean(rm.getMemberId());
+				if (user != null) {
+					deptId = user.getDepartmentId();
+				}
+			}
+			return _deptService.getBean(deptId);
+		}
+
+		@Override
+		public Object getGroupValue(final ComponentParameter cp, final Object bean,
+				final String groupColumn) {
+			final Department dept = getDepartment((RoleMember) bean);
+			return dept == null ? null : dept.getText();
+		}
+
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final RoleMember rm = (RoleMember) dataObject;
@@ -249,16 +268,9 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			if (mType == ERoleMemberType.user) {
 				kv.put("primaryRole", new Checkbox(null, null).setChecked(rm.isPrimaryRole())
 						.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
-				ID deptId = rm.getDeptId();
-				if (deptId == null) {
-					final User bean = _userService.getBean(rm.getMemberId());
-					deptId = bean.getDepartmentId();
-				}
-				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(deptId));
+				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(getDepartment(rm)));
 			}
-
 			kv.put(TablePagerColumn.DESCRIPTION, rm.getDescription());
-
 			final StringBuilder sb = new StringBuilder();
 			sb.append(ButtonElement.deleteBtn().setOnclick(
 					"$Actions['ajax_deleteMember']('mId=" + id + "');"));

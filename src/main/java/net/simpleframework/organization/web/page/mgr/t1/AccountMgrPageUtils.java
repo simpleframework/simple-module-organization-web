@@ -1,7 +1,6 @@
 package net.simpleframework.organization.web.page.mgr.t1;
 
 import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.common.ID;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.organization.Department;
@@ -40,8 +39,8 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 		return new TablePagerColumn("status", $m("AccountMgrPage.4"), 45).setFilter(false);
 	}
 
-	public static String toDepartmentText(final ID deptId) {
-		final Department dept = _deptService.getBean(deptId);
+	public static String toDepartmentText(final Department dept) {
+		// final = ;
 		if (dept != null) {
 			if (dept.getDepartmentType() == EDepartmentType.department) {
 				return dept.getText();

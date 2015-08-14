@@ -91,7 +91,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 				final Role role = (Role) o;
 				parent.setImage(RoleSelectUtils.getRoleIcon(cp, role));
 				if (role.getRoleType() == ERoleType.normal) {
-					final int count = orgContext.getRoleMemberService().queryMembers(role).getCount();
+					final int count = role.getMembers();
 					if (count > 0) {
 						parent.setPostfixText("(" + count + ")");
 					}

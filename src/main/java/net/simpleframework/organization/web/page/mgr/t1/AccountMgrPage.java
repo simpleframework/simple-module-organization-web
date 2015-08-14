@@ -351,7 +351,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			kv.add("lastLoginDate", account.getLastLoginDate());
 			kv.add("status", account.getStatus());
 
-			kv.add("u.departmentId", AccountMgrPageUtils.toDepartmentText(user.getDepartmentId()));
+			kv.add("u.departmentId",
+					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(user.getDepartmentId())));
 
 			kv.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
 			final String email = user.getEmail();

@@ -244,7 +244,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			data.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			data.add("u.mobile", user.getMobile());
 
-			data.add("u.departmentId", AccountMgrPageUtils.toDepartmentText(user.getDepartmentId()));
+			data.add("u.departmentId",
+					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(user.getDepartmentId())));
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, user));
 			return data;
 		}
