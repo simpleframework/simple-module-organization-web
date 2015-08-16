@@ -106,14 +106,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final Department item = _deptService.getBean(cp
-				.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final Department item2 = _deptService.getBean(cp
-				.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
-		if (item != null && item2 != null) {
-			_deptService.exchange(item, item2,
-					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
-		}
+		_deptService.exchange(TablePagerUtils.getExchangeBeans(cp, _deptService));
 		return new JavascriptForward("$Actions['DepartmentMgrTPage_tbl']();");
 	}
 

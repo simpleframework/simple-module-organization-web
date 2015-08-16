@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
-import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
@@ -139,12 +138,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
 		final IRoleMemberService service = orgContext.getRoleMemberService();
-		final RoleMember item = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final RoleMember item2 = service.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
-		if (item != null && item2 != null) {
-			service.exchange(item, item2,
-					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
-		}
+		service.exchange(TablePagerUtils.getExchangeBeans(cp, service));
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 

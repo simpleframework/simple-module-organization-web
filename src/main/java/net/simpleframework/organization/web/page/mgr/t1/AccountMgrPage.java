@@ -162,12 +162,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final User item = _userService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final User item2 = _userService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
-		if (item != null && item2 != null) {
-			_userService.exchange(item, item2,
-					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
-		}
+		_userService.exchange(TablePagerUtils.getExchangeBeans(cp, _userService));
 		return createTableRefresh();
 	}
 

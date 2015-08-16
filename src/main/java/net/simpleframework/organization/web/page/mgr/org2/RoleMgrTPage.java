@@ -99,12 +99,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
 		final IRoleService rService = orgContext.getRoleService();
-		final Role item = rService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID));
-		final Role item2 = rService.getBean(cp.getParameter(TablePagerUtils.PARAM_MOVE_ROWID2));
-		if (item != null && item2 != null) {
-			rService.exchange(item, item2,
-					Convert.toBool(cp.getParameter(TablePagerUtils.PARAM_MOVE_UP)));
-		}
+		rService.exchange(TablePagerUtils.getExchangeBeans(cp, rService));
 		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
 	}
 
