@@ -48,34 +48,35 @@ var DepartmentMgrTPage = {
   },
 
   _toggle : function(img, open, cookie) {
-    var src = img.src;
-    var p = src.lastIndexOf("/") + 1;
-    var path = src.substring(0, p);
-
-    var target = function() {
-      var arr = [];
-      var item = img.up(".titem");
-      var parent = item.getAttribute("parentid");
-      var nitem = item.next();
-      while (nitem) {
-        var parent2 = nitem.getAttribute("parentid");
-        if (parent == parent2) {
-          break;
-        }
-        arr.push(nitem);
-        nitem = nitem.next();
+    var setImg(_img) {
+      if (_img) {
+        var src = _img.src;
+        var p = src.lastIndexOf("/") + 1;
+        var path = src.substring(0, p);
+        
+        _img.src = path + (open ? "p_toggle.png" : "toggle.png");
+        _img._open = !open;
       }
-      return $(arr);
     };
-
-    if (open) {
-      target().invoke("show");
-      img.src = path + "p_toggle.png";
-    } else {
-      target().invoke("hide");
-      img.src = path + "toggle.png";
+    
+    var item = img.up(".titem");
+    var parent = item.getAttribute("parentid");
+    var nitem = item.next();
+    var arr = [];
+    while (nitem) {
+      var parent2 = nitem.getAttribute("parentid");
+      if (parent == parent2) {
+        break;
+      }
+      arr.push(nitem);
+      nitem = nitem.next();
     }
-    img._open = !open;
+    $(arr).each(function(item) {
+      Element[open ? 'show' : 'hide'](item);
+      setImg(item.down("img.toggle"));
+    });
+    setImg(img);
+    
     if (cookie) {
       var cookiek = "toggle_" + img.up(".titem").getAttribute("rowid");
       document.setCookie(cookiek, open);
