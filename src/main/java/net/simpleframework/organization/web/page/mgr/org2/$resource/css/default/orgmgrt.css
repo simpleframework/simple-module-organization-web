@@ -4,6 +4,42 @@
   padding: 8px;
 }
 
+#idDepartmentMgrTPage_tbl img.toggle {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.DepartmentMgrTPage_plus, 
+.DepartmentMgrTPage_minus {
+  background-color: #fff;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 1px solid #999;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
+  width: 18px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.DepartmentMgrTPage_plus:HOVER, 
+.DepartmentMgrTPage_minus:HOVER {
+  background-color: #def;
+  border-color: #bbb;
+}
+
+.DepartmentMgrTPage_plus {
+  background-image: url("images/toggle.png");
+}
+
+.DepartmentMgrTPage_minus {
+  background-image: url("images/p_toggle.png");
+  margin: 0 4px;
+}
+
 .RoleMgrTPage {
   background-color: #def;
 }

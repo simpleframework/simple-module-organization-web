@@ -362,7 +362,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public int getUsers() {
-			final AccountStat stat = orgContext.getAccountStatService().getOrgAccountStat(getId());
+			final AccountStat stat = _accountStatService.getOrgAccountStat(getId());
 			return stat.getNums() - stat.getState_delete();
 		}
 

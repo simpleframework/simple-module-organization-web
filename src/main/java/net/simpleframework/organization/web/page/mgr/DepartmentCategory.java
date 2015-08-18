@@ -23,7 +23,6 @@ import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IAccountStatService;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
@@ -118,10 +117,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	}
 
 	private String getPostfixText(final Object type) {
-		final IAccountStatService sService = orgContext.getAccountStatService();
 		int c = 0;
 		if (type instanceof Integer) {
-			final AccountStat stat = sService.getAllAccountStat();
+			final AccountStat stat = _accountStatService.getAllAccountStat();
 			final int iType = (Integer) type;
 			if (iType == Account.TYPE_ALL) {
 				c = stat.getNums();
@@ -141,9 +139,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 			if (dept != null) {
 				AccountStat stat;
 				if (dept.getDepartmentType() == EDepartmentType.department) {
-					stat = sService.getDeptAccountStat(type);
+					stat = _accountStatService.getDeptAccountStat(type);
 				} else {
-					stat = sService.getOrgAccountStat(type);
+					stat = _accountStatService.getOrgAccountStat(type);
 				}
 				c = stat.getNums() - stat.getState_delete();
 			}

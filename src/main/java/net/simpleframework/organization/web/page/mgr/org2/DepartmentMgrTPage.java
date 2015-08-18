@@ -19,7 +19,6 @@ import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
-import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -38,7 +37,6 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.IAccountStatService;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.userselect.DefaultUserSelectHandler;
@@ -54,6 +52,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
+
+		pp.addImportJavascript(DepartmentMgrTPage.class, "/js/dept_tbl.js");
 
 		addTablePagerBean(pp);
 
@@ -84,6 +84,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"DepartmentMgrTPage_tbl").setSort(false).setPagerBarLayout(EPagerBarLayout.none)
+				.setJsLoadedCallback("DepartmentMgrTPage.jsLoaded();")
 				.setContainerId("idDepartmentMgrTPage_tbl").setHandlerClass(DepartmentTbl.class);
 		tablePager
 				.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
@@ -93,7 +94,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 								.setFilter(false))
 				.addColumn(
 						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).setTextAlign(
-								ETextAlign.center).setFilter(false)).addColumn(TablePagerColumn.OPE(150));
+								ETextAlign.center).setFilter(false))
+				.addColumn(TablePagerColumn.OPE(145).setTextAlign(ETextAlign.left));
 		return tablePager;
 	}
 
@@ -127,9 +129,17 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn().setOnclick(
-				"$Actions['DepartmentMgrTPage_editWin']();")));
+		sb.append("<div class='tbar clearfix '>");
+		sb.append(" <div class='left'>");
+		sb.append(LinkButton.addBtn().corner()
+				.setOnclick("$Actions['DepartmentMgrTPage_editWin']();"));
+		sb.append(" </div>");
+		sb.append(" <div class='right'>");
+		sb.append(new SpanElement().setClassName("DepartmentMgrTPage_plus")
+				.setTitle($m("DepartmentMgrTPage.6")).setOnclick("DepartmentMgrTPage.toggleAll()"));
+		sb.append(new SpanElement().setClassName("DepartmentMgrTPage_minus")
+				.setTitle($m("DepartmentMgrTPage.7")).setOnclick("DepartmentMgrTPage.toggleAll(true)"));
+		sb.append(" </div>");
 		sb.append("</div>");
 		sb.append("<div id='idDepartmentMgrTPage_tbl'>");
 		sb.append("</div>");
@@ -143,7 +153,9 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			if (org != null) {
 				cp.addFormParameter("orgId", org.getId());
 			}
-			return new ListDataQuery<Department>(list(org));
+			final List<Department> list = list(org);
+			list.add(0, org);
+			return new ListDataQuery<Department>(list);
 		}
 
 		private List<Department> list(final Department parent) {
@@ -154,11 +166,69 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				Department dept;
 				while ((dept = dq.next()) != null) {
 					l.add(dept);
-					dept.setAttr("_margin", Convert.toInt(parent.getAttr("_margin")) + 1);
-					l.addAll(list(dept));
+					dept.setAttr("_lev", Convert.toInt(parent.getAttr("_lev")) + 1);
+					final List<Department> list2 = list(dept);
+					dept.setAttr("_leaf", list2.size() == 0);
+					l.addAll(list2);
 				}
 			}
 			return l;
+		}
+
+		// static String[] L_COLORs = new String[] { "#333", "#666", "#999" };
+
+		@Override
+		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+			final Department dept = (Department) dataObject;
+			final KVMap data = new KVMap();
+			final StringBuilder txt = new StringBuilder();
+			if (dept.getDepartmentType() == EDepartmentType.organization) {
+				txt.append(new SpanElement(dept.getText()).setStrong(true));
+			} else {
+				final boolean leaf = Convert.toBool(dept.getAttr("_leaf"));
+				if (!leaf) {
+					txt.append("<img class='toggle' src=\"").append(
+							cp.getCssResourceHomePath(DepartmentMgrTPage.class));
+					txt.append("/images/p_toggle.png\" />");
+				}
+				final int lev = Convert.toInt(dept.getAttr("_lev"));
+				txt.append(new SpanElement(dept.getText()).setStyle("margin-left: "
+						+ (lev > 1 ? lev * 20 : 10) + "px"));
+			}
+
+			data.add("text", txt).add("name", dept.getName());
+			final Department parent = _deptService.getBean(dept.getParentId());
+			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
+				data.add("parentId", SpanElement.color777(parent.getText()));
+			}
+
+			final LinkElement le = LinkElement.style2(
+					_accountStatService.getDeptAccountStat(dept).getNums()).setHref(
+					getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
+			data.add("users", le);
+			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
+			return data;
+		}
+
+		@Override
+		protected Map<String, Object> getRowAttributes(final ComponentParameter cp,
+				final Object dataObject) {
+			final Department dept = (Department) dataObject;
+			return new KVMap().add("parentid", dept.getParentId());
+		}
+
+		protected String toOpeHTML(final ComponentParameter cp, final Department dept) {
+			final Object id = dept.getId();
+			final StringBuilder sb = new StringBuilder();
+			sb.append(new ButtonElement($m("DepartmentMgrTPage.5"))
+					.setOnclick("$Actions['DepartmentMgrTPage_userSelect']('deptId=" + id + "');"));
+			sb.append(SpanElement.SPACE);
+			sb.append(ButtonElement.editBtn().setOnclick(
+					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
+			if (dept.getDepartmentType() == EDepartmentType.department) {
+				sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			}
+			return sb.toString();
 		}
 
 		@Override
@@ -185,50 +255,6 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
 									"$pager_action(item).move2(false, 'DepartmentMgrTPage_Move');")));
 			return items;
-		}
-
-		private final IAccountStatService sService = orgContext.getAccountStatService();
-
-		private static String[] L_COLORs = new String[] { "#333", "#666", "#999" };
-
-		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
-			final Department dept = (Department) dataObject;
-			final KVMap data = new KVMap();
-			final StringBuilder txt = new StringBuilder();
-			final int margin = Convert.toInt(dept.getAttr("_margin"));
-			for (int i = 0; i < margin; i++) {
-				txt.append(i == 0 ? "| --- " : " --- ");
-			}
-			txt.append(dept.getText());
-			data.add("text", new SpanElement(txt).setColor(L_COLORs[Math.min(margin - 1, 2)]));
-			data.add("name", dept.getName());
-			final Department parent = _deptService.getBean(dept.getParentId());
-			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
-				data.add("parentId", SpanElement.color777(parent.getText()));
-			}
-			// String params = ;
-			// final String orgid = cp.getParameter("orgId");
-			// if (StringUtils.hasText(orgid)) {
-			// params += "&orgId=" + orgid;
-			// }
-			final LinkElement le = LinkElement.style2(sService.getDeptAccountStat(dept).getNums())
-					.setHref(getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
-			data.add("users", le);
-			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
-			return data;
-		}
-
-		protected String toOpeHTML(final ComponentParameter cp, final Department dept) {
-			final Object id = dept.getId();
-			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("DepartmentMgrTPage.5"))
-					.setOnclick("$Actions['DepartmentMgrTPage_userSelect']('deptId=" + id + "');"));
-			sb.append(SpanElement.SPACE);
-			sb.append(ButtonElement.editBtn().setOnclick(
-					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
-			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
-			return sb.toString();
 		}
 	}
 
