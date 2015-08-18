@@ -59,17 +59,21 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 	public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
 			final PageSelector selector) {
 		super.onLoad(pp, dataBinding, selector);
+		Object parentId;
 		final Department dept = _deptService.getBean(pp.getParameter("deptId"));
 		if (dept != null) {
 			dataBinding.put("category_id", dept.getId());
 			dataBinding.put("category_name", dept.getName());
 			dataBinding.put("category_text", dept.getText());
-			final Department parent = _deptService.getBean(dept.getParentId());
-			if (parent != null) {
-				dataBinding.put("category_parentId", parent.getId());
-				dataBinding.put("category_parentText", parent.getText());
-			}
 			dataBinding.put("category_description", dept.getDescription());
+			parentId = dept.getParentId();
+		} else {
+			parentId = pp.getParameter("parentId");
+		}
+		final Department parent = _deptService.getBean(parentId);
+		if (parent != null) {
+			dataBinding.put("category_parentId", parent.getId());
+			dataBinding.put("category_parentText", parent.getText());
 		}
 	}
 

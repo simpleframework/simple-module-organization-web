@@ -95,7 +95,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				.addColumn(
 						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).setTextAlign(
 								ETextAlign.center).setFilter(false))
-				.addColumn(TablePagerColumn.OPE(145).setTextAlign(ETextAlign.left));
+				.addColumn(TablePagerColumn.OPE(120).setTextAlign(ETextAlign.left));
 		return tablePager;
 	}
 
@@ -175,8 +175,6 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			return l;
 		}
 
-		// static String[] L_COLORs = new String[] { "#333", "#666", "#999" };
-
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final Department dept = (Department) dataObject;
@@ -187,16 +185,19 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			} else {
 				final boolean leaf = Convert.toBool(dept.getAttr("_leaf"));
 				if (!leaf) {
-					txt.append("<img class='toggle' src=\"").append(
+					txt.append("<img class='toggle' style='' src=\"").append(
 							cp.getCssResourceHomePath(DepartmentMgrTPage.class));
 					txt.append("/images/p_toggle.png\" />");
+				} else {
+					txt.append("<span class='imgToggle'></span>");
 				}
-				final int lev = Convert.toInt(dept.getAttr("_lev"));
-				txt.append(new SpanElement(dept.getText()).setStyle("margin-left: "
-						+ (lev > 1 ? lev * 20 : 10) + "px"));
+				txt.append(dept.getText());
 			}
 
-			data.add("text", txt).add("name", dept.getName());
+			final int lev = Convert.toInt(dept.getAttr("_lev"));
+			data.add("text",
+					new SpanElement(txt).setStyle("margin-left: " + (lev == 1 ? 10 : lev * 20) + "px"))
+					.add("name", dept.getName());
 			final Department parent = _deptService.getBean(dept.getParentId());
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
 				data.add("parentId", SpanElement.color777(parent.getText()));
@@ -220,8 +221,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final Department dept) {
 			final Object id = dept.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("DepartmentMgrTPage.5"))
-					.setOnclick("$Actions['DepartmentMgrTPage_userSelect']('deptId=" + id + "');"));
+			sb.append(ButtonElement.addBtn().setOnclick(
+					"$Actions['DepartmentMgrTPage_editWin']('parentId=" + id + "');"));
 			sb.append(SpanElement.SPACE);
 			sb.append(ButtonElement.editBtn().setOnclick(
 					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
@@ -238,6 +239,10 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				return null;
 			}
 			final MenuItems items = MenuItems.of();
+			items.add(MenuItem.of($m("DepartmentMgrTPage.5")).setOnclick_act(
+					"DepartmentMgrTPage_userSelect", "deptId"));
+			items.add(MenuItem.sep());
+			items.add(MenuItem.itemEdit().setOnclick_act("DepartmentMgrTPage_editWin", "deptId"));
 			items.add(MenuItem.itemDelete().setOnclick_act("DepartmentMgrTPage_delete", "id"));
 			items.add(MenuItem.sep());
 			items.append(MenuItem

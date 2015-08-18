@@ -7,6 +7,12 @@
 #idDepartmentMgrTPage_tbl img.toggle {
   cursor: pointer;
   vertical-align: middle;
+  margin-right: 8px;
+}
+
+#idDepartmentMgrTPage_tbl .imgToggle {
+  display: inline-block;
+  width: 18px;
 }
 
 .DepartmentMgrTPage_plus, 
