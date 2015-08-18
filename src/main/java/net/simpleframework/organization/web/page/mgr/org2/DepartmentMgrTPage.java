@@ -146,6 +146,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		return sb.toString();
 	}
 
+	static String[] L_COLORs = new String[] { "#765", "#876", "#987" };
+
 	public static class DepartmentTbl extends AbstractDbTablePagerHandler {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
@@ -193,11 +195,14 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				}
 				txt.append(dept.getText());
 			}
-
 			final int lev = Convert.toInt(dept.getAttr("_lev"));
-			data.add("text",
-					new SpanElement(txt).setStyle("margin-left: " + (lev == 1 ? 10 : lev * 20) + "px"))
-					.add("name", dept.getName());
+			final SpanElement tEle = new SpanElement(txt).setStyle("margin-left: "
+					+ (lev == 1 ? 10 : lev * 15) + "px");
+			if (lev > 1) {
+				tEle.setColor(L_COLORs[lev - 2]);
+			}
+
+			data.add("text", tEle).add("name", dept.getName());
 			final Department parent = _deptService.getBean(dept.getParentId());
 			if (parent != null && parent.getDepartmentType() == EDepartmentType.department) {
 				data.add("parentId", SpanElement.color777(parent.getText()));

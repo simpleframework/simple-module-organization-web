@@ -48,7 +48,7 @@ var DepartmentMgrTPage = {
   },
 
   _toggle : function(img, open, cookie) {
-    var setImg(_img) {
+    var setImg = function(_img) {
       if (_img) {
         var src = _img.src;
         var p = src.lastIndexOf("/") + 1;
@@ -56,6 +56,11 @@ var DepartmentMgrTPage = {
         
         _img.src = path + (open ? "p_toggle.png" : "toggle.png");
         _img._open = !open;
+        
+        if (cookie) {
+          var cookiek = "toggle_" + _img.up(".titem").getAttribute("rowid");
+          document.setCookie(cookiek, open);
+        }
       }
     };
     
@@ -76,10 +81,5 @@ var DepartmentMgrTPage = {
       setImg(item.down("img.toggle"));
     });
     setImg(img);
-    
-    if (cookie) {
-      var cookiek = "toggle_" + img.up(".titem").getAttribute("rowid");
-      document.setCookie(cookiek, open);
-    }
   }
 };
