@@ -31,7 +31,7 @@ import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
-import net.simpleframework.mvc.component.ui.pager.db.GroupDbTablePagerHandler;
+import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
@@ -39,8 +39,6 @@ import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleHandler;
-import net.simpleframework.organization.IRoleMemberService;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
@@ -82,18 +80,18 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
-				TablePagerBean.class).setShowFilterBar(false).setShowLineNo(true).setSort(false)
-				.setGroupColumn("deptId").setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idMemberTable").setHandlerClass(MemberTable.class);
+				TablePagerBean.class).setShowFilterBar(false).setSort(false)
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idMemberTable")
+				.setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60)
 								.setPropertyClass(ERoleMemberType.class))
 				.addColumn(new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150))
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 150))
 				.addColumn(
 						new TablePagerColumn("primaryRole", $m("RoleMembersPage.4"), 60)
 								.setPropertyClass(Boolean.class).setTextAlign(ETextAlign.center))
-				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 100))
 				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
@@ -105,29 +103,27 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("mId"), ";");
-		orgContext.getRoleMemberService().delete(ids);
+		_rolemService.delete(ids);
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doPrimaryRole(final ComponentParameter cp) {
-		final IRoleMemberService service = orgContext.getRoleMemberService();
-		service.setPrimary(service.getBean(cp.getParameter("mId")));
+		_rolemService.setPrimary(_rolemService.getBean(cp.getParameter("mId")));
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doRoleSave(final ComponentParameter cp) {
-		final IRoleService service = orgContext.getRoleService();
-		final Role role = service.getBean(cp.getParameter("roleId"));
+		final Role role = _roleService.getBean(cp.getParameter("roleId"));
 		if (role != null) {
 			final String ruleValue = cp.getParameter("role_ruleValue");
 			if (role.getRoleType() == ERoleType.handle) {
 				role.setRuleHandler(ruleValue);
-				service.update(new String[] { "rulehandler" }, role);
+				_roleService.update(new String[] { "rulehandler" }, role);
 			} else {
 				role.setRuleScript(ruleValue);
-				service.update(new String[] { "rulescript" }, role);
+				_roleService.update(new String[] { "rulescript" }, role);
 			}
 			return new JavascriptForward("alert('").append($m("RoleMembersPage.12")).append("');");
 		} else {
@@ -137,8 +133,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IRoleMemberService service = orgContext.getRoleMemberService();
-		service.exchange(TablePagerUtils.getExchangeBeans(cp, service));
+		_rolemService.exchange(TablePagerUtils.getExchangeBeans(cp, _rolemService));
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
@@ -146,7 +141,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		return rRequest.getRequestCache("@roleId", new CacheV<Role>() {
 			@Override
 			public Role get() {
-				return orgContext.getRoleService().getBean(rRequest.getParameter("roleId"));
+				return _roleService.getBean(rRequest.getParameter("roleId"));
 			}
 		});
 	}
@@ -203,7 +198,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 				sb.append("<div class='t'>#(RoleMembersPage.10)").append(HtmlConst.NBSP)
 						.append(IRoleHandler.class.getName()).append("</div>");
 				sb.append("<div class='c'><textarea name='role_ruleValue' rows='1'>");
-				final IRoleHandler rHandler = orgContext.getRoleService().getRoleHandler(role);
+				final IRoleHandler rHandler = _roleService.getRoleHandler(role);
 				if (rHandler != null) {
 					sb.append(rHandler.getClass().getName());
 				}
@@ -219,7 +214,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		return sb.toString();
 	}
 
-	public static class MemberTable extends GroupDbTablePagerHandler {
+	public static class MemberTable extends AbstractDbTablePagerHandler {
 
 		@Override
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
@@ -230,7 +225,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Role role = AbstractMVCPage.get(RoleMembersPage.class).getRoleCache(cp);
-			return orgContext.getRoleService().members(role);
+			return _roleService.members(role);
 		}
 
 		private Department getDepartment(final RoleMember rm) {
@@ -242,13 +237,6 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 				}
 			}
 			return _deptService.getBean(deptId);
-		}
-
-		@Override
-		public Object getGroupValue(final ComponentParameter cp, final Object bean,
-				final String groupColumn) {
-			final Department dept = getDepartment((RoleMember) bean);
-			return dept == null ? null : dept.getText();
 		}
 
 		@Override

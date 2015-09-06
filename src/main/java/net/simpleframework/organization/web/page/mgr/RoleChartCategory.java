@@ -19,7 +19,6 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleChartService;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.web.component.chartselect.RoleChartSelectUtils;
 
@@ -34,7 +33,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 
 	@Override
 	protected IRoleChartService getBeanService() {
-		return orgContext.getRoleChartService();
+		return _rolecService;
 	}
 
 	@Override
@@ -78,7 +77,6 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 	private TreeNodes rolecharts(final ComponentParameter cp, final TreeBean treeBean,
 			final TreeNode parent, final Department dept) {
 		final String contextMenu = treeBean.getContextMenu();
-		final IRoleService service = orgContext.getRoleService();
 		final IDataQuery<RoleChart> dq = dept == null ? getBeanService().queryGlobalCharts()
 				: getBeanService().queryOrgCharts(dept);
 		return RoleChartSelectUtils.rolecharts(cp, treeBean, parent, DataQueryUtils.toList(dq),
@@ -87,7 +85,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 					public void setAttributes(final TreeNode tn) {
 						tn.setContextMenu(contextMenu);
 						final RoleChart chart = (RoleChart) tn.getDataObject();
-						final int c = service.queryRoles(chart).getCount();
+						final int c = _roleService.queryRoles(chart).getCount();
 						if (c > 0) {
 							tn.setPostfixText("(" + c + ")");
 						}

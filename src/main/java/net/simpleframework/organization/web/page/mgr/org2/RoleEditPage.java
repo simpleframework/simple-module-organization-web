@@ -21,8 +21,6 @@ import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRoleChartService;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -63,14 +61,13 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 	public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
 			final PageSelector selector) {
 		super.onLoad(pp, dataBinding, selector);
-		final IRoleService rService = orgContext.getRoleService();
-		final Role r = rService.getBean(pp.getParameter("roleId"));
+		final Role r = _roleService.getBean(pp.getParameter("roleId"));
 		if (r != null) {
 			dataBinding.put("category_id", r.getId());
 			dataBinding.put("category_name", r.getName());
 			dataBinding.put("category_text", r.getText());
 			dataBinding.put("role_isUserRole", r.isUserRole());
-			final Role parent = rService.getBean(r.getParentId());
+			final Role parent = _roleService.getBean(r.getParentId());
 			if (parent != null) {
 				dataBinding.put("category_parentId", parent.getId());
 				dataBinding.put("category_parentText", parent.getText());
@@ -82,26 +79,25 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 	@Transaction(context = IOrganizationContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
-		final IRoleService rService = orgContext.getRoleService();
-		Role r = rService.getBean(cp.getParameter("roleId"));
+		Role r = _roleService.getBean(cp.getParameter("roleId"));
 		final boolean insert = r == null;
 		if (insert) {
-			r = rService.createBean();
+			r = _roleService.createBean();
 			final RoleChart rchart = _getRoleChart(cp);
 			r.setRoleChartId(rchart.getId());
 		}
 		r.setName(cp.getParameter("category_name"));
 		r.setText(cp.getParameter("category_text"));
 		r.setUserRole(cp.getBoolParameter("role_isUserRole"));
-		final Role parent = rService.getBean(cp.getParameter("category_parentId"));
+		final Role parent = _roleService.getBean(cp.getParameter("category_parentId"));
 		if (parent != null) {
 			r.setParentId(parent.getId());
 		}
 		r.setDescription(cp.getParameter("category_description"));
 		if (insert) {
-			rService.insert(r);
+			_roleService.insert(r);
 		} else {
-			rService.update(r);
+			_roleService.update(r);
 		}
 		return super.onSave(cp).append("$Actions['RoleMgrTPage_tbl']();");
 	}
@@ -122,7 +118,7 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 
 		final PropField f3 = new PropField($m("RoleCategory.4")).addComponents(InputComp
 				.checkbox("role_isUserRole"));
-		final Role r = orgContext.getRoleService().getBean(pp.getParameter("roleId"));
+		final Role r = _roleService.getBean(pp.getParameter("roleId"));
 		final PropField f4 = new PropField($m("RoleCategory.2")).addComponents(r == null ? InputComp
 				.select("role_type", ERoleType.class) : InputComp.label(r.getRoleType()));
 
@@ -139,12 +135,11 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 	}
 
 	private static RoleChart _getRoleChart(final PageParameter pp) {
-		final IRoleChartService cService = orgContext.getRoleChartService();
-		RoleChart rchart = cService.getBean(pp.getParameter("chartId"));
+		RoleChart rchart = _rolecService.getBean(pp.getParameter("chartId"));
 		if (rchart == null) {
-			final Role r = orgContext.getRoleService().getBean(pp.getParameter("roleId"));
+			final Role r = _roleService.getBean(pp.getParameter("roleId"));
 			if (r != null) {
-				rchart = cService.getBean(r.getRoleChartId());
+				rchart = _rolecService.getBean(r.getRoleChartId());
 			}
 		}
 		return rchart;

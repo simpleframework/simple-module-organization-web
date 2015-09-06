@@ -35,8 +35,6 @@ import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.IRoleChartService;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -92,14 +90,13 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
-		orgContext.getRoleService().delete(cp.getParameter("id"));
+		_roleService.delete(cp.getParameter("id"));
 		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
-		final IRoleService rService = orgContext.getRoleService();
-		rService.exchange(TablePagerUtils.getExchangeBeans(cp, rService));
+		_roleService.exchange(TablePagerUtils.getExchangeBeans(cp, _roleService));
 		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
 	}
 
@@ -112,8 +109,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		sb.append("  <div class='lbl'>#(RoleMgrTPage.3)</div>");
 		final RoleChart _chart = _getRoleChart(pp);
 		if (_chart != null) {
-			final IDataQuery<RoleChart> dq = orgContext.getRoleChartService().queryOrgCharts(
-					_deptService.getBean(_chart.getOrgId()));
+			final IDataQuery<RoleChart> dq = _rolecService.queryOrgCharts(_deptService.getBean(_chart
+					.getOrgId()));
 			RoleChart chart;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");
@@ -142,10 +139,9 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	private static RoleChart _getRoleChart(final PageParameter pp) {
 		final Department org = getOrg2(pp);
 		if (org != null) {
-			final IRoleChartService cService = orgContext.getRoleChartService();
-			RoleChart rchart = cService.getBean(pp.getParameter("chartId"));
+			RoleChart rchart = _rolecService.getBean(pp.getParameter("chartId"));
 			if (rchart == null || !rchart.getOrgId().equals(org.getId())) {
-				rchart = cService.queryOrgCharts(org).next();
+				rchart = _rolecService.queryOrgCharts(org).next();
 			}
 			return rchart;
 		}
@@ -164,12 +160,10 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 			return null;
 		}
 
-		final IRoleService rService = orgContext.getRoleService();
-
 		private List<Role> list(final RoleChart chart, final Role parent) {
 			final List<Role> l = new ArrayList<Role>();
 
-			final IDataQuery<Role> dq = parent == null ? rService.queryRoot(chart) : rService
+			final IDataQuery<Role> dq = parent == null ? _roleService.queryRoot(chart) : _roleService
 					.queryChildren(parent);
 			Role role;
 			while ((role = dq.next()) != null) {
@@ -216,7 +210,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				txt.append(i == 0 ? "| -- " : " -- ");
 			}
 			txt.append(role.getText());
-			data.add("text", txt).add("name", rService.toUniqueName(role));
+			data.add("text", txt).add("name", _roleService.toUniqueName(role));
 			data.put(
 					"members",
 					LinkElement.style2(role.getMembers()).setOnclick(

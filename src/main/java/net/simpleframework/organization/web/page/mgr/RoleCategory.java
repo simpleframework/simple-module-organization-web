@@ -41,7 +41,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 
 	@Override
 	protected IRoleService getBeanService() {
-		return orgContext.getRoleService();
+		return _roleService;
 	}
 
 	private RoleChart getRoleChart(final PageRequestResponse rRequest) {
@@ -49,7 +49,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		if (roleChart != null) {
 			return roleChart;
 		}
-		roleChart = orgContext.getRoleChartService().getBean(rRequest.getParameter("chartId"));
+		roleChart = _rolecService.getBean(rRequest.getParameter("chartId"));
 		if (roleChart == null) {
 			roleChart = orgContext.getSystemChart();
 		}
@@ -164,7 +164,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 		fields.add(2, new PropField($m("RoleCategory.4")).addComponents(InputComp
 				.checkbox("role_isUserRole")));
 
-		final Role r = orgContext.getRoleService().getBean(cp.getParameter(PARAM_CATEGORY_ID));
+		final Role r = _roleService.getBean(cp.getParameter(PARAM_CATEGORY_ID));
 		if (r == null) {
 			fields.add(2, new PropField($m("RoleCategory.2")).addComponents(InputComp.select(
 					"role_type", ERoleType.class)));

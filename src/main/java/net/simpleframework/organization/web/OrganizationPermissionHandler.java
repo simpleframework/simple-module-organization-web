@@ -30,7 +30,6 @@ import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EAccountType;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
@@ -74,7 +73,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (oUser == null) {
 			return super.getUser(user);
 		}
-		final IRoleService rService = orgContext.getRoleService();
 		return new PermissionUser() {
 			@Override
 			public ID getId() {
@@ -128,7 +126,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public ID getRoleId() {
-				return orgContext.getRoleService().getPrimaryRole(oUser).getId();
+				return _roleService.getPrimaryRole(oUser).getId();
 			}
 
 			private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
@@ -144,13 +142,13 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 					}
 				}
 				if (role == null) {
-					return rService.isMember(oUser, (Role) null, variables);
+					return _roleService.isMember(oUser, (Role) null, variables);
 				}
 				final String rkey = Convert.toString(role);
 				Boolean b = _MEMBERs.get(rkey);
 				if (b == null) {
 					_MEMBERs.put(rkey,
-							b = rService.isMember(oUser, getRoleObject(role, variables), variables));
+							b = _roleService.isMember(oUser, getRoleObject(role, variables), variables));
 				}
 				return b;
 			}
@@ -160,7 +158,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			@Override
 			public boolean isManager(final Map<String, Object> variables) {
 				if (_MANAGER == null) {
-					_MANAGER = rService.isManager(oUser, variables);
+					_MANAGER = _roleService.isManager(oUser, variables);
 				}
 				return _MANAGER;
 			}
@@ -173,9 +171,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (role instanceof Role) {
 			return (Role) role;
 		}
-		final IRoleService rService = orgContext.getRoleService();
 		if (role instanceof String) {
-			Role r = rService.getRoleByName((String) role);
+			Role r = _roleService.getRoleByName((String) role);
 			String[] arr;
 			Object userId;
 			if (r == null
@@ -184,13 +181,13 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				final User user = _userService.getBean(userId);
 				if (user != null) {
 					final Department org = _deptService.getBean(user.getOrgId());
-					r = rService.getRoleByName(
-							orgContext.getRoleChartService().getRoleChartByName(org, arr[0]), arr[1]);
+					r = _roleService
+							.getRoleByName(_rolecService.getRoleChartByName(org, arr[0]), arr[1]);
 				}
 			}
 			return r;
 		}
-		return rService.getBean(role);
+		return _roleService.getBean(role);
 	}
 
 	@Override
@@ -207,7 +204,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public String getName() {
-				return orgContext.getRoleService().toUniqueName(oRole);
+				return _roleService.toUniqueName(oRole);
 			}
 
 			@Override
@@ -221,8 +218,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> users(final Object role, final ID deptId, final Map<String, Object> variables) {
-		return new NestIterator<ID, User>(orgContext.getRoleService().users(
-				getRoleObject(role, variables), deptId, variables)) {
+		return new NestIterator<ID, User>(_roleService.users(getRoleObject(role, variables), deptId,
+				variables)) {
 			@Override
 			protected ID change(final User n) {
 				return n.getId();
@@ -232,8 +229,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> roles(final Object user, final Map<String, Object> variables) {
-		return new NestIterator<ID, Role>(orgContext.getRoleService().roles(getUserObject(user),
-				variables)) {
+		return new NestIterator<ID, Role>(_roleService.roles(getUserObject(user), variables)) {
 			@Override
 			protected ID change(final Role n) {
 				return n.getId();

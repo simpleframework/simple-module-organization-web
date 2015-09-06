@@ -13,6 +13,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
@@ -21,8 +22,6 @@ import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRoleMemberService;
-import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
@@ -42,10 +41,10 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "UserRolesPage_tbl",
 				UserRolesTbl.class).setShowFilterBar(false).setSort(false);
-		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 180))
-				.addColumn(new TablePagerColumn("rolename", $m("RoleMgrTPage.1"), 120))
-				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90))
-				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(80));
+		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 150))
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.1"), 150))
+				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 80))
+				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(75));
 
 		// 角色选取
 		final User user = getUser(pp);
@@ -63,25 +62,23 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 
 	public IForward doRoleSelected(final ComponentParameter cp) {
 		final User user = getUser(cp);
-		final Role r = orgContext.getRoleService().getBean(cp.getParameter("roleId"));
-		final IRoleMemberService rmService = orgContext.getRoleMemberService();
-		final RoleMember rm = rmService.createBean();
+		final Role r = _roleService.getBean(cp.getParameter("roleId"));
+		final RoleMember rm = _rolemService.createBean();
 		rm.setRoleId(r.getId());
 		rm.setMemberType(ERoleMemberType.user);
 		rm.setMemberId(user.getId());
 		rm.setDeptId(user.getDepartmentId());
-		rmService.insert(rm);
+		_rolemService.insert(rm);
 		return new JavascriptForward(
 				"$Actions['UserRolesPage_roleSelect'].close(); $Actions['UserRolesPage_tbl']();");
 	}
 
 	public IForward doMemberDel(final ComponentParameter cp) {
 		final User user = getUser(cp);
-		final Role r = orgContext.getRoleService().getBean(cp.getParameter("roleId"));
-		final IRoleMemberService rmService = orgContext.getRoleMemberService();
-		final RoleMember rm = rmService.getRoleMember(r, ERoleMemberType.user, user.getId());
+		final Role r = _roleService.getBean(cp.getParameter("roleId"));
+		final RoleMember rm = _rolemService.getRoleMember(r, ERoleMemberType.user, user.getId());
 		if (rm != null) {
-			rmService.delete(rm.getId());
+			_rolemService.delete(rm.getId());
 		}
 		return new JavascriptForward("$Actions['UserRolesPage_tbl']();");
 	}
@@ -109,14 +106,13 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 
 	public static class UserRolesTbl extends AbstractDbTablePagerHandler {
 
-		private final IRoleService rService = orgContext.getRoleService();
-
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final User user = getUser(cp);
 			if (user != null) {
 				cp.addFormParameter("accountId", user.getId());
-				return new IteratorDataQuery<Role>(rService.roles(user, new KVMap().add("inOrg", true)));
+				return new IteratorDataQuery<Role>(_roleService.roles(user,
+						new KVMap().add("inOrg", true)));
 			}
 			return null;
 		}
@@ -125,12 +121,16 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final KVMap kv = new KVMap();
 			final Role r = (Role) dataObject;
-			kv.add("rolename", rService.toUniqueName(r));
-			kv.add("roletext", r.getText());
+			final StringBuilder sb = new StringBuilder();
+			sb.append(r.getText()).append("<br>");
+			sb.append(SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true));
+			kv.add("roletext", sb.toString());
+			// kv.add("rolename", rService.toUniqueName(r));
+
 			kv.add("roletype", r.getRoleType());
 
-			final StringBuilder sb = new StringBuilder();
 			final User user = getUser(cp);
+			sb.setLength(0);
 			sb.append(ButtonElement.deleteBtn().setOnclick(
 					"$Actions['UserRolesPage_del']('accountId=" + user.getId() + "&roleId=" + r.getId()
 							+ "');"));

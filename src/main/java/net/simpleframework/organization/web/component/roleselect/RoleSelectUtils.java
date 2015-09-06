@@ -13,7 +13,6 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMark;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.IRoleChartService;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 
@@ -49,15 +48,14 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 		if (rchart != null) {
 			return rchart;
 		}
-		final IRoleChartService service = orgContext.getRoleChartService();
-		rchart = service.getBean(cp.getParameter("chartId"));
+		rchart = _rolecService.getBean(cp.getParameter("chartId"));
 		if (rchart == null) {
-			rchart = service.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
+			rchart = _rolecService.getRoleChartByName((String) cp.getBeanProperty("defaultRoleChart"));
 		}
 		if (rchart == null) {
 			final Department org = _deptService.getBean(cp.getParameter("orgId"));
 			if (org != null) {
-				rchart = orgContext.getRoleChartService().queryOrgCharts(org).next();
+				rchart = _rolecService.queryOrgCharts(org).next();
 			} else {
 				if (cp.isLmanager()) {
 					rchart = orgContext.getSystemChart();

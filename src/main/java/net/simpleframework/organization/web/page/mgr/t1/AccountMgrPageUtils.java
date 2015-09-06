@@ -40,7 +40,6 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 	}
 
 	public static String toDepartmentText(final Department dept) {
-		// final = ;
 		if (dept != null) {
 			if (dept.getDepartmentType() == EDepartmentType.department) {
 				return dept.getText();

@@ -25,8 +25,8 @@ public class DefaultRoleSelectHandler extends AbstractDictionaryHandler implemen
 		if (roleChart == null) {
 			return CollectionUtils.EMPTY_LIST();
 		}
-		return DataQueryUtils.toList(parent == null ? orgContext.getRoleService()
-				.queryRoot(roleChart) : orgContext.getRoleService().queryChildren(parent));
+		return DataQueryUtils.toList(parent == null ? _roleService.queryRoot(roleChart)
+				: _roleService.queryChildren(parent));
 	}
 
 	@Override
