@@ -33,7 +33,6 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
@@ -41,7 +40,6 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleHandler;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
-import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 
 /**
@@ -228,17 +226,6 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			return _roleService.members(role);
 		}
 
-		private Department getDepartment(final RoleMember rm) {
-			Object deptId = rm.getDeptId();
-			if (deptId == null && rm.getMemberType() == ERoleMemberType.user) {
-				final User user = _userService.getBean(rm.getMemberId());
-				if (user != null) {
-					deptId = user.getDepartmentId();
-				}
-			}
-			return _deptService.getBean(deptId);
-		}
-
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final RoleMember rm = (RoleMember) dataObject;
@@ -250,7 +237,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			if (mType == ERoleMemberType.user) {
 				kv.put("primaryRole", new Checkbox(null, null).setChecked(rm.isPrimaryRole())
 						.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
-				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(getDepartment(rm)));
+				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(rm));
 			}
 			kv.put(TablePagerColumn.DESCRIPTION, rm.getDescription());
 			final StringBuilder sb = new StringBuilder();

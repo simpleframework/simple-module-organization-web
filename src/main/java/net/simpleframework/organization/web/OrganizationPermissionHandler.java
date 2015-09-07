@@ -30,6 +30,7 @@ import net.simpleframework.organization.EAccountStatus;
 import net.simpleframework.organization.EAccountType;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.IRoleService.RoleM;
 import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
@@ -229,10 +230,10 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> roles(final Object user, final Map<String, Object> variables) {
-		return new NestIterator<ID, Role>(_roleService.roles(getUserObject(user), variables)) {
+		return new NestIterator<ID, RoleM>(_roleService.roles(getUserObject(user), variables)) {
 			@Override
-			protected ID change(final Role n) {
-				return n.getId();
+			protected ID change(final RoleM n) {
+				return n.role.getId();
 			}
 		};
 	}

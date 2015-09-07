@@ -22,10 +22,12 @@ import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.IRoleService.RoleM;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
+import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -111,7 +113,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 			final User user = getUser(cp);
 			if (user != null) {
 				cp.addFormParameter("accountId", user.getId());
-				return new IteratorDataQuery<Role>(_roleService.roles(user,
+				return new IteratorDataQuery<RoleM>(_roleService.roles(user,
 						new KVMap().add("inOrg", true)));
 			}
 			return null;
@@ -120,13 +122,17 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final KVMap kv = new KVMap();
-			final Role r = (Role) dataObject;
+			final RoleM rolem = (RoleM) dataObject;
+			final Role r = rolem.role;
 			final StringBuilder sb = new StringBuilder();
 			sb.append(r.getText()).append("<br>");
 			sb.append(SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true));
 			kv.add("roletext", sb.toString());
-			// kv.add("rolename", rService.toUniqueName(r));
-
+			final RoleMember rm = (RoleMember) r.getAttr("_rolemember");
+			if (rm != null) {
+				System.out.println("role: " + rm.hashCode());
+			}
+			kv.put("deptId", AccountMgrPageUtils.toDepartmentText(rolem.rm));
 			kv.add("roletype", r.getRoleType());
 
 			final User user = getUser(cp);
