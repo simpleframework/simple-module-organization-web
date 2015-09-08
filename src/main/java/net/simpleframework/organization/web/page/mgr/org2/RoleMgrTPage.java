@@ -40,6 +40,7 @@ import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.page.mgr.AddMembersPage;
+import net.simpleframework.organization.web.page.mgr.OmgrUtils;
 import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
 
 /**
@@ -67,7 +68,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		final AjaxRequestBean ajaxRequest = (AjaxRequestBean) addAjaxRequest(pp,
 				"RoleMgrTPage_rolePage", RoleEditPage.class).setSelector(
 				"#idRoleMgrTPage_tbl .parameters");
-		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.6"))
+		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.5"))
 				.setWidth(340).setHeight(360);
 
 		// 删除角色
@@ -143,7 +144,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	private static RoleChart _getRoleChart(final PageParameter pp) {
 		final Department org = getOrg2(pp);
 		if (org != null) {
-			RoleChart rchart = _rolecService.getBean(pp.getParameter("chartId"));
+			RoleChart rchart = OmgrUtils.getRoleChart(pp);
 			if (rchart == null || !rchart.getOrgId().equals(org.getId())) {
 				rchart = _rolecService.queryOrgCharts(org).next();
 			}

@@ -26,6 +26,7 @@ import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.component.roleselect.DefaultRoleSelectHandler;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
+import net.simpleframework.organization.web.page.mgr.OmgrUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -83,7 +84,7 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 		final boolean insert = r == null;
 		if (insert) {
 			r = _roleService.createBean();
-			final RoleChart rchart = _getRoleChart(cp);
+			final RoleChart rchart = OmgrUtils.getRoleChart(cp);
 			r.setRoleChartId(rchart.getId());
 		}
 		r.setName(cp.getParameter("category_name"));
@@ -104,7 +105,7 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 
 	@Override
 	protected void initPropEditor(final PageParameter pp, final PropEditorBean propEditor) {
-		final RoleChart rchart = _getRoleChart(pp);
+		final RoleChart rchart = OmgrUtils.getRoleChart(pp);
 		if (rchart == null) {
 			return;
 		}
@@ -134,21 +135,10 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 		propEditor.getFormFields().append(f1, f2, f3, f4, f5, f6);
 	}
 
-	private static RoleChart _getRoleChart(final PageParameter pp) {
-		RoleChart rchart = _rolecService.getBean(pp.getParameter("chartId"));
-		if (rchart == null) {
-			final Role r = _roleService.getBean(pp.getParameter("roleId"));
-			if (r != null) {
-				rchart = _rolecService.getBean(r.getRoleChartId());
-			}
-		}
-		return rchart;
-	}
-
 	public static class _RoleSelectDict extends DefaultRoleSelectHandler {
 		@Override
 		public RoleChart getRoleChart(final ComponentParameter cp) {
-			return _getRoleChart(cp);
+			return OmgrUtils.getRoleChart(cp);
 		}
 	}
 }

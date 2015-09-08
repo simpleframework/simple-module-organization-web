@@ -45,16 +45,11 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 	}
 
 	private RoleChart getRoleChart(final PageRequestResponse rRequest) {
-		RoleChart roleChart = (RoleChart) rRequest.getRequestAttr("@chartId");
-		if (roleChart != null) {
-			return roleChart;
+		RoleChart rchart = OmgrUtils.getRoleChart(rRequest);
+		if (rchart == null) {
+			rchart = orgContext.getSystemChart();
 		}
-		roleChart = _rolecService.getBean(rRequest.getParameter("chartId"));
-		if (roleChart == null) {
-			roleChart = orgContext.getSystemChart();
-		}
-		rRequest.setRequestAttr("@chartId", roleChart);
-		return roleChart;
+		return rchart;
 	}
 
 	@Override

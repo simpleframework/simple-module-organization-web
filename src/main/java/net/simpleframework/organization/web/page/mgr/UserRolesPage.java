@@ -44,7 +44,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 		final TablePagerBean tablePager = addTablePagerBean(pp, "UserRolesPage_tbl",
 				UserRolesTbl.class).setShowFilterBar(false).setSort(false);
 		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 150))
-				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.7"), 150))
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.6"), 150))
 				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 80))
 				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(75));
 
