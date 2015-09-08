@@ -18,6 +18,7 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
 import net.simpleframework.mvc.common.element.SpanElement;
@@ -55,14 +56,17 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		addTablePagerBean(pp);
 
 		// 成员窗口
-		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "RoleMgrTPage_membersPage",
-				_RoleMembersPage.class);
-		addWindowBean(pp, "RoleMgrTPage_members", ajaxRequest).setTitle($m("RoleMgrTPage.5"))
-				.setWidth(800).setHeight(480);
+		// AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
+		// "RoleMgrTPage_membersPage",
+		// _RoleMembersPage.class);
+		// addWindowBean(pp, "RoleMgrTPage_members",
+		// ajaxRequest).setTitle($m("RoleMgrTPage.5"))
+		// .setWidth(800).setHeight(480);
 
 		// 添加角色
-		ajaxRequest = (AjaxRequestBean) addAjaxRequest(pp, "RoleMgrTPage_rolePage",
-				RoleEditPage.class).setSelector("#idRoleMgrTPage_tbl .parameters");
+		final AjaxRequestBean ajaxRequest = (AjaxRequestBean) addAjaxRequest(pp,
+				"RoleMgrTPage_rolePage", RoleEditPage.class).setSelector(
+				"#idRoleMgrTPage_tbl .parameters");
 		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.6"))
 				.setWidth(340).setHeight(360);
 
@@ -204,20 +208,22 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		@Override
 		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
 			final Role role = (Role) dataObject;
-			final KVMap data = new KVMap();
+			final KVMap kv = new KVMap();
 			final StringBuilder txt = new StringBuilder();
 			for (int i = 0; i < Convert.toInt(role.getAttr("_margin")); i++) {
 				txt.append(i == 0 ? "| -- " : " -- ");
 			}
 			txt.append(role.getText());
-			data.add("text", txt).add("name", _roleService.toUniqueName(role));
-			data.put(
+			kv.add("text", txt).add("name", _roleService.toUniqueName(role));
+
+			kv.put(
 					"members",
 					LinkElement.style2(role.getMembers()).setOnclick(
-							"$Actions['RoleMgrTPage_members']('roleId=" + role.getId() + "');"));
-			data.add("roletype", role.getRoleType());
-			data.add(TablePagerColumn.OPE, toOpeHTML(cp, role));
-			return data;
+							JS.loc(uFactory.getUrl(cp, RoleMgr_MembersTPage.class,
+									"roleId=" + role.getId()))));
+			// "$Actions['RoleMgrTPage_members']('roleId=" + role.getId() + "');")
+			kv.add("roletype", role.getRoleType()).add(TablePagerColumn.OPE, toOpeHTML(cp, role));
+			return kv;
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final Role role) {
@@ -231,7 +237,7 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 	public static class _RoleMembersPage extends RoleMembersPage {
 		@Override
-		public String getRole(final PageParameter pp) {
+		public String getPageRole(final PageParameter pp) {
 			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
 
@@ -239,18 +245,17 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
 			return _AddMembersPage.class;
 		}
+	}
 
-		public static class _AddMembersPage extends AddMembersPage {
-			@Override
-			public String getRole(final PageParameter pp) {
-				return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
-			}
+	public static class _AddMembersPage extends AddMembersPage {
+		@Override
+		public String getPageRole(final PageParameter pp) {
+			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		}
 
-			@Override
-			protected JavascriptForward toJavascriptForward(final ComponentParameter cp,
-					final Role role) {
-				return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
-			}
+		@Override
+		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
+			return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 		}
 	}
 }

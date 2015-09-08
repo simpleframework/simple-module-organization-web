@@ -32,7 +32,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
@@ -67,7 +67,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 				DepartmentMgrTPage.class)),
 				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(getUrl(pp, UserMgrTPage.class))
 						.setTabMatch(ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
-						.setHref(getUrl(pp, RoleMgrTPage.class)));
+						.setHref(getUrl(pp, RoleMgrTPage.class)).setTabMatch(ETabMatch.url_contains));
 	}
 
 	@Override

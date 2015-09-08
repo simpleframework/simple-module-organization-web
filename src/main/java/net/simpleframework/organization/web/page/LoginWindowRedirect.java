@@ -37,7 +37,7 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_ANONYMOUS;
 	}
 }

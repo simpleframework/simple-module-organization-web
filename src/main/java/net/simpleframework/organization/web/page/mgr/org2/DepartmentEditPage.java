@@ -45,7 +45,7 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 

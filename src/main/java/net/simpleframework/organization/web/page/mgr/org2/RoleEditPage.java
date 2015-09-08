@@ -47,7 +47,7 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 

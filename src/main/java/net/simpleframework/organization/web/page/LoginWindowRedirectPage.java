@@ -19,7 +19,7 @@ public class LoginWindowRedirectPage extends AbstractTemplatePage {
 	static final String COMPONENT_PREFIX = "LoginWindowRedirectPage_";
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_ANONYMOUS;
 	}
 

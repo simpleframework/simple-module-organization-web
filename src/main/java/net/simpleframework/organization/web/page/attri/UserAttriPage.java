@@ -23,7 +23,7 @@ import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 public class UserAttriPage extends AbstractAccountAttriPage {
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 

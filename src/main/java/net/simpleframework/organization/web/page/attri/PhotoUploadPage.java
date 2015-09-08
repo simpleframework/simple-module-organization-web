@@ -53,7 +53,7 @@ public class PhotoUploadPage extends AbstractAccountPage {
 	}
 
 	@Override
-	public String getRole(final PageParameter pp) {
+	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 

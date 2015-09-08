@@ -11,11 +11,9 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.web.html.HtmlConst;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
@@ -40,6 +38,7 @@ import net.simpleframework.organization.IRoleHandler;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleMember;
 import net.simpleframework.organization.web.page.mgr.AddMembersPage;
+import net.simpleframework.organization.web.page.mgr.OmgrUtils;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -132,15 +131,6 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
-	private Role getRoleCache(final PageRequestResponse rRequest) {
-		return rRequest.getRequestCache("@roleId", new CacheV<Role>() {
-			@Override
-			public Role get() {
-				return _roleService.getBean(rRequest.getParameter("roleId"));
-			}
-		});
-	}
-
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String variable) throws IOException {
@@ -148,7 +138,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		sb.append("<div class='RoleMembersPage'>");
 		sb.append("<div class='tb'>");
 		sb.append("<div class='nav_arrow'>");
-		final Role role = getRoleCache(pp);
+		final Role role = OmgrUtils.getRole(pp);
 		ERoleType rt = null;
 		if (role != null) {
 			rt = role.getRoleType();
@@ -213,13 +203,13 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 		@Override
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
-			final Role role = AbstractMVCPage.get(RoleMembersPage.class).getRoleCache(cp);
+			final Role role = OmgrUtils.getRole(cp);
 			return ((KVMap) super.getFormParameters(cp)).add("roleId", role.getId());
 		}
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Role role = AbstractMVCPage.get(RoleMembersPage.class).getRoleCache(cp);
+			final Role role = OmgrUtils.getRole(cp);
 			return _roleService.members(role);
 		}
 

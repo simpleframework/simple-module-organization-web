@@ -262,7 +262,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	public static class _AccountEditPage extends AccountEditPage {
 		@Override
-		public String getRole(final PageParameter pp) {
+		public String getPageRole(final PageParameter pp) {
 			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
 
@@ -286,7 +286,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	public static class _UserRolesPage extends UserRolesPage {
 		@Override
-		public String getRole(final PageParameter pp) {
+		public String getPageRole(final PageParameter pp) {
 			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
 
