@@ -44,7 +44,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 		final TablePagerBean tablePager = addTablePagerBean(pp, "UserRolesPage_tbl",
 				UserRolesTbl.class).setShowFilterBar(false).setSort(false);
 		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 150))
-				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.1"), 150))
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.7"), 150))
 				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 80))
 				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(75));
 
@@ -76,9 +76,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 	}
 
 	public IForward doMemberDel(final ComponentParameter cp) {
-		final User user = getUser(cp);
-		final Role r = _roleService.getBean(cp.getParameter("roleId"));
-		final RoleMember rm = _rolemService.getRoleMember(r, ERoleMemberType.user, user.getId());
+		final RoleMember rm = _rolemService.getBean(cp.getParameter("mid"));
 		if (rm != null) {
 			_rolemService.delete(rm.getId());
 		}
@@ -124,23 +122,17 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 			final KVMap kv = new KVMap();
 			final RoleM rolem = (RoleM) dataObject;
 			final Role r = rolem.role;
-			final StringBuilder sb = new StringBuilder();
-			sb.append(r.getText()).append("<br>");
-			sb.append(SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true));
-			kv.add("roletext", sb.toString());
-			final RoleMember rm = (RoleMember) r.getAttr("_rolemember");
-			if (rm != null) {
-				System.out.println("role: " + rm.hashCode());
-			}
-			kv.put("deptId", AccountMgrPageUtils.toDepartmentText(rolem.rm));
+			kv.add(
+					"roletext",
+					new StringBuilder(r.getText()).append("<br>").append(
+							SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true)));
+			kv.put("deptId",
+					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(rolem.rm.getDeptId())));
 			kv.add("roletype", r.getRoleType());
-
-			final User user = getUser(cp);
-			sb.setLength(0);
-			sb.append(ButtonElement.deleteBtn().setOnclick(
-					"$Actions['UserRolesPage_del']('accountId=" + user.getId() + "&roleId=" + r.getId()
-							+ "');"));
-			kv.add(TablePagerColumn.OPE, sb.toString());
+			kv.add(
+					TablePagerColumn.OPE,
+					ButtonElement.deleteBtn().setOnclick(
+							"$Actions['UserRolesPage_del']('mid=" + rolem.rm.getId() + "');"));
 			return kv;
 		}
 	}

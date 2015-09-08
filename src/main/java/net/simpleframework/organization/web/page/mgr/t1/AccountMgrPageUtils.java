@@ -5,10 +5,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
-import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.RoleMember;
-import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -53,16 +50,5 @@ public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 		} else {
 			return SpanElement.color999($m("AccountMgrPage.20")).toString();
 		}
-	}
-
-	public static String toDepartmentText(final RoleMember rm) {
-		Object deptId = rm.getDeptId();
-		if (deptId == null && rm.getMemberType() == ERoleMemberType.user) {
-			final User user = _userService.getBean(rm.getMemberId());
-			if (user != null) {
-				deptId = user.getDepartmentId();
-			}
-		}
-		return toDepartmentText(_deptService.getBean(deptId));
 	}
 }
