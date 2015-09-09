@@ -44,13 +44,13 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 				DeptContextMenu.class);
 
 		// 创建role tree
-		addComponentBean(pp, "roleCategory", CategoryBean.class).setContainerId("idRoleCategory")
-				.setHandlerClass(RoleCategory.class);
+		addComponentBean(pp, "RoleMgrPage_category", CategoryBean.class).setContainerId(
+				"idRoleMgrPage_category").setHandlerClass(RoleCategory.class);
 
-		addComponentBean(pp, "roleMemberVal", PageIncludeBean.class).setPageUrl(
-				url(RoleMembersPage.class)).setContainerId("idRoleMemberVal");
-		addComponentBean(pp, "ajaxRoleMemberVal", AjaxRequestBean.class).setUrlForward(
-				url(RoleMembersPage.class)).setUpdateContainerId("idRoleMemberVal");
+		addComponentBean(pp, "RoleMgrPage_inc_roleMember", PageIncludeBean.class).setPageUrl(
+				url(RoleMembersPage.class)).setContainerId("idRoleMgrPage_ajax_roleMember");
+		addComponentBean(pp, "RoleMgrPage_ajax_roleMember", AjaxRequestBean.class).setUrlForward(
+				url(RoleMembersPage.class)).setUpdateContainerId("idRoleMgrPage_ajax_roleMember");
 	}
 
 	@Override

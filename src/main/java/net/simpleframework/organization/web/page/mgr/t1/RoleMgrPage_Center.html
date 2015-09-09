@@ -3,10 +3,10 @@
     <tr>
       <td width="20%" valign="top">
         <div class="ltb"></div>
-        <div id="idRoleCategory"></div>
+        <div id="idRoleMgrPage_category"></div>
       </td>
       <td class="splitbar"></td>
-      <td valign="top" id="idRoleMemberVal"></td>
+      <td valign="top" id="idRoleMgrPage_ajax_roleMember"></td>
     </tr>
   </table>
 </div>
@@ -21,26 +21,12 @@
     var sb = m.down(".splitbar");
     $UI.createSplitbar(sb, sb.previous());
 
-    var act = $Actions["roleCategory"];
-    var d = $("idRoleCategory").previous();
+    var act = $Actions["RoleMgrPage_category"];
+    var d = $("idRoleMgrPage_category").previous();
     act.jsLoadedCallback = function() {
       d.innerHTML = act.json["title"];
-      $Actions['ajaxRoleMemberVal']('roleId=');
+      $Actions['RoleMgrPage_ajax_roleMember']('roleId=');
     };
     act.jsLoadedCallback();
-
-    // 删除成员
-    m.deleteMember = function() {
-      var tbl = $Actions["RoleMemberPage_tbl"];
-      var arr = tbl.checkArr($("idRoleMemberPage_tbl"));
-      if (arr.length == 0) {
-        alert("#(RoleMgrPage_Center.0)");
-        return;
-      }
-      $Actions["ajax_deleteMember"]("mId=" + arr.inject([], function(r, o) {
-        r.push(tbl.rowId(o));
-        return r;
-      }).join(";"));
-    };
   });
 </script>

@@ -114,7 +114,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 				final String variable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
-			sb.append("<div id='idRoleMemberPage_tbl'></div>");
+			sb.append("<div id='idRoleMembersPage_tbl'></div>");
 			return sb.toString();
 		}
 
@@ -137,7 +137,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 
 		@Override
 		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
-			return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
+			return new JavascriptForward("$Actions['RoleMembersPage_tbl']();");
 		}
 	}
 }

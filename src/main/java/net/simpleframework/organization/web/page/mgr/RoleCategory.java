@@ -91,7 +91,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 						parent.setPostfixText("(" + count + ")");
 					}
 				}
-				parent.setJsClickCallback("$Actions['ajaxRoleMemberVal']('roleId=" + ((Role) o).getId()
+				parent.setJsClickCallback("$Actions['RoleMgrPage_ajax_roleMember']('roleId=" + ((Role) o).getId()
 						+ "');");
 			}
 			return super.getCategoryTreenodes(cp, treeBean, parent);

@@ -66,20 +66,21 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		addTablePagerBean(pp);
 
 		// 删除成员
-		addDeleteAjaxRequest(pp, "ajax_deleteMember");
+		addDeleteAjaxRequest(pp, "RoleMembersPage_del");
 
-		addAjaxRequest(pp, "ajax_editPrimaryRole").setHandlerMethod("doPrimaryRole");
+		addAjaxRequest(pp, "RoleMembersPage_primary").setHandlerMethod("doPrimaryRole");
 
 		// 保存规则角色
-		addAjaxRequest(pp, "ajax_roleSave").setHandlerMethod("doRoleSave");
+		addAjaxRequest(pp, "RoleMembersPage_save").setHandlerMethod("doRoleSave");
 		// 移动
 		addAjaxRequest(pp, "RoleMemberPage_Move").setHandlerMethod("doMove");
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
-				TablePagerBean.class).setSort(false).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idRoleMemberPage_tbl").setHandlerClass(MemberTable.class);
+		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
+				"RoleMembersPage_tbl", TablePagerBean.class).setSort(false)
+				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idRoleMembersPage_tbl")
+				.setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60).setPropertyClass(
@@ -100,13 +101,13 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("mId"), ";");
 		_rolemService.delete(ids);
-		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
+		return new JavascriptForward("$Actions['RoleMembersPage_tbl']();");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doPrimaryRole(final ComponentParameter cp) {
 		_rolemService.setPrimary(_rolemService.getBean(cp.getParameter("mId")));
-		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
+		return new JavascriptForward("$Actions['RoleMembersPage_tbl']();");
 	}
 
 	@Transaction(context = IOrganizationContext.class)
@@ -130,7 +131,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
 		_rolemService.exchange(TablePagerUtils.getExchangeBeans(cp, _rolemService));
-		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
+		return new JavascriptForward("$Actions['RoleMembersPage_tbl']();");
 	}
 
 	public static ElementList getActionElements(final PageParameter pp) {
@@ -141,13 +142,14 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			el.append(LinkButton.of($m("RoleMembersPage.1")).setOnclick(
 					"$Actions['addMemberWindow']('roleId=" + role.getId() + "');"));
 			el.append(SpanElement.SPACE);
-			el.append(LinkButton.deleteBtn().setOnclick("this.up('.RoleMgrPage').deleteMember();"));
+			el.append(LinkButton.deleteBtn().setOnclick(
+					"$Actions['RoleMembersPage_tbl'].doAct('RoleMembersPage_del', 'mId');"));
 		} else if (rt == ERoleType.handle) {
 			el.append(LinkButton.saveBtn().setOnclick(
-					"$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));"));
+					"$Actions['RoleMembersPage_save']($Form('#idRoleMgrPage_ajax_roleMember .rule'));"));
 		} else if (rt == ERoleType.script) {
 			el.append(LinkButton.saveBtn().setOnclick(
-					"$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));"));
+					"$Actions['RoleMembersPage_save']($Form('#idRoleMgrPage_ajax_roleMember .rule'));"));
 			el.append(SpanElement.SPACE);
 			el.add(LinkButton.of($m("RoleMembersPage.9")));
 		}
@@ -175,7 +177,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		sb.append(" </div>");
 
 		if (rt == ERoleType.normal) {
-			sb.append("<div id='idRoleMemberPage_tbl'></div>");
+			sb.append("<div id='idRoleMembersPage_tbl'></div>");
 		} else {
 			sb.append("<div class='rule'>");
 			if (role != null) {
@@ -227,14 +229,14 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			kv.put("memberId", rm.toString());
 			if (mType == ERoleMemberType.user) {
 				kv.put("primaryRole", new Checkbox(null, null).setChecked(rm.isPrimaryRole())
-						.setOnclick("$Actions['ajax_editPrimaryRole']('mId=" + id + "');"));
+						.setOnclick("$Actions['RoleMembersPage_primary']('mId=" + id + "');"));
 				kv.put("deptId",
 						AccountMgrPageUtils.toDepartmentText(_deptService.getBean(rm.getDeptId())));
 			}
 			kv.put(TablePagerColumn.DESCRIPTION, rm.getDescription());
 			final StringBuilder sb = new StringBuilder();
 			sb.append(ButtonElement.deleteBtn().setOnclick(
-					"$Actions['ajax_deleteMember']('mId=" + id + "');"));
+					"$Actions['RoleMembersPage_del']('mId=" + id + "');"));
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			kv.put(TablePagerColumn.OPE, sb.toString());
 			return kv;
@@ -245,7 +247,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 				final MenuItem menuItem) {
 			if (menuItem == null) {
 				final MenuItems items = MenuItems.of(MenuItem.itemDelete().setOnclick_act(
-						"ajax_deleteMember", "mId"));
+						"RoleMembersPage_del", "mId"));
 				items.append(MenuItem.sep());
 				items.append(MenuItem
 						.of($m("Menu.move"))
