@@ -33,15 +33,11 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
-import net.simpleframework.organization.impl.OrganizationContext;
-import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 import net.simpleframework.organization.web.page.mgr.OmgrUtils;
-import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -56,7 +52,6 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 		addTablePagerBean(pp);
 
-		// 成员窗口
 		// AjaxRequestBean ajaxRequest = addAjaxRequest(pp,
 		// "RoleMgrTPage_membersPage",
 		// _RoleMembersPage.class);
@@ -222,7 +217,6 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 					LinkElement.style2(role.getMembers()).setOnclick(
 							JS.loc(uFactory.getUrl(cp, RoleMgr_MembersTPage.class,
 									"roleId=" + role.getId()))));
-			// "$Actions['RoleMgrTPage_members']('roleId=" + role.getId() + "');")
 			kv.add("roletype", role.getRoleType()).add(TablePagerColumn.OPE, toOpeHTML(cp, role));
 			return kv;
 		}
@@ -233,30 +227,6 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 					"$Actions['RoleMgrTPage_roleWin']('roleId=" + role.getId() + "');"));
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
-		}
-	}
-
-	public static class _RoleMembersPage extends RoleMembersPage {
-		@Override
-		public String getPageRole(final PageParameter pp) {
-			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
-		}
-
-		@Override
-		protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
-			return _AddMembersPage.class;
-		}
-	}
-
-	public static class _AddMembersPage extends AddMembersPage {
-		@Override
-		public String getPageRole(final PageParameter pp) {
-			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
-		}
-
-		@Override
-		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
-			return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 		}
 	}
 }

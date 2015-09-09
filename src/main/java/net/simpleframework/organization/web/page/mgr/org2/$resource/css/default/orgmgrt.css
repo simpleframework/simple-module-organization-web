@@ -90,7 +90,7 @@
 }
 
 .RoleMgr_MembersTPage>table {
-  min-height: 480px;  
+  height: 480px;  
 }
 
 .RoleMgr_MembersTPage .lnav {

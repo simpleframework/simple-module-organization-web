@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -13,11 +14,15 @@ import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
+import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.impl.OrganizationContext;
+import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 import net.simpleframework.organization.web.page.mgr.OmgrUtils;
+import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -53,23 +58,22 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		sb.append("  <div id='idRoleMgr_MembersTPage_dept'></div>");
 		sb.append(" </td>");
 		sb.append(" <td class='rtbl'>");
-		sb.append("  <div class='tbar'>");
+		sb.append("  <div class='tbar clearfix'>");
+		sb.append("   <div class='left'>");
 		String backUrl = uFactory.getUrl(pp, RoleMgrTPage.class);
 		if (rchart != null) {
 			backUrl += "?chartId=" + rchart.getId();
 		}
 		sb.append(LinkButton.backBtn().corner().setOnclick(JS.loc(backUrl)));
+		sb.append("   </div>");
+		sb.append("   <div class='right'>").append(_RoleMembersPage.getActionElements(pp))
+				.append("</div>");
+		sb.append("   ");
 		sb.append("  </div>");
-		sb.append("  <div id='idRoleMgr_MembersTPage_tbl'></div>");
+		sb.append("  <div id='idRoleMgr_MembersTPage_tbl'>")
+				.append(pp.includeUrl(_RoleMembersPage.class)).append("</div>");
 		sb.append(" </td>");
-
 		sb.append("</tr></table>");
-		// sb.append(" <div >");
-		//
-		// sb.append(" </div>");
-		// sb.append(" <div >");
-		//
-		// sb.append(" </div>");
 		sb.append("</div>");
 		return sb.toString();
 	}
@@ -101,6 +105,39 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 				}
 			}
 			return nodes;
+		}
+	}
+
+	public static class _RoleMembersPage extends RoleMembersPage {
+
+		@Override
+		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+				final String variable) throws IOException {
+			final StringBuilder sb = new StringBuilder();
+			sb.append("<div id='idRoleMemberPage_tbl'></div>");
+			return sb.toString();
+		}
+
+		@Override
+		public String getPageRole(final PageParameter pp) {
+			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		}
+
+		@Override
+		protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
+			return _AddMembersPage.class;
+		}
+	}
+
+	public static class _AddMembersPage extends AddMembersPage {
+		@Override
+		public String getPageRole(final PageParameter pp) {
+			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		}
+
+		@Override
+		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
+			return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 		}
 	}
 }

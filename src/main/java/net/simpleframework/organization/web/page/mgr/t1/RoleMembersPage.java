@@ -14,9 +14,11 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.BlockElement;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.Checkbox;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
@@ -77,7 +79,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp, "RoleMemberPage_tbl",
 				TablePagerBean.class).setSort(false).setPagerBarLayout(EPagerBarLayout.none)
-				.setContainerId("idMemberTable").setHandlerClass(MemberTable.class);
+				.setContainerId("idRoleMemberPage_tbl").setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60).setPropertyClass(
@@ -119,7 +121,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 				role.setRuleScript(ruleValue);
 				_roleService.update(new String[] { "rulescript" }, role);
 			}
-			return new JavascriptForward("alert('").append($m("RoleMembersPage.12")).append("');");
+			return new JavascriptForward("alert('").append($m("RoleMembersPage.8")).append("');");
 		} else {
 			return null;
 		}
@@ -131,13 +133,34 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		return new JavascriptForward("$Actions['RoleMemberPage_tbl']();");
 	}
 
+	public static ElementList getActionElements(final PageParameter pp) {
+		final ElementList el = ElementList.of();
+		final Role role = OmgrUtils.getRole(pp);
+		final ERoleType rt = role != null ? role.getRoleType() : null;
+		if (rt == ERoleType.normal) {
+			el.append(LinkButton.of($m("RoleMembersPage.1")).setOnclick(
+					"$Actions['addMemberWindow']('roleId=" + role.getId() + "');"));
+			el.append(SpanElement.SPACE);
+			el.append(LinkButton.deleteBtn().setOnclick("this.up('.RoleMgrPage').deleteMember();"));
+		} else if (rt == ERoleType.handle) {
+			el.append(LinkButton.saveBtn().setOnclick(
+					"$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));"));
+		} else if (rt == ERoleType.script) {
+			el.append(LinkButton.saveBtn().setOnclick(
+					"$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));"));
+			el.append(SpanElement.SPACE);
+			el.add(LinkButton.of($m("RoleMembersPage.9")));
+		}
+		return el;
+	}
+
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String variable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='RoleMembersPage'>");
-		sb.append("<div class='tb'>");
-		sb.append("<div class='nav_arrow'>");
+		sb.append(" <div class='tb clearfix'>");
+		sb.append("  <div class='nav_arrow'>");
 		final Role role = OmgrUtils.getRole(pp);
 		ERoleType rt = null;
 		if (role != null) {
@@ -147,51 +170,32 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		} else {
 			sb.append("#(RoleMembersPage.0)");
 		}
-
-		sb.append("</div><div class='btn'>");
-		final String aClass = "simple_btn simple_btn_all";
-		if (rt == ERoleType.normal) {
-			sb.append("<a class='").append(aClass)
-					.append("' onclick=\"$Actions['addMemberWindow']('roleId=").append(role.getId())
-					.append("');\">#(RoleMembersPage.1)</a>");
-			sb.append(HtmlConst.NBSP).append("<a class='").append(aClass)
-					.append("' onclick=\"this.up('.RoleMgrPage').deleteMember();\">#(Delete)</a>");
-		} else if (rt == ERoleType.handle) {
-			sb.append("<a class='").append(aClass).append("' onclick=\"")
-					.append("$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));")
-					.append("\">#(RoleMembersPage.8)</a>");
-		} else if (rt == ERoleType.script) {
-			sb.append("<a class='").append(aClass).append("' onclick=\"")
-					.append("$Actions['ajax_roleSave']($Form('#idRoleMemberVal .rule'));")
-					.append("\">#(RoleMembersPage.8)</a>");
-			sb.append(HtmlConst.NBSP).append("<a class='").append(aClass).append("' onclick=\"")
-					.append("\">#(RoleMembersPage.9)</a>");
-		}
-		sb.append("</div>");
-		sb.append(BlockElement.CLEAR);
-		sb.append("</div>");
+		sb.append("  </div>");
+		sb.append("  <div class='btn'>").append(getActionElements(pp)).append("</div>");
+		sb.append(" </div>");
 
 		if (rt == ERoleType.normal) {
-			sb.append("<div id='idMemberTable'></div>");
+			sb.append("<div id='idRoleMemberPage_tbl'></div>");
 		} else {
-			sb.append("<div  class='rule'>");
+			sb.append("<div class='rule'>");
 			if (role != null) {
-				sb.append("<input type='hidden' name='roleId' value='");
-				sb.append(role.getId()).append("' />");
+				sb.append(InputElement.hidden().setName("roleId").setVal(role.getId()));
 			}
 			if (rt == ERoleType.handle) {
 				sb.append("<div class='t'>#(RoleMembersPage.10)").append(HtmlConst.NBSP)
 						.append(IRoleHandler.class.getName()).append("</div>");
-				sb.append("<div class='c'><textarea name='role_ruleValue' rows='1'>");
+				sb.append("<div class='c'>");
+				final InputElement ta = InputElement.textarea().setName("role_ruleValue").setRows(1);
 				final IRoleHandler rHandler = _roleService.getRoleHandler(role);
 				if (rHandler != null) {
-					sb.append(rHandler.getClass().getName());
+					ta.setValue(rHandler.getClass().getName());
 				}
-				sb.append("</textarea>");
+				sb.append(ta);
 			} else if (rt == ERoleType.script) {
 				sb.append("<div class='t'>#(RoleMembersPage.11)</div>");
-				sb.append("<div class='c'><textarea name='role_ruleValue' rows='14'>");
-				sb.append(StringUtils.blank(role.getRuleScript())).append("</textarea>");
+				sb.append("<div class='c'>");
+				sb.append(InputElement.textarea().setName("role_ruleValue").setRows(14)
+						.setValue(role.getRuleScript()));
 			}
 			sb.append("</div></div>");
 		}
