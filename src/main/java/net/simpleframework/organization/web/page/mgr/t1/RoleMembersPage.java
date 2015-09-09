@@ -218,8 +218,8 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			final Role role = OmgrUtils.getRole(cp);
-			return _roleService.members(role);
+			return _rolemService.queryRoleMembers(OmgrUtils.getRole(cp),
+					_deptService.getBean(cp.getParameter("deptId")));
 		}
 
 		@Override
