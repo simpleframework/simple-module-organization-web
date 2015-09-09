@@ -90,11 +90,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 			if (parent == null) {
 				final Department dept = getOrg2(cp);
 				if (dept != null) {
-					TreeNode treeNode = new TreeNode(treeBean, parent, $m("RoleMgr_MembersTPage.0"));
-					nodes.add(treeNode);
-					treeNode.setJsClickCallback("$Actions['RoleMembersPage_tbl']('deptId=');");
-					treeNode = new TreeNode(treeBean, parent, dept);
-					nodes.add(treeNode);
+					nodes.add(createTreeNode(treeBean, parent, $m("RoleMgr_MembersTPage.0")));
+					nodes.add(createTreeNode(treeBean, parent, dept));
 				}
 			} else {
 				final Object dataObject = parent.getDataObject();
@@ -103,14 +100,23 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 							(Department) dataObject, EDepartmentType.department);
 					Department dept;
 					while ((dept = dq.next()) != null) {
-						final TreeNode treeNode = new TreeNode(treeBean, parent, dept);
-						treeNode.setJsClickCallback("$Actions['RoleMembersPage_tbl']('deptId="
-								+ dept.getId() + "');");
-						nodes.add(treeNode);
+						nodes.add(createTreeNode(treeBean, parent, dept));
 					}
 				}
 			}
 			return nodes;
+		}
+
+		private TreeNode createTreeNode(final TreeBean treeBean, final TreeNode parent,
+				final Object dataObject) {
+			final TreeNode treeNode = new TreeNode(treeBean, parent, dataObject);
+			String js = "$Actions['RoleMembersPage_tbl']('deptId=";
+			if (dataObject instanceof Department) {
+				js += ((Department) dataObject).getId();
+			}
+			js += "');";
+			treeNode.setJsClickCallback(js);
+			return treeNode;
 		}
 	}
 
