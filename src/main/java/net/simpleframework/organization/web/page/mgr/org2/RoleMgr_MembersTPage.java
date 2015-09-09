@@ -1,5 +1,7 @@
 package net.simpleframework.organization.web.page.mgr.org2;
 
+import static net.simpleframework.common.I18n.$m;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -67,7 +69,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 		sb.append(LinkButton.backBtn().corner().setOnclick(JS.loc(backUrl)));
 		sb.append("   </div>");
-		sb.append("   <div class='right'>").append(_RoleMembersPage.getActionElements(pp))
+		sb.append("   <div class='right'>").append(RoleMembersPage.getActionElements(pp))
 				.append("</div>");
 		sb.append("   ");
 		sb.append("  </div>");
@@ -88,8 +90,9 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 			if (parent == null) {
 				final Department dept = getOrg2(cp);
 				if (dept != null) {
-					TreeNode treeNode = new TreeNode(treeBean, parent, "所有成员");
+					TreeNode treeNode = new TreeNode(treeBean, parent, $m("RoleMgr_MembersTPage.0"));
 					nodes.add(treeNode);
+					treeNode.setJsClickCallback("$Actions['RoleMembersPage_tbl']('deptId=');");
 					treeNode = new TreeNode(treeBean, parent, dept);
 					nodes.add(treeNode);
 				}
@@ -101,6 +104,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 					Department dept;
 					while ((dept = dq.next()) != null) {
 						final TreeNode treeNode = new TreeNode(treeBean, parent, dept);
+						treeNode.setJsClickCallback("$Actions['RoleMembersPage_tbl']('deptId="
+								+ dept.getId() + "');");
 						nodes.add(treeNode);
 					}
 				}
