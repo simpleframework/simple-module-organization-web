@@ -164,9 +164,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		sb.append(" <div class='tb clearfix'>");
 		sb.append("  <div class='nav_arrow'>");
 		final Role role = OmgrUtils.getRole(pp);
-		ERoleType rt = null;
 		if (role != null) {
-			rt = role.getRoleType();
 			sb.append(role.getText());
 			sb.append(SpanElement.shortText("(" + role.getName() + ")"));
 		} else {
@@ -176,6 +174,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		sb.append("  <div class='btn'>").append(getActionElements(pp)).append("</div>");
 		sb.append(" </div>");
 
+		final ERoleType rt = role != null ? role.getRoleType() : null;
 		if (rt == ERoleType.normal) {
 			sb.append("<div id='idRoleMembersPage_tbl'></div>");
 		} else {
@@ -209,8 +208,12 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 
 		@Override
 		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
+			final KVMap kv = (KVMap) super.getFormParameters(cp);
 			final Role role = OmgrUtils.getRole(cp);
-			return ((KVMap) super.getFormParameters(cp)).add("roleId", role.getId());
+			if (role != null) {
+				kv.add("roleId", role.getId());
+			}
+			return kv;
 		}
 
 		@Override

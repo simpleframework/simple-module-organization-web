@@ -17,6 +17,7 @@ import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.EDepartmentType;
+import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -114,7 +115,11 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 				final String variable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
-			sb.append("<div id='idRoleMembersPage_tbl'></div>");
+			final Role role = OmgrUtils.getRole(pp);
+			final ERoleType rt = role != null ? role.getRoleType() : null;
+			if (rt == ERoleType.normal) {
+				sb.append("<div id='idRoleMembersPage_tbl'></div>");
+			}
 			return sb.toString();
 		}
 
