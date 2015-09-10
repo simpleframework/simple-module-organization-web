@@ -89,8 +89,8 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 						if (c > 0) {
 							tn.setPostfixText("(" + c + ")");
 						}
-						tn.setJsClickCallback("$Actions['RoleMgrPage_category']('chartId=" + chart.getId()
-								+ "');");
+						tn.setJsClickCallback("$Actions['RoleMgrPage_category']('chartId="
+								+ chart.getId() + "');");
 					}
 				});
 	}
