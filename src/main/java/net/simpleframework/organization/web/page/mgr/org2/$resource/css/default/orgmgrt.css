@@ -102,6 +102,10 @@
   padding: 10px;  
 }
 
+#idRoleMgr_MembersTPage_tbl {
+  padding: 3px;
+}
+
 .RoleMgr_MembersTPage .lnav .lbl {
   background-color: #f5f5f5;
   border-bottom: 1px solid #aaa;

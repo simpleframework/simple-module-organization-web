@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.Convert;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.JS;
@@ -68,6 +69,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 			backUrl += "?chartId=" + rchart.getId();
 		}
 		sb.append(LinkButton.backBtn().corner().setOnclick(JS.loc(backUrl)));
+		sb.append(SpanElement.SPACE);
+		sb.append(new SpanElement($m("RoleMgr_MembersTPage.0")));
 		sb.append("   </div>");
 		sb.append("   <div class='right'>").append(RoleMembersPage.getActionElements(pp))
 				.append("</div>");
@@ -85,13 +88,22 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 
 		@Override
 		public TreeNodes getTreenodes(final ComponentParameter cp, final TreeNode parent) {
+			final Role r = OmgrUtils.getRole(cp);
+			final Map<Department, Integer> stat = cp.getRequestCache("_deptstat",
+					new CacheV<Map<Department, Integer>>() {
+						@Override
+						public Map<Department, Integer> get() {
+							return _rolemService.getMemberNums(r);
+						}
+					});
 			final TreeNodes nodes = TreeNodes.of();
 			final TreeBean treeBean = (TreeBean) cp.componentBean;
 			if (parent == null) {
 				final Department dept = getOrg2(cp);
 				if (dept != null) {
-					nodes.add(createTreeNode(treeBean, parent, $m("RoleMgr_MembersTPage.0")));
-					nodes.add(createTreeNode(treeBean, parent, dept));
+					// nodes.add(createTreeNode(treeBean, parent,
+					// $m("RoleMgr_MembersTPage.0"), stat));
+					nodes.add(createTreeNode(treeBean, parent, dept, stat));
 				}
 			} else {
 				final Object dataObject = parent.getDataObject();
@@ -100,7 +112,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 							(Department) dataObject, EDepartmentType.department);
 					Department dept;
 					while ((dept = dq.next()) != null) {
-						nodes.add(createTreeNode(treeBean, parent, dept));
+						nodes.add(createTreeNode(treeBean, parent, dept, stat));
 					}
 				}
 			}
@@ -108,11 +120,16 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 
 		private TreeNode createTreeNode(final TreeBean treeBean, final TreeNode parent,
-				final Object dataObject) {
+				final Object dataObject, final Map<Department, Integer> stat) {
 			final TreeNode treeNode = new TreeNode(treeBean, parent, dataObject);
 			String js = "$Actions['RoleMembersPage_tbl']('deptId=";
 			if (dataObject instanceof Department) {
-				js += ((Department) dataObject).getId();
+				final Department dept = (Department) dataObject;
+				js += dept.getId();
+				final int nums = Convert.toInt(stat.get(dept));
+				if (nums > 0) {
+					treeNode.setPostfixText("(" + nums + ")");
+				}
 			}
 			js += "');";
 			treeNode.setJsClickCallback(js);
