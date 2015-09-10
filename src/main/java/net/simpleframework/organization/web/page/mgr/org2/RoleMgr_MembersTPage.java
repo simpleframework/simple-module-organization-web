@@ -13,6 +13,7 @@ import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
@@ -70,8 +71,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 		sb.append(LinkButton.backBtn().corner().setOnclick(JS.loc(backUrl)));
 		sb.append(SpanElement.SPACE);
-		sb.append(LinkButton.corner($m("RoleMgr_MembersTPage.0")).setOnclick(
-				"$Actions['RoleMembersPage_tbl']('deptId=');"));
+		sb.append(LinkButton.corner($m("RoleMgr_MembersTPage.0")).setClassName("showall")
+				.setOnclick("$Actions['RoleMembersPage_tbl']('deptId=');"));
 		sb.append("   </div>");
 		sb.append("   <div class='right'>").append(RoleMembersPage.getActionElements(pp));
 		sb.append("</div>");
@@ -102,8 +103,6 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 			if (parent == null) {
 				final Department dept = getOrg2(cp);
 				if (dept != null) {
-					// nodes.add(createTreeNode(treeBean, parent,
-					// $m("RoleMgr_MembersTPage.0"), stat));
 					nodes.add(createTreeNode(treeBean, parent, dept, stat));
 				}
 			} else {
@@ -153,6 +152,19 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
+		protected TablePagerBean addTablePagerBean(final PageParameter pp) {
+			final StringBuilder sb = new StringBuilder();
+			sb.append("var tbl = $('#idRoleMembersPage_tbl');");
+			sb.append("var showall = tbl.up('.rtbl').down('.tbar .showall');");
+			sb.append("var dept = tbl.down('.parameters #deptId');");
+			sb.append("if ($F(dept).length > 0) showall.show();");
+			sb.append("else showall.hide();");
+			final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp)
+					.setJsLoadedCallback(sb.toString());
+			return tablePager;
+		}
+
+		@Override
 		public String getPageRole(final PageParameter pp) {
 			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 		}
@@ -171,7 +183,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 
 		@Override
 		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
-			return new JavascriptForward("$Actions['RoleMembersPage_tbl']();");
+			return new JavascriptForward("$Actions['RoleMembersPage_tbl']('deptId=');");
 		}
 	}
 }

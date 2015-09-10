@@ -32,6 +32,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
+import net.simpleframework.organization.Department;
 import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContext;
@@ -79,8 +80,8 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
 				"RoleMembersPage_tbl", TablePagerBean.class).setFilter(false).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.none).setContainerId("idRoleMembersPage_tbl")
-				.setHandlerClass(MemberTable.class);
+				.setPageItems(30).setPagerBarLayout(EPagerBarLayout.bottom)
+				.setContainerId("idRoleMembersPage_tbl").setHandlerClass(MemberTable.class);
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60)
@@ -206,19 +207,16 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	public static class MemberTable extends AbstractDbTablePagerHandler {
 
 		@Override
-		public Map<String, Object> getFormParameters(final ComponentParameter cp) {
-			final KVMap kv = (KVMap) super.getFormParameters(cp);
+		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Role role = OmgrUtils.getRole(cp);
 			if (role != null) {
-				kv.add("roleId", role.getId());
+				cp.addFormParameter("roleId", role.getId());
 			}
-			return kv;
-		}
-
-		@Override
-		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
-			return _rolemService.queryRoleMembers(OmgrUtils.getRole(cp),
-					_deptService.getBean(cp.getParameter("deptId")));
+			final Department dept = _deptService.getBean(cp.getParameter("deptId"));
+			if (dept != null) {
+				cp.addFormParameter("deptId", dept.getId());
+			}
+			return _rolemService.queryRoleMembers(role, dept);
 		}
 
 		@Override
