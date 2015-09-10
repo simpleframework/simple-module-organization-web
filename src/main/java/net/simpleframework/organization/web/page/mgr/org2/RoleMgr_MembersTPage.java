@@ -70,10 +70,11 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 		sb.append(LinkButton.backBtn().corner().setOnclick(JS.loc(backUrl)));
 		sb.append(SpanElement.SPACE);
-		sb.append(new SpanElement($m("RoleMgr_MembersTPage.0")));
+		sb.append(LinkButton.corner($m("RoleMgr_MembersTPage.0")).setOnclick(
+				"$Actions['RoleMembersPage_tbl']('deptId=');"));
 		sb.append("   </div>");
-		sb.append("   <div class='right'>").append(RoleMembersPage.getActionElements(pp))
-				.append("</div>");
+		sb.append("   <div class='right'>").append(RoleMembersPage.getActionElements(pp));
+		sb.append("</div>");
 		sb.append("   ");
 		sb.append("  </div>");
 		sb.append("  <div id='idRoleMgr_MembersTPage_tbl'>")
