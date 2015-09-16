@@ -57,7 +57,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		final RoleChart rchart = OmgrUtils.getRoleChart(pp);
 		final Role r = OmgrUtils.getRole(pp);
 		if (r != null) {
-			sb.append(rchart).append(SpanElement.NAV).append(r);
+			sb.append(rchart).append(SpanElement.NAV()).append(r);
 		}
 		sb.append("  </div>");
 		sb.append("  <div id='idRoleMgr_MembersTPage_dept'></div>");

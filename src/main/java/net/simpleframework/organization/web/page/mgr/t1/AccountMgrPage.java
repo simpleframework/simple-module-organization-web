@@ -173,11 +173,11 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				.toString()));
 		final Object s = getSelectedTreeNode(pp);
 		if (s instanceof Department) {
-			eles.append(SpanElement.NAV).append(new LabelElement(s));
+			eles.append(SpanElement.NAV()).append(new LabelElement(s));
 		} else {
 			final int type = Convert.toInt(s, Account.TYPE_ALL);
 			if (type != Account.TYPE_ALL) {
-				eles.append(SpanElement.NAV);
+				eles.append(SpanElement.NAV());
 				if (type >= Account.TYPE_STATE_DELETE && type <= Account.TYPE_STATE_NORMAL) {
 					eles.append(new LabelElement(EAccountStatus.values()[Account.TYPE_STATE_NORMAL
 							- type]));
