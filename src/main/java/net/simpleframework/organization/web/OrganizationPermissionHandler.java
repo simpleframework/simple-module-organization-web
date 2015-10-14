@@ -65,7 +65,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (o instanceof Account) {
 			o = ((Account) o).getId();
 		}
-		return _userService.getBean(o);
+		return _accountService.getUser(o);
 	}
 
 	@Override
