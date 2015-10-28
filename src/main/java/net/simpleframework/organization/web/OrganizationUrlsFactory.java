@@ -1,6 +1,14 @@
 package net.simpleframework.organization.web;
 
 import net.simpleframework.mvc.common.UrlsCache;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.AccountPasswordTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.AccountStatTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.PhotoTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.UserAttriTPage;
+import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.AccountPasswordPageT2;
+import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.AccountStatPageT2;
+import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.PhotoPageT2;
+import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.UserAttriPageT2;
 import net.simpleframework.organization.web.page.mgr.org2.DepartmentMgrTPage;
 import net.simpleframework.organization.web.page.mgr.org2.RoleMgrTPage;
 import net.simpleframework.organization.web.page.mgr.org2.RoleMgr_MembersTPage;
@@ -23,5 +31,10 @@ public class OrganizationUrlsFactory extends UrlsCache {
 		put(UserMgrTPage.class);
 		put(UserMgr_DelTPage.class);
 		put(UserMgr_OnlineTPage.class);
+
+		put(UserAttriTPage.class, UserAttriPageT2.class);
+		put(AccountStatTPage.class, AccountStatPageT2.class);
+		put(AccountPasswordTPage.class, AccountPasswordPageT2.class);
+		put(PhotoTPage.class, PhotoPageT2.class);
 	}
 }

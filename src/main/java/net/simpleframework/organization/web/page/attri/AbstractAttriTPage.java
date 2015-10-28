@@ -1,27 +1,19 @@
-package net.simpleframework.organization.web.page.attri.t2;
+package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
 import java.util.Map;
 
-import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ui.window.WindowRegistry;
 import net.simpleframework.mvc.template.lets.Category_BlankPage;
 import net.simpleframework.mvc.template.struct.CategoryItem;
 import net.simpleframework.mvc.template.struct.CategoryItems;
-import net.simpleframework.organization.web.page.attri.AbstractAccountPage;
-import net.simpleframework.organization.web.page.attri.AccountPasswordPage;
-import net.simpleframework.organization.web.page.attri.AccountStatPage;
-import net.simpleframework.organization.web.page.attri.PhotoPage;
-import net.simpleframework.organization.web.page.attri.UserAttriPage;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.AccountPasswordPageT2;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.AccountStatPageT2;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.PhotoPageT2;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.UserAttriPageT2;
+import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.web.IOrganizationWebContext;
+import net.simpleframework.organization.web.OrganizationUrlsFactory;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -29,13 +21,14 @@ import net.simpleframework.organization.web.page.attri.t2.AbstractAttriPage.User
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractAttriTPage extends Category_BlankPage {
+public abstract class AbstractAttriTPage extends Category_BlankPage implements
+		IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(AbstractAccountPage.class, "/account_attri.css");
+		pp.addImportCSS(AbstractAttriTPage.class, "/account_attri.css");
 	}
 
 	@Override
@@ -43,20 +36,20 @@ public abstract class AbstractAttriTPage extends Category_BlankPage {
 		return new String[] { WindowRegistry.WINDOW };
 	}
 
+	static final OrganizationUrlsFactory uFactory = ((IOrganizationWebContext) orgContext)
+			.getUrlsFactory();
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItems blocks = CategoryItems.of();
 		int i = 0;
 		final String[] icons = new String[] { "img_user", "img_account", "img_password", "img_photo" };
-		for (final Class<? extends AbstractMVCPage> pageClass : new Class[] { UserAttriPageT2.class,
-				AccountStatPageT2.class, AccountPasswordPageT2.class, PhotoPageT2.class }) {
-			final String hash = ObjectUtils.hashStr(pageClass.getSimpleName());
-			final CategoryItem block = new CategoryItem($m("AbstractEditAwarePage." + i)).setHref(
-					url(pageClass, "h=" + hash)).setIconClass(icons[i++]);
-			final String h = pp.getParameter("h");
-			block.setSelected(StringUtils.hasText(h) ? h.equals(hash) : i == 1);
-			blocks.add(block);
+		for (final Class<? extends AbstractMVCPage> pageClass : new Class[] { UserAttriTPage.class,
+				AccountStatTPage.class, AccountPasswordTPage.class, PhotoTPage.class }) {
+			blocks.add(new CategoryItem($m("AbstractEditAwarePage." + i))
+					.setHref(uFactory.getUrl(pp, pageClass)).setIconClass(icons[i++])
+					.setSelected(pageClass.isAssignableFrom(getOriginalClass())));
 		}
 		return blocks;
 	}

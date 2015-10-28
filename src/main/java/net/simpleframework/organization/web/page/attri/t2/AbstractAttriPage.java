@@ -8,10 +8,10 @@ import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageMapping;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.template.t2.T2TemplatePage;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriTPage.AccountPasswordTPage;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriTPage.AccountStatTPage;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriTPage.PhotoTPage;
-import net.simpleframework.organization.web.page.attri.t2.AbstractAttriTPage.UserAttriTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.AccountPasswordTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.AccountStatTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.PhotoTPage;
+import net.simpleframework.organization.web.page.attri.AbstractAttriTPage.UserAttriTPage;
 
 /**
  * Licensed under the Apache License, Version 2.0
