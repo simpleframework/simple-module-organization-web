@@ -42,7 +42,8 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(SpanElement.strongText($m("UserAttriPage.1")));
+		return ElementList.of(SpanElement.strongText($m("UserAttriPage.1")).addStyle(
+				"line-height: 2;"));
 	}
 
 	@Override
