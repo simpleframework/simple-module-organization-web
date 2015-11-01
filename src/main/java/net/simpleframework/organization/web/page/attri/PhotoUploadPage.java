@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.simpleframework.common.AlgorithmUtils;
+import net.simpleframework.common.Convert;
+import net.simpleframework.common.FileUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.ImageUtils;
+import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.AbstractUrlForward;
 import net.simpleframework.mvc.IMultipartFile;
 import net.simpleframework.mvc.MVCUtils;
@@ -57,6 +60,20 @@ public class PhotoUploadPage extends AbstractAccountPage {
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
+	@Override
+	public KVMap createVariables(final PageParameter pp) {
+		final KVMap kv = super.createVariables(pp);
+		final String src = pp.getParameter("src");
+		if (StringUtils.hasText(src)) {
+			kv.add("src", new String(AlgorithmUtils.base64Decode(src)));
+		}
+		final String size = pp.getParameter("size");
+		if (StringUtils.hasText(size)) {
+			kv.add("size", FileUtils.toFileSize(Convert.toLong(size)));
+		}
+		return kv;
+	}
+
 	@Transaction(context = IOrganizationContext.class)
 	public AbstractUrlForward upload(final ComponentParameter cp) {
 		final Account account = getAccount(cp);
@@ -65,8 +82,7 @@ public class PhotoUploadPage extends AbstractAccountPage {
 		final IMultipartFile multipart = request.getFile("user_photo");
 		long size;
 		if ((size = multipart.getSize()) > 1024 * 1024) {
-			return new UrlForward(AbstractMVCPage.url(PhotoUploadResultPage.class, "accountId="
-					+ accountId + "&error=size"));
+			return new UrlForward(url(PhotoUploadPage.class, "size=" + size));
 		} else {
 			try {
 				final User user = _accountService.getUser(accountId);
@@ -81,10 +97,8 @@ public class PhotoUploadPage extends AbstractAccountPage {
 				}
 				deletePhoto(cp, accountId);
 				return new UrlForward(url(
-						PhotoUploadResultPage.class,
-						"accountId="
-								+ accountId
-								+ "&src="
+						PhotoUploadPage.class,
+						"src="
 								+ AlgorithmUtils.base64Encode((get(PhotoPage.class)
 										.getPhotoUrl(cp, account) + "?c=" + System.currentTimeMillis())
 										.getBytes())));

@@ -26,6 +26,9 @@ public class AccountStatPage extends AbstractAccountPage {
 		final Account account = getAccount(pp);
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='AccountStatPage'>");
+		sb.append(" <div class='tt'>");
+		sb.append("  <strong>#(AccountStatPage.11)</strong>");
+		sb.append(" </div>");
 		sb.append("<table class='form_tbl' cellspacing='1'>");
 		sb.append("  <tr>");
 		sb.append("    <td class='l'>#(AccountStatPage.0)</td>");

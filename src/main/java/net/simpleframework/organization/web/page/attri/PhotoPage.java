@@ -1,10 +1,6 @@
 package net.simpleframework.organization.web.page.attri;
 
-import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.BlockElement;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.organization.Account;
 
 /**
@@ -21,11 +17,5 @@ public class PhotoPage extends AbstractAccountPage {
 
 	public String getUploadUrl(final PageParameter pp, final Account account) {
 		return pp.getContextPath() + url(PhotoUploadPage.class, "accountId=" + account.getId());
-	}
-
-	@Override
-	public KVMap createVariables(final PageParameter pp) {
-		return super.createVariables(pp).add("nav",
-				BlockElement.nav().addElements(SpanElement.strongText($m("PhotoPage.0"))));
 	}
 }

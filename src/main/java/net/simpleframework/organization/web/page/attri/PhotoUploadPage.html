@@ -1,20 +1,30 @@
 <html>
 <body>
   <div class="PhotoUploadPage">
-    <form id="uploadPhoto" style="width: 280px;">${page.buildFormHidden(parameter)}</form>
-    <div class="desc">#(PhotoUploadPage.0)</div>
-    <div>
-      <input type="button" class="button2" id="btnUploadPhoto" value="#(PhotoUploadPage.1)"
-        onclick="$Actions['uploadPhoto']();" />
-    </div>
+    <form id="uploadPhoto">
+      ${page.buildFormHidden(parameter)}
+      <div class="btns">
+        <input type="file" id="user_photo" name="user_photo" accept="image/png,image/gif,image/jpeg" /><input 
+          type="button" class="button2"
+          id="btnUploadPhoto" value="#(PhotoUploadPage.1)" />
+      </div>
+      <div class="desc">#(PhotoUploadPage.0)</div>
+      $if{isdef size}
+      <div class="err">#(PhotoUploadPage.2)${size}</div>
+      $end{}
+    </form>
   </div>
   <script type="text/javascript">
-			(function() {
-				var ele = $UI.createFileInputField();
-				ele.file.writeAttribute("id", "user_photo");
-				ele.file.writeAttribute("name", "user_photo");
-				$("uploadPhoto").insert(ele);
-			})();
-		</script>
+    $ready(function() {
+      $('user_photo').observe("change", function(evn) {
+        $Actions['uploadPhoto']();
+      });
+      
+      $if{isdef src}
+      parent.$('user_edit_photo_image').src = '${src}';
+      $end{}
+    });
+	</script>
 </body>
 </html>
+

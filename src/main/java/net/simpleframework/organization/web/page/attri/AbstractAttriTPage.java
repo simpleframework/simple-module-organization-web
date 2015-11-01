@@ -60,7 +60,7 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
-			sb.append("<div class='UserAttriTPage'>");
+			sb.append("<div class='UserAttriTPage' align='center'>");
 			sb.append(pp.includeUrl(UserAttriPage.class));
 			sb.append("</div>");
 			return sb.toString();
@@ -72,7 +72,7 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
-			sb.append("<div class='AccountStatTPage'>");
+			sb.append("<div class='AccountStatTPage' align='center'>");
 			sb.append(pp.includeUrl(AccountStatPage.class));
 			sb.append("</div>");
 			return sb.toString();
@@ -84,7 +84,7 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
-			sb.append("<div class='AccountPasswordTPage'>");
+			sb.append("<div class='AccountPasswordTPage' align='center'>");
 			sb.append(pp.includeUrl(AccountPasswordPage.class));
 			sb.append("</div>");
 			return sb.toString();
@@ -96,7 +96,7 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 		protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
-			sb.append("<div class='PhotoTPage'>");
+			sb.append("<div class='PhotoTPage' align='center'>");
 			sb.append(pp.includeUrl(PhotoPage.class));
 			sb.append("</div>");
 			return sb.toString();
