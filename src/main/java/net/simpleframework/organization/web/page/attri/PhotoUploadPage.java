@@ -4,8 +4,6 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,11 +17,10 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractUrlForward;
+import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.IMultipartFile;
-import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.MultipartPageRequest;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.UrlForward;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.submit.SubmitBean;
@@ -40,7 +37,7 @@ import net.simpleframework.organization.User;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class PhotoUploadPage extends AbstractAccountPage {
+public class PhotoUploadPage extends AbstractAccountPage implements IMVCConst {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -95,32 +92,13 @@ public class PhotoUploadPage extends AbstractAccountPage {
 				} else {
 					_userService.updatePhoto(user, null);
 				}
-				deletePhoto(cp, accountId);
-				return new UrlForward(url(
-						PhotoUploadPage.class,
-						"src="
-								+ AlgorithmUtils.base64Encode((get(PhotoPage.class)
-										.getPhotoUrl(cp, account) + "?c=" + System.currentTimeMillis())
-										.getBytes())));
+				// 删除图片缓存
+				cp.clearPhotoCache(accountId);
+				return new UrlForward(url(PhotoUploadPage.class,
+						"src=" + AlgorithmUtils.base64Encode(cp.getPhotoUrl(accountId).getBytes())));
 			} catch (final IOException e) {
 				throw OrganizationException.of(e);
 			}
-		}
-	}
-
-	private void deletePhoto(final PageRequestResponse requestResponse, final Object userId) {
-		final File photoCache = new File(MVCUtils.getRealPath(MVCUtils.getPageResourcePath()
-				+ "/images/photo-cache/"));
-		if (!photoCache.exists()) {
-			return;
-		}
-		for (final File photo : photoCache.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(final File dir, final String name) {
-				return name.startsWith(userId + "_");
-			}
-		})) {
-			photo.delete();
 		}
 	}
 }

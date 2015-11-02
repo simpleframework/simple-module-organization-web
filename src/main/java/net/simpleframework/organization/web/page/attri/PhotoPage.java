@@ -12,7 +12,7 @@ import net.simpleframework.organization.Account;
 public class PhotoPage extends AbstractAccountPage {
 
 	public String getPhotoUrl(final PageParameter pp, final Account account) {
-		return pp.getPhotoUrl(account.getId(), 164, 164);
+		return pp.getPhotoUrl(account.getId());
 	}
 
 	public String getUploadUrl(final PageParameter pp, final Account account) {

@@ -45,7 +45,7 @@ import net.simpleframework.organization.web.page.LoginWindowRedirect;
  *         http://www.simpleframework.net
  */
 public class OrganizationPermissionHandler extends DefaultPagePermissionHandler implements
-		IOrganizationContextAware {
+		IOrganizationContextAware, IMVCConst {
 
 	protected User getUserObject(Object o) {
 		if (o instanceof User) {
@@ -312,7 +312,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
 		_accountService.logout(new HttpAccountSession(rRequest), true);
-		rRequest.removeSessionAttr(IMVCConst.SESSION_ATTRI_LASTURL);
+		rRequest.removeSessionAttr(SESSION_ATTRI_LASTURL);
 	}
 
 	@Override
