@@ -2,6 +2,7 @@ package net.simpleframework.organization.web.page.attri;
 
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
@@ -22,6 +23,11 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 		super.onForward(pp);
 
 		pp.addImportCSS(AbstractAccountPage.class, "/account_attri.css");
+	}
+
+	@Override
+	public String getPageRole(final PageParameter pp) {
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	public String buildFormHidden(final PageParameter pp) {

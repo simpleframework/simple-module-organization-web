@@ -1,15 +1,15 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.LinkButton;
+import net.simpleframework.mvc.common.element.TableRows;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
+import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.organization.Account;
 
 /**
@@ -21,59 +21,53 @@ import net.simpleframework.organization.Account;
 public class AccountStatPage extends AbstractAccountPage {
 
 	@Override
-	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
-			final String currentVariable) throws IOException {
+	protected void onForward(final PageParameter pp) throws Exception {
+		super.onForward(pp);
+
+		// 工作列表窗口
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatPage_binding_page",
+				AccountBindingPage.class);
+		addWindowBean(pp, "AccountStatPage_binding", ajaxRequest).setWidth(400).setHeight(180)
+				.setTitle($m("AccountStatPage.13"));
+	}
+
+	@Override
+	public KVMap createVariables(final PageParameter pp) {
+		final KVMap kv = super.createVariables(pp);
 		final Account account = getAccount(pp);
-		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='AccountStatPage'>");
-		sb.append(" <div class='tt'>");
-		sb.append("  <strong>#(AccountStatPage.11)</strong>");
-		sb.append(" </div>");
-		sb.append("<table class='form_tbl' cellspacing='1'>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.0)</td>");
-		sb.append("    <td class='v'>").append(account.getStatus()).append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.1)</td>");
-		sb.append("    <td class='v'>").append(d(account.getCreateDate())).append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.2)</td>");
-		sb.append("    <td class='v'>").append(d(account.getLastLoginDate())).append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.3)</td>");
-		sb.append("    <td class='v'>").append(StringUtils.blank(account.getLastLoginIP()))
-				.append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.4)</td>");
-		sb.append("    <td class='v'>").append(account.getLoginTimes()).append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.5)</td>");
-		sb.append("    <td class='v'>").append(DateUtils.toDifferenceDate(account.getOnlineMillis()))
-				.append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.6)</td>");
-		sb.append("    <td class='v'>").append(b(account.isMailbinding())).append("</td>");
-		sb.append("  </tr>");
-		sb.append("  <tr>");
-		sb.append("    <td class='l'>#(AccountStatPage.7)</td>");
-		sb.append("    <td class='v'>").append(b(account.isMobilebinding())).append("</td>");
-		sb.append("  </tr>");
-		sb.append("</table>");
-		sb.append("</div>");
-		return sb.toString();
+		kv.add("status", account.getStatus())
+				.add("createDate", blank(Convert.toDateString(account.getCreateDate())))
+				.add("lastLoginDate", blank(Convert.toDateString(account.getLastLoginDate())))
+				.add("lastLoginIP", blank(account.getLastLoginIP()))
+				.add("loginTimes", account.getLoginTimes())
+				.add("onlineMillis", DateUtils.toDifferenceDate(account.getOnlineMillis()))
+				.add("mdevid", account.getMdevid());
+		final boolean mailbinding = account.isMailbinding();
+		kv.add("mailbinding", bool(mailbinding)).add("mailbinding_act", binding(mailbinding));
+		final boolean mobilebinding = account.isMobilebinding();
+		kv.add("mobilebinding", bool(mobilebinding)).add("mobilebinding_act", binding(mobilebinding));
+		return kv;
 	}
 
-	private String d(final Date d) {
-		return StringUtils.blank(Convert.toDateString(d));
+	private LinkButton binding(final boolean binding) {
+		return binding ? LinkButton.corner($m("AccountStatPage.14")) : LinkButton.corner(
+				$m("AccountStatPage.13")).setOnclick("$Actions['AccountStatPage_binding']();");
 	}
 
-	private String b(final boolean b) {
+	private String bool(final boolean b) {
 		return $m(b ? "AccountStatPage.9" : "AccountStatPage.10");
+	}
+
+	private String blank(final Object o) {
+		final String r = Convert.toString(o);
+		return StringUtils.hasText(r) ? r : "&nbsp;";
+	}
+
+	public static class AccountBindingPage extends FormTableRowTemplatePage {
+
+		@Override
+		protected TableRows getTableRows(final PageParameter pp) {
+			return TableRows.of();
+		}
 	}
 }

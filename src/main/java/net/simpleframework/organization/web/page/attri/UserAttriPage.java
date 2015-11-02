@@ -9,6 +9,7 @@ import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -49,6 +50,11 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	@Override
 	public ElementList getRightElements(final PageParameter pp) {
 		return ElementList.of(SAVE_BTN());
+	}
+
+	@Override
+	protected InputElement createTextarea() {
+		return super.createTextarea().setRows(5);
 	}
 
 	@Override

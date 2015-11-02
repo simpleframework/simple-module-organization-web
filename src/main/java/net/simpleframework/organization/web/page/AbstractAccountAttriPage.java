@@ -175,8 +175,11 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		return new TableRow(new RowField($m("AccountEditPage.14"), new InputElement("ue_address")));
 	}
 
+	protected InputElement createTextarea() {
+		return InputElement.textarea("ue_description").setRows(3);
+	}
+
 	protected final TableRow r10(final PageParameter pp) {
-		return new TableRow(new RowField($m("AccountEditPage.15"), InputElement.textarea(
-				"ue_description").setRows(4)));
+		return new TableRow(new RowField($m("AccountEditPage.15"), createTextarea()));
 	}
 }

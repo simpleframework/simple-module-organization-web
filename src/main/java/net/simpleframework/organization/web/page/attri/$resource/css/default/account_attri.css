@@ -41,6 +41,10 @@
 }
 
 /*-----------------------AccountPasswordPage----------------------*/
+.AccountPasswordPage table.form_tbl .l {
+  padding: 12px 6px;
+}
+
 .AccountPasswordPage {
   text-align: left;
   margin-top: 40px;
@@ -58,8 +62,12 @@
   width: 650px;
 }
 
-.AccountStatPage table .l {
-  width: 150px;  
+.AccountStatPage table.form_tbl .l {
+  width: 150px;
+}
+
+.AccountStatPage .v .left {
+  line-height: 2;
 }
 
 /*-----------------------PhotoPage----------------------*/
@@ -121,6 +129,3 @@
   margin-top: 10px;
   text-align: right;
 }
-
-
-
