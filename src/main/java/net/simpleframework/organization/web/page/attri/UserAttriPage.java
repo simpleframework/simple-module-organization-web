@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Map;
 
 import net.simpleframework.ctx.permission.PermissionConst;
+import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -13,6 +14,7 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 
 /**
@@ -28,6 +30,7 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
+	@Transaction(context = IOrganizationContext.class)
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		super.onSave(cp);

@@ -36,14 +36,6 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 		return sb.toString();
 	}
 
-	protected Account getAccount(final PageParameter pp) {
-		Object id = pp.getParameter("accountId");
-		if (!StringUtils.hasObject(id)) {
-			id = pp.getLoginId();
-		}
-		return _accountService.getBean(id);
-	}
-
 	@Override
 	public KVMap createVariables(final PageParameter pp) {
 		final KVMap variables = (KVMap) super.createVariables(pp);
@@ -51,5 +43,13 @@ public abstract class AbstractAccountPage extends AbstractTemplatePage implement
 		variables.put("account", account);
 		// variables.put("user", client.accountMgr().getUser(account.getId()));
 		return variables;
+	}
+
+	protected static Account getAccount(final PageParameter pp) {
+		final String accountId = pp.getParameter("accountId");
+		if (!StringUtils.hasText(accountId)) {
+			return _accountService.getBean(pp.getLoginId());
+		}
+		return _accountService.getBean(accountId);
 	}
 }
