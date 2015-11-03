@@ -280,7 +280,24 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		Account account = null;
 		if (accountType == EAccountType.normal) {
 			account = _accountService.getAccountByName(login);
+		} else if (accountType == EAccountType.email) {
+			final User user = _userService.getUserByEmail(login);
+			if (user != null) {
+				account = _accountService.getBean(user.getId());
+				if (account != null && !account.isMailbinding()) {
+					throw OrganizationException.of($m("OrganizationPermission.6"));
+				}
+			}
+		} else if (accountType == EAccountType.mobile) {
+			final User user = _userService.getUserByMobile(login);
+			if (user != null) {
+				account = _accountService.getBean(user.getId());
+				if (account != null && !account.isMobilebinding()) {
+					throw OrganizationException.of($m("OrganizationPermission.7"));
+				}
+			}
 		}
+
 		if (account == null) {
 			throw OrganizationException.of($m("OrganizationPermission.1")).setCode(2001);
 		} else {
