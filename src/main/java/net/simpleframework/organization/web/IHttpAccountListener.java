@@ -1,7 +1,7 @@
 package net.simpleframework.organization.web;
 
-import net.simpleframework.organization.IAccountSession;
-import net.simpleframework.organization.LoginObject;
+import net.simpleframework.organization.login.IAccountSession;
+import net.simpleframework.organization.login.LoginObject;
 
 /**
  * Licensed under the Apache License, Version 2.0

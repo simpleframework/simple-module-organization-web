@@ -16,9 +16,9 @@ import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.IMVCContextVar;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.organization.Account;
-import net.simpleframework.organization.IAccountSession;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.LoginObject;
+import net.simpleframework.organization.login.IAccountSession;
+import net.simpleframework.organization.login.LoginObject;
 
 /**
  * Licensed under the Apache License, Version 2.0

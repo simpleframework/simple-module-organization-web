@@ -31,10 +31,10 @@ import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService.RoleM;
-import net.simpleframework.organization.LoginObject;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.User;
+import net.simpleframework.organization.login.LoginObject;
 import net.simpleframework.organization.role.RolenameW;
 import net.simpleframework.organization.web.page.LoginWindowRedirect;
 
