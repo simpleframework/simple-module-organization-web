@@ -36,7 +36,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.EDepartmentType;
+import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.userselect.DefaultUserSelectHandler;

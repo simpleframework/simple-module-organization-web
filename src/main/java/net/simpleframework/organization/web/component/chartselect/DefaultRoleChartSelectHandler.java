@@ -8,7 +8,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.EDepartmentType;
+import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.RoleChart;
 

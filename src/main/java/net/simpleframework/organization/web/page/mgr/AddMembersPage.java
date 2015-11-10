@@ -25,12 +25,12 @@ import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
 import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.ERoleMemberType;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 import net.simpleframework.organization.RoleMember;
+import net.simpleframework.organization.RoleMember.ERoleMemberType;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 

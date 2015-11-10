@@ -10,10 +10,10 @@ import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.ERoleMark;
-import net.simpleframework.organization.ERoleType;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.Role;
+import net.simpleframework.organization.Role.ERoleMark;
+import net.simpleframework.organization.Role.ERoleType;
 import net.simpleframework.organization.RoleChart;
 
 /**

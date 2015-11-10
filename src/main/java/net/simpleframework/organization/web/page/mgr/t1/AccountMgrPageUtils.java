@@ -4,7 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.organization.Department;
-import net.simpleframework.organization.EDepartmentType;
+import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
