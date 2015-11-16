@@ -35,7 +35,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 		} else {
 			Department org = _deptService.getBean(cp.getParameter("orgId"));
 			if (org == null) {
-				org = _deptService.getBean(cp.getLdept().getDomainId());
+				org = _deptService.getBean(cp.getLDomainId());
 			}
 			if (org != null) {
 				return _userService.queryUsers(org);

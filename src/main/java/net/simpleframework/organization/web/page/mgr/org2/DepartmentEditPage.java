@@ -91,7 +91,7 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		if (parent != null) {
 			dept.setParentId(parent.getId());
 		} else {
-			dept.setParentId(cp.getLogin().getDomainId());
+			dept.setParentId(cp.getLDomainId());
 		}
 		dept.setDescription(cp.getParameter("category_description"));
 		if (insert) {
