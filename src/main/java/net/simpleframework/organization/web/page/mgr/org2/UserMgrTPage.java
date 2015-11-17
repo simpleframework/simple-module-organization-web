@@ -105,27 +105,21 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final Department org = getOrg2(pp);
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
 				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
-		tablePager
-				.addColumn(AccountMgrPageUtils.TC_TEXT())
-				.addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(
-						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
-							@Override
-							public String getFilterVal(final String val) {
-								if (val == null) {
-									return null;
-								}
-								final PermissionDept dept = pp.getPermission().getDept(ID.of(val));
-								return dept.getId() != null ? dept.getText() : val;
-							}
-						}.setFilterAdvClick(
-								"$Actions['UserMgrTPage_deptSelect']("
-										+ (org == null ? "" : "'orgId=" + org.getId() + "'") + ");").setSort(
-								false)).addColumn(AccountMgrPageUtils.TC_MOBILE().setSort(false))
+		tablePager.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
+					@Override
+					public String getFilterVal(final String val) {
+						if (val == null) {
+							return null;
+						}
+						final PermissionDept dept = pp.getPermission().getDept(ID.of(val));
+						return dept.getId() != null ? dept.getText() : val;
+					}
+				}.setFilterAdvClick("$Actions['UserMgrTPage_deptSelect']();").setSort(false))
+				.addColumn(AccountMgrPageUtils.TC_MOBILE().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_EMAIL().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilterSort(false));
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
@@ -176,7 +170,6 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Department org = getOrg2(cp);
 			if (org != null) {
-				cp.addFormParameter("orgId", org.getId());
 				return _userService.queryUsers(org);
 			}
 			return null;

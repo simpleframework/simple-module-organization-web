@@ -1,11 +1,11 @@
 package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
-import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ETabMatch;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
@@ -36,6 +36,11 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
 	}
 
+	@Override
+	protected LinkButton createOrgCancelBtn(final PageParameter pp) {
+		return null;
+	}
+
 	static Department getOrg2(final PageParameter pp) {
 		return _deptService.getBean(getPermissionOrg(pp).getId());
 	}
@@ -49,15 +54,15 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	}
 
 	protected static String getUrl(final PageParameter pp,
-			final Class<? extends AbstractOrgMgrTPage> pClass, String params) {
-		final String orgid = pp.getParameter("orgId");
-		if (StringUtils.hasText(orgid)) {
-			if (params != null) {
-				params += "&orgId=" + orgid;
-			} else {
-				params = "orgId=" + orgid;
-			}
-		}
+			final Class<? extends AbstractOrgMgrTPage> pClass, final String params) {
+		// final String orgid = pp.getParameter("orgId");
+		// if (StringUtils.hasText(orgid)) {
+		// if (params != null) {
+		// params += "&orgId=" + orgid;
+		// } else {
+		// params = "orgId=" + orgid;
+		// }
+		// }
 		return uFactory.getUrl(pp, pClass, params);
 	}
 

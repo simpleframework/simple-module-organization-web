@@ -30,8 +30,7 @@ public class UserMgr_OnlineTPage extends UserMgrTPage {
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Department org = getOrg2(cp);
 			if (org != null) {
-				cp.addFormParameter("orgId", org.getId());
-				return _accountService.queryAccounts(getOrg2(cp), Account.TYPE_ONLINE);
+				return _accountService.queryAccounts(org, Account.TYPE_ONLINE);
 			}
 			return null;
 		}

@@ -152,9 +152,6 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		@Override
 		public IDataQuery<?> createDataObjectQuery(final ComponentParameter cp) {
 			final Department org = getOrg2(cp);
-			if (org != null) {
-				cp.addFormParameter("orgId", org.getId());
-			}
 			final List<Department> list = list(org);
 			list.add(0, org);
 			return new ListDataQuery<Department>(list);

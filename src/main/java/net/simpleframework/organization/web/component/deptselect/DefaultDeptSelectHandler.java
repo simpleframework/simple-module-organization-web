@@ -10,6 +10,7 @@ import java.util.List;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.ctx.permission.PermissionDept;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.common.element.Checkbox;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -18,10 +19,10 @@ import net.simpleframework.mvc.component.ext.deptselect.IDeptSelectHandle;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.mvc.component.ui.dictionary.DictionaryBean.DictionaryTreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
+import net.simpleframework.mvc.ctx.permission.IPagePermissionHandler;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.web.OrganizationPermissionHandler._PermissionDept;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -35,20 +36,19 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 	@Override
 	public Collection<PermissionDept> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final PermissionDept parent) {
-		final Department pdept = parent != null ? (Department) ((_PermissionDept) parent)
-				.getDepartment() : null;
+		final IPagePermissionHandler permission = cp.getPermission();
+		final Department pdept = parent != null ? _deptService.getBean(parent.getId()) : null;
 		IDataQuery<Department> dq = null;
 		// 仅显示机构
 		final boolean borg = (Boolean) cp.getBeanProperty("org");
 		if (borg) {
 			dq = _deptService.queryDepartments(pdept, EDepartmentType.organization);
 		} else {
-			Department org;
-			if (!cp.isLmanager() && (org = _deptService.getBean(cp.getParameter("orgId"))) != null) {
+			final PermissionDept org = AbstractMVCPage.getPermissionOrg(cp);
+			if (org.getId() != null) {
 				// 单机构
 				if (parent == null) {
-					final PermissionDept _dept = new _PermissionDept(org);
-					return Arrays.asList(_dept);
+					return Arrays.asList(org);
 				} else {
 					dq = _deptService.queryDepartments(pdept, EDepartmentType.department);
 				}
@@ -60,8 +60,7 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 		final List<PermissionDept> al = new ArrayList<PermissionDept>();
 		Department dept;
 		while ((dept = dq.next()) != null) {
-			final PermissionDept _dept = new _PermissionDept(dept);
-			al.add(_dept);
+			al.add(permission.getDept(dept));
 		}
 		return al;
 	}
