@@ -381,12 +381,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public PermissionDept getParent() {
-			final Department dept = _deptService.getBean(oDept.getParentId());
-			return dept == null ? super.getParent() : new _PermissionDept(dept);
-		}
-
-		@Override
 		public boolean hasChild() {
 			return _deptService.hasChild(oDept);
 		}
@@ -403,15 +397,18 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
+		public ID getParentId() {
+			return oDept.getParentId();
+		}
+
+		private Department getOrg() {
+			return _deptService.getOrg(_deptService.getBean(getId()));
+		}
+
+		@Override
 		public ID getDomainId() {
-			ID domainId = super.getDomainId();
-			if (domainId == null) {
-				final Department org = _deptService.getOrg(_deptService.getBean(getId()));
-				if (org != null) {
-					setDomainId(domainId = org.getId());
-				}
-			}
-			return domainId;
+			final Department org = getOrg();
+			return org != null ? org.getId() : null;
 		}
 
 		@Override
@@ -425,7 +422,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public String getDomainText() {
-			final Department org = _deptService.getBean(getDomainId());
+			final Department org = getOrg();
 			return org != null ? org.getText() : super.getDomainText();
 		}
 
