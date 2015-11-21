@@ -73,15 +73,14 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		final Object orgId = _chart.getOrgId();
 
 		final PropField f1 = new PropField($m("AddMembersPage.0")).addComponents(
-				new InputComp("roleId").setType(EInputCompType.hidden).setDefaultValue(
-						String.valueOf(role.getId())),
+				InputComp.hidden("roleId").setDefaultValue(String.valueOf(role.getId())),
 				new InputComp("member_type").setType(EInputCompType.select).setDefaultEnumValue(
 						ERoleMemberType.user, ERoleMemberType.role));
 
 		final String utype = ERoleMemberType.user.name();
 		final PropField f2 = new PropField($m("AddMembersPage.1")).addComponents(
-				new InputComp("member_id").setType(EInputCompType.hidden),
-				new InputComp("member_val").setType(EInputCompType.textButton).addEvent(
+				InputComp.hidden("member_id"),
+				InputComp.textButton("member_val").addEvent(
 						EElementEvent.click,
 						"$Actions[$F('member_type') == '" + utype
 								+ "' ? 'dictUserSelect' : 'dictRoleSelect']('orgId=" + orgId + "');"));
@@ -90,8 +89,8 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 				"member_primary").setType(EInputCompType.checkbox));
 
 		final PropField f4 = new PropField($m("AddMembersPage.3")).addComponents(
-				new InputComp("member_deptId").setType(EInputCompType.hidden),
-				new InputComp("member_deptVal").setType(EInputCompType.textButton).addEvent(
+				InputComp.hidden("member_deptId"),
+				InputComp.textButton("member_deptVal").addEvent(
 						EElementEvent.click,
 						"if ($F('member_type') == '" + utype + "') $Actions['dictDeptSelect']('orgId="
 								+ orgId + "'); else alert('" + $m("AddMembersPage.4") + "');"));

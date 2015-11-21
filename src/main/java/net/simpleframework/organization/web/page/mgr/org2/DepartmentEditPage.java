@@ -109,15 +109,15 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 			return;
 		}
 
-		final PropField f1 = new PropField($m("category_edit.0")).addComponents(new InputComp(
-				"category_id").setType(EInputCompType.hidden), new InputComp("category_text"));
+		final PropField f1 = new PropField($m("category_edit.0")).addComponents(
+				InputComp.hidden("category_id"), new InputComp("category_text"));
 		final PropField f2 = new PropField($m("category_edit.1")).addComponents(new InputComp(
 				"category_name"));
 
 		final PropField f3 = new PropField($m("category_edit.2")).addComponents(
-				new InputComp("category_parentId").setType(EInputCompType.hidden),
-				new InputComp("category_parentText")
-						.setType(EInputCompType.textButton)
+				InputComp.hidden("category_parentId"),
+				InputComp
+						.textButton("category_parentText")
 						.setAttributes("readonly")
 						.addEvent(EElementEvent.click,
 								"$Actions['DepartmentEditPage_deptSelect']('orgId=" + org.getId() + "');"));

@@ -110,10 +110,9 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 			return;
 		}
 
-		final PropField f1 = new PropField($m("category_edit.0")).addComponents(new InputComp(
-				"chartId").setDefaultValue(rchart.getId()).setType(EInputCompType.hidden),
-				new InputComp("category_id").setType(EInputCompType.hidden), new InputComp(
-						"category_text"));
+		final PropField f1 = new PropField($m("category_edit.0")).addComponents(
+				InputComp.hidden("chartId").setDefaultValue(rchart.getId()),
+				InputComp.hidden("category_id"), new InputComp("category_text"));
 		final PropField f2 = new PropField($m("category_edit.1")).addComponents(new InputComp(
 				"category_name"));
 
@@ -124,9 +123,9 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 				.select("role_type", ERoleType.class) : InputComp.label(r.getRoleType()));
 
 		final PropField f5 = new PropField($m("category_edit.2")).addComponents(
-				new InputComp("category_parentId").setType(EInputCompType.hidden),
-				new InputComp("category_parentText")
-						.setType(EInputCompType.textButton)
+				InputComp.hidden("category_parentId"),
+				InputComp
+						.textButton("category_parentText")
 						.setAttributes("readonly")
 						.addEvent(EElementEvent.click,
 								"$Actions['RoleEditPage_roleSelect']('chartId=" + rchart.getId() + "');"));
