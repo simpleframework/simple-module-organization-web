@@ -104,8 +104,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='RoleMgrTPage clearfix'>");
-		sb.append(" <div class='lnav'>");
+		sb.append("<div class='RoleMgrTPage clearfix'><table width='100%'><tr>");
+		sb.append(" <td valign='top' style='width: 17%;'><div class='lnav'>");
 		sb.append("  <div class='lbl'>#(RoleMgrTPage.3)</div>");
 		final RoleChart _chart = _getRoleChart(pp);
 		if (_chart != null) {
@@ -121,8 +121,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 						.append("');\">").append(chart.getText()).append("</div>");
 			}
 		}
-		sb.append(" </div>");
-		sb.append(" <div class='rtbl'>");
+		sb.append(" </div></td>");
+		sb.append(" <td valign='top'><div class='rtbl'>");
 		if (_chart != null) {
 			sb.append("  <div class='tbar'>");
 			sb.append(ElementList.of(
@@ -131,8 +131,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 			sb.append("  </div>");
 		}
 		sb.append("  <div id='idRoleMgrTPage_tbl'></div>");
-		sb.append(" </div>");
-		sb.append("</div>");
+		sb.append(" </div></td>");
+		sb.append("</tr></table></div>");
 		return sb.toString();
 	}
 

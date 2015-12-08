@@ -52,17 +52,13 @@
 
 .RoleMgrTPage .lnav {
   padding: 41px 0 20px 0;
-  float: left;
-  width: 180px;
   text-align: right;
   position: relative;
 }
 
 .RoleMgrTPage .rtbl {
   border-left: 1px solid #aaa;
-  float: left;
   min-height: 480px;
-  width: 896px;
   background-color: #fff;
 }
 
