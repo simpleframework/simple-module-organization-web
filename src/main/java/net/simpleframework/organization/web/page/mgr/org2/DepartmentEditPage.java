@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.util.Map;
 
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -40,7 +41,7 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		addFormValidationBean(pp);
 		// 部门选取字典
 		addComponentBean(pp, "DepartmentEditPage_deptSelect", DeptSelectBean.class)
-				.setMultiple(false).setBindingId("category_parentId")
+				.setClearAction("false").setMultiple(false).setBindingId("category_parentId")
 				.setBindingText("category_parentText");
 	}
 
@@ -70,7 +71,10 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 		} else {
 			parentId = pp.getParameter("parentId");
 		}
-		final Department parent = _deptService.getBean(parentId);
+		Department parent = _deptService.getBean(parentId);
+		if (dept == null && parent == null) {
+			parent = _deptService.getBean(AbstractMVCPage.getPermissionOrg(pp).getDomainId());
+		}
 		if (parent != null) {
 			dataBinding.put("category_parentId", parent.getId());
 			dataBinding.put("category_parentText", parent.getText());
