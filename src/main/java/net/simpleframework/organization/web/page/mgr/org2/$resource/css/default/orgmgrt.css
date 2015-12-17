@@ -107,17 +107,3 @@
   background-color: #fff;
   vertical-align: top;
 }
-
-/**-------------Tabs_BlankPage-----------------**/
-.AbstractOrgMgrPage .Tabs_BlankPage .Tabs_cc {
-  border: 0;
-}
-
-.AbstractOrgMgrPage .Tabs_BlankPage .Tabs_tb {
-  border: 0;
-  border-bottom: 1px solid #ccc;
-}
-
-.AbstractOrgMgrPage .Tabs_BlankPage .Tabs_cc .tbar {
-  border-color: #ccc;
-}
