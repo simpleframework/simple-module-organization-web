@@ -12,6 +12,7 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -41,7 +42,6 @@ import net.simpleframework.organization.Account;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
-import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
 import net.simpleframework.organization.web.page.attri.AccountStatPage;
@@ -256,7 +256,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	public static class _AccountEditPage extends AccountEditPage {
 		@Override
 		public String getPageRole(final PageParameter pp) {
-			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+			return PermissionConst.ROLE_DOMAIN_MANAGER;
 		}
 
 		@Override
@@ -280,7 +280,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	public static class _UserRolesPage extends UserRolesPage {
 		@Override
 		public String getPageRole(final PageParameter pp) {
-			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+			return PermissionConst.ROLE_DOMAIN_MANAGER;
 		}
 
 		@Override

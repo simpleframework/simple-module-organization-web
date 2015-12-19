@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
 import net.simpleframework.mvc.PageParameter;
@@ -11,7 +12,6 @@ import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationUrlsFactory;
 
@@ -33,7 +33,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 
 	@Override
 	public String getPageRole(final PageParameter pp) {
-		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		return PermissionConst.ROLE_DOMAIN_MANAGER;
 	}
 
 	@Override

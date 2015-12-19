@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.JS;
@@ -24,7 +25,6 @@ import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.Role.ERoleType;
 import net.simpleframework.organization.RoleChart;
-import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.page.mgr.AddMembersPage;
 import net.simpleframework.organization.web.page.mgr.OmgrUtils;
 import net.simpleframework.organization.web.page.mgr.t1.RoleMembersPage;
@@ -166,7 +166,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 
 		@Override
 		public String getPageRole(final PageParameter pp) {
-			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+			return PermissionConst.ROLE_DOMAIN_MANAGER;
 		}
 
 		@Override
@@ -178,7 +178,7 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 	public static class _AddMembersPage extends AddMembersPage {
 		@Override
 		public String getPageRole(final PageParameter pp) {
-			return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+			return PermissionConst.ROLE_DOMAIN_MANAGER;
 		}
 
 		@Override

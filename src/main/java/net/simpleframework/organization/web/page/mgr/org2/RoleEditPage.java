@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Map;
 
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
@@ -23,7 +24,6 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.Role.ERoleType;
 import net.simpleframework.organization.RoleChart;
-import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.component.roleselect.DefaultRoleSelectHandler;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 import net.simpleframework.organization.web.page.mgr.OmgrUtils;
@@ -49,7 +49,7 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 
 	@Override
 	public String getPageRole(final PageParameter pp) {
-		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		return PermissionConst.ROLE_DOMAIN_MANAGER;
 	}
 
 	@Override

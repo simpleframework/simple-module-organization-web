@@ -4,6 +4,7 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.util.Map;
 
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IPageHandler.PageSelector;
@@ -23,7 +24,6 @@ import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.impl.OrganizationContext;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -47,7 +47,7 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 
 	@Override
 	public String getPageRole(final PageParameter pp) {
-		return OrganizationContext.ROLE_ORGANIZATION_MANAGER;
+		return PermissionConst.ROLE_DOMAIN_MANAGER;
 	}
 
 	@Override
