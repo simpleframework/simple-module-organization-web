@@ -111,14 +111,14 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		if (_chart != null) {
 			final IDataQuery<RoleChart> dq = _rolecService.queryOrgCharts(_deptService.getBean(_chart
 					.getOrgId()));
-			final RoleChart chart;
+			RoleChart chart;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");
 				if (chart.equals(_chart)) {
 					sb.append(" active");
 				}
 				sb.append("' onclick=\"$Actions.reloc('chartId=").append(chart.getId())
-						.append("');\">").append(chart.getText()).append(chart.);
+						.append("');\">").append(chart.getText());
 				sb.append("</div>");
 			}
 		}
