@@ -106,6 +106,14 @@ public class AccountStatPage extends AbstractAccountPage {
 		return JavascriptForward.RELOC;
 	}
 
+	public String toTitleHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='tt'>");
+		sb.append(" <strong>#(AccountStatPage.10)</strong>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
 	public static class AccountMailBindingPage extends FormTableRowTemplatePage {
 		@Override
 		protected void onForward(final PageParameter pp) throws Exception {

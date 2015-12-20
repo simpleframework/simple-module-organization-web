@@ -65,7 +65,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 		// 帐号信息
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "UserMgrTPage_accountPage",
-				AccountStatPage.class);
+				_AccountStatPage.class);
 		addWindowBean(pp, "UserMgrTPage_accountWin", ajaxRequest).setTitle($m("AccountMgrPage.18"))
 				.setHeight(450).setWidth(380);
 
@@ -286,6 +286,13 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		@Override
 		protected Department getOrg(final PageParameter pp) {
 			return AbstractOrgMgrTPage.getOrg2(pp);
+		}
+	}
+
+	public static class _AccountStatPage extends AccountStatPage {
+		@Override
+		public String toTitleHTML(final PageParameter pp) {
+			return "";
 		}
 	}
 

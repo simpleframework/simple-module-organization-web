@@ -114,3 +114,8 @@
   background-color: #fff;
   vertical-align: top;
 }
+
+.AccountStatPage {
+  margin-top: -1px;
+  width: 100%;
+}
