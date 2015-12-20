@@ -115,7 +115,11 @@
   vertical-align: top;
 }
 
-.AccountStatPage {
+.ui-window .AccountStatPage {
   margin-top: -1px;
   width: 100%;
+}
+
+.ui-window .AccountStatPage table.form_tbl .l {
+  width: 110px;
 }
