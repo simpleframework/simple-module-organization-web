@@ -12,7 +12,6 @@ import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.Role;
-import net.simpleframework.organization.Role.ERoleMark;
 import net.simpleframework.organization.Role.ERoleType;
 import net.simpleframework.organization.RoleChart;
 
@@ -76,9 +75,6 @@ public abstract class RoleSelectUtils implements IOrganizationContextAware {
 			img = "role_script";
 		} else {
 			img = "role";
-		}
-		if (role.getRoleMark() == ERoleMark.builtIn) {
-			img += "_lock";
 		}
 		return imgBase + img + ".png";
 	}
