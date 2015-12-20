@@ -79,6 +79,13 @@
   font-weight: bold;
 }
 
+.RoleMgrTPage .lnav .litem .num {
+  color: #777;
+  font-size: 9px;
+  font-weight: normal;
+  margin-left: 5px;
+}
+
 .RoleMgr_MembersTPage>table {
   height: 480px;  
 }

@@ -85,7 +85,7 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 					public void setAttributes(final TreeNode tn) {
 						tn.setContextMenu(contextMenu);
 						final RoleChart chart = (RoleChart) tn.getDataObject();
-						final int c = _roleService.queryRoles(chart).getCount();
+						final int c = chart.getRoles();
 						if (c > 0) {
 							tn.setPostfixText("(" + c + ")");
 						}

@@ -119,6 +119,10 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				}
 				sb.append("' onclick=\"$Actions.reloc('chartId=").append(chart.getId())
 						.append("');\">").append(chart.getText());
+				final int roles = chart.getRoles();
+				if (roles > 0) {
+					sb.append(new SpanElement("(" + roles + ")").setClassName("num"));
+				}
 				sb.append("</div>");
 			}
 		}
