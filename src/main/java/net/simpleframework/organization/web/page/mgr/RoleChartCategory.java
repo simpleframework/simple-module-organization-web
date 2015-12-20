@@ -42,12 +42,12 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 		final TreeNodes nodes = TreeNodes.of();
 		if (parent == null) {
 			TreeNode tn = createRoot(treeBean, $m("RoleChartCategory.0"), $m("RoleChartCategory.1"));
-			tn.setImage(RoleChartSelectUtils.icon_chart(cp, "chart_g.png"));
+			tn.setImage(RoleChartSelectUtils.getRolechartIcon(cp, "chart_g.png"));
 			tn.setContextMenu("none");
 			nodes.add(tn);
 			tn = new TreeNode(treeBean, parent, $m("RoleChartCategory.2"));
 			tn.setOpened(true);
-			tn.setImage(RoleChartSelectUtils.icon_chart(cp, "chart_d.png"));
+			tn.setImage(RoleChartSelectUtils.getRolechartIcon(cp, "chart_d.png"));
 			tn.setContextMenu("none");
 			nodes.add(tn);
 		} else {

@@ -68,12 +68,12 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 					final boolean showGlobalChart = (Boolean) nCP.getBeanProperty("showGlobalChart");
 					if (showGlobalChart) {
 						final TreeNode n = new TreeNode(treeBean, null, $m("RoleChartSelectRegistry.0"));
-						n.setImage(RoleChartSelectUtils.icon_chart(nCP, "chart_g.png"));
+						n.setImage(RoleChartSelectUtils.getRolechartIcon(nCP, "chart_g.png"));
 						n.setOpened(true);
 						nodes.add(n);
 					}
 					final TreeNode n = new TreeNode(treeBean, null, $m("RoleChartSelectRegistry.1"));
-					n.setImage(RoleChartSelectUtils.icon_chart(nCP, "chart_d.png"));
+					n.setImage(RoleChartSelectUtils.getRolechartIcon(nCP, "chart_d.png"));
 					n.setOpened(true);
 					nodes.add(n);
 				} else {

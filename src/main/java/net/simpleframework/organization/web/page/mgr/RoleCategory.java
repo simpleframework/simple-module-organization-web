@@ -75,8 +75,7 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 			final TreeNodes nodes = TreeNodes.of();
 			final TreeNode tn = createRoot(treeBean, $m("RoleCategory.0"), $m("RoleCategory.1"));
 			tn.setContextMenu("none");
-			final RoleChart chart = getRoleChart(cp);
-			tn.setImage(RoleChartSelectUtils.icon_chart(cp, chart));
+			tn.setImage(RoleChartSelectUtils.getRolechartIcon(cp, "chart.png"));
 			tn.setAcceptdrop(true);
 			nodes.add(tn);
 			return nodes;

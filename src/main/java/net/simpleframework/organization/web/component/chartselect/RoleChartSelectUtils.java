@@ -13,7 +13,6 @@ import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.RoleChart;
-import net.simpleframework.organization.RoleChart.ERoleChartMark;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -23,12 +22,7 @@ import net.simpleframework.organization.RoleChart.ERoleChartMark;
  */
 public abstract class RoleChartSelectUtils {
 
-	public static String icon_chart(final PageParameter pp, final RoleChart chart) {
-		return icon_chart(pp, chart.getChartMark() == ERoleChartMark.builtIn ? "chart_lock.png"
-				: "chart.png");
-	}
-
-	public static String icon_chart(final PageParameter pp, final String filename) {
+	public static String getRolechartIcon(final PageParameter pp, final String filename) {
 		return ComponentUtils.getCssResourceHomePath(pp, RoleChartSelectBean.class) + "/images/"
 				+ filename;
 	}
@@ -40,7 +34,7 @@ public abstract class RoleChartSelectUtils {
 		if (coll != null) {
 			for (final RoleChart chart : coll) {
 				final TreeNode tn = new TreeNode(treeBean, parent, chart);
-				tn.setImage(icon_chart(cp, chart));
+				tn.setImage(getRolechartIcon(cp, "chart.png"));
 				if (callback != null) {
 					callback.setAttributes(tn);
 				}
