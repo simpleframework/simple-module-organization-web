@@ -50,14 +50,17 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		addFormValidationBean(pp);
 
 		// 用户选择字典
-		addComponentBean(pp, "dictUserSelect", UserSelectBean.class).setMultiple(true)
+		addComponentBean(pp, "AddMembersPage_userSelect", UserSelectBean.class).setMultiple(true)
 				.setBindingId("member_id").setBindingText("member_val");
 		// 角色选择字典
-		addComponentBean(pp, "dictRoleSelect", RoleSelectBean.class).setBindingId("member_id")
-				.setBindingText("member_val");
+		addComponentBean(pp, "AddMembersPage_roleSelect", RoleSelectBean.class).setBindingId(
+				"member_id").setBindingText("member_val");
+		addComponentBean(pp, "AddMembersPage_deptSelect", DeptSelectBean.class).setBindingId(
+				"member_id").setBindingText("member_val");
+
 		// 部门选择
-		addComponentBean(pp, "dictDeptSelect", DeptSelectBean.class).setBindingId("member_deptId")
-				.setBindingText("member_deptVal");
+		addComponentBean(pp, "AddMembersPage_deptSelect2", DeptSelectBean.class).setBindingId(
+				"member_deptId2").setBindingText("member_deptVal2");
 	}
 
 	@Override
@@ -75,25 +78,32 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		final PropField f1 = new PropField($m("AddMembersPage.0")).addComponents(
 				InputComp.hidden("roleId").setDefaultValue(String.valueOf(role.getId())),
 				new InputComp("member_type").setType(EInputCompType.select).setDefaultEnumValue(
-						ERoleMemberType.user, ERoleMemberType.role));
+						ERoleMemberType.user, ERoleMemberType.role, ERoleMemberType.dept));
 
-		final String utype = ERoleMemberType.user.name();
+		final StringBuilder click = new StringBuilder();
+		click.append("var mval = $F('member_type');");
+		click.append("var params = 'orgId=").append(orgId).append("';");
+		click.append("if (mval == '").append(ERoleMemberType.user.name()).append("') {");
+		click.append(" $Actions['AddMembersPage_userSelect'](params);");
+		click.append("} else if (mval == '").append(ERoleMemberType.role.name()).append("') {");
+		click.append(" $Actions['AddMembersPage_roleSelect'](params);");
+		click.append("} else {");
+		click.append(" $Actions['AddMembersPage_deptSelect'](params);");
+		click.append("}");
 		final PropField f2 = new PropField($m("AddMembersPage.1")).addComponents(
 				InputComp.hidden("member_id"),
-				InputComp.textButton("member_val").addEvent(
-						EElementEvent.click,
-						"$Actions[$F('member_type') == '" + utype
-								+ "' ? 'dictUserSelect' : 'dictRoleSelect']('orgId=" + orgId + "');"));
+				InputComp.textButton("member_val").addEvent(EElementEvent.click, click.toString()));
 
 		final PropField f3 = new PropField($m("AddMembersPage.2")).addComponents(new InputComp(
 				"member_primary").setType(EInputCompType.checkbox));
 
 		final PropField f4 = new PropField($m("AddMembersPage.3")).addComponents(
-				InputComp.hidden("member_deptId"),
-				InputComp.textButton("member_deptVal").addEvent(
+				InputComp.hidden("member_deptId2"),
+				InputComp.textButton("member_deptVal2").addEvent(
 						EElementEvent.click,
-						"if ($F('member_type') == '" + utype + "') $Actions['dictDeptSelect']('orgId="
-								+ orgId + "'); else alert('" + $m("AddMembersPage.4") + "');"));
+						"if ($F('member_type') == '" + ERoleMemberType.user.name()
+								+ "') $Actions['AddMembersPage_deptSelect2']('orgId=" + orgId
+								+ "'); else alert('" + $m("AddMembersPage.4") + "');"));
 
 		final PropField f5 = new PropField($m("Description")).addComponents(new InputComp(
 				"member_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
@@ -111,9 +121,16 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 				cp.getParameter("member_type"));
 
 		final boolean primary = Convert.toBool(cp.getParameter("member_primary"));
-		final String deptId = cp.getParameter("member_deptId");
+		final String deptId = cp.getParameter("member_deptId2");
 		final String description = cp.getParameter("member_description");
-		final IDbBeanService<?> mgr = (mType == ERoleMemberType.user ? _userService : _roleService);
+		IDbBeanService<?> mgr;
+		if (mType == ERoleMemberType.user) {
+			mgr = _userService;
+		} else if (mType == ERoleMemberType.role) {
+			mgr = _roleService;
+		} else {
+			mgr = _deptService;
+		}
 		final ArrayList<RoleMember> beans = new ArrayList<RoleMember>();
 		for (final String id : StringUtils.split(cp.getParameter("member_id"), ",")) {
 			final IIdBeanAware bean = (IIdBeanAware) mgr.getBean(id);

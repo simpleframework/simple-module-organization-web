@@ -14,12 +14,12 @@ import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.tree.AbstractTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
-import net.simpleframework.mvc.template.AbstractTemplatePage;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.Role;
@@ -170,8 +170,11 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
-		protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
-			return _AddMembersPage.class;
+		protected void addMemberWindow(final PageParameter pp) {
+			final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ajax_addMemberPage",
+					_AddMembersPage.class);
+			addWindowBean(pp, "addMemberWindow", ajaxRequest).setTitle($m("RoleMembersPage.1"))
+					.setHeight(340).setWidth(320);
 		}
 	}
 

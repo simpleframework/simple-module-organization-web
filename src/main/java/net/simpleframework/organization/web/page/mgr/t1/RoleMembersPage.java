@@ -58,10 +58,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		pp.addImportCSS(RoleMembersPage.class, "/role_members.css");
 
 		// 添加成员
-		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ajax_addMemberPage",
-				getAddMembersPageClass());
-		addWindowBean(pp, "addMemberWindow", ajaxRequest).setTitle($m("RoleMembersPage.1"))
-				.setHeight(340).setWidth(320);
+		addMemberWindow(pp);
 
 		// 成员列表
 		addTablePagerBean(pp);
@@ -93,8 +90,11 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		return tablePager;
 	}
 
-	protected Class<? extends AbstractTemplatePage> getAddMembersPageClass() {
-		return AddMembersPage.class;
+	protected void addMemberWindow(final PageParameter pp) {
+		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "ajax_addMemberPage",
+				AddMembersPage.class);
+		addWindowBean(pp, "addMemberWindow", ajaxRequest).setTitle($m("RoleMembersPage.1"))
+				.setHeight(340).setWidth(320);
 	}
 
 	@Transaction(context = IOrganizationContext.class)
