@@ -32,6 +32,11 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 	}
 
 	@Override
+	protected int getCategoryWidth(final PageParameter pp) {
+		return 185;
+	}
+
+	@Override
 	public String[] getDependentComponents(final PageParameter pp) {
 		return new String[] { WindowRegistry.WINDOW };
 	}
