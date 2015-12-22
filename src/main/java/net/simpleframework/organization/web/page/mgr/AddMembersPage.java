@@ -8,6 +8,7 @@ import net.simpleframework.ado.bean.IIdBeanAware;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
@@ -55,8 +56,9 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		// 角色选择字典
 		addComponentBean(pp, "AddMembersPage_roleSelect", RoleSelectBean.class).setBindingId(
 				"member_id").setBindingText("member_val");
-		addComponentBean(pp, "AddMembersPage_deptSelect", DeptSelectBean.class).setBindingId(
-				"member_id").setBindingText("member_val");
+		addComponentBean(pp,
+				new KVMap().add("name", "AddMembersPage_deptSelect").add("multiple", true),
+				DeptSelectBean.class).setBindingId("member_id").setBindingText("member_val");
 
 		// 部门选择
 		addComponentBean(pp, "AddMembersPage_deptSelect2", DeptSelectBean.class).setBindingId(
