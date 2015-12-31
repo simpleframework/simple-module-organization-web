@@ -72,8 +72,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "RoleMgrTPage_tbl")
-				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "RoleMgrTPage_tbl",
+				RoleTbl.class).setContainerId("idRoleMgrTPage_tbl");
 		tablePager
 				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0")).setSort(false))
 				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 150).setSort(false))

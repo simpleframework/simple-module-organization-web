@@ -11,6 +11,7 @@ import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
+import net.simpleframework.mvc.component.ui.pager.ITablePagerHandler;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
@@ -39,9 +40,10 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	}
 
 	@Override
-	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name) {
-		return (TablePagerBean) super.addTablePagerBean(pp, name).setResize(false)
-				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30);
+	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
+			final Class<? extends ITablePagerHandler> tblClass) {
+		return (TablePagerBean) super.addTablePagerBean(pp, name, tblClass).setPagerBarLayout(
+				EPagerBarLayout.bottom);
 	}
 
 	@Override

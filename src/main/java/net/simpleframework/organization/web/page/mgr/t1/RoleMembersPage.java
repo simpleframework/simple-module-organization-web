@@ -75,10 +75,10 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) addComponentBean(pp,
-				"RoleMembersPage_tbl", TablePagerBean.class).setFilter(false).setSort(false)
-				.setPageItems(30).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setContainerId("idRoleMembersPage_tbl").setHandlerClass(MemberTable.class);
+		final TablePagerBean tablePager = (TablePagerBean) super
+				.addTablePagerBean(pp, "RoleMembersPage_tbl", MemberTable.class).setFilter(false)
+				.setSort(false).setPagerBarLayout(EPagerBarLayout.bottom)
+				.setContainerId("idRoleMembersPage_tbl");
 		tablePager
 				.addColumn(
 						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60)

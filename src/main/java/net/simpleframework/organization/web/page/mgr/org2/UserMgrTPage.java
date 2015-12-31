@@ -104,8 +104,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
-				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
+		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl",
+				UserTbl.class).setContainerId("idUserMgrTPage_tbl");
 		tablePager.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_NAME())
 				.addColumn(new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
 					@Override

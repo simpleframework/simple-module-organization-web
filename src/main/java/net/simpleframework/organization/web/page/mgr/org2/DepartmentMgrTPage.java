@@ -83,9 +83,10 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
-				"DepartmentMgrTPage_tbl").setSort(false).setPagerBarLayout(EPagerBarLayout.none)
+				"DepartmentMgrTPage_tbl", DepartmentTbl.class).setSort(false)
+				.setPagerBarLayout(EPagerBarLayout.none)
 				.setJsLoadedCallback("DepartmentMgrTPage.jsLoaded();")
-				.setContainerId("idDepartmentMgrTPage_tbl").setHandlerClass(DepartmentTbl.class);
+				.setContainerId("idDepartmentMgrTPage_tbl");
 		tablePager
 				.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
 				.addColumn(new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150))
