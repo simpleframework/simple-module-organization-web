@@ -32,7 +32,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
-import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
@@ -106,7 +105,6 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl")
-				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idUserMgrTPage_tbl").setHandlerClass(UserTbl.class);
 		tablePager.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_NAME())
 				.addColumn(new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {

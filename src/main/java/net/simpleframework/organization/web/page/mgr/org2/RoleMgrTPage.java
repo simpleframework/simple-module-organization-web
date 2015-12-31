@@ -28,7 +28,6 @@ import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
-import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
@@ -74,7 +73,6 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "RoleMgrTPage_tbl")
-				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30)
 				.setContainerId("idRoleMgrTPage_tbl").setHandlerClass(RoleTbl.class);
 		tablePager
 				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0")).setSort(false))

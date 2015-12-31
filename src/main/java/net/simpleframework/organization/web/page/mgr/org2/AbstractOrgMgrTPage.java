@@ -10,6 +10,8 @@ import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
+import net.simpleframework.mvc.component.ui.pager.EPagerBarLayout;
+import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.web.IOrganizationWebContext;
@@ -34,6 +36,12 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	@Override
 	public String getPageRole(final PageParameter pp) {
 		return PermissionConst.ROLE_DOMAIN_MANAGER;
+	}
+
+	@Override
+	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name) {
+		return (TablePagerBean) super.addTablePagerBean(pp, name).setResize(false)
+				.setPagerBarLayout(EPagerBarLayout.bottom).setPageItems(30);
 	}
 
 	@Override
