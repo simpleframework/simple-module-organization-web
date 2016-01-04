@@ -150,7 +150,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				}
 
 				// 加入缓存
-				final String rkey = Convert.toString(role);
+				String rkey = Convert.toString(role);
+				final Object deptId = variables.get(PermissionConst.VAR_DEPTID);
+				if (deptId != null) {
+					rkey += ":" + deptId;
+				}
 				Boolean b = _MEMBERs.get(rkey);
 				if (b == null) {
 					_MEMBERs.put(rkey,
@@ -225,7 +229,10 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<ID> users(final Object role, final ID deptId, final Map<String, Object> variables) {
-		return new NestIterator<ID, User>(_roleService.users(getRoleObject(role, variables), deptId,
+		if (deptId != null) {
+			variables.put(PermissionConst.VAR_DEPTID, deptId);
+		}
+		return new NestIterator<ID, User>(_roleService.users(getRoleObject(role, variables),
 				variables)) {
 			@Override
 			protected ID change(final User n) {
