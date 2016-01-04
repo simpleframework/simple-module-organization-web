@@ -134,6 +134,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 			@Override
 			public boolean isMember(final Object role, final Map<String, Object> variables) {
+				variables.put(PermissionConst.VAR_USERID, this.getId());
+
 				String[] arr;
 				if (role instanceof String && (arr = StringUtils.split((String) role, ";")).length > 1) {
 					for (final String r : arr) {
@@ -142,9 +144,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 						}
 					}
 				}
+
 				if (role == null) {
 					return _roleService.isMember(oUser, (Role) null, variables);
 				}
+
+				// 加入缓存
 				final String rkey = Convert.toString(role);
 				Boolean b = _MEMBERs.get(rkey);
 				if (b == null) {
@@ -159,6 +164,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			@Override
 			public boolean isManager(final Map<String, Object> variables) {
 				if (_MANAGER == null) {
+					variables.put(PermissionConst.VAR_USERID, this.getId());
 					_MANAGER = _roleService.isManager(oUser, variables);
 				}
 				return _MANAGER;
