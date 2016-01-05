@@ -6,6 +6,7 @@ import net.simpleframework.ado.FilterItems;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.mvc.component.ui.autocomplete.AutocompleteData;
 import net.simpleframework.organization.Role;
 import net.simpleframework.organization.RoleChart;
 
@@ -18,10 +19,11 @@ import net.simpleframework.organization.RoleChart;
 public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 
 	@Override
-	public Object[] getData(final ComponentParameter cp, final String val, final String val2) {
+	public AutocompleteData[] getData(final ComponentParameter cp, final String val,
+			final String val2) {
 		String nVal = val2;
 		if (nVal.length() > 0 && nVal.charAt(0) == '#') {
-			final ArrayList<String> al = new ArrayList<String>();
+			final ArrayList<AutocompleteData> al = new ArrayList<AutocompleteData>();
 			nVal = nVal.substring(1);
 			final String[] arr = StringUtils.split(nVal, ":");
 			if (arr.length == 2) {
@@ -32,7 +34,7 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 					while ((role = dq.next()) != null) {
 						final String rn = role.getName();
 						if (rn.indexOf(arr[1]) > -1) {
-							al.add("#" + rChart.getName() + ":" + rn);
+							al.add(new AutocompleteData("#" + rChart.getName() + ":" + rn));
 						}
 					}
 				}
@@ -41,10 +43,10 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 						"name", nVal));
 				RoleChart rChart;
 				while ((rChart = dq.next()) != null) {
-					al.add("#" + rChart.getName());
+					al.add(new AutocompleteData("#" + rChart.getName()));
 				}
 			}
-			return al.toArray();
+			return al.toArray(new AutocompleteData[al.size()]);
 		}
 		return super.getData(cp, val, val2);
 	}

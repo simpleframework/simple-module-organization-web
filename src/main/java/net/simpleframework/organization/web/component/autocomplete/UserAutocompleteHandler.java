@@ -8,8 +8,10 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.autocomplete.AbstractAutocompleteHandler;
+import net.simpleframework.mvc.component.ui.autocomplete.AutocompleteData;
 import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -21,7 +23,8 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 		IOrganizationContextAware {
 
 	@Override
-	public Object[] getData(final ComponentParameter cp, final String val, final String val2) {
+	public AutocompleteData[] getData(final ComponentParameter cp, final String val,
+			final String val2) {
 		final StringBuilder sql = new StringBuilder("select a.* from ")
 				.append(_userService.getTablename()).append(" u left join ")
 				.append(_accountService.getTablename()).append(" a on u.id=a.id where 1=1");
@@ -34,11 +37,16 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 		sql.append(" and a.name like '%").append(val2).append("%'");
 		final IDataQuery<Account> dq = _accountService.getEntityManager().queryBeans(
 				new SQLValue(sql, params.toArray()));
-		final ArrayList<String> al = new ArrayList<String>();
+		final ArrayList<AutocompleteData> al = new ArrayList<AutocompleteData>();
 		Account account;
 		while ((account = dq.next()) != null) {
-			al.add(account.getName());
+			final User user = _accountService.getUser(account.getId());
+			final AutocompleteData data = new AutocompleteData(account.getName(), user.getText()
+					+ " (" + account.getName() + ")");
+			data.setTxt2(_deptService.getBean(user.getOrgId()) + " - "
+					+ _deptService.getBean(user.getDepartmentId()));
+			al.add(data);
 		}
-		return al.toArray();
+		return al.toArray(new AutocompleteData[al.size()]);
 	}
 }
