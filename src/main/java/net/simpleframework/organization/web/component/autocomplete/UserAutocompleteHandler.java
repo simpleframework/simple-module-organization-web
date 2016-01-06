@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.component.autocomplete;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import net.simpleframework.ado.db.common.SQLValue;
@@ -23,7 +24,7 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 		IOrganizationContextAware {
 
 	@Override
-	public AutocompleteData[] getData(final ComponentParameter cp, final String val,
+	public Enumeration<AutocompleteData> getData(final ComponentParameter cp, final String val,
 			final String val2) {
 		final StringBuilder sql = new StringBuilder("select a.* from ")
 				.append(_userService.getTablename()).append(" u left join ")
@@ -37,16 +38,23 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 		sql.append(" and a.name like '%").append(val2).append("%'");
 		final IDataQuery<Account> dq = _accountService.getEntityManager().queryBeans(
 				new SQLValue(sql, params.toArray()));
-		final ArrayList<AutocompleteData> al = new ArrayList<AutocompleteData>();
-		Account account;
-		while ((account = dq.next()) != null) {
-			final User user = _accountService.getUser(account.getId());
-			final AutocompleteData data = new AutocompleteData(account.getName(), user.getText()
-					+ " (" + account.getName() + ")");
-			data.setTxt2(_deptService.getBean(user.getOrgId()) + " - "
-					+ _deptService.getBean(user.getDepartmentId()));
-			al.add(data);
-		}
-		return al.toArray(new AutocompleteData[al.size()]);
+		return new Enumeration<AutocompleteData>() {
+			Account account;
+
+			@Override
+			public boolean hasMoreElements() {
+				return (account = dq.next()) != null;
+			}
+
+			@Override
+			public AutocompleteData nextElement() {
+				final User user = _accountService.getUser(account.getId());
+				final AutocompleteData data = new AutocompleteData(account.getName(), user.getText()
+						+ " (" + account.getName() + ")");
+				data.setTxt2(_deptService.getBean(user.getOrgId()) + " - "
+						+ _deptService.getBean(user.getDepartmentId()));
+				return data;
+			}
+		};
 	}
 }
