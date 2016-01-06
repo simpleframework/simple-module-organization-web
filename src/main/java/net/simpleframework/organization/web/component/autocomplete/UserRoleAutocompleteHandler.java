@@ -26,6 +26,7 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 			nVal = nVal.substring(1);
 			final String[] arr = StringUtils.split(nVal, ":");
 			if (arr.length == 2) {
+				final String sepChar = (String) cp.getBeanProperty("sepChar");
 				final RoleChart rChart = _rolecService.getRoleChartByName(arr[0]);
 				final IDataQuery<Role> dq = rChart != null ? _roleService.queryRoles(rChart) : null;
 				return new Enumeration<AutocompleteData>() {
@@ -40,7 +41,8 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 
 					@Override
 					public AutocompleteData nextElement() {
-						return new AutocompleteData("#" + rChart.getName() + ":" + rn);
+						final String txt = "#" + rChart.getName() + ":" + rn;
+						return new AutocompleteData(txt + sepChar, txt);
 					}
 				};
 			} else {
