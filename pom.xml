@@ -14,26 +14,22 @@
     <dependency>
       <groupId>net.simpleframework</groupId>
       <artifactId>simple-module-organization-service</artifactId>
-      <version>${simple.module.organization.service}</version>
     </dependency>
 
     <dependency>
       <groupId>net.simpleframework</groupId>
       <artifactId>simple-mvc-template</artifactId>
-      <version>${simple.mvc.template}</version>
     </dependency>
 
     <dependency>
       <groupId>net.simpleframework</groupId>
       <artifactId>simple-module-log-web</artifactId>
-      <version>${simple.module.log.web}</version>
       <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>net.simpleframework</groupId>
       <artifactId>simple-module-msg-web</artifactId>
-      <version>${simple.module.msg.web}</version>
       <optional>true</optional>
     </dependency>
 
