@@ -147,11 +147,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public PermissionDept getDept(final Object dept) {
-		final Department oDept = getDepartmentObject(dept);
-		if (oDept == null) {
-			return super.getDept(dept);
-		}
-		return new _PermissionDept(oDept);
+		return new _PermissionDept(getDepartmentObject(dept));
 	}
 
 	@Override
@@ -397,17 +393,17 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oDept.getId();
+			return oDept == null ? super.getId() : oDept.getId();
 		}
 
 		@Override
 		public String getName() {
-			return oDept.getName();
+			return oDept == null ? super.getName() : oDept.getName();
 		}
 
 		@Override
 		public String getText() {
-			return oDept.getText();
+			return oDept == null ? super.getText() : oDept.getText();
 		}
 
 		@Override
@@ -416,8 +412,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			return stat.getNums() - stat.getState_delete();
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Iterator<PermissionUser> users() {
+			if (oDept == null) {
+				return CollectionUtils.EMPTY_ITERATOR;
+			}
 			final IDataQuery<User> dq = _userService.queryUsers(getDepartmentObject(oDept));
 			return new AbstractIterator<PermissionUser>() {
 				private User user;
@@ -464,11 +464,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getParentId() {
-			return oDept.getParentId();
+			return oDept == null ? null : oDept.getParentId();
 		}
 
 		private Department getOrg() {
-			return _deptService.getOrg(_deptService.getBean(getId()));
+			return oDept == null ? null : _deptService.getOrg(_deptService.getBean(getId()));
 		}
 
 		@Override
@@ -479,6 +479,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public boolean isOrg() {
+			if (oDept == null) {
+				return false;
+			}
 			return oDept.getDepartmentType() == EDepartmentType.organization;
 		}
 
