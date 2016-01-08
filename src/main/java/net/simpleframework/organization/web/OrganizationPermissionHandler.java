@@ -446,7 +446,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public List<PermissionDept> getOrgChildren() {
-			if (isOrg()) {
+			if (oDept == null || isOrg()) {
 				return _children(_deptService.queryDepartments(oDept, EDepartmentType.organization));
 			} else {
 				return CollectionUtils.EMPTY_LIST();
