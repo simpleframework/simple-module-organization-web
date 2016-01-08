@@ -97,6 +97,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			}
 
 			@Override
+			public String getMobile() {
+				return oUser.getMobile();
+			}
+
+			@Override
 			public String getSex() {
 				return oUser.getSex();
 			}
