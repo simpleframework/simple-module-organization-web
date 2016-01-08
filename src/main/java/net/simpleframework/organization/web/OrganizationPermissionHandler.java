@@ -14,6 +14,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.CollectionUtils;
 import net.simpleframework.common.coll.CollectionUtils.AbstractIterator;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
 import net.simpleframework.ctx.permission.PermissionConst;
@@ -434,17 +435,29 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public boolean hasChild() {
-			return _deptService.hasChild(oDept);
+		public List<PermissionDept> getAllChildren() {
+			return _children(_deptService.queryChildren(oDept));
 		}
 
 		@Override
 		public List<PermissionDept> getChildren() {
+			return _children(_deptService.queryDepartments(oDept, EDepartmentType.department));
+		}
+
+		@Override
+		public List<PermissionDept> getOrgChildren() {
+			if (isOrg()) {
+				return _children(_deptService.queryDepartments(oDept, EDepartmentType.organization));
+			} else {
+				return CollectionUtils.EMPTY_LIST();
+			}
+		}
+
+		private List<PermissionDept> _children(final IDataQuery<Department> dq) {
 			final List<PermissionDept> l = new ArrayList<PermissionDept>();
-			final IDataQuery<Department> dq = _deptService.queryChildren(oDept);
 			Department dept;
 			while ((dept = dq.next()) != null) {
-				l.add(new _PermissionDept(dept));
+				l.add(getDept(dept));
 			}
 			return l;
 		}
