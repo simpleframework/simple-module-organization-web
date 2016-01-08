@@ -14,6 +14,7 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
+import net.simpleframework.common.coll.CollectionUtils.AbstractIterator;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
@@ -74,113 +75,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (oUser == null) {
 			return super.getUser(user);
 		}
-		return new PermissionUser() {
-			@Override
-			public ID getId() {
-				return oUser.getId();
-			}
-
-			@Override
-			public String getName() {
-				final Account account = _userService.getAccount(oUser.getId());
-				return account != null ? account.getName() : null;
-			}
-
-			@Override
-			public String getText() {
-				return oUser.getText();
-			}
-
-			@Override
-			public String getEmail() {
-				return oUser.getEmail();
-			}
-
-			@Override
-			public String getMobile() {
-				return oUser.getMobile();
-			}
-
-			@Override
-			public String getSex() {
-				return oUser.getSex();
-			}
-
-			@Override
-			public Date getBirthday() {
-				return oUser.getBirthday();
-			}
-
-			@Override
-			public String getDescription() {
-				return oUser.getDescription();
-			}
-
-			@Override
-			public PermissionDept getDept() {
-				PermissionDept dept = super.getDept();
-				if (dept == null || dept.getId() == null) {
-					setDept(dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
-				}
-				return dept;
-			}
-
-			@Override
-			public InputStream getPhotoStream() {
-				return _userService.getPhoto(oUser);
-			}
-
-			@Override
-			public ID getRoleId() {
-				return _roleService.getPrimaryRole(oUser).getId();
-			}
-
-			private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
-
-			@Override
-			public boolean isMember(final Object role, final Map<String, Object> variables) {
-				variables.put(PermissionConst.VAR_USERID, this.getId());
-
-				String[] arr;
-				if (role instanceof String && (arr = StringUtils.split((String) role, ";")).length > 1) {
-					for (final String r : arr) {
-						if (isMember(r, variables)) {
-							return true;
-						}
-					}
-				}
-
-				if (role == null) {
-					return _roleService.isMember(oUser, (Role) null, variables);
-				}
-
-				// 加入缓存
-				String rkey = Convert.toString(role);
-				final Object deptId = variables.get(PermissionConst.VAR_DEPTID);
-				if (deptId != null) {
-					rkey += ":" + deptId;
-				}
-				Boolean b = _MEMBERs.get(rkey);
-				if (b == null) {
-					_MEMBERs.put(rkey,
-							b = _roleService.isMember(oUser, getRoleObject(role, variables), variables));
-				}
-				return b;
-			}
-
-			private Boolean _MANAGER;
-
-			@Override
-			public boolean isManager(final Map<String, Object> variables) {
-				if (_MANAGER == null) {
-					variables.put(PermissionConst.VAR_USERID, this.getId());
-					_MANAGER = _roleService.isManager(oUser, variables);
-				}
-				return _MANAGER;
-			}
-
-			private static final long serialVersionUID = -2824016565752293671L;
-		};
+		return new _PermissionUser(oUser);
 	}
 
 	protected Role getRoleObject(final Object role, final Map<String, Object> variables) {
@@ -212,24 +107,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (oRole == null) {
 			return super.getRole(role, variables);
 		}
-		return new PermissionRole() {
-			@Override
-			public ID getId() {
-				return oRole.getId();
-			}
-
-			@Override
-			public String getName() {
-				return _roleService.toUniqueName(oRole);
-			}
-
-			@Override
-			public String getText() {
-				return oRole.getText();
-			}
-
-			private static final long serialVersionUID = 4548851646225261207L;
-		};
+		return new _PermissionRole(oRole);
 	}
 
 	@Override
@@ -370,10 +248,149 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return AbstractMVCPage.url(LoginWindowRedirect.class);
 	}
 
-	public static class _PermissionDept extends PermissionDept {
+	protected class _PermissionUser extends PermissionUser {
+		private final User oUser;
+
+		protected _PermissionUser(final User oUser) {
+			this.oUser = oUser;
+		}
+
+		@Override
+		public ID getId() {
+			return oUser.getId();
+		}
+
+		@Override
+		public String getName() {
+			final Account account = _userService.getAccount(oUser.getId());
+			return account != null ? account.getName() : null;
+		}
+
+		@Override
+		public String getText() {
+			return oUser.getText();
+		}
+
+		@Override
+		public String getEmail() {
+			return oUser.getEmail();
+		}
+
+		@Override
+		public String getMobile() {
+			return oUser.getMobile();
+		}
+
+		@Override
+		public String getSex() {
+			return oUser.getSex();
+		}
+
+		@Override
+		public Date getBirthday() {
+			return oUser.getBirthday();
+		}
+
+		@Override
+		public String getDescription() {
+			return oUser.getDescription();
+		}
+
+		@Override
+		public PermissionDept getDept() {
+			PermissionDept dept = super.getDept();
+			if (dept == null || dept.getId() == null) {
+				setDept(dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
+			}
+			return dept;
+		}
+
+		@Override
+		public InputStream getPhotoStream() {
+			return _userService.getPhoto(oUser);
+		}
+
+		@Override
+		public ID getRoleId() {
+			return _roleService.getPrimaryRole(oUser).getId();
+		}
+
+		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
+
+		@Override
+		public boolean isMember(final Object role, final Map<String, Object> variables) {
+			variables.put(PermissionConst.VAR_USERID, this.getId());
+
+			String[] arr;
+			if (role instanceof String && (arr = StringUtils.split((String) role, ";")).length > 1) {
+				for (final String r : arr) {
+					if (isMember(r, variables)) {
+						return true;
+					}
+				}
+			}
+
+			if (role == null) {
+				return _roleService.isMember(oUser, (Role) null, variables);
+			}
+
+			// 加入缓存
+			String rkey = Convert.toString(role);
+			final Object deptId = variables.get(PermissionConst.VAR_DEPTID);
+			if (deptId != null) {
+				rkey += ":" + deptId;
+			}
+			Boolean b = _MEMBERs.get(rkey);
+			if (b == null) {
+				_MEMBERs.put(rkey,
+						b = _roleService.isMember(oUser, getRoleObject(role, variables), variables));
+			}
+			return b;
+		}
+
+		private Boolean _MANAGER;
+
+		@Override
+		public boolean isManager(final Map<String, Object> variables) {
+			if (_MANAGER == null) {
+				variables.put(PermissionConst.VAR_USERID, this.getId());
+				_MANAGER = _roleService.isManager(oUser, variables);
+			}
+			return _MANAGER;
+		}
+
+		private static final long serialVersionUID = -2824016565752293671L;
+	}
+
+	protected class _PermissionRole extends PermissionRole {
+		private final Role oRole;
+
+		protected _PermissionRole(final Role oRole) {
+			this.oRole = oRole;
+		}
+
+		@Override
+		public ID getId() {
+			return oRole.getId();
+		}
+
+		@Override
+		public String getName() {
+			return _roleService.toUniqueName(oRole);
+		}
+
+		@Override
+		public String getText() {
+			return oRole.getText();
+		}
+
+		private static final long serialVersionUID = 4548851646225261207L;
+	}
+
+	protected class _PermissionDept extends PermissionDept {
 		private final Department oDept;
 
-		public _PermissionDept(final Department oDept) {
+		protected _PermissionDept(final Department oDept) {
 			this.oDept = oDept;
 		}
 
@@ -396,6 +413,24 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		public int getUsers() {
 			final AccountStat stat = _accountStatService.getOrgAccountStat(getId());
 			return stat.getNums() - stat.getState_delete();
+		}
+
+		@Override
+		public Iterator<PermissionUser> users() {
+			final IDataQuery<User> dq = _userService.queryUsers(getDepartmentObject(oDept));
+			return new AbstractIterator<PermissionUser>() {
+				private User user;
+
+				@Override
+				public boolean hasNext() {
+					return (user = dq.next()) != null;
+				}
+
+				@Override
+				public PermissionUser next() {
+					return OrganizationPermissionHandler.this.getUser(user);
+				}
+			};
 		}
 
 		@Override
