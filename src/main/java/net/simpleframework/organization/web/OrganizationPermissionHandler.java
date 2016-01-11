@@ -113,30 +113,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return new _PermissionRole(oRole);
 	}
 
-	@Override
-	public Iterator<ID> users(final Object role, final ID deptId, final Map<String, Object> variables) {
-		if (deptId != null) {
-			variables.put(PermissionConst.VAR_DEPTID, deptId);
-		}
-		return new NestIterator<ID, User>(_roleService.users(getRoleObject(role, variables),
-				variables)) {
-			@Override
-			protected ID change(final User n) {
-				return n.getId();
-			}
-		};
-	}
-
-	@Override
-	public Iterator<ID> roles(final Object user, final Map<String, Object> variables) {
-		return new NestIterator<ID, RoleM>(_roleService.roles(getUserObject(user), variables)) {
-			@Override
-			protected ID change(final RoleM n) {
-				return n.role.getId();
-			}
-		};
-	}
-
 	protected Department getDepartmentObject(final Object dept) {
 		if (dept instanceof Department) {
 			return (Department) dept;
@@ -358,6 +334,16 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			return _MANAGER;
 		}
 
+		@Override
+		public Iterator<ID> roles(final Map<String, Object> variables) {
+			return new NestIterator<ID, RoleM>(_roleService.roles(oUser, variables)) {
+				@Override
+				protected ID change(final RoleM n) {
+					return n.role.getId();
+				}
+			};
+		}
+
 		private static final long serialVersionUID = -2824016565752293671L;
 	}
 
@@ -381,6 +367,19 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		@Override
 		public String getText() {
 			return oRole.getText();
+		}
+
+		@Override
+		public Iterator<ID> users(final ID deptId, final Map<String, Object> variables) {
+			if (deptId != null) {
+				variables.put(PermissionConst.VAR_DEPTID, deptId);
+			}
+			return new NestIterator<ID, User>(_roleService.users(oRole, variables)) {
+				@Override
+				protected ID change(final User n) {
+					return n.getId();
+				}
+			};
 		}
 
 		@Override
