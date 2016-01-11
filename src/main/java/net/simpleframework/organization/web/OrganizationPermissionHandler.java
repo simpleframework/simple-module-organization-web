@@ -35,6 +35,8 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService.RoleM;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.Role;
+import net.simpleframework.organization.RoleMember;
+import net.simpleframework.organization.RoleMember.ERoleMemberType;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.login.LoginObject;
 import net.simpleframework.organization.role.RolenameW;
@@ -379,6 +381,18 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		@Override
 		public String getText() {
 			return oRole.getText();
+		}
+
+		@Override
+		public PermissionDept getDept(final Object user) {
+			final User oUser = getUserObject(user);
+			RoleMember rm;
+			if (oUser != null
+					&& (rm = _rolemService.getBean("roleId=? and memberType=? and memberId=?", getId(),
+							ERoleMemberType.user, oUser.getId())) != null) {
+				return OrganizationPermissionHandler.this.getDept(rm.getDeptId());
+			}
+			return super.getDept(user);
 		}
 
 		private static final long serialVersionUID = 4548851646225261207L;
