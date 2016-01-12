@@ -409,6 +409,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return _dept == null ? super.getDept(dept) : new _PermissionDept(_dept);
 	}
 
+	@Override
+	public List<PermissionDept> getRootChildren() {
+		return _children(_deptService.queryChildren(null));
+	}
+
 	protected class _PermissionDept extends PermissionDept {
 		private final Department oDept;
 
@@ -467,20 +472,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public List<PermissionDept> getOrgChildren() {
-			if (oDept == null || isOrg()) {
+			if (isOrg()) {
 				return _children(_deptService.queryDepartments(oDept, EDepartmentType.organization));
 			} else {
 				return CollectionUtils.EMPTY_LIST();
 			}
-		}
-
-		private List<PermissionDept> _children(final IDataQuery<Department> dq) {
-			final List<PermissionDept> l = new ArrayList<PermissionDept>();
-			Department dept;
-			while ((dept = dq.next()) != null) {
-				l.add(getDept(dept));
-			}
-			return l;
 		}
 
 		@Override
@@ -510,5 +506,14 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		private static final long serialVersionUID = 3406269517390528431L;
+	}
+
+	private List<PermissionDept> _children(final IDataQuery<Department> dq) {
+		final List<PermissionDept> l = new ArrayList<PermissionDept>();
+		Department dept;
+		while ((dept = dq.next()) != null) {
+			l.add(getDept(dept));
+		}
+		return l;
 	}
 }
