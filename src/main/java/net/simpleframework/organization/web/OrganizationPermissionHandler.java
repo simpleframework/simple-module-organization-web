@@ -74,11 +74,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public PermissionUser getUser(final Object user) {
-		final User oUser = getUserObject(user);
-		if (oUser == null) {
-			return super.getUser(user);
-		}
-		return new _PermissionUser(oUser);
+		return new _PermissionUser(getUserObject(user));
 	}
 
 	protected Role getRoleObject(final Object role, final Map<String, Object> variables) {
@@ -106,11 +102,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public PermissionRole getRole(final Object role, final Map<String, Object> variables) {
-		final Role oRole = getRoleObject(role, variables);
-		if (oRole == null) {
-			return super.getRole(role, variables);
-		}
-		return new _PermissionRole(oRole);
+		return new _PermissionRole(getRoleObject(role, variables));
 	}
 
 	protected Department getDepartmentObject(final Object dept) {
@@ -232,68 +224,69 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oUser.getId();
+			return oUser != null ? oUser.getId() : null;
 		}
 
 		@Override
 		public String getName() {
-			final Account account = _userService.getAccount(oUser.getId());
+			final Account account = _userService.getAccount(getId());
 			return account != null ? account.getName() : null;
 		}
 
 		@Override
 		public String getText() {
-			return oUser.getText();
+			return oUser != null ? oUser.getText() : null;
 		}
 
 		@Override
 		public String getEmail() {
-			return oUser.getEmail();
+			return oUser != null ? oUser.getEmail() : null;
 		}
 
 		@Override
 		public String getMobile() {
-			return oUser.getMobile();
+			return oUser != null ? oUser.getMobile() : null;
 		}
 
 		@Override
 		public String getSex() {
-			return oUser.getSex();
+			return oUser != null ? oUser.getSex() : null;
 		}
 
 		@Override
 		public Date getBirthday() {
-			return oUser.getBirthday();
+			return oUser != null ? oUser.getBirthday() : null;
 		}
 
 		@Override
 		public String getDescription() {
-			return oUser.getDescription();
-		}
-
-		@Override
-		public PermissionDept getDept() {
-			PermissionDept dept = super.getDept();
-			if (dept == null || dept.getId() == null) {
-				setDept(dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
-			}
-			return dept;
+			return oUser != null ? oUser.getDescription() : null;
 		}
 
 		@Override
 		public InputStream getPhotoStream() {
-			return _userService.getPhoto(oUser);
+			return oUser != null ? _userService.getPhoto(oUser) : null;
 		}
 
 		@Override
 		public ID getRoleId() {
-			return _roleService.getPrimaryRole(oUser).getId();
+			return oUser != null ? _roleService.getPrimaryRole(oUser).getId() : null;
+		}
+
+		@Override
+		public PermissionDept getDept() {
+			return oUser != null ? OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId())
+					: PermissionDept.NULL_DEPT;
 		}
 
 		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
 
 		@Override
 		public boolean isMember(final Object role, final Map<String, Object> variables) {
+			if (oUser == null) {
+				return false;
+			}
+
 			variables.put(PermissionConst.VAR_USERID, this.getId());
 
 			String[] arr;
@@ -327,6 +320,10 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public boolean isManager(final Map<String, Object> variables) {
+			if (oUser == null) {
+				return false;
+			}
+
 			if (_MANAGER == null) {
 				variables.put(PermissionConst.VAR_USERID, this.getId());
 				_MANAGER = _roleService.isManager(oUser, variables);
@@ -334,8 +331,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			return _MANAGER;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Iterator<ID> roles(final Map<String, Object> variables) {
+			if (oUser == null) {
+				return CollectionUtils.EMPTY_ITERATOR;
+			}
 			return new NestIterator<ID, RoleM>(_roleService.roles(oUser, variables)) {
 				@Override
 				protected ID change(final RoleM n) {
@@ -356,21 +357,26 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oRole.getId();
+			return oRole != null ? oRole.getId() : null;
 		}
 
 		@Override
 		public String getName() {
-			return _roleService.toUniqueName(oRole);
+			return oRole != null ? _roleService.toUniqueName(oRole) : null;
 		}
 
 		@Override
 		public String getText() {
-			return oRole.getText();
+			return oRole != null ? oRole.getText() : null;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public Iterator<ID> users(final ID deptId, final Map<String, Object> variables) {
+			if (oRole == null) {
+				return CollectionUtils.EMPTY_ITERATOR;
+			}
+
 			if (deptId != null) {
 				variables.put(PermissionConst.VAR_DEPTID, deptId);
 			}
@@ -391,7 +397,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 							ERoleMemberType.user, oUser.getId())) != null) {
 				return OrganizationPermissionHandler.this.getDept(rm.getDeptId());
 			}
-			return super.getDept(user);
+			return PermissionDept.NULL_DEPT;
 		}
 
 		private static final long serialVersionUID = 4548851646225261207L;
@@ -406,17 +412,17 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oDept == null ? super.getId() : oDept.getId();
+			return oDept == null ? null : oDept.getId();
 		}
 
 		@Override
 		public String getName() {
-			return oDept == null ? super.getName() : oDept.getName();
+			return oDept == null ? null : oDept.getName();
 		}
 
 		@Override
 		public String getText() {
-			return oDept == null ? super.getText() : oDept.getText();
+			return oDept == null ? null : oDept.getText();
 		}
 
 		@Override
@@ -496,10 +502,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				return false;
 			}
 			return oDept.getDepartmentType() == EDepartmentType.organization;
-		}
-
-		public Department getDepartment() {
-			return oDept;
 		}
 
 		@Override
