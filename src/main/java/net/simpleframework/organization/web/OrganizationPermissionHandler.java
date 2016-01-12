@@ -267,7 +267,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				setRole(_role = OrganizationPermissionHandler.this.getRole(_roleService.getPrimaryRole(
 						oUser).getId()));
 			}
-			return _role;
+			return _role.setUser(this);
 		}
 
 		@Override
@@ -330,7 +330,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			final Iterator<RoleM> it = _roleService.roles(oUser, variables);
 			final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
 			RoleM n;
-			while ((n = it.next()) != null) {
+			while (it.hasNext()) {
+				n = it.next();
 				l.add(hdl.getRole(n.role).setUser(_PermissionUser.this)
 						.setDept(hdl.getDept(n.rm.getDeptId())));
 			}
@@ -387,15 +388,27 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
+		public PermissionUser getUser() {
+			return super.getUser().setRole(this);
+		}
+
+		@Override
 		public PermissionDept getDept() {
 			PermissionDept _dept = super.getDept();
 			if (_dept.getId() == null) {
-				final ID userId = getUser().getId();
-				RoleMember rm;
-				if (userId != null
-						&& (rm = _rolemService.getBean("roleId=? and memberType=? and memberId=?",
-								getId(), ERoleMemberType.user, userId)) != null) {
-					setDept(_dept = OrganizationPermissionHandler.this.getDept(rm.getDeptId()));
+				final PermissionUser user = getUser();
+				final ID userId = user.getId();
+				if (userId != null) {
+					final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
+					final RoleMember rm;
+					if ((rm = _rolemService.getBean("roleId=? and memberType=? and memberId=?", getId(),
+							ERoleMemberType.user, userId)) != null) {
+						_dept = hdl.getDept(rm.getDeptId());
+					}
+					if (_dept.getId() == null) {
+						_dept = hdl.getDept(user.getDept().getId());
+					}
+					setDept(_dept);
 				}
 			}
 			return _dept;
@@ -483,7 +496,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		@Override
 		public List<PermissionDept> getOrgChildren() {
 			if (isOrg()) {
-				return _dept_children(_deptService.queryDepartments(oDept, EDepartmentType.organization));
+				return _dept_children(_deptService
+						.queryDepartments(oDept, EDepartmentType.organization));
 			} else {
 				return CollectionUtils.EMPTY_LIST();
 			}
