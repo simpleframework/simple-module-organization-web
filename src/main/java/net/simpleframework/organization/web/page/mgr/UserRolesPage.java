@@ -43,9 +43,9 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 
 		final TablePagerBean tablePager = addTablePagerBean(pp, "UserRolesPage_tbl",
 				UserRolesTbl.class).setFilter(false).setSort(false);
-		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 150))
-				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.6"), 150))
-				.addColumn(new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 80))
+		tablePager.addColumn(new TablePagerColumn("roletext", $m("RoleMgrTPage.0"), 180))
+				.addColumn(new TablePagerColumn("deptId", $m("RoleMgrTPage.6"), 120))
+				.addColumn(new TablePagerColumn("roletype", $m("RoleMembersPage.2"), 80))
 				.addColumn(TablePagerColumn.DESCRIPTION()).addColumn(TablePagerColumn.OPE(75));
 
 		// 角色选取
@@ -126,9 +126,18 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 					"roletext",
 					new StringBuilder(r.getText()).append("<br>").append(
 							SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true)));
-			kv.put("deptId",
-					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(rolem.rm.getDeptId())));
-			kv.add("roletype", r.getRoleType());
+			final ERoleMemberType mtype = rolem.rm.getMemberType();
+			kv.add("roletype", mtype);
+			Object deptId = null;
+			if (mtype == ERoleMemberType.user) {
+				deptId = rolem.rm.getDeptId();
+			} else if (mtype == ERoleMemberType.dept) {
+				deptId = rolem.rm.getMemberId();
+			}
+
+			if (deptId != null) {
+				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(_deptService.getBean(deptId)));
+			}
 			kv.add(
 					TablePagerColumn.OPE,
 					ButtonElement.deleteBtn().setOnclick(
