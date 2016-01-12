@@ -72,11 +72,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return _accountService.getUser(o);
 	}
 
-	@Override
-	public PermissionUser getUser(final Object user) {
-		return new _PermissionUser(getUserObject(user));
-	}
-
 	protected Role getRoleObject(final Object role, final Map<String, Object> variables) {
 		if (role instanceof Role) {
 			return (Role) role;
@@ -100,11 +95,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return _roleService.getBean(role);
 	}
 
-	@Override
-	public PermissionRole getRole(final Object role, final Map<String, Object> variables) {
-		return new _PermissionRole(getRoleObject(role, variables));
-	}
-
 	protected Department getDepartmentObject(final Object dept) {
 		if (dept instanceof Department) {
 			return (Department) dept;
@@ -113,11 +103,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			return _deptService.getDepartmentByName((String) dept);
 		}
 		return _deptService.getBean(dept);
-	}
-
-	@Override
-	public PermissionDept getDept(final Object dept) {
-		return new _PermissionDept(getDepartmentObject(dept));
 	}
 
 	@Override
@@ -215,6 +200,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return AbstractMVCPage.url(LoginWindowRedirect.class);
 	}
 
+	@Override
+	public PermissionUser getUser(final Object user) {
+		final User _user = getUserObject(user);
+		return _user == null ? super.getUser(user) : new _PermissionUser(_user);
+	}
+
 	protected class _PermissionUser extends PermissionUser {
 		private final User oUser;
 
@@ -224,69 +215,64 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oUser != null ? oUser.getId() : null;
+			return oUser.getId();
 		}
 
 		@Override
 		public String getName() {
 			final Account account = _userService.getAccount(getId());
-			return account != null ? account.getName() : null;
+			return account != null ? account.getName() : super.getName();
 		}
 
 		@Override
 		public String getText() {
-			return oUser != null ? oUser.getText() : null;
+			return oUser.getText();
 		}
 
 		@Override
 		public String getEmail() {
-			return oUser != null ? oUser.getEmail() : null;
+			return oUser.getEmail();
 		}
 
 		@Override
 		public String getMobile() {
-			return oUser != null ? oUser.getMobile() : null;
+			return oUser.getMobile();
 		}
 
 		@Override
 		public String getSex() {
-			return oUser != null ? oUser.getSex() : null;
+			return oUser.getSex();
 		}
 
 		@Override
 		public Date getBirthday() {
-			return oUser != null ? oUser.getBirthday() : null;
+			return oUser.getBirthday();
 		}
 
 		@Override
 		public String getDescription() {
-			return oUser != null ? oUser.getDescription() : null;
+			return oUser.getDescription();
 		}
 
 		@Override
 		public InputStream getPhotoStream() {
-			return oUser != null ? _userService.getPhoto(oUser) : null;
+			return _userService.getPhoto(oUser);
 		}
 
 		@Override
 		public ID getRoleId() {
-			return oUser != null ? _roleService.getPrimaryRole(oUser).getId() : null;
+			return _roleService.getPrimaryRole(oUser).getId();
 		}
 
 		@Override
 		public PermissionDept getDept() {
-			return oUser != null ? OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId())
-					: PermissionDept.NULL_DEPT;
+			return OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId());
 		}
 
 		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
 
 		@Override
 		public boolean isMember(final Object role, final Map<String, Object> variables) {
-			if (oUser == null) {
-				return false;
-			}
-
 			variables.put(PermissionConst.VAR_USERID, this.getId());
 
 			String[] arr;
@@ -320,10 +306,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public boolean isManager(final Map<String, Object> variables) {
-			if (oUser == null) {
-				return false;
-			}
-
 			if (_MANAGER == null) {
 				variables.put(PermissionConst.VAR_USERID, this.getId());
 				_MANAGER = _roleService.isManager(oUser, variables);
@@ -331,12 +313,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			return _MANAGER;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public Iterator<ID> roles(final Map<String, Object> variables) {
-			if (oUser == null) {
-				return CollectionUtils.EMPTY_ITERATOR;
-			}
 			return new NestIterator<ID, RoleM>(_roleService.roles(oUser, variables)) {
 				@Override
 				protected ID change(final RoleM n) {
@@ -348,6 +326,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		private static final long serialVersionUID = -2824016565752293671L;
 	}
 
+	@Override
+	public PermissionRole getRole(final Object role, final Map<String, Object> variables) {
+		final Role _role = getRoleObject(role, variables);
+		return _role == null ? super.getRole(role, variables) : new _PermissionRole(_role);
+	}
+
 	protected class _PermissionRole extends PermissionRole {
 		private final Role oRole;
 
@@ -357,26 +341,21 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oRole != null ? oRole.getId() : null;
+			return oRole.getId();
 		}
 
 		@Override
 		public String getName() {
-			return oRole != null ? _roleService.toUniqueName(oRole) : null;
+			return _roleService.toUniqueName(oRole);
 		}
 
 		@Override
 		public String getText() {
-			return oRole != null ? oRole.getText() : null;
+			return oRole.getText();
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public Iterator<ID> users(final ID deptId, final Map<String, Object> variables) {
-			if (oRole == null) {
-				return CollectionUtils.EMPTY_ITERATOR;
-			}
-
 			if (deptId != null) {
 				variables.put(PermissionConst.VAR_DEPTID, deptId);
 			}
@@ -397,10 +376,16 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 							ERoleMemberType.user, oUser.getId())) != null) {
 				return OrganizationPermissionHandler.this.getDept(rm.getDeptId());
 			}
-			return PermissionDept.NULL_DEPT;
+			return super.getDept(oUser);
 		}
 
 		private static final long serialVersionUID = 4548851646225261207L;
+	}
+
+	@Override
+	public PermissionDept getDept(final Object dept) {
+		final Department _dept = getDepartmentObject(dept);
+		return _dept == null ? super.getDept(dept) : new _PermissionDept(_dept);
 	}
 
 	protected class _PermissionDept extends PermissionDept {
@@ -412,17 +397,17 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getId() {
-			return oDept == null ? null : oDept.getId();
+			return oDept.getId();
 		}
 
 		@Override
 		public String getName() {
-			return oDept == null ? null : oDept.getName();
+			return oDept.getName();
 		}
 
 		@Override
 		public String getText() {
-			return oDept == null ? null : oDept.getText();
+			return oDept.getText();
 		}
 
 		@Override
@@ -431,12 +416,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			return stat != null ? (stat.getNums() - stat.getState_delete()) : 0;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public Iterator<PermissionUser> users() {
-			if (oDept == null) {
-				return CollectionUtils.EMPTY_ITERATOR;
-			}
 			final IDataQuery<User> dq = _userService.queryUsers(getDepartmentObject(oDept));
 			return new AbstractIterator<PermissionUser>() {
 				private User user;
@@ -483,11 +464,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public ID getParentId() {
-			return oDept == null ? null : oDept.getParentId();
+			return oDept.getParentId();
 		}
 
 		private Department getOrg() {
-			return oDept == null ? null : _deptService.getOrg(_deptService.getBean(getId()));
+			return _deptService.getOrg(_deptService.getBean(getId()));
 		}
 
 		@Override
@@ -498,9 +479,6 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public boolean isOrg() {
-			if (oDept == null) {
-				return false;
-			}
 			return oDept.getDepartmentType() == EDepartmentType.organization;
 		}
 
