@@ -260,13 +260,24 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public ID getRoleId() {
-			return _roleService.getPrimaryRole(oUser).getId();
+		public PermissionRole getRole() {
+			PermissionRole _role = super.getRole();
+			if (_role.getId() == null) {
+				// 获取缺省角色
+				setRole(_role = OrganizationPermissionHandler.this.getRole(_roleService.getPrimaryRole(
+						oUser).getId()));
+			}
+			return _role;
 		}
 
 		@Override
 		public PermissionDept getDept() {
-			return OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId());
+			PermissionDept _dept = super.getDept();
+			if (_dept.getId() == null) {
+				// 从用户实体部门属性获取
+				setDept(_dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
+			}
+			return _dept;
 		}
 
 		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
@@ -314,11 +325,13 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public Iterator<ID> roles(final Map<String, Object> variables) {
-			return new NestIterator<ID, RoleM>(_roleService.roles(oUser, variables)) {
+		public Iterator<PermissionRole> roles(final Map<String, Object> variables) {
+			return new NestIterator<PermissionRole, RoleM>(_roleService.roles(oUser, variables)) {
 				@Override
-				protected ID change(final RoleM n) {
-					return n.role.getId();
+				protected PermissionRole change(final RoleM n) {
+					final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
+					return hdl.getRole(n.role).setUser(_PermissionUser.this)
+							.setDept(hdl.getDept(n.rm.getDeptId()));
 				}
 			};
 		}
@@ -355,28 +368,36 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public Iterator<ID> users(final ID deptId, final Map<String, Object> variables) {
+		public Iterator<PermissionUser> users(final ID deptId, final Map<String, Object> variables) {
 			if (deptId != null) {
 				variables.put(PermissionConst.VAR_DEPTID, deptId);
 			}
-			return new NestIterator<ID, User>(_roleService.users(oRole, variables)) {
+			return new NestIterator<PermissionUser, User>(_roleService.users(oRole, variables)) {
 				@Override
-				protected ID change(final User n) {
-					return n.getId();
+				protected PermissionUser change(final User n) {
+					final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
+					final PermissionUser user = hdl.getUser(n.getId()).setRole(_PermissionRole.this);
+					if (deptId != null) {
+						user.setDept(hdl.getDept(deptId));
+					}
+					return user;
 				}
 			};
 		}
 
 		@Override
-		public PermissionDept getDept(final Object user) {
-			final User oUser = getUserObject(user);
-			RoleMember rm;
-			if (oUser != null
-					&& (rm = _rolemService.getBean("roleId=? and memberType=? and memberId=?", getId(),
-							ERoleMemberType.user, oUser.getId())) != null) {
-				return OrganizationPermissionHandler.this.getDept(rm.getDeptId());
+		public PermissionDept getDept() {
+			PermissionDept _dept = super.getDept();
+			if (_dept.getId() == null) {
+				final ID userId = getUser().getId();
+				RoleMember rm;
+				if (userId != null
+						&& (rm = _rolemService.getBean("roleId=? and memberType=? and memberId=?",
+								getId(), ERoleMemberType.user, userId)) != null) {
+					setDept(_dept = OrganizationPermissionHandler.this.getDept(rm.getDeptId()));
+				}
 			}
-			return super.getDept(oUser);
+			return _dept;
 		}
 
 		private static final long serialVersionUID = 4548851646225261207L;
