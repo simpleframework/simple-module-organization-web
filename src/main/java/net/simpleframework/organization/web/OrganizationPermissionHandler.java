@@ -325,15 +325,16 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public Iterator<PermissionRole> roles(final Map<String, Object> variables) {
-			return new NestIterator<PermissionRole, RoleM>(_roleService.roles(oUser, variables)) {
-				@Override
-				protected PermissionRole change(final RoleM n) {
-					final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
-					return hdl.getRole(n.role).setUser(_PermissionUser.this)
-							.setDept(hdl.getDept(n.rm.getDeptId()));
-				}
-			};
+		public List<PermissionRole> roles(final Map<String, Object> variables) {
+			final ArrayList<PermissionRole> l = new ArrayList<PermissionRole>();
+			final Iterator<RoleM> it = _roleService.roles(oUser, variables);
+			final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
+			RoleM n;
+			while ((n = it.next()) != null) {
+				l.add(hdl.getRole(n.role).setUser(_PermissionUser.this)
+						.setDept(hdl.getDept(n.rm.getDeptId())));
+			}
+			return l;
 		}
 
 		private static final long serialVersionUID = -2824016565752293671L;
@@ -411,7 +412,16 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public List<PermissionDept> getRootChildren() {
-		return _children(_deptService.queryChildren(null));
+		return _dept_children(_deptService.queryChildren(null));
+	}
+
+	private List<PermissionDept> _dept_children(final IDataQuery<Department> dq) {
+		final List<PermissionDept> l = new ArrayList<PermissionDept>();
+		Department dept;
+		while ((dept = dq.next()) != null) {
+			l.add(getDept(dept));
+		}
+		return l;
 	}
 
 	protected class _PermissionDept extends PermissionDept {
@@ -462,18 +472,18 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public List<PermissionDept> getAllChildren() {
-			return _children(_deptService.queryChildren(oDept));
+			return _dept_children(_deptService.queryChildren(oDept));
 		}
 
 		@Override
 		public List<PermissionDept> getChildren() {
-			return _children(_deptService.queryDepartments(oDept, EDepartmentType.department));
+			return _dept_children(_deptService.queryDepartments(oDept, EDepartmentType.department));
 		}
 
 		@Override
 		public List<PermissionDept> getOrgChildren() {
 			if (isOrg()) {
-				return _children(_deptService.queryDepartments(oDept, EDepartmentType.organization));
+				return _dept_children(_deptService.queryDepartments(oDept, EDepartmentType.organization));
 			} else {
 				return CollectionUtils.EMPTY_LIST();
 			}
@@ -506,14 +516,5 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		private static final long serialVersionUID = 3406269517390528431L;
-	}
-
-	private List<PermissionDept> _children(final IDataQuery<Department> dq) {
-		final List<PermissionDept> l = new ArrayList<PermissionDept>();
-		Department dept;
-		while ((dept = dq.next()) != null) {
-			l.add(getDept(dept));
-		}
-		return l;
 	}
 }
