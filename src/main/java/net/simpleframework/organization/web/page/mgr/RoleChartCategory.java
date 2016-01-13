@@ -109,7 +109,8 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 
 	@Override
 	protected String[] getContextMenuKeys() {
-		return new String[] { "Edit", "Delete", "-", "Refresh", "-", "Move" };
+		return new String[] { "Edit", "Delete", "-", "Refresh", "-", "Move.up", "Move.up2",
+				"Move.down", "Move.down2" };
 	}
 
 	@Override

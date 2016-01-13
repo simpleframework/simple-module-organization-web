@@ -242,26 +242,17 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				return null;
 			}
 			final MenuItems items = MenuItems.of();
-			items.add(MenuItem.of($m("DepartmentMgrTPage.5")).setOnclick_act(
+			items.append(MenuItem.of($m("DepartmentMgrTPage.5")).setOnclick_act(
 					"DepartmentMgrTPage_userSelect", "deptId"));
-			items.add(MenuItem.sep());
-			items.add(MenuItem.itemEdit().setOnclick_act("DepartmentMgrTPage_editWin", "deptId"));
-			items.add(MenuItem.itemDelete().setOnclick_act("DepartmentMgrTPage_delete", "id"));
-			items.add(MenuItem.sep());
-			items.append(MenuItem
-					.of($m("Menu.move"))
-					.addChild(
-							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-									"$pager_action(item).move(true, 'DepartmentMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-									"$pager_action(item).move2(true, 'DepartmentMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-									"$pager_action(item).move(false, 'DepartmentMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-									"$pager_action(item).move2(false, 'DepartmentMgrTPage_Move');")));
+			items.append(MenuItem.sep());
+			items.append(MenuItem.itemEdit().setOnclick_act("DepartmentMgrTPage_editWin", "deptId"));
+			items.append(MenuItem.itemDelete().setOnclick_act("DepartmentMgrTPage_delete", "id"));
+			items.append(MenuItem.sep());
+			// 移动菜单
+			items.append(MenuItem.TBL_MOVE_UP("DepartmentMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_UP2("DepartmentMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_DOWN("DepartmentMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_DOWN2("DepartmentMgrTPage_Move"));
 			return items;
 		}
 	}

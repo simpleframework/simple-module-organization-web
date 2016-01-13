@@ -180,31 +180,22 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 				return null;
 			}
 			final MenuItems items = MenuItems.of();
-			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("UserMgrTPage_accountWin",
+			items.append(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act(
+					"UserMgrTPage_accountWin", "accountId"));
+			items.append(MenuItem.sep());
+			items.append(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("UserMgrTPage_roleWin",
 					"accountId"));
-			items.add(MenuItem.sep());
-			items.add(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("UserMgrTPage_roleWin",
-					"accountId"));
-			items.add(MenuItem.sep());
-			items.add(MenuItem.itemEdit().setOnclick_act("UserMgrTPage_edit", "accountId"));
-			items.add(MenuItem.itemDelete().setOnclick_act("UserMgrTPage_delete", "id"));
-			items.add(MenuItem.sep());
-			items.add(MenuItem.itemLog().setOnclick_act("UserMgrTPage_logWin", "beanId"));
-			items.add(MenuItem.sep());
-			items.append(MenuItem
-					.of($m("Menu.move"))
-					.addChild(
-							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-									"$pager_action(item).move(true, 'UserMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-									"$pager_action(item).move2(true, 'UserMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-									"$pager_action(item).move(false, 'UserMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-									"$pager_action(item).move2(false, 'UserMgrTPage_Move');")));
+			items.append(MenuItem.sep());
+			items.append(MenuItem.itemEdit().setOnclick_act("UserMgrTPage_edit", "accountId"));
+			items.append(MenuItem.itemDelete().setOnclick_act("UserMgrTPage_delete", "id"));
+			items.append(MenuItem.sep());
+			items.append(MenuItem.itemLog().setOnclick_act("UserMgrTPage_logWin", "beanId"));
+			items.append(MenuItem.sep());
+			// 移动菜单
+			items.append(MenuItem.TBL_MOVE_UP("UserMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_UP2("UserMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_DOWN("UserMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_DOWN2("UserMgrTPage_Move"));
 			return items;
 		}
 

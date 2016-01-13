@@ -262,43 +262,34 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			final Object obj = getSelectedTreeNode(cp);
 			final int type = Convert.toInt(obj);
 			if (type != Account.TYPE_STATE_DELETE) {
-				items.add(MenuItem.sep());
-				items.add(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("AccountMgrPage_roleWin",
-						"accountId"));
-				items.add(MenuItem.sep());
-				items.add(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
+				items.append(MenuItem.sep());
+				items.append(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act(
+						"AccountMgrPage_roleWin", "accountId"));
+				items.append(MenuItem.sep());
+				items.append(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
 			}
 
 			if (type != Account.TYPE_ONLINE) {
-				items.add(MenuItem.sep());
+				items.append(MenuItem.sep());
 				MenuItem itemDelete;
 				if (type == Account.TYPE_STATE_DELETE) {
 					itemDelete = MenuItem.of($m("AccountMgrPage.21"));
 				} else {
 					itemDelete = MenuItem.itemDelete();
 				}
-				items.add(itemDelete.setOnclick_act("AccountMgrPage_delete", "id"));
+				items.append(itemDelete.setOnclick_act("AccountMgrPage_delete", "id"));
 			}
 
-			items.add(MenuItem.sep());
-			items.add(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
+			items.append(MenuItem.sep());
+			items.append(MenuItem.itemLog().setOnclick_act("AccountMgrPage_logWin", "beanId"));
 
 			if (obj instanceof Department) {
-				items.add(MenuItem.sep());
-				items.append(MenuItem
-						.of($m("Menu.move"))
-						.addChild(
-								MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-										"$pager_action(item).move(true, 'AccountMgrPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-										"$pager_action(item).move2(true, 'AccountMgrPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-										"$pager_action(item).move(false, 'AccountMgrPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-										"$pager_action(item).move2(false, 'AccountMgrPage_Move');")));
+				items.append(MenuItem.sep());
+				// 移动菜单
+				items.append(MenuItem.TBL_MOVE_UP("AccountMgrPage_Move"));
+				items.append(MenuItem.TBL_MOVE_UP2("AccountMgrPage_Move"));
+				items.append(MenuItem.TBL_MOVE_DOWN("AccountMgrPage_Move"));
+				items.append(MenuItem.TBL_MOVE_DOWN2("AccountMgrPage_Move"));
 			}
 			return items;
 		}

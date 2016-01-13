@@ -185,22 +185,13 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				return null;
 			}
 			final MenuItems items = MenuItems.of();
-			items.add(MenuItem.itemDelete().setOnclick_act("RoleMgrTPage_delete", "id"));
-			items.add(MenuItem.sep());
-			items.append(MenuItem
-					.of($m("Menu.move"))
-					.addChild(
-							MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-									"$pager_action(item).move(true, 'RoleMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-									"$pager_action(item).move2(true, 'RoleMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-									"$pager_action(item).move(false, 'RoleMgrTPage_Move');"))
-					.addChild(
-							MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-									"$pager_action(item).move2(false, 'RoleMgrTPage_Move');")));
+			items.append(MenuItem.itemDelete().setOnclick_act("RoleMgrTPage_delete", "id"));
+			items.append(MenuItem.sep());
+			// 移动菜单
+			items.append(MenuItem.TBL_MOVE_UP("RoleMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_UP2("RoleMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_DOWN("RoleMgrTPage_Move"));
+			items.append(MenuItem.TBL_MOVE_DOWN2("RoleMgrTPage_Move"));
 			return items;
 		}
 

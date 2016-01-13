@@ -249,20 +249,11 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 				final MenuItems items = MenuItems.of(MenuItem.itemDelete().setOnclick_act(
 						"RoleMembersPage_del", "mId"));
 				items.append(MenuItem.sep());
-				items.append(MenuItem
-						.of($m("Menu.move"))
-						.addChild(
-								MenuItem.of($m("Menu.up"), MenuItem.ICON_UP,
-										"$pager_action(item).move(true, 'RoleMemberPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.up2"), MenuItem.ICON_UP2,
-										"$pager_action(item).move2(true, 'RoleMemberPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.down"), MenuItem.ICON_DOWN,
-										"$pager_action(item).move(false, 'RoleMemberPage_Move');"))
-						.addChild(
-								MenuItem.of($m("Menu.down2"), MenuItem.ICON_DOWN2,
-										"$pager_action(item).move2(false, 'RoleMemberPage_Move');")));
+				// 移动菜单
+				items.append(MenuItem.TBL_MOVE_UP("RoleMemberPage_Move"));
+				items.append(MenuItem.TBL_MOVE_UP2("RoleMemberPage_Move"));
+				items.append(MenuItem.TBL_MOVE_DOWN("RoleMemberPage_Move"));
+				items.append(MenuItem.TBL_MOVE_DOWN2("RoleMemberPage_Move"));
 				return items;
 			}
 			return null;
