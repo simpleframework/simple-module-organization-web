@@ -260,6 +260,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
+		public int getOorder() {
+			return oUser.getOorder();
+		}
+
+		@Override
 		public PermissionRole getRole() {
 			PermissionRole _role = super.getRole();
 			if (_role.getId() == null) {
