@@ -126,18 +126,9 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 					"roletext",
 					new StringBuilder(r.getText()).append("<br>").append(
 							SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true)));
-			final ERoleMemberType mtype = rolem.rm.getMemberType();
-			kv.add("roletype", mtype);
-			Object deptId = null;
-			if (mtype == ERoleMemberType.user) {
-				deptId = rolem.rm.getDeptId();
-			} else if (mtype == ERoleMemberType.dept) {
-				deptId = rolem.rm.getMemberId();
-			}
-
-			if (deptId != null) {
-				kv.put("deptId", AccountMgrPageUtils.toDepartmentText(_deptService.getBean(deptId)));
-			}
+			kv.add("roletype", rolem.rm.getMemberType());
+			kv.put("deptId",
+					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(rolem.rm.getDeptId())));
 			kv.add(
 					TablePagerColumn.OPE,
 					ButtonElement.deleteBtn().setOnclick(

@@ -45,7 +45,7 @@ public class DefaultDeptSelectHandler extends AbstractDictionaryHandler implemen
 			dq = _deptService.queryDepartments(pdept, EDepartmentType.organization);
 		} else {
 			final PermissionDept org = AbstractMVCPage.getPermissionOrg(cp);
-			if (org.getId() != null) {
+			if (org.exists()) {
 				// 单机构
 				if (parent == null) {
 					return Arrays.asList(org);

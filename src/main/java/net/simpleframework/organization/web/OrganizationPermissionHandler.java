@@ -332,8 +332,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			RoleM n;
 			while (it.hasNext()) {
 				n = it.next();
-				l.add(hdl.getRole(n.role).setUser(_PermissionUser.this)
-						.setDept(hdl.getDept(n.rm.getDeptId())));
+				final PermissionRole r = hdl.getRole(n.role).setUser(_PermissionUser.this);
+				l.add(r.setDept(hdl.getDept(n.rm.getDeptId())));
 			}
 			return l;
 		}
