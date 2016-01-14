@@ -92,7 +92,7 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	}
 
 	@Override
-	public Collection<DepartmentW> getDepartmentWrappers(final ComponentParameter cp) {
+	public Collection<DepartmentMemory> getDepartments(final ComponentParameter cp) {
 		final Map<ID, Collection<Department>> dTreemap = DataQueryUtils.toTreeMap(_deptService
 				.queryAll());
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
@@ -116,13 +116,13 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 	}
 
 	@SuppressWarnings("unchecked")
-	private Collection<DepartmentW> createDepartmentColl(
+	private Collection<DepartmentMemory> createDepartmentColl(
 			final Map<ID, Collection<Department>> depts, final Map<ID, Collection<User>> users,
 			final Collection<Department> children) {
-		final Collection<DepartmentW> wrappers = new ArrayList<DepartmentW>();
+		final Collection<DepartmentMemory> wrappers = new ArrayList<DepartmentMemory>();
 		if (children != null) {
 			for (final Department dept : children) {
-				final DepartmentW wrapper = new DepartmentW(dept);
+				final DepartmentMemory wrapper = new DepartmentMemory(dept);
 				final ID k = dept.getId();
 				final Collection<Department> v1 = depts.get(k);
 				final Collection<User> v2 = users.get(k);
