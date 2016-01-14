@@ -11,9 +11,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.autocomplete.AbstractAutocompleteHandler;
 import net.simpleframework.mvc.component.ui.autocomplete.AutocompleteData;
 import net.simpleframework.organization.Account;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0
@@ -39,7 +37,7 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 
 			@Override
 			public AutocompleteData nextElement() {
-				return createAutocompleteData(account, sepChar);
+				return createAutocompleteData(cp.getUser(account.getId()), sepChar);
 			}
 		};
 	}
@@ -57,25 +55,5 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 		}
 		sql.append(" and a.name like '%").append(val2).append("%'");
 		return _accountService.getEntityManager().queryBeans(new SQLValue(sql, params.toArray()));
-	}
-
-	protected AutocompleteData createAutocompleteData(final Account account, final String sepChar) {
-		final User user = _accountService.getUser(account.getId());
-		final String name = account.getName();
-		final AutocompleteData data = new AutocompleteData(name + sepChar, user.getText() + " ("
-				+ name + ")");
-		final StringBuilder txt2 = new StringBuilder();
-		Department dept = _deptService.getBean(user.getOrgId());
-		if (dept != null) {
-			txt2.append(dept);
-		}
-		dept = _deptService.getBean(user.getDepartmentId());
-		if (dept != null) {
-			txt2.append(" - ").append(dept);
-		}
-		if (txt2.length() > 0) {
-			data.setTxt2(txt2.toString());
-		}
-		return data;
 	}
 }
