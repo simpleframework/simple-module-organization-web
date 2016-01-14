@@ -15,8 +15,8 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.CollectionUtils;
-import net.simpleframework.common.coll.CollectionUtils.AbstractIterator;
 import net.simpleframework.common.coll.CollectionUtils.NestIterator;
+import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
@@ -470,25 +470,18 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public int getUsers() {
+		public int getUserCount() {
 			final AccountStat stat = _accountStatService.getOrgAccountStat(getId());
 			return stat != null ? (stat.getNums() - stat.getState_delete()) : 0;
 		}
 
 		@Override
-		public Iterator<PermissionUser> users() {
-			final IDataQuery<User> dq = _userService.queryUsers(getDepartmentObject(oDept));
-			return new AbstractIterator<PermissionUser>() {
-				private User user;
-
+		public Iterator<PermissionUser> users(final boolean all) {
+			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept), all, new KVMap());
+			return new NestIterator<PermissionUser, User>(it) {
 				@Override
-				public boolean hasNext() {
-					return (user = dq.next()) != null;
-				}
-
-				@Override
-				public PermissionUser next() {
-					return OrganizationPermissionHandler.this.getUser(user);
+				protected PermissionUser change(final User n) {
+					return OrganizationPermissionHandler.this.getUser(n);
 				}
 			};
 		}
