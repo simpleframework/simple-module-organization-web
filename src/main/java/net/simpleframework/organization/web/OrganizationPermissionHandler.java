@@ -476,8 +476,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public Iterator<PermissionUser> users(final boolean all) {
-			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept), all, new KVMap());
+		public Iterator<PermissionUser> users(final boolean rolemember) {
+			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept), rolemember,
+					new KVMap());
 			return new NestIterator<PermissionUser, User>(it) {
 				@Override
 				protected PermissionUser change(final User n) {
