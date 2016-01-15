@@ -87,10 +87,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 			userData.put("orgId", org.getId());
 		}
 
-		_accountService
-				.doSave(_accountService.getBean(cp.getParameter("ae_id")),
-						cp.getParameter("ae_accountName"), cp.getParameter("ae_password"), null, null,
-						userData);
+		_accountService.doSave(_accountService.getBean(cp.getParameter("ae_id")),
+				cp.getParameter("ae_accountName"), cp.getParameter("ae_password"), null, userData);
 		return super.onSave(cp);
 	}
 
