@@ -122,7 +122,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 			final AccountStat stat = _accountStatService.getAllAccountStat();
 			final int iType = (Integer) type;
 			if (iType == Account.TYPE_ALL) {
-				c = stat.getNums();
+				c = stat.getRnums();
 			} else if (iType == Account.TYPE_ONLINE) {
 				c = stat.getOnline_nums();
 			} else if (iType == Account.TYPE_STATE_NORMAL) {
@@ -143,7 +143,7 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				} else {
 					stat = _accountStatService.getOrgAccountStat(type);
 				}
-				c = stat.getNums() - stat.getState_delete();
+				c = stat.getRnums();
 			}
 		}
 		return c > 0 ? "(" + c + ")" : null;

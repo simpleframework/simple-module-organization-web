@@ -208,8 +208,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			}
 
 			final AccountStat stat = _accountStatService.getDeptAccountStat(dept);
-			final LinkElement le = LinkElement.style2(stat.getNums() - stat.getState_delete())
-					.setHref(getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
+			final LinkElement le = LinkElement.style2(stat.getRnums()).setHref(
+					getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
 			data.add("users", le);
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;
