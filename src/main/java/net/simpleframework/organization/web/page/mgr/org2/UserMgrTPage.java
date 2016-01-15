@@ -38,6 +38,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.TemplateUtils;
 import net.simpleframework.organization.Account;
+import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
@@ -147,11 +148,29 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar UserMgrTPage_tbar'>");
 		sb.append(ElementList.of(LinkButton.addBtn().setOnclick("$Actions['UserMgrTPage_edit']();")));
+
+		AccountStat stat = null;
+		final Department org = getOrg2(pp);
+		if (org != null) {
+			stat = _accountStatService.getOrgAccountStat(org);
+		}
+		String online_lbl = $m("UserMgrTPage.1");
+		String del_lbl = $m("UserMgrTPage.2");
+		if (stat != null) {
+			final int online_nums = stat.getOnline_nums();
+			if (online_nums > 0) {
+				online_lbl += "(" + online_nums + ")";
+			}
+			final int state_delete = stat.getState_delete();
+			if (state_delete > 0) {
+				del_lbl += "(" + state_delete + ")";
+			}
+		}
+
 		sb.append(TabButtons.of(
 				new TabButton($m("UserMgrTPage.0")).setHref(getUrl(pp, UserMgrTPage.class)),
-				new TabButton($m("UserMgrTPage.1")).setHref(getUrl(pp, UserMgr_OnlineTPage.class)),
-				new TabButton($m("UserMgrTPage.2")).setHref(getUrl(pp, UserMgr_DelTPage.class)))
-				.toString(pp));
+				new TabButton(online_lbl).setHref(getUrl(pp, UserMgr_OnlineTPage.class)),
+				new TabButton(del_lbl).setHref(getUrl(pp, UserMgr_DelTPage.class))).toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
 		final Department dept = getDept(pp);

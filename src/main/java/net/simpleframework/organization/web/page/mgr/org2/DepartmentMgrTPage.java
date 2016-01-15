@@ -35,6 +35,7 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.organization.Account;
+import net.simpleframework.organization.AccountStat;
 import net.simpleframework.organization.Department;
 import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContext;
@@ -206,9 +207,9 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				data.add("parentId", SpanElement.color777(parent.getText()));
 			}
 
-			final LinkElement le = LinkElement.style2(
-					_accountStatService.getDeptAccountStat(dept).getNums()).setHref(
-					getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
+			final AccountStat stat = _accountStatService.getDeptAccountStat(dept);
+			final LinkElement le = LinkElement.style2(stat.getNums() - stat.getState_delete())
+					.setHref(getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
 			data.add("users", le);
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;
