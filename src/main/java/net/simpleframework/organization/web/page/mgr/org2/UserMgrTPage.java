@@ -132,13 +132,17 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doMove(final ComponentParameter cp) {
 		_userService.exchange(TablePagerUtils.getExchangeBeans(cp, _userService));
-		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
+		return createTableRefresh();
 	}
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
 		final Object[] ids = StringUtils.split(cp.getParameter("id"));
 		_accountService.delete(ids);
+		return createTableRefresh();
+	}
+
+	protected JavascriptForward createTableRefresh() {
 		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 	}
 
