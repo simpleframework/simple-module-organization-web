@@ -55,7 +55,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(RoleMembersPage.class, "/role_members.css");
+		pp.addImportCSS(RoleMembersPage.class, "/orgmgr.css");
 
 		// 添加成员
 		addMemberWindow(pp);

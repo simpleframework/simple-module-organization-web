@@ -44,9 +44,9 @@ import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
-import net.simpleframework.organization.web.page.attri.AccountStatPage;
 import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.UserRolesPage;
+import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage._AccountStatPage;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 
 /**
@@ -294,13 +294,6 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		@Override
 		protected Department getOrg(final PageParameter pp) {
 			return AbstractOrgMgrTPage.getOrg2(pp);
-		}
-	}
-
-	public static class _AccountStatPage extends AccountStatPage {
-		@Override
-		public String toTitleHTML(final PageParameter pp) {
-			return "";
 		}
 	}
 

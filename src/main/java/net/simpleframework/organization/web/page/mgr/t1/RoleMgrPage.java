@@ -34,7 +34,7 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(RoleMgrPage.class, "/role_mgr.css");
+		pp.addImportCSS(RoleMgrPage.class, "/orgmgr.css");
 
 		// 创建roleChart tree
 		addComponentBean(pp, "roleChartCategory", CategoryBean.class).setDraggable(false)

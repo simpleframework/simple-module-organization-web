@@ -64,7 +64,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(AccountMgrPage.class, "/account_mgr.css");
+		pp.addImportCSS(AccountMgrPage.class, "/orgmgr.css");
 
 		addCategoryBean(pp, DepartmentCategory.class);
 
@@ -85,7 +85,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		addWindowBean(pp, "AccountMgrPage_edit", ajaxRequest).setTitle($m("AccountMgrPage.8"))
 				.setHeight(500).setWidth(620);
 		// 帐号信息
-		ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_accountPage", AccountStatPage.class);
+		ajaxRequest = addAjaxRequest(pp, "AccountMgrPage_accountPage", _AccountStatPage.class);
 		addWindowBean(pp, "AccountMgrPage_accountWin", ajaxRequest).setTitle($m("AccountMgrPage.18"))
 				.setHeight(450).setWidth(380);
 
@@ -381,6 +381,13 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			kv.add(TablePagerColumn.OPE, sb.toString());
 			return kv;
+		}
+	}
+
+	public static class _AccountStatPage extends AccountStatPage {
+		@Override
+		public String toTitleHTML(final PageParameter pp) {
+			return "";
 		}
 	}
 }
