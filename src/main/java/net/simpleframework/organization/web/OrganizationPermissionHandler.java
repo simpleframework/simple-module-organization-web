@@ -22,7 +22,7 @@ import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
 import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.mvc.AbstractMVCPage;
-import net.simpleframework.mvc.IMVCConst;
+import net.simpleframework.mvc.MVCConst;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.ctx.permission.DefaultPagePermissionHandler;
 import net.simpleframework.organization.Account;
@@ -49,7 +49,7 @@ import net.simpleframework.organization.web.page.LoginWindowRedirect;
  *         http://www.simpleframework.net
  */
 public class OrganizationPermissionHandler extends DefaultPagePermissionHandler implements
-		IOrganizationContextAware, IMVCConst {
+		IOrganizationContextAware {
 
 	protected User getUserObject(Object o) {
 		if (o instanceof User) {
@@ -177,7 +177,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
 		_accountService.logout(new HttpAccountSession(rRequest), true);
-		rRequest.removeSessionAttr(SESSION_ATTRI_LASTURL);
+		rRequest.removeSessionAttr(MVCConst.SESSION_ATTRI_LASTURL);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSessionListener;
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
-import net.simpleframework.mvc.IMVCContextVar;
+import net.simpleframework.mvc.MVCContext;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.organization.impl.OrganizationContext;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
@@ -20,15 +20,14 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class OrganizationWebContext extends OrganizationContext implements IOrganizationWebContext,
-		IMVCContextVar {
+public class OrganizationWebContext extends OrganizationContext implements IOrganizationWebContext {
 
 	@Override
 	public void onInit(final IApplicationContext application) throws Exception {
 		super.onInit(application);
 
 		// 添加监听器
-		mvcContext.getEventAdapter().addListener(new HttpSessionListener() {
+		MVCContext.get().getEventAdapter().addListener(new HttpSessionListener() {
 			@Override
 			public void sessionCreated(final HttpSessionEvent event) {
 			}

@@ -17,7 +17,6 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.AbstractUrlForward;
-import net.simpleframework.mvc.IMVCConst;
 import net.simpleframework.mvc.IMultipartFile;
 import net.simpleframework.mvc.MultipartPageRequest;
 import net.simpleframework.mvc.PageParameter;
@@ -37,7 +36,7 @@ import net.simpleframework.organization.User;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class PhotoUploadPage extends AbstractAccountPage implements IMVCConst {
+public class PhotoUploadPage extends AbstractAccountPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
