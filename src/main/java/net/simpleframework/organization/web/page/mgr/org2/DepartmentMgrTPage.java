@@ -4,17 +4,17 @@ import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
+import net.simpleframework.ado.query.NestDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.coll.CollectionUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.permission.PermissionUser;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
@@ -272,13 +272,18 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
-		public Iterator<?> getUsers(final ComponentParameter cp) {
+		public IDataQuery<PermissionUser> getUsers(final ComponentParameter cp) {
 			final Department dept = UserMgrTPage.getDept(cp);
 			if (dept == null) {
-				return CollectionUtils.EMPTY_ITERATOR();
+				return DataQueryUtils.nullQuery();
 			}
-			return DataQueryUtils.toIterator(_userService.queryUsers(_deptService.getOrg(dept),
-					Account.TYPE_NO_DEPT));
+			return new NestDataQuery<PermissionUser, User>(_userService.queryUsers(
+					_deptService.getOrg(dept), Account.TYPE_NO_DEPT)) {
+				@Override
+				protected PermissionUser change(final User n) {
+					return cp.getUser(n);
+				}
+			};
 		}
 	}
 }

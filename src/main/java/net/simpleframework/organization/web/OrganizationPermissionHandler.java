@@ -477,6 +477,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
+		public int getLevel() {
+			return _deptService.getLevel(oDept);
+		}
+
+		@Override
 		public int getOorder() {
 			return oDept.getOorder();
 		}
@@ -501,9 +506,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public Iterator<PermissionUser> orgUsers() {
-			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept),
-					new KVMap().add("org-users", true));
-			return new NestIterator<PermissionUser, User>(it) {
+			return new NestIterator<PermissionUser, User>(DataQueryUtils.toIterator(_userService
+					.queryUsers(getDepartmentObject(oDept), Account.TYPE_ALL))) {
 				@Override
 				protected PermissionUser change(final User n) {
 					return OrganizationPermissionHandler.this.getUser(n);
