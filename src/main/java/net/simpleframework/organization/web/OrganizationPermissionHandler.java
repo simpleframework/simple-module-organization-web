@@ -487,8 +487,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public int getUserCount() {
-			final AccountStat stat = _accountStatService.getDeptAccountStat(getId());
+		public int getUserCount(final boolean org) {
+			final AccountStat stat = org ? _accountStatService.getOrgAccountStat(getId())
+					: _accountStatService.getDeptAccountStat(getId());
 			return stat != null ? stat.getRnums() : 0;
 		}
 

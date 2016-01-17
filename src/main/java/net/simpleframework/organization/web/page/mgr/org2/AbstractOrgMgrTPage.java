@@ -91,7 +91,7 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 		final PermissionDept org = getPermissionOrg(pp);
 		if (org != null) {
 			String txt = org.getText();
-			final int nums = org.getUserCount();
+			final int nums = org.getUserCount(true);
 			if (nums > 0) {
 				txt += " (" + nums + ")";
 			}
