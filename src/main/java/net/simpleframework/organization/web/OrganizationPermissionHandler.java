@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.CollectionUtils;
-import net.simpleframework.common.coll.CollectionUtils.NestIterator;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.coll.NestIterator;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.ctx.permission.PermissionRole;
@@ -198,6 +199,17 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 	@Override
 	protected String getLoginWindowRedirectUrl(final PageRequestResponse rRequest) {
 		return AbstractMVCPage.url(LoginWindowRedirect.class);
+	}
+
+	@Override
+	public Iterator<PermissionUser> allUsers() {
+		return new NestIterator<PermissionUser, User>(DataQueryUtils.toIterator(_userService
+				.queryAll())) {
+			@Override
+			protected PermissionUser change(final User n) {
+				return OrganizationPermissionHandler.this.getUser(n);
+			}
+		};
 	}
 
 	@Override
@@ -477,8 +489,20 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public Iterator<PermissionUser> users(final boolean rolemember) {
-			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept), rolemember,
-					new KVMap());
+			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept),
+					new KVMap().add("role-member", rolemember));
+			return new NestIterator<PermissionUser, User>(it) {
+				@Override
+				protected PermissionUser change(final User n) {
+					return OrganizationPermissionHandler.this.getUser(n);
+				}
+			};
+		}
+
+		@Override
+		public Iterator<PermissionUser> orgUsers() {
+			final Iterator<User> it = _roleService.users(getDepartmentObject(oDept),
+					new KVMap().add("org-users", true));
 			return new NestIterator<PermissionUser, User>(it) {
 				@Override
 				protected PermissionUser change(final User n) {

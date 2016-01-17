@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import net.simpleframework.ado.query.DataQueryUtils;
-import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -29,16 +29,16 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 		IUserSelectHandler, IOrganizationContextAware {
 
 	@Override
-	public IDataQuery<?> getUsers(final ComponentParameter cp) {
+	public Iterator<?> getUsers(final ComponentParameter cp) {
 		if (cp.isLmanager()) {
-			return _userService.queryAll();
+			return DataQueryUtils.toIterator(_userService.queryAll());
 		} else {
 			Department org = _deptService.getBean(cp.getParameter("orgId"));
 			if (org == null) {
 				org = _deptService.getBean(cp.getLDomainId());
 			}
 			if (org != null) {
-				return _userService.queryUsers(org);
+				return DataQueryUtils.toIterator(_userService.queryUsers(org));
 			}
 		}
 		return null;
@@ -96,11 +96,12 @@ public class DefaultUserSelectHandler extends AbstractDictionaryHandler implemen
 		final Map<ID, Collection<Department>> dTreemap = DataQueryUtils.toTreeMap(_deptService
 				.queryAll());
 		final Map<ID, Collection<User>> users = new HashMap<ID, Collection<User>>();
-		final IDataQuery<?> dq = getUsers(cp);
+		final Iterator<?> dq = getUsers(cp);
 		if (dq != null) {
-			dq.setFetchSize(0);
+			// dq.setFetchSize(0);
 			User user;
-			while ((user = (User) dq.next()) != null) {
+			while (dq.hasNext()) {
+				user = (User) dq.next();
 				ID deptId = user.getDepartmentId();
 				if (deptId == null) {
 					deptId = ID.NULL_ID;
