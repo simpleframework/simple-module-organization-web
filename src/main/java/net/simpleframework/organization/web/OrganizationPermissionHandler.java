@@ -442,7 +442,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public List<PermissionDept> getRootChildren() {
-		return _dept_children(_deptService.queryChildren(null));
+		return _dept_children(_deptService.queryDepartments(null, EDepartmentType.organization));
 	}
 
 	private List<PermissionDept> _dept_children(final IDataQuery<Department> dq) {
@@ -522,7 +522,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
-		public List<PermissionDept> getChildren() {
+		public List<PermissionDept> getDeptChildren() {
 			return _dept_children(_deptService.queryDepartments(oDept, EDepartmentType.department));
 		}
 
