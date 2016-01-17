@@ -24,8 +24,12 @@ import net.simpleframework.organization.IOrganizationContextAware;
 public class DefaultUserSelectHandler extends AbstractUserSelectHandler implements
 		IOrganizationContextAware {
 
+	// private final Map<ID, List<PermissionDept>> allDepts = new HashMap<ID,
+	// List<PermissionDept>>();
+
 	@Override
 	public Collection<DepartmentMemory> getDepartments(final ComponentParameter cp) {
+		// cp.getPermission().getRootChildren();
 		final Map<ID, Collection<Department>> dTreemap = DataQueryUtils.toTreeMap(_deptService
 				.queryAll());
 		final Map<ID, Collection<PermissionUser>> users = new HashMap<ID, Collection<PermissionUser>>();
