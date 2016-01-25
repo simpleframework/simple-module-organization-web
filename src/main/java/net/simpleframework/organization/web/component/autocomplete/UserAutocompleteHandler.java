@@ -1,12 +1,13 @@
 package net.simpleframework.organization.web.component.autocomplete;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import net.simpleframework.ado.db.common.SQLValue;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.coll.CollectionUtils.AbstractIterator;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.autocomplete.AbstractAutocompleteHandler;
 import net.simpleframework.mvc.component.ui.autocomplete.AutocompleteData;
@@ -23,20 +24,20 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler impleme
 		IOrganizationContextAware {
 
 	@Override
-	public Enumeration<AutocompleteData> getData(final ComponentParameter cp, final String val,
+	public Iterator<AutocompleteData> getData(final ComponentParameter cp, final String val,
 			final String val2) {
 		final String sepChar = (String) cp.getBeanProperty("sepChar");
 		final IDataQuery<Account> dq = createDataQuery(cp, val, val2);
-		return new Enumeration<AutocompleteData>() {
+		return new AbstractIterator<AutocompleteData>() {
 			Account account;
 
 			@Override
-			public boolean hasMoreElements() {
+			public boolean hasNext() {
 				return (account = dq.next()) != null;
 			}
 
 			@Override
-			public AutocompleteData nextElement() {
+			public AutocompleteData next() {
 				return createAutocompleteData(cp.getUser(account.getId()), sepChar);
 			}
 		};
