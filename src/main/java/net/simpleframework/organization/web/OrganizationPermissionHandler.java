@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
+import net.simpleframework.common.BeanUtils;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
@@ -262,6 +263,16 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		}
 
 		@Override
+		public String getNick() {
+			return oUser.getNick();
+		}
+
+		@Override
+		public Object getProperty(final String property) {
+			return BeanUtils.getProperty(oUser, property);
+		}
+
+		@Override
 		public String getDescription() {
 			return oUser.getDescription();
 		}
@@ -479,6 +490,11 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		@Override
 		public int getLevel() {
 			return _deptService.getLevel(oDept);
+		}
+
+		@Override
+		public Object getProperty(final String property) {
+			return BeanUtils.getProperty(oDept, property);
 		}
 
 		@Override
