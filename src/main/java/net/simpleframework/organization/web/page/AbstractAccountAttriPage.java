@@ -161,8 +161,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	protected final TableRow r7(final PageParameter pp) {
-		return new TableRow(new RowField($m("AccountEditPage.12"), new InputElement("ue_qq")),
-				new RowField($m("AccountEditPage.13"), new InputElement("ue_oorder")));
+		return new TableRow(new RowField($m("AccountEditPage.12"), new InputElement("ue_nick")),
+				new RowField($m("AccountEditPage.13"), new InputElement("ue_job")));
 	}
 
 	protected final TableRow r8(final PageParameter pp) {

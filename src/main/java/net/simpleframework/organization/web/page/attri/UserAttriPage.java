@@ -63,6 +63,6 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	@Override
 	protected TableRows getTableRows(final PageParameter pp) {
 		// r7(pp),
-		return TableRows.of(r1(pp), r3(pp), r4(pp), r5(pp), r6(pp), r8(pp), r9(pp), r10(pp));
+		return TableRows.of(r1(pp), r3(pp), r4(pp), r5(pp), r6(pp), r7(pp), r8(pp), r9(pp), r10(pp));
 	}
 }
