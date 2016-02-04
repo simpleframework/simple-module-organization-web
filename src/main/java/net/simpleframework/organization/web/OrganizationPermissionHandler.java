@@ -269,6 +269,9 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public Object getProperty(final String property) {
+			if (property.startsWith("account.")) {
+				return BeanUtils.getProperty(_userService.getAccount(getId()), property.substring(8));
+			}
 			return BeanUtils.getProperty(oUser, property);
 		}
 
