@@ -123,14 +123,14 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (params != null) {
 			accountType = (EAccountType) params.get(ACCOUNT_TYPE);
 		}
-		if (accountType == null) {
-			accountType = EAccountType.normal;
-		}
 
+		// 自动识别 accountType == null
 		Account account = null;
-		if (accountType == EAccountType.normal) {
+		if (accountType == null || accountType == EAccountType.normal) {
 			account = _accountService.getAccountByName(login);
-		} else if (accountType == EAccountType.email) {
+		}
+		if (account == null
+				&& ((accountType == null && login.contains("@")) || accountType == EAccountType.email)) {
 			final User user = _userService.getUserByEmail(login);
 			if (user != null) {
 				account = _accountService.getBean(user.getId());
@@ -138,7 +138,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 					throw OrganizationException.of($m("OrganizationPermission.6"));
 				}
 			}
-		} else if (accountType == EAccountType.mobile) {
+		}
+		if (account == null && (accountType == null || accountType == EAccountType.mobile)) {
 			final User user = _userService.getUserByMobile(login);
 			if (user != null) {
 				account = _accountService.getBean(user.getId());
