@@ -3,8 +3,12 @@ package net.simpleframework.organization.web.page.mgr.org2;
 import static net.simpleframework.common.I18n.$m;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
+import net.simpleframework.ado.FilterItem;
+import net.simpleframework.ado.db.DbDataQuery;
+import net.simpleframework.ado.db.common.ExpressionValue;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
@@ -194,6 +198,21 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 				return _userService.queryUsers(org);
 			}
 			return null;
+		}
+
+		@Override
+		protected ExpressionValue createFilterExpressionValue(final DbDataQuery<?> qs,
+				final TablePagerColumn oCol, final Collection<FilterItem> coll) {
+			final String col = oCol.getColumnName();
+			if ("u.text".equals(col)) {
+				final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol, coll);
+				final ExpressionValue ev2 = super.createFilterExpressionValue(qs, new TablePagerColumn(
+						"py"), coll);
+				ev.setExpression("((" + ev.getExpression() + ") or (" + ev2.getExpression() + "))");
+				ev.addValues(ev2.getValues());
+				return ev;
+			}
+			return super.createFilterExpressionValue(qs, oCol, coll);
 		}
 
 		@Override
