@@ -3,6 +3,7 @@ package net.simpleframework.organization.web.page;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.ctx.IModuleRef;
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -30,6 +31,8 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
+		pp.addImportCSS(PasswordGetPage.class, "/pass_get.css");
+
 		addComponentBean(pp, "PasswordGetPage_validation", ValidationBean.class)
 				.setTriggerSelector("#pg_email_btn")
 				.setWarnType(EWarnType.insertLast)
@@ -42,6 +45,11 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 
 		addAjaxRequest(pp, "PasswordGetPage_post").setConfirmMessage($m("Confirm.Post"))
 				.setHandlerMethod("doPost");
+	}
+
+	@Override
+	public String getPageRole(final PageParameter pp) {
+		return PermissionConst.ROLE_ANONYMOUS;
 	}
 
 	public IForward doPost(final ComponentParameter cp) {
