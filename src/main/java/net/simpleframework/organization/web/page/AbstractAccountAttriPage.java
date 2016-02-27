@@ -47,6 +47,11 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	@Override
+	public String getLabelWidth(final PageParameter pp) {
+		return "85px";
+	}
+
+	@Override
 	protected ValidationBean addFormValidationBean(final PageParameter pp) {
 		return super
 				.addFormValidationBean(pp)

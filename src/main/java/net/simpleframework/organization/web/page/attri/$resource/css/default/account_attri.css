@@ -1,16 +1,22 @@
 .AbstractAttriPage table.form_tbl {
   margin: -1px 0;
+  background-color: #ddd;
 }
 
 .AbstractAttriPage table.form_tbl .l {
-  padding: 10px 6px;
+  padding: 12px 6px;
+}
+
+.AbstractAttriPage .FormTableRowTemplatePage .tool_bar {
+  padding: 10px;
+  border-color: #ddd;
 }
 
 .AbstractAttriPage .tt {
   background-color: #f6f6f6;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   color: #666;
-  padding: 10px;
+  padding: 14px;
 }
 
 .AbstractAttriPage .FormTableRowTemplatePage {
@@ -42,7 +48,7 @@
 
 /*-----------------------AccountPasswordPage----------------------*/
 .AccountPasswordPage table.form_tbl .l {
-  padding: 12px 6px;
+  padding: 15px 6px;
 }
 
 .AccountPasswordPage {
@@ -68,6 +74,19 @@
 
 .AccountStatPage .v .left {
   line-height: 2;
+}
+
+.AccountStatPage .desc {
+  color: #888;
+  padding: 10px 20px;
+}
+
+#mobile_binding {
+  margin-bottom: 4px;
+}
+
+.ui-window table.form_tbl .l {
+  padding: 15px 6px;
 }
 
 /*-----------------------PhotoPage----------------------*/

@@ -9,6 +9,7 @@ import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.RowField;
@@ -38,13 +39,13 @@ public class AccountStatPage extends AbstractAccountPage {
 		// 邮件binding
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mailbinding_page",
 				AccountMailBindingPage.class);
-		addWindowBean(pp, "AccountStatPage_mailbinding", ajaxRequest).setWidth(400).setHeight(180)
+		addWindowBean(pp, "AccountStatPage_mailbinding", ajaxRequest).setWidth(420).setHeight(250)
 				.setTitle($m("AccountStatPage.12"));
 
 		// 手机binding
 		ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mobilebinding_page",
 				AccountMobileBindingPage.class);
-		addWindowBean(pp, "AccountStatPage_mobilebinding", ajaxRequest).setWidth(400).setHeight(180)
+		addWindowBean(pp, "AccountStatPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250)
 				.setTitle($m("AccountStatPage.12"));
 
 		// unbinding
@@ -151,7 +152,7 @@ public class AccountStatPage extends AbstractAccountPage {
 			super.onForward(pp);
 
 			addFormValidationBean(pp).addValidators(
-					new Validator(EValidatorMethod.required, "#mobile_binding"),
+					new Validator(EValidatorMethod.required, "#mobile_binding, #mobile_validate_code"),
 					new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"));
 		}
 
@@ -171,10 +172,19 @@ public class AccountStatPage extends AbstractAccountPage {
 		protected TableRows getTableRows(final PageParameter pp) {
 			final Account account = getAccount(pp);
 			final User user = _accountService.getUser(account.getId());
-			return TableRows
-					.of(new TableRow(new RowField($m("AccountEditPage.5"), InputElement
-							.hidden("accountId"), new InputElement("mobile_binding").setText(user
-							.getMobile()))));
+
+			final InputElement mobile_binding = new InputElement("mobile_binding").setPlaceholder(
+					$m("AccountEditPage.21")).setText(user.getMobile());
+			final InputElement mobile_validate_code = new InputElement("mobile_validate_code")
+					.setPlaceholder($m("AccountEditPage.22"));
+
+			final TableRow r1 = new TableRow(new RowField($m("AccountEditPage.5"),
+					InputElement.hidden("accountId"), mobile_binding, new ButtonElement(
+							$m("AccountEditPage.20"))));
+			final TableRow r2 = new TableRow(new RowField($m("AccountEditPage.19"),
+					mobile_validate_code));
+
+			return TableRows.of(r1, r2);
 		}
 	}
 }
