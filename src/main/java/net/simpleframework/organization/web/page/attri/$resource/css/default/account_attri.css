@@ -62,6 +62,10 @@
 }
 
 /*-----------------------AccountStatPage----------------------*/
+.ui-window table.form_tbl .l {
+  padding: 15px 6px;
+}
+
 .AccountStatPage {
   text-align: left;
   margin-top: 40px;
@@ -73,7 +77,7 @@
 }
 
 .AccountStatPage .v .left {
-  line-height: 2;
+  line-height: 2.1;
 }
 
 .AccountStatPage .desc {
@@ -85,8 +89,9 @@
   margin-bottom: 4px;
 }
 
-.ui-window table.form_tbl .l {
-  padding: 15px 6px;
+#mobile_binding_btn {
+  position: absolute;
+  right: 8px;
 }
 
 /*-----------------------PhotoPage----------------------*/

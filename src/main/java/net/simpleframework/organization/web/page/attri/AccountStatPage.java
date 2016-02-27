@@ -18,6 +18,8 @@ import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
+import net.simpleframework.mvc.component.base.validation.EWarnType;
+import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
 import net.simpleframework.organization.Account;
@@ -152,8 +154,15 @@ public class AccountStatPage extends AbstractAccountPage {
 			super.onForward(pp);
 
 			addFormValidationBean(pp).addValidators(
-					new Validator(EValidatorMethod.required, "#mobile_binding, #mobile_validate_code"),
-					new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"));
+					new Validator(EValidatorMethod.required, "#mobile_binding"),
+					new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"),
+					new Validator(EValidatorMethod.required, "#mobile_validate_code"));
+
+			addComponentBean(pp, "AccountMobileBindingPage_sent", ValidationBean.class)
+					.setWarnType(EWarnType.insertAfter)
+					.setTriggerSelector("#mobile_binding_btn")
+					.addValidators(new Validator(EValidatorMethod.required, "#mobile_binding"),
+							new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"));
 		}
 
 		@Transaction(context = IOrganizationContext.class)
@@ -177,10 +186,11 @@ public class AccountStatPage extends AbstractAccountPage {
 					$m("AccountEditPage.21")).setText(user.getMobile());
 			final InputElement mobile_validate_code = new InputElement("mobile_validate_code")
 					.setPlaceholder($m("AccountEditPage.22"));
+			final ButtonElement mobile_binding_btn = new ButtonElement($m("AccountEditPage.20"))
+					.setId("mobile_binding_btn").setOnclick("AccountStatPage.sms_sent(this);");
 
 			final TableRow r1 = new TableRow(new RowField($m("AccountEditPage.5"),
-					InputElement.hidden("accountId"), mobile_binding, new ButtonElement(
-							$m("AccountEditPage.20"))));
+					InputElement.hidden("accountId"), mobile_binding, mobile_binding_btn));
 			final TableRow r2 = new TableRow(new RowField($m("AccountEditPage.19"),
 					mobile_validate_code));
 
