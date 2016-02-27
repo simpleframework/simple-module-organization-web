@@ -375,8 +375,18 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public PermissionRole getRole(final Object role, final Map<String, Object> variables) {
-		final Role _role = getRoleObject(role, variables);
-		return _role == null ? super.getRole(role, variables) : new _PermissionRole(_role);
+		final Role oRole = getRoleObject(role, variables);
+		if (oRole != null) {
+			final _PermissionRole _role = new _PermissionRole(oRole);
+			Object userId;
+			PermissionUser _user;
+			if ((userId = variables.get(PermissionConst.VAR_USERID)) != null
+					&& (_user = getUser(userId)).exists()) {
+				_role.setUser(_user);
+			}
+			return _role;
+		}
+		return super.getRole(role, variables);
 	}
 
 	protected class _PermissionRole extends PermissionRole {
