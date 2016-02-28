@@ -5,7 +5,11 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.ctx.common.MValidateCode;
+import net.simpleframework.ctx.common.MValidateCode.Code;
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.module.msg.IMessageContextAware;
+import net.simpleframework.module.msg.ISMSService;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -29,10 +33,11 @@ import net.simpleframework.organization.User;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AccountStatPage extends AbstractAccountPage {
+public class AccountStatPage extends AbstractAccountPage implements IMessageContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -41,20 +46,12 @@ public class AccountStatPage extends AbstractAccountPage {
 		// 邮件binding
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mailbinding_page",
 				AccountMailBindingPage.class);
-		addWindowBean(pp, "AccountStatPage_mailbinding", ajaxRequest).setWidth(420).setHeight(250)
-				.setTitle($m("AccountStatPage.12"));
+		addWindowBean(pp, "AccountStatPage_mailbinding", ajaxRequest).setWidth(420).setHeight(250);
 
 		// 手机binding
 		ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mobilebinding_page",
 				AccountMobileBindingPage.class);
-		addWindowBean(pp, "AccountStatPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250)
-				.setTitle($m("AccountStatPage.12"));
-
-		// unbinding
-		addAjaxRequest(pp, "AccountStatPage_unmailbinding").setConfirmMessage(
-				$m("AccountStatPage.14")).setHandlerMethod("doUnMailbinding");
-		addAjaxRequest(pp, "AccountStatPage_unmobilebinding").setConfirmMessage(
-				$m("AccountStatPage.14")).setHandlerMethod("doUnMobilebinding");
+		addWindowBean(pp, "AccountStatPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250);
 	}
 
 	@Override
@@ -79,34 +76,15 @@ public class AccountStatPage extends AbstractAccountPage {
 	}
 
 	private LinkButton createBinding(final Account account, final String act, final boolean binding) {
-		if (binding) {
-			return LinkButton.corner($m("AccountStatPage.13")).setOnclick(
-					"$Actions['AccountStatPage_un" + act + "']('accountId=" + account.getId() + "');");
-		} else {
-			return LinkButton.corner($m("AccountStatPage.12")).setOnclick(
-					"$Actions['AccountStatPage_" + act + "']('accountId=" + account.getId() + "');");
-		}
+		return LinkButton.corner(binding ? $m("AccountStatPage.13") : $m("AccountStatPage.12"))
+				.setOnclick(
+						"$Actions['AccountStatPage_" + act + "']('accountId=" + account.getId()
+								+ "&unbinding=" + binding + "');");
 	}
 
 	private String blank(final Object o) {
 		final String r = Convert.toString(o);
 		return StringUtils.hasText(r) ? r : "&nbsp;";
-	}
-
-	@Transaction(context = IOrganizationContext.class)
-	public IForward doUnMailbinding(final ComponentParameter cp) {
-		final Account account = getAccount(cp);
-		account.setMailbinding(false);
-		_accountService.update(new String[] { "mailbinding" }, account);
-		return JavascriptForward.RELOC;
-	}
-
-	@Transaction(context = IOrganizationContext.class)
-	public IForward doUnMobilebinding(final ComponentParameter cp) {
-		final Account account = getAccount(cp);
-		account.setMobilebinding(false);
-		_accountService.update(new String[] { "mobilebinding" }, account);
-		return JavascriptForward.RELOC;
 	}
 
 	public String toTitleHTML(final PageParameter pp) {
@@ -117,14 +95,27 @@ public class AccountStatPage extends AbstractAccountPage {
 		return sb.toString();
 	}
 
-	public static class AccountMailBindingPage extends FormTableRowTemplatePage {
+	public static class AccountMailBindingPage extends AbstractAccountBindingPage {
 		@Override
 		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
 
 			addFormValidationBean(pp).addValidators(
 					new Validator(EValidatorMethod.required, "#mail_binding"),
-					new Validator(EValidatorMethod.email, "#mail_binding"));
+					new Validator(EValidatorMethod.email, "#mail_binding"),
+					new Validator(EValidatorMethod.required, "#mail_validate_code"));
+
+			addComponentBean(pp, "AccountMailBindingPage_sent_validation", ValidationBean.class)
+					.setWarnType(EWarnType.insertAfter)
+					.setTriggerSelector("#mail_binding_btn")
+					.addValidators(new Validator(EValidatorMethod.required, "#mail_binding"),
+							new Validator(EValidatorMethod.email, "#mail_binding"));
+
+			addAjaxRequest(pp, "AccountMailBindingPage_sentcode").setHandlerMethod("doSentcode");
+		}
+
+		public IForward doSentcode(final ComponentParameter cp) {
+			return null;
 		}
 
 		@Transaction(context = IOrganizationContext.class)
@@ -143,12 +134,24 @@ public class AccountStatPage extends AbstractAccountPage {
 		protected TableRows getTableRows(final PageParameter pp) {
 			final Account account = getAccount(pp);
 			final User user = _accountService.getUser(account.getId());
-			return TableRows.of(new TableRow(new RowField($m("AccountEditPage.4"), InputElement
-					.hidden("accountId"), new InputElement("mail_binding").setText(user.getEmail()))));
+
+			final boolean unbinding = pp.getBoolParameter("unbinding");
+			final InputElement _unbinding = InputElement.hidden("unbinding").setVal(unbinding);
+			final InputElement mail_binding = new InputElement("mail_binding").setReadonly(unbinding)
+					.setPlaceholder($m("AccountEditPage.23")).setText(user.getEmail());
+			final ButtonElement mail_binding_btn = new ButtonElement($m("AccountEditPage.20")).setId(
+					"mail_binding_btn").setOnclick("AccountStatPage.mail_sent(this);");
+
+			final InputElement mail_validate_code = new InputElement("mail_validate_code")
+					.setPlaceholder($m("AccountEditPage.22"));
+
+			return TableRows.of(new TableRow(new RowField($m("AccountEditPage.4"), _unbinding,
+					mail_binding, mail_binding_btn)), new TableRow(new RowField(
+					$m("AccountEditPage.19"), mail_validate_code)));
 		}
 	}
 
-	public static class AccountMobileBindingPage extends FormTableRowTemplatePage {
+	public static class AccountMobileBindingPage extends AbstractAccountBindingPage {
 		@Override
 		protected void onForward(final PageParameter pp) throws Exception {
 			super.onForward(pp);
@@ -158,11 +161,21 @@ public class AccountStatPage extends AbstractAccountPage {
 					new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"),
 					new Validator(EValidatorMethod.required, "#mobile_validate_code"));
 
-			addComponentBean(pp, "AccountMobileBindingPage_sent", ValidationBean.class)
+			addComponentBean(pp, "AccountMobileBindingPage_sent_validation", ValidationBean.class)
 					.setWarnType(EWarnType.insertAfter)
 					.setTriggerSelector("#mobile_binding_btn")
 					.addValidators(new Validator(EValidatorMethod.required, "#mobile_binding"),
 							new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"));
+
+			addAjaxRequest(pp, "AccountMobileBindingPage_sentcode").setHandlerMethod("doSentcode");
+		}
+
+		public IForward doSentcode(final ComponentParameter cp) {
+			final String mobile = cp.getParameter("mobile");
+			final ISMSService smsService = messageContext.getSMSService();
+			final Code code = MValidateCode.genCode(mobile);
+			smsService.sentSMS(mobile, "auth", new KVMap().add("code", code.val()).add("product", ""));
+			return null;
 		}
 
 		@Transaction(context = IOrganizationContext.class)
@@ -170,10 +183,17 @@ public class AccountStatPage extends AbstractAccountPage {
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final Account account = getAccount(cp);
 			final User user = _accountService.getUser(account.getId());
-			account.setMobilebinding(true);
+			final String mobile = cp.getParameter("mobile_binding");
+			MValidateCode.verifyCode(mobile, cp.getParameter("mobile_validate_code"));
+
+			final boolean binding = !cp.getBoolParameter("unbinding");
+			account.setMobilebinding(binding);
 			_accountService.update(new String[] { "mobilebinding" }, account);
-			user.setMobile(cp.getParameter("mobile_binding"));
-			_userService.update(new String[] { "mobile" }, user);
+			if (binding && !mobile.equals(user.getMobile())) {
+				user.setMobile(mobile);
+				_userService.update(new String[] { "mobile" }, user);
+			}
+
 			return super.onSave(cp).append("$Actions.reloc();");
 		}
 
@@ -182,19 +202,29 @@ public class AccountStatPage extends AbstractAccountPage {
 			final Account account = getAccount(pp);
 			final User user = _accountService.getUser(account.getId());
 
-			final InputElement mobile_binding = new InputElement("mobile_binding").setPlaceholder(
-					$m("AccountEditPage.21")).setText(user.getMobile());
-			final InputElement mobile_validate_code = new InputElement("mobile_validate_code")
-					.setPlaceholder($m("AccountEditPage.22"));
+			final boolean unbinding = pp.getBoolParameter("unbinding");
+			final InputElement _unbinding = InputElement.hidden("unbinding").setVal(unbinding);
+			final InputElement mobile_binding = new InputElement("mobile_binding")
+					.setReadonly(unbinding).setPlaceholder($m("AccountEditPage.21"))
+					.setText(user.getMobile());
 			final ButtonElement mobile_binding_btn = new ButtonElement($m("AccountEditPage.20"))
 					.setId("mobile_binding_btn").setOnclick("AccountStatPage.sms_sent(this);");
 
-			final TableRow r1 = new TableRow(new RowField($m("AccountEditPage.5"),
-					InputElement.hidden("accountId"), mobile_binding, mobile_binding_btn));
-			final TableRow r2 = new TableRow(new RowField($m("AccountEditPage.19"),
-					mobile_validate_code));
+			final InputElement mobile_validate_code = new InputElement("mobile_validate_code")
+					.setPlaceholder($m("AccountEditPage.22"));
 
-			return TableRows.of(r1, r2);
+			return TableRows.of(new TableRow(new RowField($m("AccountEditPage.5"), _unbinding,
+					mobile_binding, mobile_binding_btn)), new TableRow(new RowField(
+					$m("AccountEditPage.19"), mobile_validate_code)));
+		}
+	}
+
+	public static abstract class AbstractAccountBindingPage extends FormTableRowTemplatePage {
+
+		@Override
+		public String getTitle(final PageParameter pp) {
+			return pp.getBoolParameter("unbinding") ? $m("AccountStatPage.13")
+					: $m("AccountStatPage.12");
 		}
 	}
 }

@@ -126,8 +126,6 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 				}
 				dataBinding.put("ue_" + k, o);
 			}
-
-			selector.readonlySelector = "#ae_accountName";
 		}
 		if (dept == null) {
 			dept = _deptService.getBean(pp.getParameter("deptId"));
@@ -145,8 +143,20 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	protected final TableRow r3(final PageParameter pp) {
-		return new TableRow(new RowField($m("AccountEditPage.4"), new InputElement("ue_email")),
-				new RowField($m("AccountEditPage.5"), new InputElement("ue_mobile")));
+		final InputElement ue_email = new InputElement("ue_email");
+		final InputElement ue_mobile = new InputElement("ue_mobile");
+		final Account account = getAccount(pp);
+		if (account != null) {
+			if (account.isMailbinding()) {
+				// 不允许提交
+				ue_email.setName(null);
+			}
+			if (account.isMobilebinding()) {
+				ue_mobile.setName(null);
+			}
+		}
+		return new TableRow(new RowField($m("AccountEditPage.4"), ue_email), new RowField(
+				$m("AccountEditPage.5"), ue_mobile));
 	}
 
 	protected final TableRow r4(final PageParameter pp) {

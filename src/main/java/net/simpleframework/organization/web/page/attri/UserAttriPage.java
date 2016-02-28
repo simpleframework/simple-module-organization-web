@@ -14,6 +14,7 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
+import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 
@@ -41,7 +42,17 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
 			final PageSelector selector) {
 		super.onLoad(pp, dataBinding, selector);
-		selector.readonlySelector = "#ae_accountName";
+		final Account account = getAccount(pp);
+		if (account != null) {
+			String _selector = "#ae_accountName";
+			if (account.isMailbinding()) {
+				_selector += ", #ue_email";
+			}
+			if (account.isMobilebinding()) {
+				_selector += ", #ue_mobile";
+			}
+			selector.readonlySelector = _selector;
+		}
 	}
 
 	@Override
