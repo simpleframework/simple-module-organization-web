@@ -5,9 +5,11 @@ import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
+import net.simpleframework.common.mail.Email;
 import net.simpleframework.ctx.common.MValidateCode;
 import net.simpleframework.ctx.common.MValidateCode.Code;
 import net.simpleframework.ctx.trans.Transaction;
+import net.simpleframework.module.msg.IEmailService;
 import net.simpleframework.module.msg.IMessageContextAware;
 import net.simpleframework.module.msg.ISMSService;
 import net.simpleframework.mvc.IForward;
@@ -115,6 +117,11 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 		}
 
 		public IForward doSentcode(final ComponentParameter cp) {
+			final String mail = cp.getParameter("mail");
+			final IEmailService emailService = messageContext.getEmailService();
+			final Code code = MValidateCode.genCode(mail);
+			emailService
+					.sentMail(Email.of(mail).subject($m("AccountStatPage.15")).addText(code.val()));
 			return null;
 		}
 
@@ -123,10 +130,18 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final Account account = getAccount(cp);
 			final User user = _accountService.getUser(account.getId());
-			account.setMailbinding(true);
+
+			final String mail = cp.getParameter("mail_binding");
+			MValidateCode.verifyCode(mail, cp.getParameter("mail_validate_code"));
+
+			final boolean binding = !cp.getBoolParameter("unbinding");
+			account.setMailbinding(binding);
 			_accountService.update(new String[] { "mailbinding" }, account);
-			user.setEmail(cp.getParameter("mail_binding"));
-			_userService.update(new String[] { "email" }, user);
+
+			if (binding && !mail.equals(user.getEmail())) {
+				user.setEmail(mail);
+				_userService.update(new String[] { "email" }, user);
+			}
 			return super.onSave(cp).append("$Actions.reloc();");
 		}
 
@@ -137,8 +152,10 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 
 			final boolean unbinding = pp.getBoolParameter("unbinding");
 			final InputElement _unbinding = InputElement.hidden("unbinding").setVal(unbinding);
-			final InputElement mail_binding = new InputElement("mail_binding").setReadonly(unbinding)
-					.setPlaceholder($m("AccountEditPage.23")).setText(user.getEmail());
+			final String email = user.getEmail();
+			final InputElement mail_binding = new InputElement("mail_binding")
+					.setReadonly(unbinding && StringUtils.hasText(email))
+					.setPlaceholder($m("AccountEditPage.23")).setText(email);
 			final ButtonElement mail_binding_btn = new ButtonElement($m("AccountEditPage.20")).setId(
 					"mail_binding_btn").setOnclick("AccountStatPage.mail_sent(this);");
 
@@ -204,9 +221,10 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 
 			final boolean unbinding = pp.getBoolParameter("unbinding");
 			final InputElement _unbinding = InputElement.hidden("unbinding").setVal(unbinding);
+			final String mobile = user.getMobile();
 			final InputElement mobile_binding = new InputElement("mobile_binding")
-					.setReadonly(unbinding).setPlaceholder($m("AccountEditPage.21"))
-					.setText(user.getMobile());
+					.setReadonly(unbinding && StringUtils.hasText(mobile))
+					.setPlaceholder($m("AccountEditPage.21")).setText(mobile);
 			final ButtonElement mobile_binding_btn = new ButtonElement($m("AccountEditPage.20"))
 					.setId("mobile_binding_btn").setOnclick("AccountStatPage.sms_sent(this);");
 
