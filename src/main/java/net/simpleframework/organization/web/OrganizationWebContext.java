@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSessionListener;
 import net.simpleframework.ctx.IApplicationContext;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
+import net.simpleframework.ctx.ModuleRefUtils;
 import net.simpleframework.mvc.MVCContext;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.organization.impl.OrganizationContext;
@@ -64,12 +65,13 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 
 	@Override
 	public IModuleRef getLogRef() {
-		return getRef("net.simpleframework.organization.web.OrganizationLogRef");
+		return ModuleRefUtils.getRef("net.simpleframework.organization.web.OrganizationLogRef");
 	}
 
 	@Override
 	public IModuleRef getMessageRef() {
-		return getRef("net.simpleframework.organization.web.OrganizationMessageWebRef");
+		return ModuleRefUtils
+				.getRef("net.simpleframework.organization.web.OrganizationMessageWebRef");
 	}
 
 	@Override

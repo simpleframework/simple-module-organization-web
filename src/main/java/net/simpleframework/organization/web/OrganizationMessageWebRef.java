@@ -3,7 +3,7 @@ package net.simpleframework.organization.web;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.ClassUtils;
 import net.simpleframework.common.coll.KVMap;
-import net.simpleframework.ctx.IModuleContext;
+import net.simpleframework.ctx.IContextBase;
 import net.simpleframework.module.msg.plugin.NoticeMessageCategory;
 import net.simpleframework.module.msg.plugin.NoticeMessagePlugin;
 import net.simpleframework.organization.Account;
@@ -20,7 +20,7 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 	protected NoticeMessageCategory MC_PASSWORD_EDIT, MC_PASSWORD_GET;
 
 	@Override
-	public void onInit(final IModuleContext context) throws Exception {
+	public void onInit(final IContextBase context) throws Exception {
 		super.onInit(context);
 
 		final NoticeMessagePlugin plugin = getNoticeMessagePlugin();
