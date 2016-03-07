@@ -7,10 +7,10 @@ import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
-import net.simpleframework.organization.Department;
-import net.simpleframework.organization.Department.EDepartmentType;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.RoleChart;
+import net.simpleframework.organization.bean.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

@@ -15,8 +15,8 @@ import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.mvc.MVCConst;
 import net.simpleframework.mvc.MVCContext;
 import net.simpleframework.mvc.PageRequestResponse;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.bean.Account;
 import net.simpleframework.organization.login.IAccountSession;
 import net.simpleframework.organization.login.LoginObject;
 

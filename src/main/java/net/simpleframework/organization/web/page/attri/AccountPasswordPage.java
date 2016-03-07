@@ -17,8 +17,8 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.EWarnType;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
+import net.simpleframework.organization.bean.Account;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationMessageWebRef;
 

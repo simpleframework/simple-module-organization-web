@@ -37,12 +37,12 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.organization.Account;
-import net.simpleframework.organization.AccountStat;
-import net.simpleframework.organization.Department;
-import net.simpleframework.organization.Department.EDepartmentType;
+import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.AccountStat;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.User;
+import net.simpleframework.organization.bean.Department.EDepartmentType;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.User;
 
 /**
  * Licensed under the Apache License, Version 2.0

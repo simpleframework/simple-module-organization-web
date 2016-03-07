@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.IDictionaryHandle;
-import net.simpleframework.organization.Role;
-import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

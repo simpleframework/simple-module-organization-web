@@ -14,9 +14,9 @@ import net.simpleframework.mvc.common.element.TextButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.deptselect.DeptSelectBean;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
-import net.simpleframework.organization.Account;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
+import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 
 /**

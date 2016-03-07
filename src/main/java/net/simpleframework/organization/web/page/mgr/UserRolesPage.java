@@ -19,13 +19,13 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
 import net.simpleframework.mvc.template.lets.OneTableTemplatePage;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService.RoleM;
-import net.simpleframework.organization.Role;
-import net.simpleframework.organization.RoleMember;
-import net.simpleframework.organization.RoleMember.ERoleMemberType;
-import net.simpleframework.organization.User;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleMember;
+import net.simpleframework.organization.bean.User;
+import net.simpleframework.organization.bean.RoleMember.ERoleMemberType;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPageUtils;
 

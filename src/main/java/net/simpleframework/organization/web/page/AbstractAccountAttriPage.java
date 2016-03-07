@@ -23,10 +23,10 @@ import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.ValidationBean;
 import net.simpleframework.mvc.component.base.validation.Validator;
 import net.simpleframework.mvc.template.lets.FormTableRowTemplatePage;
-import net.simpleframework.organization.Account;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.User;
+import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.User;
 
 /**
  * Licensed under the Apache License, Version 2.0

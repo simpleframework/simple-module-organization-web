@@ -14,10 +14,10 @@ import net.simpleframework.mvc.component.ui.menu.MenuItem;
 import net.simpleframework.mvc.component.ui.menu.MenuItems;
 import net.simpleframework.mvc.component.ui.pager.AbstractTablePagerSchema;
 import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
-import net.simpleframework.organization.Account;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.User;
+import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.User;
 
 /**
  * Licensed under the Apache License, Version 2.0

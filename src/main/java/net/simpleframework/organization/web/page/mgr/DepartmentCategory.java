@@ -18,13 +18,13 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
-import net.simpleframework.organization.Account;
-import net.simpleframework.organization.Account.EAccountStatus;
-import net.simpleframework.organization.AccountStat;
-import net.simpleframework.organization.Department;
-import net.simpleframework.organization.Department.EDepartmentType;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.AccountStat;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.Account.EAccountStatus;
+import net.simpleframework.organization.bean.Department.EDepartmentType;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
 
 /**

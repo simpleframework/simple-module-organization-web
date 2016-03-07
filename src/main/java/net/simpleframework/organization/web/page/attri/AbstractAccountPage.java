@@ -6,8 +6,8 @@ import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.bean.Account;
 
 /**
  * Licensed under the Apache License, Version 2.0

@@ -11,8 +11,8 @@ import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.login.AbstractLoginHandler;
 import net.simpleframework.mvc.component.ui.validatecode.ValidateCodeUtils;
-import net.simpleframework.organization.Account.EAccountType;
 import net.simpleframework.organization.OrganizationException;
+import net.simpleframework.organization.bean.Account.EAccountType;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.organization.web.page.PasswordGetPage;
 

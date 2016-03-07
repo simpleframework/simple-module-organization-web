@@ -11,7 +11,7 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.Role;
+import net.simpleframework.organization.bean.Role;
 import net.simpleframework.organization.web.component.chartselect.RoleChartSelectBean;
 
 /**

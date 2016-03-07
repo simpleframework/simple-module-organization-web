@@ -6,8 +6,8 @@ import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IContextBase;
 import net.simpleframework.module.msg.plugin.NoticeMessageCategory;
 import net.simpleframework.module.msg.plugin.NoticeMessagePlugin;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.OrganizationMessageRef;
+import net.simpleframework.organization.bean.Account;
 
 /**
  * Licensed under the Apache License, Version 2.0

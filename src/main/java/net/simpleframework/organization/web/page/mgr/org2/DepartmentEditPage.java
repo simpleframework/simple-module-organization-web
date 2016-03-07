@@ -21,9 +21,9 @@ import net.simpleframework.mvc.component.ui.propeditor.InputComp;
 import net.simpleframework.mvc.component.ui.propeditor.PropEditorBean;
 import net.simpleframework.mvc.component.ui.propeditor.PropField;
 import net.simpleframework.mvc.template.lets.FormPropEditorTemplatePage;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.bean.Department;
 
 /**
  * Licensed under the Apache License, Version 2.0

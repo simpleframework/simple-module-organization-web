@@ -4,8 +4,8 @@ import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.object.ObjectEx.CacheV;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.Role;
-import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

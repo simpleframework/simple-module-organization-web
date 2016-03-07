@@ -32,10 +32,10 @@ import net.simpleframework.mvc.component.ui.pager.TablePagerBean;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.mvc.component.ui.pager.TablePagerUtils;
 import net.simpleframework.mvc.component.ui.pager.db.AbstractDbTablePagerHandler;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContext;
-import net.simpleframework.organization.Role;
-import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleChart;
 import net.simpleframework.organization.web.page.mgr.OmgrUtils;
 
 /**

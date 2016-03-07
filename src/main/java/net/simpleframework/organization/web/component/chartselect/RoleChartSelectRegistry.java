@@ -15,9 +15,9 @@ import net.simpleframework.mvc.component.ui.dictionary.DictionaryTreeHandler;
 import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

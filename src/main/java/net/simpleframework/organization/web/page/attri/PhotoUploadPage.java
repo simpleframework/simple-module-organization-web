@@ -25,10 +25,10 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.submit.SubmitBean;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.Validator;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.OrganizationException;
-import net.simpleframework.organization.User;
+import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.User;
 
 /**
  * Licensed under the Apache License, Version 2.0

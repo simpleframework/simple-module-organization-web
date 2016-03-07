@@ -7,8 +7,8 @@ import net.simpleframework.common.coll.CollectionUtils;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.dictionary.AbstractDictionaryHandler;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.Role;
-import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

@@ -1,7 +1,7 @@
 package net.simpleframework.organization.web.page.attri;
 
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.organization.Account;
+import net.simpleframework.organization.bean.Account;
 
 /**
  * Licensed under the Apache License, Version 2.0

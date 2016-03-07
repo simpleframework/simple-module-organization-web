@@ -9,11 +9,11 @@ import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ComponentUtils;
-import net.simpleframework.organization.Department;
 import net.simpleframework.organization.IOrganizationContextAware;
-import net.simpleframework.organization.Role;
-import net.simpleframework.organization.Role.ERoleType;
-import net.simpleframework.organization.RoleChart;
+import net.simpleframework.organization.bean.Department;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleChart;
+import net.simpleframework.organization.bean.Role.ERoleType;
 
 /**
  * Licensed under the Apache License, Version 2.0

@@ -11,8 +11,8 @@ import net.simpleframework.common.coll.CollectionUtils.AbstractIterator;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.autocomplete.AbstractAutocompleteHandler;
 import net.simpleframework.mvc.component.ui.autocomplete.AutocompleteData;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContextAware;
+import net.simpleframework.organization.bean.Account;
 
 /**
  * Licensed under the Apache License, Version 2.0

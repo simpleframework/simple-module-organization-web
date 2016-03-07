@@ -14,8 +14,8 @@ import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TableRows;
 import net.simpleframework.mvc.component.ComponentParameter;
-import net.simpleframework.organization.Account;
 import net.simpleframework.organization.IOrganizationContext;
+import net.simpleframework.organization.bean.Account;
 import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 
 /**
