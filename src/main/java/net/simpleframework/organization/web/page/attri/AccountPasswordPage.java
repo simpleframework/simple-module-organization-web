@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.permission.PermissionConst;
@@ -76,7 +77,7 @@ public class AccountPasswordPage extends AbstractAccountPage {
 					.append($m("AccountPasswordPage.6")).append("');");
 		} else {
 			final String password = cp.getParameter("user_password");
-			account.setPassword(Account.encrypt(password));
+			account.setPassword(AlgorithmUtils.encryptPass(password));
 			_accountService.update(new String[] { "password" }, account);
 			if (cp.getBoolParameter("user_SendMail")) {
 				final IModuleRef ref = ((IOrganizationWebContext) orgContext).getMessageRef();

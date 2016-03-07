@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page;
 
 import static net.simpleframework.common.I18n.$m;
+import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.object.ObjectUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.permission.PermissionConst;
@@ -81,7 +82,7 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			final Account account = _accountService.getBean(arr[1]);
 			if (account != null) {
 				final String password = ObjectUtils.hashStr(cp);
-				account.setPassword(Account.encrypt(password));
+				account.setPassword(AlgorithmUtils.encryptPass(password));
 				_accountService.update(new String[] { "password" }, account);
 				final JavascriptForward js = new JavascriptForward();
 				js.append("var np=$('idNewPassword');");
