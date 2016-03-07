@@ -26,7 +26,7 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 
 		final AjaxRequestBean ajaxRequest = addAjaxRequest(pp, COMPONENT_PREFIX + "Page",
 				LoginWindowRedirectPage.class);
-		addWindowBean(pp, COMPONENT_PREFIX + "Window", ajaxRequest).setWidth(420).setHeight(320)
+		addWindowBean(pp, COMPONENT_PREFIX + "Window", ajaxRequest).setWidth(420).setHeight(335)
 				.setResizable(false).setTitle($m("LoginWindowRedirect.0"));
 	}
 

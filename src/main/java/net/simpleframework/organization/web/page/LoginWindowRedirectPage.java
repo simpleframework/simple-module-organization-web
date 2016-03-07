@@ -29,6 +29,8 @@ public class LoginWindowRedirectPage extends AbstractTemplatePage {
 
 		pp.addComponentBean(COMPONENT_PREFIX + "Login", LoginBean.class)
 				.setPasswordGetUrl(null)
+				.setShowAccountType(false)
+				.setShowResetAction(false)
 				.setJsLoginCallback(
 						"$Actions['" + LoginWindowRedirect.COMPONENT_PREFIX + "Window'].close();")
 				.setContainerId("login_" + hashId);
