@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.simpleframework.ado.query.DataQueryUtils;
@@ -31,15 +33,15 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService.RoleM;
 import net.simpleframework.organization.OrganizationException;
 import net.simpleframework.organization.bean.Account;
-import net.simpleframework.organization.bean.AccountStat;
-import net.simpleframework.organization.bean.Department;
-import net.simpleframework.organization.bean.Role;
-import net.simpleframework.organization.bean.RoleMember;
-import net.simpleframework.organization.bean.User;
 import net.simpleframework.organization.bean.Account.EAccountStatus;
 import net.simpleframework.organization.bean.Account.EAccountType;
+import net.simpleframework.organization.bean.AccountStat;
+import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.bean.Department.EDepartmentType;
+import net.simpleframework.organization.bean.Role;
+import net.simpleframework.organization.bean.RoleMember;
 import net.simpleframework.organization.bean.RoleMember.ERoleMemberType;
+import net.simpleframework.organization.bean.User;
 import net.simpleframework.organization.login.LoginObject;
 import net.simpleframework.organization.role.RolenameW;
 import net.simpleframework.organization.web.page.LoginWindowRedirect;
@@ -310,6 +312,20 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 				setDept(_dept = OrganizationPermissionHandler.this.getDept(oUser.getDepartmentId()));
 			}
 			return _dept;
+		}
+
+		@Override
+		public List<PermissionDept> depts() {
+			final Set<ID> deptIds = new LinkedHashSet<ID>();
+			deptIds.add(oUser.getDepartmentId());
+			for (final Department dept : _rolemService.getDeptsByUser(oUser)) {
+				deptIds.add(dept.getId());
+			}
+			final List<PermissionDept> depts = new ArrayList<PermissionDept>();
+			for (final ID deptId : deptIds) {
+				depts.add(OrganizationPermissionHandler.this.getDept(deptId));
+			}
+			return depts;
 		}
 
 		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
