@@ -62,8 +62,8 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 		final Account account = getAccount(pp);
 		final User user = _accountService.getUser(account.getId());
 		kv.add("status", account.getStatus())
-				.add("createDate", blank(Convert.toDateString(account.getCreateDate())))
-				.add("lastLoginDate", blank(Convert.toDateString(account.getLastLoginDate())))
+				.add("createDate", blank(Convert.toDateTimeString(account.getCreateDate())))
+				.add("lastLoginDate", blank(Convert.toDateTimeString(account.getLastLoginDate())))
 				.add("lastLoginIP", blank(account.getLastLoginIP()))
 				.add("loginTimes", account.getLoginTimes())
 				.add("onlineMillis", DateUtils.toDifferenceDate(account.getOnlineMillis()))
