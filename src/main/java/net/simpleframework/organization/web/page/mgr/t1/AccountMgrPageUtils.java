@@ -3,9 +3,9 @@ package net.simpleframework.organization.web.page.mgr.t1;
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
+import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.bean.Department.EDepartmentType;
-import net.simpleframework.organization.IOrganizationContextAware;
 
 /**
  * Licensed under the Apache License, Version 2.0

@@ -11,8 +11,8 @@ import net.simpleframework.mvc.component.ui.tree.TreeBean;
 import net.simpleframework.mvc.component.ui.tree.TreeNode;
 import net.simpleframework.mvc.component.ui.tree.TreeNodes;
 import net.simpleframework.organization.bean.Department;
-import net.simpleframework.organization.bean.RoleChart;
 import net.simpleframework.organization.bean.Department.EDepartmentType;
+import net.simpleframework.organization.bean.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

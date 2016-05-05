@@ -25,8 +25,8 @@ import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.IRoleService;
 import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.bean.Role;
-import net.simpleframework.organization.bean.RoleChart;
 import net.simpleframework.organization.bean.Role.ERoleType;
+import net.simpleframework.organization.bean.RoleChart;
 import net.simpleframework.organization.web.component.chartselect.RoleChartSelectUtils;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectUtils;
 

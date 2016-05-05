@@ -31,8 +31,8 @@ import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.bean.Role;
 import net.simpleframework.organization.bean.RoleChart;
 import net.simpleframework.organization.bean.RoleMember;
-import net.simpleframework.organization.bean.User;
 import net.simpleframework.organization.bean.RoleMember.ERoleMemberType;
+import net.simpleframework.organization.bean.User;
 import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
 
 /**

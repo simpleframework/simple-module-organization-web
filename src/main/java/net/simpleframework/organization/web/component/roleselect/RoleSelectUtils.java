@@ -12,8 +12,8 @@ import net.simpleframework.mvc.component.ComponentUtils;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.bean.Role;
-import net.simpleframework.organization.bean.RoleChart;
 import net.simpleframework.organization.bean.Role.ERoleType;
+import net.simpleframework.organization.bean.RoleChart;
 
 /**
  * Licensed under the Apache License, Version 2.0

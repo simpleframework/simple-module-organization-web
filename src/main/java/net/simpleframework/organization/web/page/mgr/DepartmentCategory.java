@@ -21,9 +21,9 @@ import net.simpleframework.mvc.template.t1.ext.CategoryTableLCTemplatePage;
 import net.simpleframework.organization.IDepartmentService;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.Account.EAccountStatus;
 import net.simpleframework.organization.bean.AccountStat;
 import net.simpleframework.organization.bean.Department;
-import net.simpleframework.organization.bean.Account.EAccountStatus;
 import net.simpleframework.organization.bean.Department.EDepartmentType;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
 
