@@ -61,7 +61,7 @@ public class PhotoUploadPage extends AbstractAccountPage {
 		final KVMap kv = super.createVariables(pp);
 		final String src = pp.getParameter("src");
 		if (StringUtils.hasText(src)) {
-			kv.add("src", new String(AlgorithmUtils.base64Decode(src)));
+			kv.add("src", pp.wrapContextPath(new String(AlgorithmUtils.base64Decode(src))));
 		}
 		final String size = pp.getParameter("size");
 		if (StringUtils.hasText(size)) {
