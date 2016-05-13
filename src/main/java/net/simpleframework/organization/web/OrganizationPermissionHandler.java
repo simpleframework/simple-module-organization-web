@@ -341,6 +341,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 						return true;
 					}
 				}
+				return false;
 			}
 
 			if (role == null) {
