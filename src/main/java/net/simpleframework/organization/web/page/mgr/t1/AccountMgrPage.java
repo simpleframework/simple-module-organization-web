@@ -122,7 +122,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Override
 	public String getPageRole(final PageParameter pp) {
-		return orgContext.getModule().getManagerRole();
+		return getPageManagerRole(pp);
 	}
 
 	@Transaction(context = IOrganizationContext.class)
