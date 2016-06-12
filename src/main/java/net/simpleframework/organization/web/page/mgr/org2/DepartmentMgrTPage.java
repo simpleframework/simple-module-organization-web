@@ -281,7 +281,7 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 					_deptService.getOrg(dept), Account.TYPE_NO_DEPT)) {
 				@Override
 				protected PermissionUser change(final User n) {
-					return cp.getUser(n);
+					return n == null ? null : cp.getUser(n);
 				}
 			};
 		}
