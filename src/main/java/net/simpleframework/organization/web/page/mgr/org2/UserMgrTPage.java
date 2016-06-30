@@ -111,7 +111,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl",
 				UserTbl.class).setContainerId("idUserMgrTPage_tbl");
 		tablePager.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(AccountMgrPageUtils.TC_NICK().setSort(false))
+				.addColumn(AccountMgrPageUtils.TC_NICK().setFilterSort(false))
 				.addColumn(new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
 					@Override
 					public String getFilterVal(final String val) {
@@ -122,7 +122,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 						return dept.getId() != null ? dept.getText() : val;
 					}
 				}.setFilterAdvClick("$Actions['UserMgrTPage_deptSelect']();").setSort(false))
-				.addColumn(AccountMgrPageUtils.TC_JOB().setSort(false))
+				.addColumn(AccountMgrPageUtils.TC_JOB().setFilterSort(false))
 				.addColumn(AccountMgrPageUtils.TC_MOBILE().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilterSort(false));
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
