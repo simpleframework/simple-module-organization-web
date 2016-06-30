@@ -16,15 +16,23 @@ import net.simpleframework.organization.bean.Department.EDepartmentType;
 public abstract class AccountMgrPageUtils implements IOrganizationContextAware {
 
 	public static TablePagerColumn TC_NAME() {
-		return new TablePagerColumn("name", $m("AccountMgrPage.1"), 125);
+		return new TablePagerColumn("name", $m("AccountMgrPage.1"), 120);
 	}
 
 	public static TablePagerColumn TC_TEXT() {
-		return new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 125);
+		return new TablePagerColumn("u.text", $m("AccountMgrPage.2"), 120);
+	}
+
+	public static TablePagerColumn TC_NICK() {
+		return new TablePagerColumn("u.nick", $m("AccountEditPage.12"), 105);
 	}
 
 	public static TablePagerColumn TC_EMAIL() {
 		return new TablePagerColumn("u.email", $m("AccountMgrPage.6"), 120);
+	}
+
+	public static TablePagerColumn TC_JOB() {
+		return new TablePagerColumn("u.job", $m("AccountEditPage.13"), 60);
 	}
 
 	public static TablePagerColumn TC_MOBILE() {

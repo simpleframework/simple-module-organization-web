@@ -47,12 +47,22 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 	protected JavascriptForward toJavascriptForward(final PageParameter pp) {
 		final JavascriptForward js = CategoryTableLCTemplatePage.createTableRefresh();
 		if (Convert.toBool(pp.getParameter(OPT_NEXT))) {
-			js.append("$('").append(getFormSelector()).append("').down('form').reset();");
-			js.append("$('ae_accountName').focus();");
+			js.append(resetForm());
 		} else {
 			js.append("$Actions['AccountMgrPage_edit'].close();");
 		}
 		return js;
+	}
+
+	protected String resetForm() {
+		final StringBuilder js = new StringBuilder();
+		js.append("var _txt = $F('id_departmentText');");
+		js.append("var _id = $F('ue_departmentId');");
+		js.append("$('").append(getFormSelector()).append("').down('form').reset();");
+		js.append("if (_txt != '') $('id_departmentText').value = _txt;");
+		js.append("if (_id != '') $('ue_departmentId').value = _id;");
+		js.append("$('ae_accountName').focus();");
+		return js.toString();
 	}
 
 	@Override

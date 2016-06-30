@@ -8,6 +8,8 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.ElementList;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ui.menu.MenuBean;
 import net.simpleframework.mvc.component.ui.menu.MenuItem;
@@ -43,6 +45,12 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		return (TablePagerBean) super.addTablePagerBean(pp).setHandlerClass(UserTbl_Del.class);
+	}
+
+	@Override
+	protected ElementList getOpeActions(final PageParameter pp) {
+		return ElementList.of(LinkButton.of($m("AccountMgrPage.21")).setOnclick(
+				"$Actions['UserMgrTPage_tbl'].doAct('UserMgrTPage_delete');"));
 	}
 
 	public static class UserTbl_Del extends UserTbl {

@@ -26,7 +26,6 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
-import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -112,6 +111,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "UserMgrTPage_tbl",
 				UserTbl.class).setContainerId("idUserMgrTPage_tbl");
 		tablePager.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_NAME())
+				.addColumn(AccountMgrPageUtils.TC_NICK().setSort(false))
 				.addColumn(new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
 					@Override
 					public String getFilterVal(final String val) {
@@ -122,14 +122,14 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 						return dept.getId() != null ? dept.getText() : val;
 					}
 				}.setFilterAdvClick("$Actions['UserMgrTPage_deptSelect']();").setSort(false))
+				.addColumn(AccountMgrPageUtils.TC_JOB().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_MOBILE().setSort(false))
-				.addColumn(AccountMgrPageUtils.TC_EMAIL().setSort(false))
 				.addColumn(AccountMgrPageUtils.TC_LASTLOGINDATE().setFilterSort(false));
 		final boolean self = UserMgrTPage.class.equals(getOriginalClass());
 		if (self) {
 			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS().setFilterSort(false));
 		}
-		tablePager.addColumn(TablePagerColumn.OPE(self ? 120 : 70));
+		tablePager.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -150,12 +150,22 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		return new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 	}
 
+	protected ElementList getOpeActions(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder("$Actions['UserMgrTPage_edit'](");
+		final Department dept = getDept(pp);
+		if (dept != null) {
+			sb.append("'deptId=").append(dept.getId()).append("'");
+		}
+		sb.append(");");
+		return ElementList.of(LinkButton.addBtn().setOnclick(sb.toString()));
+	}
+
 	@Override
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar UserMgrTPage_tbar'>");
-		sb.append(ElementList.of(LinkButton.addBtn().setOnclick("$Actions['UserMgrTPage_edit']();")));
+		sb.append(getOpeActions(pp));
 
 		AccountStat stat = null;
 		final Department org = getOrg2(pp);
@@ -254,7 +264,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 				user = _accountService.getUser(account.getId());
 			}
 
-			data.add("name", account.getName());
+			data.add("name", new LinkElement(account.getName())
+					.setOnclick("$Actions['UserMgrTPage_edit']('accountId=" + user.getId() + "');"));
 			data.add("u.text", TemplateUtils.toIconUser(cp, user.getId()));
 
 			data.add("lastLoginDate", account.getLastLoginDate()).add("status", account.getStatus());
@@ -262,6 +273,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			final String email = user.getEmail();
 			data.add("u.email", new LinkElement(email).setHref("mailto:" + email));
 			data.add("u.mobile", user.getMobile());
+			data.add("u.job", user.getJob());
+			data.add("u.nick", user.getNick());
 
 			data.add("u.departmentId",
 					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(user.getDepartmentId())));
@@ -275,11 +288,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			sb.append(
 					new ButtonElement($m("AccountMgrPage.22"))
 							.setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id + "');"))
-					.append(SpanElement.SPACE)
-					.append(
-							ButtonElement.editBtn().setOnclick(
-									"$Actions['UserMgrTPage_edit']('accountId=" + id + "');"));
-			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
+					.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}
@@ -299,8 +308,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		protected JavascriptForward toJavascriptForward(final PageParameter pp) {
 			final JavascriptForward js = new JavascriptForward("$Actions['UserMgrTPage_tbl']();");
 			if (Convert.toBool(pp.getParameter(OPT_NEXT))) {
-				js.append("$('").append(getFormSelector()).append("').down('form').reset();");
-				js.append("$('ae_accountName').focus();");
+				js.append(resetForm());
 			} else {
 				js.append("$Actions['UserMgrTPage_edit'].close();");
 			}
