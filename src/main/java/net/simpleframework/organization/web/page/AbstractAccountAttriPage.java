@@ -136,25 +136,27 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		}
 	}
 
+	protected void doR1(final PageParameter pp, final InputElement ae_accountName,
+			final InputElement ue_text) {
+	}
+
 	protected final TableRow r1(final PageParameter pp) {
+		final InputElement ae_accountName = new InputElement("ae_accountName");
+		final InputElement ue_text = new InputElement("ue_text");
+		doR1(pp, ae_accountName, ue_text);
 		return new TableRow(new RowField($m("AccountEditPage.0"), InputElement.hidden("ae_id"),
-				new InputElement("ae_accountName")).setStarMark(true), new RowField(
-				$m("AccountEditPage.1"), new InputElement("ue_text")).setStarMark(true));
+				ae_accountName).setStarMark(true),
+				new RowField($m("AccountEditPage.1"), ue_text).setStarMark(true));
+	}
+
+	protected void doR3(final PageParameter pp, final InputElement ue_email,
+			final InputElement ue_mobile) {
 	}
 
 	protected final TableRow r3(final PageParameter pp) {
 		final InputElement ue_email = new InputElement("ue_email");
 		final InputElement ue_mobile = new InputElement("ue_mobile");
-		final Account account = getAccount(pp);
-		if (account != null) {
-			if (account.isMailbinding()) {
-				// 不允许提交
-				ue_email.setName(null);
-			}
-			if (account.isMobilebinding()) {
-				ue_mobile.setName(null);
-			}
-		}
+		doR3(pp, ue_email, ue_mobile);
 		return new TableRow(new RowField($m("AccountEditPage.4"), ue_email), new RowField(
 				$m("AccountEditPage.5"), ue_mobile));
 	}

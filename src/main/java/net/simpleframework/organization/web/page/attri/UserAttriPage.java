@@ -1,12 +1,8 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
-
-import java.util.Map;
-
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
-import net.simpleframework.mvc.IPageHandler.PageSelector;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ElementList;
@@ -21,7 +17,8 @@ import net.simpleframework.organization.web.page.AbstractAccountAttriPage;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public class UserAttriPage extends AbstractAccountAttriPage {
@@ -39,19 +36,21 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	}
 
 	@Override
-	public void onLoad(final PageParameter pp, final Map<String, Object> dataBinding,
-			final PageSelector selector) {
-		super.onLoad(pp, dataBinding, selector);
+	protected void doR1(final PageParameter pp, final InputElement ae_accountName,
+			final InputElement ue_text) {
 		final Account account = getAccount(pp);
 		if (account != null) {
-			String _selector = "#ae_accountName";
-			if (account.isMailbinding()) {
-				_selector += ", #ue_email";
-			}
-			if (account.isMobilebinding()) {
-				_selector += ", #ue_mobile";
-			}
-			selector.readonlySelector = _selector;
+			ae_accountName.setReadonly(true);
+		}
+	}
+
+	@Override
+	protected void doR3(final PageParameter pp, final InputElement ue_email,
+			final InputElement ue_mobile) {
+		final Account account = getAccount(pp);
+		if (account != null) {
+			ue_email.setReadonly(account.isMailbinding());
+			ue_mobile.setReadonly(account.isMobilebinding());
 		}
 	}
 

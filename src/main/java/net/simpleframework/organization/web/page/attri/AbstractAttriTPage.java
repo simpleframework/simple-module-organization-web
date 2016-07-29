@@ -18,7 +18,8 @@ import net.simpleframework.organization.web.OrganizationUrlsFactory;
 /**
  * Licensed under the Apache License, Version 2.0
  * 
- * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
+ * @author 陈侃(cknet@126.com, 13910090885)
+ *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
 public abstract class AbstractAttriTPage extends Category_BlankPage implements
@@ -30,6 +31,8 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 
 		pp.addImportCSS(AbstractAttriTPage.class, "/account_attri.css");
 	}
+
+	protected abstract Class<? extends AbstractMVCPage> getFormClass();
 
 	@Override
 	protected int getCategoryWidth(final PageParameter pp) {
@@ -68,9 +71,14 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<div class='UserAttriTPage' align='center'>");
-			sb.append(pp.includeUrl(UserAttriPage.class));
+			sb.append(pp.includeUrl(getFormClass()));
 			sb.append("</div>");
 			return sb.toString();
+		}
+
+		@Override
+		protected Class<? extends AbstractMVCPage> getFormClass() {
+			return UserAttriPage.class;
 		}
 	}
 
@@ -80,9 +88,14 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<div class='AccountStatTPage' align='center'>");
-			sb.append(pp.includeUrl(AccountStatPage.class));
+			sb.append(pp.includeUrl(getFormClass()));
 			sb.append("</div>");
 			return sb.toString();
+		}
+
+		@Override
+		protected Class<? extends AbstractMVCPage> getFormClass() {
+			return AccountStatPage.class;
 		}
 	}
 
@@ -92,9 +105,14 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<div class='AccountPasswordTPage' align='center'>");
-			sb.append(pp.includeUrl(AccountPasswordPage.class));
+			sb.append(pp.includeUrl(getFormClass()));
 			sb.append("</div>");
 			return sb.toString();
+		}
+
+		@Override
+		protected Class<? extends AbstractMVCPage> getFormClass() {
+			return AccountPasswordPage.class;
 		}
 	}
 
@@ -104,9 +122,14 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 				final String currentVariable) throws IOException {
 			final StringBuilder sb = new StringBuilder();
 			sb.append("<div class='PhotoTPage' align='center'>");
-			sb.append(pp.includeUrl(PhotoPage.class));
+			sb.append(pp.includeUrl(getFormClass()));
 			sb.append("</div>");
 			return sb.toString();
+		}
+
+		@Override
+		protected Class<? extends AbstractMVCPage> getFormClass() {
+			return PhotoPage.class;
 		}
 	}
 }
