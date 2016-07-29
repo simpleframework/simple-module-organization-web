@@ -32,7 +32,7 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	@Override
 	public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 		super.onSave(cp);
-		return new JavascriptForward("alert('").append($m("UserAttriPage.0")).append("');");
+		return new JavascriptForward("$Actions.reloc('saved=true');");
 	}
 
 	@Override
@@ -56,8 +56,13 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		return ElementList.of(SpanElement.strongText($m("UserAttriPage.1")).addStyle(
-				"line-height: 2;"));
+		final boolean saved = pp.getBoolParameter("saved");
+		final SpanElement txt = SpanElement.strongText(
+				saved ? $m("UserAttriPage.0") : $m("UserAttriPage.1")).addStyle("line-height: 2;");
+		if (saved) {
+			txt.setColor("#f00");
+		}
+		return ElementList.of(txt);
 	}
 
 	@Override
