@@ -5,6 +5,7 @@ import static net.simpleframework.common.I18n.$m;
 import java.io.IOException;
 import java.util.Map;
 
+import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.ui.window.WindowRegistry;
@@ -30,6 +31,11 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 		super.onForward(pp);
 
 		pp.addImportCSS(AbstractAttriTPage.class, "/account_attri.css");
+	}
+
+	@Override
+	public String getPageRole(final PageParameter pp) {
+		return PermissionConst.ROLE_ALL_ACCOUNT;
 	}
 
 	protected abstract Class<? extends AbstractMVCPage> getFormClass();
