@@ -2,6 +2,24 @@
   ${page.toTitleHTML(parameter)}
   <table class="form_tbl">
     <tr>
+      <td class="l">#(AccountStatPage.16)</td>
+      <td class="v">${name}</td>
+    </tr>
+    <tr>
+      <td class="l">#(AccountStatPage.6)</td>
+      <td class="v">
+        <div class="left">${mailbinding}</div>
+        <div class="right">${mailbinding_act}</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="l">#(AccountStatPage.7)</td>
+      <td class="v">
+        <div class="left">${mobilebinding}</div>
+        <div class="right">${mobilebinding_act}</div>
+      </td>
+    </tr>
+    <tr>
       <td class="l">#(AccountStatPage.0)</td>
       <td class="v">${status}</td>
     </tr>
@@ -29,20 +47,6 @@
       <td class="l">#(AccountStatPage.11)</td>
       <td class="v">${mdevid}</td>
     </tr>
-    <tr>
-      <td class="l">#(AccountStatPage.6)</td>
-      <td class="v">
-        <div class="left">${mailbinding}</div>
-        <div class="right">${mailbinding_act}</div>
-      </td>
-    </tr>
-    <tr>
-      <td class="l">#(AccountStatPage.7)</td>
-      <td class="v">
-        <div class="left">${mobilebinding}</div>
-        <div class="right">${mobilebinding_act}</div>
-      </td>
-    </tr>
   </table>
   <div class="desc">* #(AccountStatPage.14)</div>
 </div>
@@ -53,7 +57,7 @@
       obj.disable();
       var i = 60;
       obj.value = btxt + "(" + (i--) + ")";
-      var hdl = setInterval(function() {         
+      var hdl = setInterval(function() {
         if (i == 0) {
           clearTimeout(hdl);
           obj.value = btxt;
@@ -63,7 +67,7 @@
         }
       }, 1000);
     },
-    
+
     sms_sent : function(obj) {
       var mobile = $F(obj.previous());
       var act = $Actions['AccountMobileBindingPage_sentcode'];
@@ -73,7 +77,7 @@
       };
       act("mobile=" + mobile);
     },
-    
+
     mail_sent : function(obj) {
       var mail = $F(obj.previous());
       var act = $Actions['AccountMailBindingPage_sentcode'];

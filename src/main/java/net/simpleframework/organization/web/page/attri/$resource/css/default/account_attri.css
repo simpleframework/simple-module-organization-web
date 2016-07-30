@@ -81,6 +81,10 @@
   line-height: 2.1;
 }
 
+.AccountStatPage .v .right a.simple_btn {
+  margin-right: 8px;
+}
+
 .AccountStatPage .desc {
   color: #888;
   padding: 10px 20px;
