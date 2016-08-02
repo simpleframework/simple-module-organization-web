@@ -58,10 +58,10 @@ public abstract class AbstractAttriTPage extends Category_BlankPage implements
 	protected CategoryItems getCategoryList(final PageParameter pp) {
 		final CategoryItems blocks = CategoryItems.of();
 		int i = 0;
-		final String[] icons = new String[] { "/images/user.png", "/images/account.png",
+		final String[] icons = new String[] { "/images/account.png", "/images/user.png",
 				"/images/password.png", "/images/photo.png" };
-		for (final Class<? extends AbstractMVCPage> pageClass : new Class[] { UserAttriTPage.class,
-				AccountStatTPage.class, AccountPasswordTPage.class, PhotoTPage.class }) {
+		for (final Class<? extends AbstractMVCPage> pageClass : new Class[] { AccountStatTPage.class,
+				UserAttriTPage.class, AccountPasswordTPage.class, PhotoTPage.class }) {
 			blocks.add(new CategoryItem($m("AbstractEditAwarePage." + i))
 					.setHref(uFactory.getUrl(pp, pageClass))
 					.setIconClass(pp.getCssResourceHomePath(AbstractAttriTPage.class) + icons[i++])
