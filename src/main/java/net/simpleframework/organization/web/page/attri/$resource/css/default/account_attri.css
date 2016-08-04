@@ -9,7 +9,7 @@
 
 .AbstractAttriPage .FormTableRowTemplatePage .tool_bar {
   padding: 10px;
-  border-color: #ddd;
+  border: 1px solid #ddd;
 }
 
 .AbstractAttriPage .tt {
