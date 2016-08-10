@@ -60,23 +60,22 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			if (ref != null) {
 				final User user = _userService.getUserByEmail(cp.getParameter("val"));
 				if (user == null) {
-					return new JavascriptForward("alert('").append($m("PasswordGetPage.6"))
-							.append("');");
+					return JavascriptForward.alert($m("PasswordGetPage.6"));
 				}
 				final Object id = user.getId();
 				final String code = ObjectUtils.hashStr(cp);
 				((OrganizationMessageWebRef) ref).doPasswordGetMessage(_userService.getAccount(id),
 						code);
 				cp.setSessionAttr("password_get_code", new Object[] { code, id });
-				return new JavascriptForward("alert('").append($m("PasswordGetPage.9")).append("');");
+				return JavascriptForward.alert($m("PasswordGetPage.9"));
 			}
 		} else if ("code".equals(t)) {
 			final Object[] arr = (Object[]) cp.getSessionAttr("password_get_code");
 			if (arr == null) {
-				return new JavascriptForward("alert('").append($m("PasswordGetPage.7")).append("');");
+				return JavascriptForward.alert($m("PasswordGetPage.7"));
 			}
 			if (!arr[0].equals(cp.getParameter("val"))) {
-				return new JavascriptForward("alert('").append($m("PasswordGetPage.8")).append("');");
+				return JavascriptForward.alert($m("PasswordGetPage.8"));
 			}
 
 			final Account account = _accountService.getBean(arr[1]);

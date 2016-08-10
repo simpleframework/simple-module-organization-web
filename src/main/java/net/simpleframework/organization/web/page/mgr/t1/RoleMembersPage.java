@@ -122,7 +122,7 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 				role.setRuleScript(ruleValue);
 				_roleService.update(new String[] { "rulescript" }, role);
 			}
-			return new JavascriptForward("alert('").append($m("RoleMembersPage.8")).append("');");
+			return JavascriptForward.alert($m("RoleMembersPage.8"));
 		} else {
 			return null;
 		}
