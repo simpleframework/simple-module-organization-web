@@ -72,9 +72,9 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 				final String code = StringUtils.genRandomNum(6);
 				final Account account = _userService.getAccount(user.getId());
 				if (email) {
-					_ref.doPasswordGetEmailMessage(account, code);
+					_ref.doPasswordResetEmailMessage(account, code);
 				} else {
-					_ref.doPasswordGetMobileMessage(account, code);
+					_ref.doPasswordResetMobileMessage(account, code);
 				}
 				cp.setSessionAttr("password_get_code", new Object[] { code, account.getId() });
 				return JavascriptForward.alert($m("PasswordGetPage.9"));

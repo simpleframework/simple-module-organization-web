@@ -21,9 +21,10 @@ import net.simpleframework.organization.bean.Account;
  */
 public class OrganizationMessageWebRef extends OrganizationMessageRef {
 	protected String PASSWORD_EDIT = $m("OrganizationMessageWebRef.0");
-	protected String PASSWORD_GET = $m("OrganizationMessageWebRef.1");
+	protected String PASSWORD_RESET = $m("OrganizationMessageWebRef.1");
 
-	protected NoticeMessageCategory MC_PASSWORD_EDIT, MC_PASSWORD_GET_EMAIL, MC_PASSWORD_GET_MOBILE;
+	protected NoticeMessageCategory MC_PASSWORD_EDIT, MC_PASSWORD_RESET_EMAIL,
+			MC_PASSWORD_RESET_MOBILE;
 
 	@Override
 	public void onInit(final IContextBase context) throws Exception {
@@ -31,8 +32,9 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 
 		final NoticeMessagePlugin plugin = getNoticeMessagePlugin();
 		plugin.registMessageCategory(setGroup(MC_PASSWORD_EDIT = MC_PASSWORD_EDIT()));
-		plugin.registMessageCategory(setGroup(MC_PASSWORD_GET_EMAIL = MC_PASSWORD_GET_EMAIL()));
-		plugin.registMessageCategory(setGroup(MC_PASSWORD_GET_MOBILE = MC_PASSWORD_GET_MOBILE()));
+		plugin.registMessageCategory(setGroup(MC_PASSWORD_RESET_EMAIL = MC_PASSWORD_RESET_EMAIL()));
+		plugin.registMessageCategory(setGroup(MC_PASSWORD_RESET_MOBILE = MC_PASSWORD_RESET_MOBILE()));
+
 	}
 
 	protected NoticeMessageCategory MC_PASSWORD_EDIT() throws IOException {
@@ -40,17 +42,17 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 				ClassUtils.getResourceAsString(OrganizationMessageWebRef.class, "MC_PASSWORD_EDIT.txt"));
 	}
 
-	protected NoticeMessageCategory MC_PASSWORD_GET_EMAIL() throws IOException {
+	protected NoticeMessageCategory MC_PASSWORD_RESET_EMAIL() throws IOException {
 		final String cc = ClassUtils.getResourceAsString(OrganizationMessageWebRef.class,
-				"MC_PASSWORD_GET.txt");
-		return new NoticeMessageCategory("MC_PASSWORD_GET_EMAIL", PASSWORD_GET, PASSWORD_GET, cc)
-				.setSendTo_normal(false).setSendTo_email(true);
+				"MC_PASSWORD_RESET.txt");
+		return new NoticeMessageCategory("MC_PASSWORD_RESET_EMAIL", PASSWORD_RESET, PASSWORD_RESET,
+				cc).setSendTo_normal(false).setSendTo_email(true);
 	}
 
-	protected NoticeMessageCategory MC_PASSWORD_GET_MOBILE() throws IOException {
+	protected NoticeMessageCategory MC_PASSWORD_RESET_MOBILE() throws IOException {
 		final String cc = ClassUtils.getResourceAsString(OrganizationMessageWebRef.class,
-				"MC_PASSWORD_GET.txt");
-		return new NoticeMessageCategory("MC_PASSWORD_GET_MOBILE", PASSWORD_GET, null, cc)
+				"MC_PASSWORD_RESET.txt");
+		return new NoticeMessageCategory("MC_PASSWORD_RESET_MOBILE", PASSWORD_RESET, null, cc)
 				.setSendTo_normal(false).setSendTo_mobile(true);
 	}
 
@@ -62,19 +64,19 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 				new KVMap().add("account", account).add("password", password));
 	}
 
-	public void doPasswordGetEmailMessage(final Account account, final String code) {
-		if (MC_PASSWORD_GET_EMAIL == null) {
+	public void doPasswordResetEmailMessage(final Account account, final String code) {
+		if (MC_PASSWORD_RESET_EMAIL == null) {
 			return;
 		}
-		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_GET_EMAIL,
+		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_RESET_EMAIL,
 				new KVMap().add("code", code));
 	}
 
-	public void doPasswordGetMobileMessage(final Account account, final String code) {
-		if (MC_PASSWORD_GET_MOBILE == null) {
+	public void doPasswordResetMobileMessage(final Account account, final String code) {
+		if (MC_PASSWORD_RESET_MOBILE == null) {
 			return;
 		}
-		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_GET_MOBILE,
+		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_RESET_MOBILE,
 				new KVMap().add("code", code));
 	}
 }

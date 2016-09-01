@@ -11,7 +11,6 @@ import net.simpleframework.ctx.common.MValidateCode.Code;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.module.msg.IEmailService;
 import net.simpleframework.module.msg.IMessageContextAware;
-import net.simpleframework.module.msg.ISMSService;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -189,9 +188,7 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 
 		public IForward doSentcode(final ComponentParameter cp) {
 			final String mobile = cp.getParameter("mobile");
-			final ISMSService smsService = messageContext.getSMSService();
-			final Code code = MValidateCode.genCode(mobile);
-			smsService.sentSMS(mobile, "auth", new KVMap().add("code", code.val()).add("product", ""));
+			_accountService.sentBindingSMS(mobile);
 			return null;
 		}
 
