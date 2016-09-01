@@ -2,7 +2,7 @@ package net.simpleframework.organization.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 import net.simpleframework.common.AlgorithmUtils;
-import net.simpleframework.common.object.ObjectUtils;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
@@ -35,10 +35,8 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 		pp.addImportCSS(PasswordGetPage.class, "/pass_get.css");
 
 		addComponentBean(pp, "PasswordGetPage_validation", ValidationBean.class)
-				.setTriggerSelector("#pg_email_btn")
-				.setWarnType(EWarnType.insertLast)
-				.addValidators(new Validator(EValidatorMethod.required, "#pg_email"),
-						new Validator(EValidatorMethod.email, "#pg_email"));
+				.setTriggerSelector("#pg_account_btn").setWarnType(EWarnType.insertLast)
+				.addValidators(new Validator(EValidatorMethod.required, "#pg_account"));
 
 		addComponentBean(pp, "PasswordGetPage_validation2", ValidationBean.class)
 				.setTriggerSelector("#pg_code_btn").setWarnType(EWarnType.insertLast)
@@ -55,18 +53,30 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 
 	public IForward doPost(final ComponentParameter cp) {
 		final String t = cp.getParameter("t");
-		if ("email".equals(t)) {
+		if ("account".equals(t)) {
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getMessageRef();
-			if (ref != null) {
-				final User user = _userService.getUserByEmail(cp.getParameter("val"));
+			String val;
+			if (ref != null && StringUtils.hasText(val = cp.getParameter("val"))) {
+				User user;
+				final boolean email = val.contains("@");
+				if (email) {
+					user = _userService.getUserByEmail(val);
+				} else {
+					user = _userService.getUserByMobile(val);
+				}
 				if (user == null) {
 					return JavascriptForward.alert($m("PasswordGetPage.6"));
 				}
-				final Object id = user.getId();
-				final String code = ObjectUtils.hashStr(cp);
-				((OrganizationMessageWebRef) ref).doPasswordGetMessage(_userService.getAccount(id),
-						code);
-				cp.setSessionAttr("password_get_code", new Object[] { code, id });
+
+				final OrganizationMessageWebRef _ref = (OrganizationMessageWebRef) ref;
+				final String code = StringUtils.genRandomNum(6);
+				final Account account = _userService.getAccount(user.getId());
+				if (email) {
+					_ref.doPasswordGetEmailMessage(account, code);
+				} else {
+					_ref.doPasswordGetMobileMessage(account, code);
+				}
+				cp.setSessionAttr("password_get_code", new Object[] { code, account.getId() });
 				return JavascriptForward.alert($m("PasswordGetPage.9"));
 			}
 		} else if ("code".equals(t)) {
@@ -80,9 +90,10 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 
 			final Account account = _accountService.getBean(arr[1]);
 			if (account != null) {
-				final String password = ObjectUtils.hashStr(cp);
+				final String password = StringUtils.genRandomNum(8);
 				account.setPassword(AlgorithmUtils.encryptPass(password));
 				_accountService.update(new String[] { "password" }, account);
+
 				final JavascriptForward js = new JavascriptForward();
 				js.append("var np=$('idNewPassword');");
 				js.append("np.innerHTML='")
