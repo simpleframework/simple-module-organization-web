@@ -16,7 +16,6 @@ import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.ButtonElement;
-import net.simpleframework.mvc.common.element.ETextAlign;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -80,9 +79,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 				.addColumn(
 						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
 				.addColumn(
-						new TablePagerColumn("members", $m("RoleMgrTPage.4"), 50).setTextAlign(
-								ETextAlign.center).setFilterSort(false))
-				.addColumn(TablePagerColumn.OPE(70));
+						new TablePagerColumn("members", $m("RoleMgrTPage.4"), 50).center().setFilterSort(
+								false)).addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 

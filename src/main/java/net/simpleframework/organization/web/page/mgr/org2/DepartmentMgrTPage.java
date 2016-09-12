@@ -97,9 +97,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 						new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210)
 								.setFilter(false))
 				.addColumn(
-						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).setTextAlign(
-								ETextAlign.center).setFilter(false))
-				.addColumn(TablePagerColumn.OPE(120).setTextAlign(ETextAlign.left));
+						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).center().setFilter(
+								false)).addColumn(TablePagerColumn.OPE(120).setTextAlign(ETextAlign.left));
 		return tablePager;
 	}
 
