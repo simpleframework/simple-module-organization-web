@@ -18,8 +18,8 @@ import net.simpleframework.organization.bean.RoleChart;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultRoleChartSelectHandler extends AbstractDictionaryHandler implements
-		IRoleChartSelectHandle, IOrganizationContextAware {
+public class DefaultRoleChartSelectHandler extends AbstractDictionaryHandler
+		implements IRoleChartSelectHandle, IOrganizationContextAware {
 
 	@Override
 	public Collection<RoleChart> getRoleCharts(final ComponentParameter cp, final TreeBean treeBean,
@@ -32,7 +32,7 @@ public class DefaultRoleChartSelectHandler extends AbstractDictionaryHandler imp
 	@Override
 	public Collection<Department> getDepartments(final ComponentParameter cp,
 			final TreeBean treeBean, final Department parent) {
-		return DataQueryUtils.toList(_deptService.queryDepartments(parent,
-				EDepartmentType.organization));
+		return DataQueryUtils
+				.toList(_deptService.queryDepartments(parent, EDepartmentType.organization));
 	}
 }

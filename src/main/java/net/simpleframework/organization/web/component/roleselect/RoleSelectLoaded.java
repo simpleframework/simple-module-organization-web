@@ -31,8 +31,9 @@ public class RoleSelectLoaded extends DefaultPageHandler implements IOrganizatio
 		final String selectName = nCP.getComponentName();
 
 		// roleChart选择器
-		final RoleChartSelectBean roleChartSelect = (RoleChartSelectBean) pp.addComponentBean(
-				selectName + "_chart", RoleChartSelectBean.class).setClearAction("false");
+		final RoleChartSelectBean roleChartSelect = (RoleChartSelectBean) pp
+				.addComponentBean(selectName + "_chart", RoleChartSelectBean.class)
+				.setClearAction("false");
 
 		final StringBuilder sb = new StringBuilder();
 		sb.append("var s = selects[0];");

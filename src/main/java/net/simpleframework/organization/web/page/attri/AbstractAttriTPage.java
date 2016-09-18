@@ -23,8 +23,8 @@ import net.simpleframework.organization.web.OrganizationUrlsFactory;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractAttriTPage extends Category_BlankPage implements
-		IOrganizationContextAware {
+public abstract class AbstractAttriTPage extends Category_BlankPage
+		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

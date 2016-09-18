@@ -113,24 +113,23 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 		final PropField f1 = new PropField($m("category_edit.0")).addComponents(
 				InputComp.hidden("chartId").setDefaultValue(rchart.getId()),
 				InputComp.hidden("category_id"), new InputComp("category_text"));
-		final PropField f2 = new PropField($m("category_edit.1")).addComponents(new InputComp(
-				"category_name"));
+		final PropField f2 = new PropField($m("category_edit.1"))
+				.addComponents(new InputComp("category_name"));
 
-		final PropField f3 = new PropField($m("RoleCategory.4")).addComponents(InputComp
-				.checkbox("role_isUserRole"));
+		final PropField f3 = new PropField($m("RoleCategory.4"))
+				.addComponents(InputComp.checkbox("role_isUserRole"));
 		final Role r = _roleService.getBean(pp.getParameter("roleId"));
-		final PropField f4 = new PropField($m("RoleCategory.2")).addComponents(r == null ? InputComp
-				.select("role_type", ERoleType.class) : InputComp.label(r.getRoleType()));
+		final PropField f4 = new PropField($m("RoleCategory.2")).addComponents(r == null
+				? InputComp.select("role_type", ERoleType.class) : InputComp.label(r.getRoleType()));
 
 		final PropField f5 = new PropField($m("category_edit.2")).addComponents(
 				InputComp.hidden("category_parentId"),
-				InputComp
-						.textButton("category_parentText")
-						.setAttributes("readonly")
-						.addEvent(EElementEvent.click,
-								"$Actions['RoleEditPage_roleSelect']('chartId=" + rchart.getId() + "');"));
-		final PropField f6 = new PropField($m("Description")).addComponents(new InputComp(
-				"category_description").setType(EInputCompType.textarea).setAttributes("rows:5"));
+				InputComp.textButton("category_parentText").setAttributes("readonly").addEvent(
+						EElementEvent.click, "$Actions['RoleEditPage_roleSelect']('chartId="
+								+ rchart.getId() + "');"));
+		final PropField f6 = new PropField($m("Description"))
+				.addComponents(new InputComp("category_description").setType(EInputCompType.textarea)
+						.setAttributes("rows:5"));
 		propEditor.getFormFields().append(f1, f2, f3, f4, f5, f6);
 	}
 

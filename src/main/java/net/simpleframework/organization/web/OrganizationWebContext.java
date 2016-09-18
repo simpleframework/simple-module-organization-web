@@ -76,8 +76,9 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 
 	@Override
 	protected ModuleFunctions getFunctions() {
-		return ModuleFunctions.of((WebModuleFunction) new WebModuleFunction(this,
-				AccountMgrPage.class).setName(MODULE_NAME + "-AccountMgrPage").setText(
-				$m("OrganizationWebContext.0")));
+		return ModuleFunctions
+				.of((WebModuleFunction) new WebModuleFunction(this, AccountMgrPage.class)
+						.setName(MODULE_NAME + "-AccountMgrPage")
+						.setText($m("OrganizationWebContext.0")));
 	}
 }

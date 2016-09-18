@@ -47,8 +47,8 @@ public class UserRoleAutocompleteHandler extends UserAutocompleteHandler {
 					}
 				};
 			} else {
-				final IDataQuery<RoleChart> dq = _rolecService.queryByParams(FilterItems.of().addLike(
-						"name", nVal));
+				final IDataQuery<RoleChart> dq = _rolecService
+						.queryByParams(FilterItems.of().addLike("name", nVal));
 				return new AbstractIterator<AutocompleteData>() {
 					RoleChart rChart;
 

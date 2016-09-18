@@ -59,8 +59,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 		// 添加角色
 		final AjaxRequestBean ajaxRequest = (AjaxRequestBean) addAjaxRequest(pp,
-				"RoleMgrTPage_rolePage", RoleEditPage.class).setSelector(
-				"#idRoleMgrTPage_tbl .parameters");
+				"RoleMgrTPage_rolePage", RoleEditPage.class)
+						.setSelector("#idRoleMgrTPage_tbl .parameters");
 		addWindowBean(pp, "RoleMgrTPage_roleWin", ajaxRequest).setTitle($m("RoleMgrTPage.5"))
 				.setWidth(340).setHeight(360);
 
@@ -73,14 +73,13 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp, "RoleMgrTPage_tbl",
 				RoleTbl.class).setContainerId("idRoleMgrTPage_tbl");
-		tablePager
-				.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0")).setSort(false))
+		tablePager.addColumn(new TablePagerColumn("text", $m("RoleMgrTPage.0")).setSort(false))
 				.addColumn(new TablePagerColumn("name", $m("RoleMgrTPage.1"), 150).setSort(false))
 				.addColumn(
 						new TablePagerColumn("roletype", $m("RoleMgrTPage.2"), 90).setFilterSort(false))
-				.addColumn(
-						new TablePagerColumn("members", $m("RoleMgrTPage.4"), 50).center().setFilterSort(
-								false)).addColumn(TablePagerColumn.OPE(70));
+				.addColumn(new TablePagerColumn("members", $m("RoleMgrTPage.4"), 50).center()
+						.setFilterSort(false))
+				.addColumn(TablePagerColumn.OPE(70));
 		return tablePager;
 	}
 
@@ -105,16 +104,16 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		sb.append("  <div class='lbl'>#(RoleMgrTPage.3)</div>");
 		final RoleChart _chart = _getRoleChart(pp);
 		if (_chart != null) {
-			final IDataQuery<RoleChart> dq = _rolecService.queryOrgCharts(_deptService.getBean(_chart
-					.getOrgId()));
+			final IDataQuery<RoleChart> dq = _rolecService
+					.queryOrgCharts(_deptService.getBean(_chart.getOrgId()));
 			RoleChart chart;
 			while ((chart = dq.next()) != null) {
 				sb.append("<div class='litem");
 				if (chart.equals(_chart)) {
 					sb.append(" active");
 				}
-				sb.append("' onclick=\"$Actions.reloc('chartId=").append(chart.getId())
-						.append("');\">").append(chart.getText());
+				sb.append("' onclick=\"$Actions.reloc('chartId=").append(chart.getId()).append("');\">")
+						.append(chart.getText());
 				final int roles = chart.getRoles();
 				if (roles > 0) {
 					sb.append(new SpanElement("(" + roles + ")").setClassName("num"));
@@ -126,9 +125,9 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		sb.append(" <td valign='top'><div class='rtbl'>");
 		if (_chart != null) {
 			sb.append("  <div class='tbar'>");
-			sb.append(ElementList.of(
-					LinkButton.addBtn().setOnclick("$Actions['RoleMgrTPage_roleWin']();"),
-					SpanElement.SPACE, LinkButton.deleteBtn()));
+			sb.append(
+					ElementList.of(LinkButton.addBtn().setOnclick("$Actions['RoleMgrTPage_roleWin']();"),
+							SpanElement.SPACE, LinkButton.deleteBtn()));
 			sb.append("  </div>");
 		}
 		sb.append("  <div id='idRoleMgrTPage_tbl'></div>");
@@ -164,13 +163,13 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		private List<Role> list(final RoleChart chart, final Role parent) {
 			final List<Role> l = new ArrayList<Role>();
 
-			final IDataQuery<Role> dq = parent == null ? _roleService.queryRoot(chart) : _roleService
-					.queryChildren(parent);
+			final IDataQuery<Role> dq = parent == null ? _roleService.queryRoot(chart)
+					: _roleService.queryChildren(parent);
 			Role role;
 			while ((role = dq.next()) != null) {
 				l.add(role);
-				role.setAttr("_margin", parent != null ? Convert.toInt(parent.getAttr("_margin")) + 1
-						: 1);
+				role.setAttr("_margin",
+						parent != null ? Convert.toInt(parent.getAttr("_margin")) + 1 : 1);
 				l.addAll(list(chart, role));
 			}
 			return l;
@@ -194,7 +193,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final Role role = (Role) dataObject;
 			final KVMap kv = new KVMap();
 			final StringBuilder txt = new StringBuilder();
@@ -204,19 +204,16 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 			txt.append(role.getText());
 			kv.add("text", txt).add("name", _roleService.toUniqueName(role));
 
-			kv.put(
-					"members",
-					LinkElement.style2(role.getMembers()).setOnclick(
-							JS.loc(uFactory.getUrl(cp, RoleMgr_MembersTPage.class,
-									"roleId=" + role.getId()))));
+			kv.put("members", LinkElement.style2(role.getMembers()).setOnclick(
+					JS.loc(uFactory.getUrl(cp, RoleMgr_MembersTPage.class, "roleId=" + role.getId()))));
 			kv.add("roletype", role.getRoleType()).add(TablePagerColumn.OPE, toOpeHTML(cp, role));
 			return kv;
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final Role role) {
 			final StringBuilder sb = new StringBuilder();
-			sb.append(ButtonElement.editBtn().setOnclick(
-					"$Actions['RoleMgrTPage_roleWin']('roleId=" + role.getId() + "');"));
+			sb.append(ButtonElement.editBtn()
+					.setOnclick("$Actions['RoleMgrTPage_roleWin']('roleId=" + role.getId() + "');"));
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}

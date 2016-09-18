@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.trans.Transaction;
@@ -49,8 +50,8 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 
 	@Override
 	protected ElementList getOpeActions(final PageParameter pp) {
-		return ElementList.of(LinkButton.of($m("AccountMgrPage.21")).setOnclick(
-				"$Actions['UserMgrTPage_tbl'].doAct('UserMgrTPage_delete');"));
+		return ElementList.of(LinkButton.of($m("AccountMgrPage.21"))
+				.setOnclick("$Actions['UserMgrTPage_tbl'].doAct('UserMgrTPage_delete');"));
 	}
 
 	public static class UserTbl_Del extends UserTbl {
@@ -73,7 +74,8 @@ public class UserMgr_DelTPage extends UserMgrTPage {
 			items.add(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("UserMgrTPage_accountWin",
 					"accountId"));
 			items.add(MenuItem.sep());
-			items.add(MenuItem.of($m("AccountMgrPage.21")).setOnclick_act("UserMgrTPage_delete", "id"));
+			items.add(
+					MenuItem.of($m("AccountMgrPage.21")).setOnclick_act("UserMgrTPage_delete", "id"));
 			items.add(MenuItem.sep());
 			items.add(MenuItem.itemLog().setOnclick_act("UserMgrTPage_logWin", "beanId"));
 			return items;

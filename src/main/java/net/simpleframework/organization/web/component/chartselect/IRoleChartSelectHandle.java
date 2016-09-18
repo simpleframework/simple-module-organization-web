@@ -36,5 +36,6 @@ public interface IRoleChartSelectHandle extends IDictionaryHandle {
 	 * @param parent
 	 * @return
 	 */
-	Collection<Department> getDepartments(ComponentParameter cp, TreeBean treeBean, Department parent);
+	Collection<Department> getDepartments(ComponentParameter cp, TreeBean treeBean,
+			Department parent);
 }

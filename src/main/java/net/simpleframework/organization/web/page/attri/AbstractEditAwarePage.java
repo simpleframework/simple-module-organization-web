@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.element.AbstractElement;
@@ -19,8 +20,8 @@ import net.simpleframework.organization.IOrganizationContextAware;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractEditAwarePage extends AbstractTemplatePage implements
-		IOrganizationContextAware {
+public abstract class AbstractEditAwarePage extends AbstractTemplatePage
+		implements IOrganizationContextAware {
 
 	protected void addComponent_editUserWin(final PageParameter pp) {
 		addAjaxRequest(pp, "taAttri_1", UserAttriPage.class);
@@ -29,26 +30,22 @@ public abstract class AbstractEditAwarePage extends AbstractTemplatePage impleme
 		addAjaxRequest(pp, "taAttri_4", PhotoPage.class);
 
 		addComponentBean(pp, "taAttri", TabsBean.class)
-				.addTab(
-						new TabItem($m("AbstractEditAwarePage.0")).setContentRef("taAttri_1").setCache(
-								true))
-				.addTab(
-						new TabItem($m("AbstractEditAwarePage.1")).setContentRef("taAttri_2").setCache(
-								true))
-				.addTab(
-						new TabItem($m("AbstractEditAwarePage.2")).setContentRef("taAttri_3").setCache(
-								true))
-				.addTab(
-						new TabItem($m("AbstractEditAwarePage.3")).setContentRef("taAttri_4").setCache(
-								true));
+				.addTab(new TabItem($m("AbstractEditAwarePage.0")).setContentRef("taAttri_1")
+						.setCache(true))
+				.addTab(new TabItem($m("AbstractEditAwarePage.1")).setContentRef("taAttri_2")
+						.setCache(true))
+				.addTab(new TabItem($m("AbstractEditAwarePage.2")).setContentRef("taAttri_3")
+						.setCache(true))
+				.addTab(new TabItem($m("AbstractEditAwarePage.3")).setContentRef("taAttri_4")
+						.setCache(true));
 
 		addWindowBean(pp, "AbstractEditAwarePage_editUserWin").setContentRef("taAttri")
 				.setTitle($m("AbstractEditAwarePage.4")).setHeight(480).setWidth(640);
 	}
 
 	public AbstractElement<?> str_Login(final PageParameter pp) {
-		return new LinkElement($m("AbstractEditAwarePage.5")).setOnclick(JS.loc(MVCUtils
-				.getLocationPath()));
+		return new LinkElement($m("AbstractEditAwarePage.5"))
+				.setOnclick(JS.loc(MVCUtils.getLocationPath()));
 	}
 
 	public AbstractElement<?> str_Logout(final PageParameter pp) {

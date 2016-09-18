@@ -41,7 +41,8 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectBean;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AddMembersPage extends FormPropEditorTemplatePage implements IOrganizationContextAware {
+public class AddMembersPage extends FormPropEditorTemplatePage
+		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -54,21 +55,21 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 		addComponentBean(pp, "AddMembersPage_userSelect", UserSelectBean.class).setMultiple(true)
 				.setBindingId("member_id").setBindingText("member_val");
 		// 角色选择字典
-		addComponentBean(pp, "AddMembersPage_roleSelect", RoleSelectBean.class).setBindingId(
-				"member_id").setBindingText("member_val");
+		addComponentBean(pp, "AddMembersPage_roleSelect", RoleSelectBean.class)
+				.setBindingId("member_id").setBindingText("member_val");
 		addComponentBean(pp,
 				new KVMap().add("name", "AddMembersPage_deptSelect").add("multiple", true),
 				DeptSelectBean.class).setBindingId("member_id").setBindingText("member_val");
 
 		// 部门选择
-		addComponentBean(pp, "AddMembersPage_deptSelect2", DeptSelectBean.class).setBindingId(
-				"member_deptId2").setBindingText("member_deptVal2");
+		addComponentBean(pp, "AddMembersPage_deptSelect2", DeptSelectBean.class)
+				.setBindingId("member_deptId2").setBindingText("member_deptVal2");
 	}
 
 	@Override
 	protected ValidationBean addFormValidationBean(final PageParameter pp) {
-		return super.addFormValidationBean(pp).addValidators(
-				new Validator(EValidatorMethod.required, "#member_val"));
+		return super.addFormValidationBean(pp)
+				.addValidators(new Validator(EValidatorMethod.required, "#member_val"));
 	}
 
 	@Override
@@ -96,19 +97,19 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 				InputComp.hidden("member_id"),
 				InputComp.textButton("member_val").addEvent(EElementEvent.click, click.toString()));
 
-		final PropField f3 = new PropField($m("AddMembersPage.2")).addComponents(new InputComp(
-				"member_primary").setType(EInputCompType.checkbox));
+		final PropField f3 = new PropField($m("AddMembersPage.2"))
+				.addComponents(new InputComp("member_primary").setType(EInputCompType.checkbox));
 
 		final PropField f4 = new PropField($m("AddMembersPage.3")).addComponents(
 				InputComp.hidden("member_deptId2"),
-				InputComp.textButton("member_deptVal2").addEvent(
-						EElementEvent.click,
+				InputComp.textButton("member_deptVal2").addEvent(EElementEvent.click,
 						"if ($F('member_type') == '" + ERoleMemberType.user.name()
 								+ "') $Actions['AddMembersPage_deptSelect2']('orgId=" + orgId
 								+ "'); else alert('" + $m("AddMembersPage.4") + "');"));
 
-		final PropField f5 = new PropField($m("Description")).addComponents(new InputComp(
-				"member_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
+		final PropField f5 = new PropField($m("Description"))
+				.addComponents(new InputComp("member_description").setType(EInputCompType.textarea)
+						.setAttributes("rows:6"));
 
 		propEditor.getFormFields().append(f1, f2, f3, f4, f5);
 	}
@@ -162,7 +163,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage implements IOrgan
 	}
 
 	protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
-		return new JavascriptForward("$Actions['RoleMgrPage_ajax_roleMember']('roleId=").append(
-				role.getId()).append("')");
+		return new JavascriptForward("$Actions['RoleMgrPage_ajax_roleMember']('roleId=")
+				.append(role.getId()).append("')");
 	}
 }

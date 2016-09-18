@@ -46,10 +46,8 @@ public class PhotoUploadPage extends AbstractAccountPage {
 		addComponentBean(pp, "uploadPhoto", SubmitBean.class).setFormName("uploadPhoto")
 				.setBinary(true).setConfirmMessage($m("Confirm.Post")).setHandlerMethod("upload")
 				.setHandlerClass(PhotoUploadPage.class);
-		addValidationBean(pp, "uploadValidation").setTriggerSelector("#btnUploadPhoto")
-				.addValidators(
-						new Validator(EValidatorMethod.file, "#user_photo")
-								.setArgs("jpg,jpeg,bmp,gif,png"));
+		addValidationBean(pp, "uploadValidation").setTriggerSelector("#btnUploadPhoto").addValidators(
+				new Validator(EValidatorMethod.file, "#user_photo").setArgs("jpg,jpeg,bmp,gif,png"));
 	}
 
 	@Override

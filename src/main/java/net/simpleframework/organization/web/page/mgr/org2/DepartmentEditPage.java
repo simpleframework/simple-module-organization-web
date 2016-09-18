@@ -31,8 +31,8 @@ import net.simpleframework.organization.bean.Department;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DepartmentEditPage extends FormPropEditorTemplatePage implements
-		IOrganizationContextAware {
+public class DepartmentEditPage extends FormPropEditorTemplatePage
+		implements IOrganizationContextAware {
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
@@ -113,20 +113,19 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage implements
 			return;
 		}
 
-		final PropField f1 = new PropField($m("category_edit.0")).addComponents(
-				InputComp.hidden("category_id"), new InputComp("category_text"));
-		final PropField f2 = new PropField($m("category_edit.1")).addComponents(new InputComp(
-				"category_name"));
+		final PropField f1 = new PropField($m("category_edit.0"))
+				.addComponents(InputComp.hidden("category_id"), new InputComp("category_text"));
+		final PropField f2 = new PropField($m("category_edit.1"))
+				.addComponents(new InputComp("category_name"));
 
 		final PropField f3 = new PropField($m("category_edit.2")).addComponents(
 				InputComp.hidden("category_parentId"),
-				InputComp
-						.textButton("category_parentText")
-						.setAttributes("readonly")
-						.addEvent(EElementEvent.click,
-								"$Actions['DepartmentEditPage_deptSelect']('orgId=" + org.getId() + "');"));
-		final PropField f4 = new PropField($m("Description")).addComponents(new InputComp(
-				"category_description").setType(EInputCompType.textarea).setAttributes("rows:6"));
+				InputComp.textButton("category_parentText").setAttributes("readonly").addEvent(
+						EElementEvent.click, "$Actions['DepartmentEditPage_deptSelect']('orgId="
+								+ org.getId() + "');"));
+		final PropField f4 = new PropField($m("Description"))
+				.addComponents(new InputComp("category_description").setType(EInputCompType.textarea)
+						.setAttributes("rows:6"));
 		propEditor.getFormFields().append(f1, f2, f3, f4);
 	}
 }

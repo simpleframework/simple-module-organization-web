@@ -36,8 +36,8 @@ import net.simpleframework.organization.web.component.roleselect.RoleSelectUtils
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
-		IOrganizationContextAware {
+public class RoleCategory extends CategoryBeanAwareHandler<Role>
+		implements IOrganizationContextAware {
 
 	@Override
 	protected IRoleService getBeanService() {
@@ -90,8 +90,8 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 						parent.setPostfixText("(" + count + ")");
 					}
 				}
-				parent.setJsClickCallback("$Actions['RoleMgrPage_ajax_roleMember']('roleId="
-						+ ((Role) o).getId() + "');");
+				parent.setJsClickCallback(
+						"$Actions['RoleMgrPage_ajax_roleMember']('roleId=" + ((Role) o).getId() + "');");
 			}
 			return super.getCategoryTreenodes(cp, treeBean, parent);
 		}
@@ -156,13 +156,13 @@ public class RoleCategory extends CategoryBeanAwareHandler<Role> implements
 	protected AbstractComponentBean categoryEdit_createPropEditor(final ComponentParameter cp) {
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
 		final PropFields fields = editor.getFormFields();
-		fields.add(2, new PropField($m("RoleCategory.4")).addComponents(InputComp
-				.checkbox("role_isUserRole")));
+		fields.add(2, new PropField($m("RoleCategory.4"))
+				.addComponents(InputComp.checkbox("role_isUserRole")));
 
 		final Role r = _roleService.getBean(cp.getParameter(PARAM_CATEGORY_ID));
 		if (r == null) {
-			fields.add(2, new PropField($m("RoleCategory.2")).addComponents(InputComp.select(
-					"role_type", ERoleType.class)));
+			fields.add(2, new PropField($m("RoleCategory.2"))
+					.addComponents(InputComp.select("role_type", ERoleType.class)));
 		} else {
 			// 该字段不能编辑
 			fields.add(2,

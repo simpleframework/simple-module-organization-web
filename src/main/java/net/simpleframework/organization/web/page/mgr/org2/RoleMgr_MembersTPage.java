@@ -42,8 +42,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		super.onForward(pp);
 
 		// 部门树
-		addComponentBean(pp, "RoleMgr_MembersTPage_tree", TreeBean.class).setContainerId(
-				"idRoleMgr_MembersTPage_dept").setHandlerClass(_DeptHandler.class);
+		addComponentBean(pp, "RoleMgr_MembersTPage_tree", TreeBean.class)
+				.setContainerId("idRoleMgr_MembersTPage_dept").setHandlerClass(_DeptHandler.class);
 	}
 
 	@Override
@@ -108,8 +108,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 			} else {
 				final Object dataObject = parent.getDataObject();
 				if (dataObject instanceof Department) {
-					final IDataQuery<Department> dq = _deptService.queryDepartments(
-							(Department) dataObject, EDepartmentType.department);
+					final IDataQuery<Department> dq = _deptService
+							.queryDepartments((Department) dataObject, EDepartmentType.department);
 					Department dept;
 					while ((dept = dq.next()) != null) {
 						nodes.add(createTreeNode(treeBean, parent, dept, stat));
@@ -185,7 +185,8 @@ public class RoleMgr_MembersTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
-		protected JavascriptForward toJavascriptForward(final ComponentParameter cp, final Role role) {
+		protected JavascriptForward toJavascriptForward(final ComponentParameter cp,
+				final Role role) {
 			return new JavascriptForward("$Actions['RoleMembersPage_tbl']('deptId=');");
 		}
 	}

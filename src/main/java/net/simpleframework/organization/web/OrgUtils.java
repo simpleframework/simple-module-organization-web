@@ -11,7 +11,8 @@ import net.simpleframework.organization.IOrganizationContextAware;
  */
 public abstract class OrgUtils implements IOrganizationContextAware {
 
-	public static String getUrl(final PageParameter pp, final Class<? extends AbstractMVCPage> mClass) {
+	public static String getUrl(final PageParameter pp,
+			final Class<? extends AbstractMVCPage> mClass) {
 		return uFactory.getUrl(pp, mClass);
 	}
 

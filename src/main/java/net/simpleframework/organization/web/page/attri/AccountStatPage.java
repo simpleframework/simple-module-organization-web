@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
@@ -68,19 +69,19 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 				.add("onlineMillis", DateUtils.toDifferenceDate(account.getOnlineMillis()))
 				.add("mdevid", account.getMdevid());
 		final boolean mailbinding = account.isMailbinding();
-		kv.add("mailbinding", mailbinding ? user.getEmail() : $m("AccountStatPage.9")).add(
-				"mailbinding_act", createBinding(account, "mailbinding", mailbinding));
+		kv.add("mailbinding", mailbinding ? user.getEmail() : $m("AccountStatPage.9"))
+				.add("mailbinding_act", createBinding(account, "mailbinding", mailbinding));
 		final boolean mobilebinding = account.isMobilebinding();
-		kv.add("mobilebinding", mobilebinding ? user.getMobile() : $m("AccountStatPage.9")).add(
-				"mobilebinding_act", createBinding(account, "mobilebinding", mobilebinding));
+		kv.add("mobilebinding", mobilebinding ? user.getMobile() : $m("AccountStatPage.9"))
+				.add("mobilebinding_act", createBinding(account, "mobilebinding", mobilebinding));
 		return kv;
 	}
 
-	private LinkButton createBinding(final Account account, final String act, final boolean binding) {
+	private LinkButton createBinding(final Account account, final String act,
+			final boolean binding) {
 		return LinkButton.corner(binding ? $m("AccountStatPage.13") : $m("AccountStatPage.12"))
-				.setOnclick(
-						"$Actions['AccountStatPage_" + act + "']('accountId=" + account.getId()
-								+ "&unbinding=" + binding + "');");
+				.setOnclick("$Actions['AccountStatPage_" + act + "']('accountId=" + account.getId()
+						+ "&unbinding=" + binding + "');");
 	}
 
 	private String blank(final Object o) {
@@ -107,8 +108,7 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 					new Validator(EValidatorMethod.required, "#mail_validate_code"));
 
 			addComponentBean(pp, "AccountMailBindingPage_sent_validation", ValidationBean.class)
-					.setWarnType(EWarnType.insertAfter)
-					.setTriggerSelector("#mail_binding_btn")
+					.setWarnType(EWarnType.insertAfter).setTriggerSelector("#mail_binding_btn")
 					.addValidators(new Validator(EValidatorMethod.required, "#mail_binding"),
 							new Validator(EValidatorMethod.email, "#mail_binding"));
 
@@ -155,15 +155,16 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 			final InputElement mail_binding = new InputElement("mail_binding")
 					.setReadonly(unbinding && StringUtils.hasText(email))
 					.setPlaceholder($m("AccountEditPage.23")).setText(email);
-			final ButtonElement mail_binding_btn = new ButtonElement($m("AccountEditPage.20")).setId(
-					"mail_binding_btn").setOnclick("AccountStatPage.mail_sent(this);");
+			final ButtonElement mail_binding_btn = new ButtonElement($m("AccountEditPage.20"))
+					.setId("mail_binding_btn").setOnclick("AccountStatPage.mail_sent(this);");
 
 			final InputElement mail_validate_code = new InputElement("mail_validate_code")
 					.setPlaceholder($m("AccountEditPage.22"));
 
-			return TableRows.of(new TableRow(new RowField($m("AccountEditPage.4"), _unbinding,
-					mail_binding, mail_binding_btn)), new TableRow(new RowField(
-					$m("AccountEditPage.19"), mail_validate_code)));
+			return TableRows.of(
+					new TableRow(new RowField($m("AccountEditPage.4"), _unbinding, mail_binding,
+							mail_binding_btn)),
+					new TableRow(new RowField($m("AccountEditPage.19"), mail_validate_code)));
 		}
 	}
 
@@ -178,8 +179,7 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 					new Validator(EValidatorMethod.required, "#mobile_validate_code"));
 
 			addComponentBean(pp, "AccountMobileBindingPage_sent_validation", ValidationBean.class)
-					.setWarnType(EWarnType.insertAfter)
-					.setTriggerSelector("#mobile_binding_btn")
+					.setWarnType(EWarnType.insertAfter).setTriggerSelector("#mobile_binding_btn")
 					.addValidators(new Validator(EValidatorMethod.required, "#mobile_binding"),
 							new Validator(EValidatorMethod.mobile_phone, "#mobile_binding"));
 
@@ -228,9 +228,10 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 			final InputElement mobile_validate_code = new InputElement("mobile_validate_code")
 					.setPlaceholder($m("AccountEditPage.22"));
 
-			return TableRows.of(new TableRow(new RowField($m("AccountEditPage.5"), _unbinding,
-					mobile_binding, mobile_binding_btn)), new TableRow(new RowField(
-					$m("AccountEditPage.19"), mobile_validate_code)));
+			return TableRows.of(
+					new TableRow(new RowField($m("AccountEditPage.5"), _unbinding, mobile_binding,
+							mobile_binding_btn)),
+					new TableRow(new RowField($m("AccountEditPage.19"), mobile_validate_code)));
 		}
 	}
 

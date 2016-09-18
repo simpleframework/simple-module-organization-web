@@ -34,8 +34,8 @@ import net.simpleframework.organization.bean.User;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage implements
-		IOrganizationContextAware {
+public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage
+		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -53,11 +53,9 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 
 	@Override
 	protected ValidationBean addFormValidationBean(final PageParameter pp) {
-		return super
-				.addFormValidationBean(pp)
-				.addValidators(
-						new Validator(EValidatorMethod.required,
-								"#ae_accountName, #ae_password, #ue_text"))
+		return super.addFormValidationBean(pp)
+				.addValidators(new Validator(EValidatorMethod.required,
+						"#ae_accountName, #ae_password, #ue_text"))
 				.addValidators(
 						new Validator(EValidatorMethod.min_length, "#ae_accountName, #ue_text", "2"))
 				// .addValidators(new Validator(EValidatorMethod.number,
@@ -144,8 +142,9 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		final InputElement ae_accountName = new InputElement("ae_accountName");
 		final InputElement ue_text = new InputElement("ue_text");
 		doR1(pp, ae_accountName, ue_text);
-		return new TableRow(new RowField($m("AccountEditPage.0"), InputElement.hidden("ae_id"),
-				ae_accountName).setStarMark(true),
+		return new TableRow(
+				new RowField($m("AccountEditPage.0"), InputElement.hidden("ae_id"), ae_accountName)
+						.setStarMark(true),
 				new RowField($m("AccountEditPage.1"), ue_text).setStarMark(true));
 	}
 
@@ -157,8 +156,8 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 		final InputElement ue_email = new InputElement("ue_email");
 		final InputElement ue_mobile = new InputElement("ue_mobile");
 		doR3(pp, ue_email, ue_mobile);
-		return new TableRow(new RowField($m("AccountEditPage.4"), ue_email), new RowField(
-				$m("AccountEditPage.5"), ue_mobile));
+		return new TableRow(new RowField($m("AccountEditPage.4"), ue_email),
+				new RowField($m("AccountEditPage.5"), ue_mobile));
 	}
 
 	protected final TableRow r4(final PageParameter pp) {
@@ -167,10 +166,12 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage 
 	}
 
 	protected final TableRow r5(final PageParameter pp) {
-		return new TableRow(new RowField($m("AccountEditPage.6"),
-				InputElement.select("ue_sex").addElements(new Option($m("AccountEditPage.16")),
-						new Option($m("AccountEditPage.17")))), new RowField($m("AccountEditPage.7"),
-				new CalendarInput("ue_birthday").setCalendarComponent("cal_Birthday")));
+		return new TableRow(
+				new RowField($m("AccountEditPage.6"),
+						InputElement.select("ue_sex").addElements(new Option($m("AccountEditPage.16")),
+								new Option($m("AccountEditPage.17")))),
+				new RowField($m("AccountEditPage.7"),
+						new CalendarInput("ue_birthday").setCalendarComponent("cal_Birthday")));
 	}
 
 	protected final TableRow r6(final PageParameter pp) {

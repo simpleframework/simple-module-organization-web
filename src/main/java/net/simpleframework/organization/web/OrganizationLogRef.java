@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ado.bean.AbstractIdBean;
 import net.simpleframework.ctx.service.ado.db.IDbBeanService;
 import net.simpleframework.module.log.LogRef;
@@ -21,8 +22,9 @@ public class OrganizationLogRef extends LogRef implements IOrganizationContextAw
 
 	public void addLogComponent(final PageParameter pp, final Class<?> cls) {
 		final String clsn = cls.getSimpleName();
-		final AjaxRequestBean ajaxRequest = pp.addComponentBean(clsn + "_logPage",
-				AjaxRequestBean.class).setUrlForward(AbstractMVCPage.url(AccountLogPage.class));
+		final AjaxRequestBean ajaxRequest = pp
+				.addComponentBean(clsn + "_logPage", AjaxRequestBean.class)
+				.setUrlForward(AbstractMVCPage.url(AccountLogPage.class));
 		pp.addComponentBean(clsn + "_logWin", WindowBean.class).setContentRef(ajaxRequest.getName())
 				.setHeight(600).setWidth(960);
 	}

@@ -26,8 +26,8 @@ public class PhotoPage extends AbstractAccountPage {
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		addAjaxRequest(pp, "PhotoPage_del").setHandlerMethod("doDel").setConfirmMessage(
-				$m("PhotoPage.1"));
+		addAjaxRequest(pp, "PhotoPage_del").setHandlerMethod("doDel")
+				.setConfirmMessage($m("PhotoPage.1"));
 	}
 
 	@Transaction(context = IOrganizationContext.class)
@@ -36,8 +36,8 @@ public class PhotoPage extends AbstractAccountPage {
 		_userService.updatePhoto(user, null);
 		// 删除图片缓存
 		cp.clearPhotoCache(user);
-		return new JavascriptForward("$('user_edit_photo_image').src = '").append(
-				cp.getPhotoUrl(user.getId())).append("';");
+		return new JavascriptForward("$('user_edit_photo_image').src = '")
+				.append(cp.getPhotoUrl(user.getId())).append("';");
 	}
 
 	public String getPhotoUrl(final PageParameter pp, final Account account) {

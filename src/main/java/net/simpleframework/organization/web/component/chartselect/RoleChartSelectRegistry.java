@@ -40,16 +40,17 @@ public class RoleChartSelectRegistry extends DictionaryRegistry {
 
 		final String chartSelectName = nCP.getComponentName();
 
-		final TreeBean treeBean = (TreeBean) pp.addComponentBean(chartSelectName + "_tree",
-				TreeBean.class).setHandlerClass(RoleChartTree.class);
+		final TreeBean treeBean = (TreeBean) pp
+				.addComponentBean(chartSelectName + "_tree", TreeBean.class)
+				.setHandlerClass(RoleChartTree.class);
 
 		roleChart.addTreeRef(nCP, treeBean.getName());
 		treeBean.setAttr("__roleChart", roleChart);
 		return roleChart;
 	}
 
-	public static class RoleChartTree extends DictionaryTreeHandler implements
-			IOrganizationContextAware {
+	public static class RoleChartTree extends DictionaryTreeHandler
+			implements IOrganizationContextAware {
 		@Override
 		public TreeNodes getTreenodes(final ComponentParameter cp, final TreeNode parent) {
 			final TreeNodes nodes = TreeNodes.of();

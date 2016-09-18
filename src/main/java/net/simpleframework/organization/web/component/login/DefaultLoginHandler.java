@@ -46,8 +46,8 @@ public class DefaultLoginHandler extends AbstractLoginHandler {
 		}
 
 		final String lastUrl = getLastUrl(cp);
-		final String loginForward = StringUtils.hasText(lastUrl) ? lastUrl : (String) cp
-				.getBeanProperty("loginForward");
+		final String loginForward = StringUtils.hasText(lastUrl) ? lastUrl
+				: (String) cp.getBeanProperty("loginForward");
 		try {
 			doLogin(cp);
 			final String loginCallback = (String) cp.getBeanProperty("jsLoginCallback");
@@ -72,9 +72,7 @@ public class DefaultLoginHandler extends AbstractLoginHandler {
 	}
 
 	protected void doLogin(final PageRequestResponse rRequest) {
-		rRequest.getPermission().login(
-				rRequest,
-				rRequest.getParameter("_accountName"),
+		rRequest.getPermission().login(rRequest, rRequest.getParameter("_accountName"),
 				rRequest.getParameter("_passwordName"),
 				new KVMap().add(OrganizationPermissionHandler.ACCOUNT_TYPE,
 						Convert.toEnum(EAccountType.class, rRequest.getParameter("_accountType"))));

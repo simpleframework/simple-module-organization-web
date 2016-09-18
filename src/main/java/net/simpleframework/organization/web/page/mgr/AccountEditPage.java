@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.common.Convert;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
@@ -84,10 +85,11 @@ public class AccountEditPage extends AbstractAccountAttriPage {
 			dept_click += "'orgId=" + org.getId() + "'";
 		}
 		dept_click += ");";
-		final TableRow r2 = new TableRow(new RowField($m("AccountEditPage.2"), new InputElement(
-				"ae_password", EInputType.password)).setStarMark(true), new RowField(
-				$m("AccountEditPage.3"), new TextButton("id_departmentText").setHiddenField(
-						"ue_departmentId").setOnclick(dept_click)));
+		final TableRow r2 = new TableRow(
+				new RowField($m("AccountEditPage.2"),
+						new InputElement("ae_password", EInputType.password)).setStarMark(true),
+				new RowField($m("AccountEditPage.3"), new TextButton("id_departmentText")
+						.setHiddenField("ue_departmentId").setOnclick(dept_click)));
 		return TableRows.of(r1(pp), r2, r3(pp), r4(pp), r5(pp), r6(pp), r7(pp), r8(pp), r9(pp),
 				r10(pp));
 	}

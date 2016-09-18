@@ -38,8 +38,8 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 	}
 
 	protected NoticeMessageCategory MC_PASSWORD_EDIT() throws IOException {
-		return new NoticeMessageCategory("MC_PASSWORD_EDIT", PASSWORD_EDIT, PASSWORD_EDIT,
-				ClassUtils.getResourceAsString(OrganizationMessageWebRef.class, "MC_PASSWORD_EDIT.txt"));
+		return new NoticeMessageCategory("MC_PASSWORD_EDIT", PASSWORD_EDIT, PASSWORD_EDIT, ClassUtils
+				.getResourceAsString(OrganizationMessageWebRef.class, "MC_PASSWORD_EDIT.txt"));
 	}
 
 	protected NoticeMessageCategory MC_PASSWORD_RESET_EMAIL() throws IOException {

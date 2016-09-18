@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.permission.PermissionDept;
 import net.simpleframework.module.common.web.page.AbstractMgrTPage;
@@ -24,8 +25,8 @@ import net.simpleframework.organization.web.OrganizationUrlsFactory;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
-		IOrganizationContextAware {
+public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage
+		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -42,8 +43,8 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 	@Override
 	protected TablePagerBean addTablePagerBean(final PageParameter pp, final String name,
 			final Class<? extends ITablePagerHandler> tblClass) {
-		return (TablePagerBean) super.addTablePagerBean(pp, name, tblClass).setPagerBarLayout(
-				EPagerBarLayout.bottom);
+		return (TablePagerBean) super.addTablePagerBean(pp, name, tblClass)
+				.setPagerBarLayout(EPagerBarLayout.bottom);
 	}
 
 	@Override
@@ -78,11 +79,13 @@ public abstract class AbstractOrgMgrTPage extends AbstractMgrTPage implements
 
 	@Override
 	public TabButtons getTabButtons(final PageParameter pp) {
-		return TabButtons.of(new TabButton($m("AbstractOrgMgrTPage.0")).setHref(getUrl(pp,
-				DepartmentMgrTPage.class)),
+		return TabButtons.of(
+				new TabButton($m("AbstractOrgMgrTPage.0"))
+						.setHref(getUrl(pp, DepartmentMgrTPage.class)),
 				new TabButton($m("AbstractOrgMgrTPage.1")).setHref(getUrl(pp, UserMgrTPage.class))
-						.setTabMatch(ETabMatch.url_contains), new TabButton($m("AbstractOrgMgrTPage.2"))
-						.setHref(getUrl(pp, RoleMgrTPage.class)).setTabMatch(ETabMatch.url_contains));
+						.setTabMatch(ETabMatch.url_contains),
+				new TabButton($m("AbstractOrgMgrTPage.2")).setHref(getUrl(pp, RoleMgrTPage.class))
+						.setTabMatch(ETabMatch.url_contains));
 	}
 
 	@Override

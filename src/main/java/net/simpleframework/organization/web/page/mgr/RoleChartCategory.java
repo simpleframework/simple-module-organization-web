@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ado.query.DataQueryUtils;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.coll.KVMap;
@@ -28,8 +29,8 @@ import net.simpleframework.organization.web.component.chartselect.RoleChartSelec
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> implements
-		IOrganizationContextAware {
+public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart>
+		implements IOrganizationContextAware {
 
 	@Override
 	protected IRoleChartService getBeanService() {
@@ -89,8 +90,8 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 						if (c > 0) {
 							tn.setPostfixText("(" + c + ")");
 						}
-						tn.setJsClickCallback("$Actions['RoleMgrPage_category']('chartId="
-								+ chart.getId() + "');");
+						tn.setJsClickCallback(
+								"$Actions['RoleMgrPage_category']('chartId=" + chart.getId() + "');");
 					}
 				});
 	}
@@ -126,8 +127,8 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 
 	@Override
 	public KVMap categoryEdit_attri(final ComponentParameter cp) {
-		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("RoleMgrPage.1")).add(
-				window_height, 300);
+		return ((KVMap) super.categoryEdit_attri(cp)).add(window_title, $m("RoleMgrPage.1"))
+				.add(window_height, 300);
 	}
 
 	@Override
@@ -141,8 +142,8 @@ public class RoleChartCategory extends CategoryBeanAwareHandler<RoleChart> imple
 		@Override
 		public MenuItems getMenuItems(final ComponentParameter cp, final MenuItem menuItem) {
 			if (menuItem == null) {
-				return MenuItems.of(new MenuItem().setTitle($m("RoleChartCategory.1")).setOnclick(
-						"$category_action(item).add();"));
+				return MenuItems.of(new MenuItem().setTitle($m("RoleChartCategory.1"))
+						.setOnclick("$category_action(item).add();"));
 			}
 			return null;
 		}

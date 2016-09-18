@@ -26,8 +26,8 @@ import net.simpleframework.organization.login.LoginObject;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class HttpAccountSession extends ObjectEx implements IAccountSession,
-		IOrganizationContextAware {
+public class HttpAccountSession extends ObjectEx
+		implements IAccountSession, IOrganizationContextAware {
 
 	private PageRequestResponse rRequest;
 
@@ -57,8 +57,8 @@ public class HttpAccountSession extends ObjectEx implements IAccountSession,
 
 	@SuppressWarnings("unchecked")
 	public <T extends IHttpAccountListener> void addHttpAccountListener(final Class<T> lClass) {
-		Set<Class<T>> listeners = (Set<Class<T>>) getHttpSession().getAttribute(
-				"_httpaccount_listeners");
+		Set<Class<T>> listeners = (Set<Class<T>>) getHttpSession()
+				.getAttribute("_httpaccount_listeners");
 		if (listeners == null) {
 			getHttpSession().setAttribute("_httpaccount_listeners",
 					listeners = new LinkedHashSet<Class<T>>());
@@ -90,10 +90,8 @@ public class HttpAccountSession extends ObjectEx implements IAccountSession,
 			if (StringUtils.hasText(jsessionid)) {
 				final Account account = _accountService.getAccountBySessionid(jsessionid);
 				if (account != null) {
-					_accountService.setLogin(
-							this,
-							lObj = new LoginObject(account.getId())
-									.setDescription($m("HttpAccountSession.1")));
+					_accountService.setLogin(this, lObj = new LoginObject(account.getId())
+							.setDescription($m("HttpAccountSession.1")));
 					oprintln("jsessionid: " + jsessionid);
 					oprintln("auto login ok.");
 				}
@@ -111,10 +109,8 @@ public class HttpAccountSession extends ObjectEx implements IAccountSession,
 			httpSession.setAttribute(LOGIN_KEY, login);
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
-				login.setAttr(
-						"logId",
-						((OrganizationLogRef) ref).logLogin(login.getAccountId(), getRemoteAddr(),
-								login.getDescription()));
+				login.setAttr("logId", ((OrganizationLogRef) ref).logLogin(login.getAccountId(),
+						getRemoteAddr(), login.getDescription()));
 			}
 
 			final Set<Class<IHttpAccountListener>> set = getListeners();
@@ -131,11 +127,11 @@ public class HttpAccountSession extends ObjectEx implements IAccountSession,
 		Account login = null;
 		final String pwd = HttpUtils.getCookie(rRequest.request, "_account_pwd");
 		if (StringUtils.hasText(pwd) && getLogin() == null) {
-			login = _accountService.getAccountByName(HttpUtils.getCookie(rRequest.request,
-					"_account_name"));
+			login = _accountService
+					.getAccountByName(HttpUtils.getCookie(rRequest.request, "_account_name"));
 		}
-		return login != null ? new LoginObject(login.getId())
-				.setDescription($m("HttpAccountSession.0")) : null;
+		return login != null
+				? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0")) : null;
 	}
 
 	@Override

@@ -89,10 +89,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		}
 
 		// 部门选取
-		addComponentBean(pp, "UserMgrTPage_deptSelect", DeptSelectBean.class)
-				.setMultiple(false)
-				.setClearAction("false")
-				.setJsSelectCallback(
+		addComponentBean(pp, "UserMgrTPage_deptSelect", DeptSelectBean.class).setMultiple(false)
+				.setClearAction("false").setJsSelectCallback(
 						"$Actions['UserMgrTPage_tbl']('filter_cur_col=u.departmentId&filter=%3D;' + selects[0].id);return true;");
 	}
 
@@ -185,17 +183,20 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			}
 		}
 
-		sb.append(TabButtons.of(
-				new TabButton($m("UserMgrTPage.0")).setHref(getUrl(pp, UserMgrTPage.class)),
-				new TabButton(online_lbl).setHref(getUrl(pp, UserMgr_OnlineTPage.class)),
-				new TabButton(del_lbl).setHref(getUrl(pp, UserMgr_DelTPage.class))).toString(pp));
+		sb.append(
+				TabButtons
+						.of(new TabButton($m("UserMgrTPage.0")).setHref(getUrl(pp, UserMgrTPage.class)),
+								new TabButton(online_lbl).setHref(getUrl(pp, UserMgr_OnlineTPage.class)),
+								new TabButton(del_lbl).setHref(getUrl(pp, UserMgr_DelTPage.class)))
+						.toString(pp));
 		sb.append("</div>");
 		sb.append("<div id='idUserMgrTPage_tbl'></div>");
 		final Department dept = getDept(pp);
 		if (dept != null) {
 			sb.append(JavascriptUtils.wrapScriptTag(
 					"$Actions['UserMgrTPage_tbl']('filter_cur_col=u.departmentId&filter=%3D;"
-							+ dept.getId() + "');", true));
+							+ dept.getId() + "');",
+					true));
 		}
 		return sb.toString();
 	}
@@ -216,8 +217,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 			final String col = oCol.getColumnName();
 			if ("u.text".equals(col)) {
 				final ExpressionValue ev = super.createFilterExpressionValue(qs, oCol, coll);
-				final ExpressionValue ev2 = super.createFilterExpressionValue(qs, new TablePagerColumn(
-						"py"), coll);
+				final ExpressionValue ev2 = super.createFilterExpressionValue(qs,
+						new TablePagerColumn("py"), coll);
 				ev.setExpression("((" + ev.getExpression() + ") or (" + ev2.getExpression() + "))");
 				ev.addValues(ev2.getValues());
 				return ev;
@@ -232,8 +233,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 				return null;
 			}
 			final MenuItems items = MenuItems.of();
-			items.append(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act(
-					"UserMgrTPage_accountWin", "accountId"));
+			items.append(MenuItem.of($m("AccountMgrPage.18")).setOnclick_act("UserMgrTPage_accountWin",
+					"accountId"));
 			items.append(MenuItem.sep());
 			items.append(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act("UserMgrTPage_roleWin",
 					"accountId"));
@@ -252,7 +253,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final KVMap data = new KVMap();
 			User user;
 			Account account;
@@ -285,9 +287,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final User user) {
 			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(
-					new ButtonElement($m("AccountMgrPage.22"))
-							.setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id + "');"))
+			sb.append(new ButtonElement($m("AccountMgrPage.22"))
+					.setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id + "');"))
 					.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}

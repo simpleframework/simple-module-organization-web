@@ -40,17 +40,18 @@ public class RoleMgrPage extends T1ResizedLCTemplatePage implements IOrganizatio
 		addComponentBean(pp, "roleChartCategory", CategoryBean.class).setDraggable(false)
 				.setContainerId("category_" + hashId).setHandlerClass(RoleChartCategory.class);
 
-		addComponentBean(pp, "roleChartCategory_DeptMenu", MenuBean.class).setHandlerClass(
-				DeptContextMenu.class);
+		addComponentBean(pp, "roleChartCategory_DeptMenu", MenuBean.class)
+				.setHandlerClass(DeptContextMenu.class);
 
 		// 创建role tree
-		addComponentBean(pp, "RoleMgrPage_category", CategoryBean.class).setContainerId(
-				"idRoleMgrPage_category").setHandlerClass(RoleCategory.class);
+		addComponentBean(pp, "RoleMgrPage_category", CategoryBean.class)
+				.setContainerId("idRoleMgrPage_category").setHandlerClass(RoleCategory.class);
 
-		addComponentBean(pp, "RoleMgrPage_inc_roleMember", PageIncludeBean.class).setPageUrl(
-				url(RoleMembersPage.class)).setContainerId("idRoleMgrPage_ajax_roleMember");
-		addComponentBean(pp, "RoleMgrPage_ajax_roleMember", AjaxRequestBean.class).setUrlForward(
-				url(RoleMembersPage.class)).setUpdateContainerId("idRoleMgrPage_ajax_roleMember");
+		addComponentBean(pp, "RoleMgrPage_inc_roleMember", PageIncludeBean.class)
+				.setPageUrl(url(RoleMembersPage.class)).setContainerId("idRoleMgrPage_ajax_roleMember");
+		addComponentBean(pp, "RoleMgrPage_ajax_roleMember", AjaxRequestBean.class)
+				.setUrlForward(url(RoleMembersPage.class))
+				.setUpdateContainerId("idRoleMgrPage_ajax_roleMember");
 	}
 
 	@Override

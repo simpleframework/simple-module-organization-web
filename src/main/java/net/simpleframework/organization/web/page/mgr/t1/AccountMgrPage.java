@@ -57,8 +57,8 @@ import net.simpleframework.organization.web.page.mgr.UserRolesPage;
  *         http://www.simpleframework.net
  */
 @PageMapping(url = "/org/account/mgr")
-public class AccountMgrPage extends CategoryTableLCTemplatePage implements
-		IOrganizationContextAware {
+public class AccountMgrPage extends CategoryTableLCTemplatePage
+		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -70,9 +70,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 		// 账号列表
 		final TablePagerBean tablePager = addTablePagerBean(pp, AccountList.class);
-		tablePager
-				.addColumn(AccountMgrPageUtils.TC_NAME())
-				.addColumn(AccountMgrPageUtils.TC_TEXT())
+		tablePager.addColumn(AccountMgrPageUtils.TC_NAME()).addColumn(AccountMgrPageUtils.TC_TEXT())
 				.addColumn(
 						new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")).setFilter(false))
 				.addColumn(AccountMgrPageUtils.TC_EMAIL()).addColumn(AccountMgrPageUtils.TC_MOBILE())
@@ -168,9 +166,9 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
-		final ElementList eles = ElementList.of(new LinkElement($m("AccountMgrPage."
-				+ Account.TYPE_ALL)).setOnclick(createTableRefresh("deptId=&type=" + Account.TYPE_ALL)
-				.toString()));
+		final ElementList eles = ElementList
+				.of(new LinkElement($m("AccountMgrPage." + Account.TYPE_ALL))
+						.setOnclick(createTableRefresh("deptId=&type=" + Account.TYPE_ALL).toString()));
 		final Object s = getSelectedTreeNode(pp);
 		if (s instanceof Department) {
 			eles.append(SpanElement.NAV()).append(new LabelElement(s));
@@ -179,8 +177,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			if (type != Account.TYPE_ALL) {
 				eles.append(SpanElement.NAV());
 				if (type >= Account.TYPE_STATE_DELETE && type <= Account.TYPE_STATE_NORMAL) {
-					eles.append(new LabelElement(EAccountStatus.values()[Account.TYPE_STATE_NORMAL
-							- type]));
+					eles.append(
+							new LabelElement(EAccountStatus.values()[Account.TYPE_STATE_NORMAL - type]));
 				} else {
 					eles.append(new LabelElement($m("AccountMgrPage." + type)));
 				}
@@ -204,28 +202,24 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		btns.append(del);
 		if (type != Account.TYPE_STATE_REGISTRATION && type != Account.TYPE_STATE_DELETE) {
 			if (type == Account.TYPE_STATE_LOCKED) {
-				btns.append(
-						SpanElement.SPACE,
-						act_btn("AccountMgrPage_unlock", $m("AccountMgrPage.12")).setIconClass(
-								"icon-unlock"));
+				btns.append(SpanElement.SPACE, act_btn("AccountMgrPage_unlock", $m("AccountMgrPage.12"))
+						.setIconClass("icon-unlock"));
 			} else {
-				btns.append(
-						SpanElement.SPACE,
-						act_btn("AccountMgrPage_lock", EAccountStatus.locked.toString()).setIconClass(
-								Icon.lock));
+				btns.append(SpanElement.SPACE,
+						act_btn("AccountMgrPage_lock", EAccountStatus.locked.toString())
+								.setIconClass(Icon.lock));
 			}
 		}
 
 		if (s instanceof Department) {
-			add.setOnclick("$Actions['AccountMgrPage_edit']('deptId=" + ((Department) s).getId()
-					+ "');");
+			add.setOnclick(
+					"$Actions['AccountMgrPage_edit']('deptId=" + ((Department) s).getId() + "');");
 		} else {
 			add.setOnclick("$Actions['AccountMgrPage_edit']();");
 			if (type == Account.TYPE_STATE_DELETE) {
-				btns.append(
-						SpanElement.SPACE,
-						act_btn("AccountMgrPage_undelete", $m("AccountMgrPage.11")).setIconClass(
-								Icon.share_alt));
+				btns.append(SpanElement.SPACE,
+						act_btn("AccountMgrPage_undelete", $m("AccountMgrPage.11"))
+								.setIconClass(Icon.share_alt));
 			}
 		}
 		return btns;
@@ -263,8 +257,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 			final int type = Convert.toInt(obj);
 			if (type != Account.TYPE_STATE_DELETE) {
 				items.append(MenuItem.sep());
-				items.append(MenuItem.of($m("AccountMgrPage.22")).setOnclick_act(
-						"AccountMgrPage_roleWin", "accountId"));
+				items.append(MenuItem.of($m("AccountMgrPage.22"))
+						.setOnclick_act("AccountMgrPage_roleWin", "accountId"));
 				items.append(MenuItem.sep());
 				items.append(MenuItem.itemEdit().setOnclick_act("AccountMgrPage_edit", "accountId"));
 			}
@@ -334,7 +328,8 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			Account account;
 			User user;
 			ID id;
@@ -372,12 +367,11 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage implements
 				sb.append(new ButtonElement($m("AccountMgrPage.11"))
 						.setOnclick("$Actions['AccountMgrPage_undelete']('id=" + id + "');"));
 			} else {
-				sb.append(ButtonElement.editBtn().setOnclick(
-						"$Actions['AccountMgrPage_edit']('accountId=" + id + "');"));
+				sb.append(ButtonElement.editBtn()
+						.setOnclick("$Actions['AccountMgrPage_edit']('accountId=" + id + "');"));
 			}
-			sb.append(SpanElement.SPACE).append(
-					ButtonElement.logBtn().setOnclick(
-							"$Actions['AccountMgrPage_logWin']('beanId=" + id + "');"));
+			sb.append(SpanElement.SPACE).append(ButtonElement.logBtn()
+					.setOnclick("$Actions['AccountMgrPage_logWin']('beanId=" + id + "');"));
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			kv.add(TablePagerColumn.OPE, sb.toString());
 			return kv;

@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.IModuleRef;
@@ -37,14 +38,11 @@ public class AccountPasswordPage extends AbstractAccountPage {
 		super.onForward(pp);
 
 		addComponentBean(pp, "userpwdValidation", ValidationBean.class)
-				.setTriggerSelector("#_userpwd_save")
-				.setWarnType(EWarnType.insertAfter)
-				.addValidators(
-						new Validator(EValidatorMethod.required,
-								"#user_old_password, #user_password, #user_password2"))
-				.addValidators(
-						new Validator(EValidatorMethod.equals, "#user_password2")
-								.setArgs("#user_password"));
+				.setTriggerSelector("#_userpwd_save").setWarnType(EWarnType.insertAfter)
+				.addValidators(new Validator(EValidatorMethod.required,
+						"#user_old_password, #user_password, #user_password2"))
+				.addValidators(new Validator(EValidatorMethod.equals, "#user_password2")
+						.setArgs("#user_password"));
 
 		addAjaxRequest(pp, "ajaxEditPassword").setConfirmMessage($m("Confirm.Post"))
 				.setHandlerMethod("saveAction").setSelector(".AccountPasswordPage");
@@ -57,13 +55,11 @@ public class AccountPasswordPage extends AbstractAccountPage {
 
 	@Override
 	public KVMap createVariables(final PageParameter pp) {
-		return super
-				.createVariables(pp)
+		return super.createVariables(pp)
 				.add("nav",
-						BlockElement.nav().addElements(
-								SpanElement.strongText($m("AccountPasswordPage.0"))))
-				.add("pwdstrength", new PwdStrength().setTextInput("user_password"))
-				.add("sendmail",
+						BlockElement.nav()
+								.addElements(SpanElement.strongText($m("AccountPasswordPage.0"))))
+				.add("pwdstrength", new PwdStrength().setTextInput("user_password")).add("sendmail",
 						new Checkbox("user_SendMail", $m("AccountPasswordPage.1")).setChecked(true));
 	}
 

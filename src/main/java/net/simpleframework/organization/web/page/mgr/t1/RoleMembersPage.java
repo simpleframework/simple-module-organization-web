@@ -75,14 +75,13 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
-		final TablePagerBean tablePager = (TablePagerBean) super
-				.addTablePagerBean(pp, "RoleMembersPage_tbl", MemberTable.class).setFilter(false)
-				.setSort(false).setPagerBarLayout(EPagerBarLayout.bottom)
-				.setContainerId("idRoleMembersPage_tbl");
+		final TablePagerBean tablePager = (TablePagerBean) super.addTablePagerBean(pp,
+				"RoleMembersPage_tbl", MemberTable.class).setFilter(false).setSort(false)
+						.setPagerBarLayout(EPagerBarLayout.bottom)
+						.setContainerId("idRoleMembersPage_tbl");
 		tablePager
-				.addColumn(
-						new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60)
-								.setPropertyClass(ERoleMemberType.class))
+				.addColumn(new TablePagerColumn("memberType", $m("RoleMembersPage.2"), 60)
+						.setPropertyClass(ERoleMemberType.class))
 				.addColumn(new TablePagerColumn("memberId", $m("RoleMembersPage.3"), 150))
 				.addColumn(new TablePagerColumn("deptId", $m("RoleMembersPage.5"), 150))
 				.addColumn(TablePagerColumn.BOOL("primaryRole", $m("RoleMembersPage.4")).setWidth(60))
@@ -139,11 +138,11 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		final Role role = OmgrUtils.getRole(pp);
 		final ERoleType rt = role != null ? role.getRoleType() : null;
 		if (rt == ERoleType.normal) {
-			el.append(LinkButton.of($m("RoleMembersPage.1")).setOnclick(
-					"$Actions['addMemberWindow']('roleId=" + role.getId() + "');"));
+			el.append(LinkButton.of($m("RoleMembersPage.1"))
+					.setOnclick("$Actions['addMemberWindow']('roleId=" + role.getId() + "');"));
 			el.append(SpanElement.SPACE);
-			el.append(LinkButton.deleteBtn().setOnclick(
-					"$Actions['RoleMembersPage_tbl'].doAct('RoleMembersPage_del', 'mId');"));
+			el.append(LinkButton.deleteBtn()
+					.setOnclick("$Actions['RoleMembersPage_tbl'].doAct('RoleMembersPage_del', 'mId');"));
 		} else if (rt == ERoleType.handle) {
 			el.append(LinkButton.saveBtn().setOnclick(
 					"$Actions['RoleMembersPage_save']($Form('#idRoleMgrPage_ajax_roleMember .rule'));"));
@@ -220,7 +219,8 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final RoleMember rm = (RoleMember) dataObject;
 			final ID id = rm.getId();
 			final KVMap kv = new KVMap();
@@ -235,8 +235,8 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 			}
 			kv.put(TablePagerColumn.DESCRIPTION, rm.getDescription());
 			final StringBuilder sb = new StringBuilder();
-			sb.append(ButtonElement.deleteBtn().setOnclick(
-					"$Actions['RoleMembersPage_del']('mId=" + id + "');"));
+			sb.append(ButtonElement.deleteBtn()
+					.setOnclick("$Actions['RoleMembersPage_del']('mId=" + id + "');"));
 			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			kv.put(TablePagerColumn.OPE, sb.toString());
 			return kv;
@@ -246,8 +246,8 @@ public class RoleMembersPage extends AbstractTemplatePage implements IOrganizati
 		public MenuItems getContextMenu(final ComponentParameter cp, final MenuBean menuBean,
 				final MenuItem menuItem) {
 			if (menuItem == null) {
-				final MenuItems items = MenuItems.of(MenuItem.itemDelete().setOnclick_act(
-						"RoleMembersPage_del", "mId"));
+				final MenuItems items = MenuItems
+						.of(MenuItem.itemDelete().setOnclick_act("RoleMembersPage_del", "mId"));
 				items.append(MenuItem.sep());
 				// 移动菜单
 				items.append(MenuItem.TBL_MOVE_UP("RoleMemberPage_Move"));

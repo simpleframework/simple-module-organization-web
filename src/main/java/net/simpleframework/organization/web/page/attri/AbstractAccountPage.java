@@ -16,8 +16,8 @@ import net.simpleframework.organization.bean.Account;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractAccountPage extends AbstractTemplatePage implements
-		IOrganizationContextAware {
+public abstract class AbstractAccountPage extends AbstractTemplatePage
+		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

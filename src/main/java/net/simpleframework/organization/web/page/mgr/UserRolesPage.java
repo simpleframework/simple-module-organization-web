@@ -50,10 +50,9 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 
 		// 角色选取
 		final User user = getUser(pp);
-		addComponentBean(pp, "UserRolesPage_roleSelect", RoleSelectBean.class)
-				.setClearAction("false").setJsSelectCallback(
-						"$Actions['UserRolesPage_roleSelect_OK']('accountId=" + user.getId()
-								+ "&roleId=' +　selects[0].id);");
+		addComponentBean(pp, "UserRolesPage_roleSelect", RoleSelectBean.class).setClearAction("false")
+				.setJsSelectCallback("$Actions['UserRolesPage_roleSelect_OK']('accountId="
+						+ user.getId() + "&roleId=' +　selects[0].id);");
 		// 角色选取确认
 		addAjaxRequest(pp, "UserRolesPage_roleSelect_OK").setHandlerMethod("doRoleSelected");
 
@@ -99,9 +98,8 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final Department org = getOrg(pp);
-		return ElementList.of(LinkButton.addBtn().setOnclick(
-				"$Actions['UserRolesPage_roleSelect']("
-						+ (org != null ? "'orgId=" + org.getId() + "'" : "") + ");"));
+		return ElementList.of(LinkButton.addBtn().setOnclick("$Actions['UserRolesPage_roleSelect']("
+				+ (org != null ? "'orgId=" + org.getId() + "'" : "") + ");"));
 	}
 
 	public static class UserRolesTbl extends AbstractDbTablePagerHandler {
@@ -111,28 +109,25 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 			final User user = getUser(cp);
 			if (user != null) {
 				cp.addFormParameter("accountId", user.getId());
-				return new IteratorDataQuery<RoleM>(_roleService.roles(user,
-						new KVMap().add("inOrg", true)));
+				return new IteratorDataQuery<RoleM>(
+						_roleService.roles(user, new KVMap().add("inOrg", true)));
 			}
 			return null;
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final KVMap kv = new KVMap();
 			final RoleM rolem = (RoleM) dataObject;
 			final Role r = rolem.role;
-			kv.add(
-					"roletext",
-					new StringBuilder(r.getText()).append("<br>").append(
-							SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true)));
+			kv.add("roletext", new StringBuilder(r.getText()).append("<br>")
+					.append(SpanElement.color777(_roleService.toUniqueName(r)).setItalic(true)));
 			kv.add("roletype", rolem.rm.getMemberType());
 			kv.put("deptId",
 					AccountMgrPageUtils.toDepartmentText(_deptService.getBean(rolem.rm.getDeptId())));
-			kv.add(
-					TablePagerColumn.OPE,
-					ButtonElement.deleteBtn().setOnclick(
-							"$Actions['UserRolesPage_del']('mid=" + rolem.rm.getId() + "');"));
+			kv.add(TablePagerColumn.OPE, ButtonElement.deleteBtn()
+					.setOnclick("$Actions['UserRolesPage_del']('mid=" + rolem.rm.getId() + "');"));
 			return kv;
 		}
 	}

@@ -52,8 +52,8 @@ import net.simpleframework.organization.web.page.LoginWindowRedirect;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class OrganizationPermissionHandler extends DefaultPagePermissionHandler implements
-		IOrganizationContextAware {
+public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
+		implements IOrganizationContextAware {
 
 	protected User getUserObject(Object o) {
 		if (o instanceof User) {
@@ -85,13 +85,14 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			String[] arr;
 			Object userId;
 			if (r == null
-					&& (variables != null && (userId = variables.get(PermissionConst.VAR_USERID)) != null)
+					&& (variables != null
+							&& (userId = variables.get(PermissionConst.VAR_USERID)) != null)
 					&& (arr = RolenameW.split((String) role)).length == 2) {
 				final User user = _userService.getBean(userId);
 				if (user != null) {
 					final Department org = _deptService.getBean(user.getOrgId());
-					r = _roleService
-							.getRoleByName(_rolecService.getRoleChartByName(org, arr[0]), arr[1]);
+					r = _roleService.getRoleByName(_rolecService.getRoleChartByName(org, arr[0]),
+							arr[1]);
 				}
 			}
 			return r;
@@ -131,8 +132,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		if (accountType == null || accountType == EAccountType.normal) {
 			account = _accountService.getAccountByName(login);
 		}
-		if (account == null
-				&& ((accountType == null && login.contains("@")) || accountType == EAccountType.email)) {
+		if (account == null && ((accountType == null && login.contains("@"))
+				|| accountType == EAccountType.email)) {
 			final User user = _userService.getUserByEmail(login);
 			if (user != null) {
 				account = _accountService.getBean(user.getId());
@@ -196,7 +197,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		return super.getLoginRedirectUrl(rRequest, roleName);
 	}
 
-	protected void doAutoLogin(final HttpAccountSession accountSession, final LoginObject loginObject) {
+	protected void doAutoLogin(final HttpAccountSession accountSession,
+			final LoginObject loginObject) {
 		_accountService.setLogin(accountSession, loginObject);
 	}
 
@@ -207,8 +209,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 	@Override
 	public Iterator<PermissionUser> allUsers() {
-		return new NestIterator<PermissionUser, User>(DataQueryUtils.toIterator(_userService
-				.queryAll())) {
+		return new NestIterator<PermissionUser, User>(
+				DataQueryUtils.toIterator(_userService.queryAll())) {
 			@Override
 			protected PermissionUser change(final User n) {
 				return OrganizationPermissionHandler.this.getUser(n);
@@ -298,8 +300,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 			PermissionRole _role = super.getRole();
 			if (_role.getId() == null) {
 				// 获取缺省角色
-				setRole(_role = OrganizationPermissionHandler.this.getRole(_roleService.getPrimaryRole(
-						oUser).getId()));
+				setRole(_role = OrganizationPermissionHandler.this
+						.getRole(_roleService.getPrimaryRole(oUser).getId()));
 			}
 			return _role.setUser(this);
 		}
@@ -554,8 +556,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 
 		@Override
 		public Iterator<PermissionUser> orgUsers() {
-			return new NestIterator<PermissionUser, User>(DataQueryUtils.toIterator(_userService
-					.queryUsers(getDepartmentObject(oDept), Account.TYPE_ALL))) {
+			return new NestIterator<PermissionUser, User>(DataQueryUtils
+					.toIterator(_userService.queryUsers(getDepartmentObject(oDept), Account.TYPE_ALL))) {
 				@Override
 				protected PermissionUser change(final User n) {
 					return OrganizationPermissionHandler.this.getUser(n);
@@ -576,8 +578,8 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler 
 		@Override
 		public List<PermissionDept> getOrgChildren() {
 			if (isOrg()) {
-				return _dept_children(_deptService
-						.queryDepartments(oDept, EDepartmentType.organization));
+				return _dept_children(
+						_deptService.queryDepartments(oDept, EDepartmentType.organization));
 			} else {
 				return CollectionUtils.EMPTY_LIST();
 			}

@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr.org2;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.trans.Transaction;

@@ -33,8 +33,8 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
  * @author 陈侃(cknet@126.com, 13910090885) https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DepartmentCategory extends CategoryBeanAwareHandler<Department> implements
-		IOrganizationContextAware {
+public class DepartmentCategory extends CategoryBeanAwareHandler<Department>
+		implements IOrganizationContextAware {
 
 	@Override
 	protected IDepartmentService getBeanService() {
@@ -57,8 +57,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				}
 				final TreeNode treeNode2 = new TreeNode(treeBean, treeNode, text);
 				treeNode2.setId(String.valueOf(id));
-				treeNode2.setJsClickCallback(CategoryTableLCTemplatePage.createTableRefresh(
-						"deptId=&type=" + id).toString());
+				treeNode2.setJsClickCallback(
+						CategoryTableLCTemplatePage.createTableRefresh("deptId=&type=" + id).toString());
 				treeNode2.setImage(images[i++]);
 				treeNode2.setPostfixText(getPostfixText(id));
 				treeNode2.setContextMenu("none");
@@ -78,8 +78,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 							EAccountStatus.values()[i]);
 					treeNode2.setId(String.valueOf(id));
 					treeNode2.setImage(images[i++]);
-					treeNode2.setJsClickCallback(CategoryTableLCTemplatePage.createTableRefresh(
-							"deptId=&type=" + id).toString());
+					treeNode2.setJsClickCallback(CategoryTableLCTemplatePage
+							.createTableRefresh("deptId=&type=" + id).toString());
 					treeNode2.setPostfixText(getPostfixText(id));
 					treeNode2.setContextMenu("none");
 					treeNodes.add(treeNode2);
@@ -97,12 +97,11 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 				final Object dataObject = treeNode.getDataObject();
 				if (dataObject instanceof Department) {
 					final Department dept = (Department) dataObject;
-					treeNode
-							.setImage(dept.getDepartmentType() == EDepartmentType.organization ? "/org.gif"
-									: "/dept.png");
+					treeNode.setImage(dept.getDepartmentType() == EDepartmentType.organization
+							? "/org.gif" : "/dept.png");
 					treeNode.setPostfixText(getPostfixText(dept));
-					treeNode.setJsClickCallback(CategoryTableLCTemplatePage.createTableRefresh(
-							"deptId=" + dept.getId()).toString());
+					treeNode.setJsClickCallback(CategoryTableLCTemplatePage
+							.createTableRefresh("deptId=" + dept.getId()).toString());
 					final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, treeNode);
 					if (nodes != null) {
 						for (final TreeNode tn : nodes) {
@@ -154,9 +153,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 			final TreeNode treeNode) {
 		final Object dept;
 		if (treeNode != null && (dept = treeNode.getDataObject()) instanceof Department) {
-			treeNode
-					.setImage(((Department) dept).getDepartmentType() == EDepartmentType.organization ? "/org.gif"
-							: "/dept.png");
+			treeNode.setImage(((Department) dept).getDepartmentType() == EDepartmentType.organization
+					? "/org.gif" : "/dept.png");
 		}
 		final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, treeNode);
 		if (nodes != null) {
@@ -169,7 +167,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 
 	@Override
 	protected void onLoaded_dataBinding(final ComponentParameter cp,
-			final Map<String, Object> dataBinding, final PageSelector selector, final Department dept) {
+			final Map<String, Object> dataBinding, final PageSelector selector,
+			final Department dept) {
 		if (dept != null) {
 			dataBinding.put("department_type", dept.getDepartmentType());
 		}
@@ -179,8 +178,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 	protected void onSave_setProperties(final ComponentParameter cp, final Department dept,
 			final boolean insert) {
 		if (insert) {
-			dept.setDepartmentType(Convert.toEnum(EDepartmentType.class,
-					cp.getParameter("department_type")));
+			dept.setDepartmentType(
+					Convert.toEnum(EDepartmentType.class, cp.getParameter("department_type")));
 		}
 	}
 
@@ -195,10 +194,8 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department> imp
 		final PropEditorBean editor = (PropEditorBean) super.categoryEdit_createPropEditor(cp);
 		final Department t = getBeanService().getBean(cp.getParameter(PARAM_CATEGORY_ID));
 		if (t == null) {
-			editor.getFormFields().add(
-					1,
-					new PropField($m("DepartmentCategory.0")).addComponents(InputComp.select(
-							"department_type", EDepartmentType.class)));
+			editor.getFormFields().add(1, new PropField($m("DepartmentCategory.0"))
+					.addComponents(InputComp.select("department_type", EDepartmentType.class)));
 		}
 		return editor;
 	}

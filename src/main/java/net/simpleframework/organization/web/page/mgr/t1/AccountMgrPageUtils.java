@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.mgr.t1;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.component.ui.pager.TablePagerColumn;
 import net.simpleframework.organization.IOrganizationContextAware;

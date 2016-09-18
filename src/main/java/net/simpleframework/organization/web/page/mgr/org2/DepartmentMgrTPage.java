@@ -73,32 +73,28 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 
 		// 用户选取
 		pp.addComponentBean("DepartmentMgrTPage_userSelect", UserSelectBean.class)
-				.setShowGroupOpt(false)
-				.setShowTreeOpt(false)
-				.setMultiple(true)
+				.setShowGroupOpt(false).setShowTreeOpt(false).setMultiple(true)
 				.setJsSelectCallback(
 						"$Actions['DepartmentMgrTPage_userSelect_OK']('deptId=' + $F('.user_select #deptId') + '&selectIds=' + selects.pluck('id').join(';')); return true;")
 				.setPopup(false).setModal(true).setDestroyOnClose(true)
 				.setHandlerClass(_UserSelectHandler.class);
-		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK").setHandlerMethod(
-				"doUserSelect");
+		ajaxRequest = addAjaxRequest(pp, "DepartmentMgrTPage_userSelect_OK")
+				.setHandlerMethod("doUserSelect");
 	}
 
 	protected TablePagerBean addTablePagerBean(final PageParameter pp) {
 		final TablePagerBean tablePager = (TablePagerBean) addTablePagerBean(pp,
 				"DepartmentMgrTPage_tbl", DepartmentTbl.class).setSort(false)
-				.setPagerBarLayout(EPagerBarLayout.none)
-				.setJsLoadedCallback("DepartmentMgrTPage.jsLoaded();")
-				.setContainerId("idDepartmentMgrTPage_tbl");
-		tablePager
-				.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
+						.setPagerBarLayout(EPagerBarLayout.none)
+						.setJsLoadedCallback("DepartmentMgrTPage.jsLoaded();")
+						.setContainerId("idDepartmentMgrTPage_tbl");
+		tablePager.addColumn(new TablePagerColumn("text", $m("DepartmentMgrTPage.0")))
 				.addColumn(new TablePagerColumn("name", $m("DepartmentMgrTPage.1"), 150))
-				.addColumn(
-						new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210)
-								.setFilter(false))
-				.addColumn(
-						new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).center().setFilter(
-								false)).addColumn(TablePagerColumn.OPE(120).setTextAlign(ETextAlign.left));
+				.addColumn(new TablePagerColumn("parentId", $m("DepartmentMgrTPage.3"), 210)
+						.setFilter(false))
+				.addColumn(new TablePagerColumn("users", $m("DepartmentMgrTPage.4"), 60).center()
+						.setFilter(false))
+				.addColumn(TablePagerColumn.OPE(120).setTextAlign(ETextAlign.left));
 		return tablePager;
 	}
 
@@ -134,8 +130,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tbar clearfix '>");
 		sb.append(" <div class='left'>");
-		sb.append(LinkButton.addBtn().corner()
-				.setOnclick("$Actions['DepartmentMgrTPage_editWin']();"));
+		sb.append(
+				LinkButton.addBtn().corner().setOnclick("$Actions['DepartmentMgrTPage_editWin']();"));
 		sb.append(" </div>");
 		sb.append(" <div class='right'>");
 		sb.append(new SpanElement().setClassName("DepartmentMgrTPage_plus")
@@ -178,7 +174,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		}
 
 		@Override
-		protected Map<String, Object> getRowData(final ComponentParameter cp, final Object dataObject) {
+		protected Map<String, Object> getRowData(final ComponentParameter cp,
+				final Object dataObject) {
 			final Department dept = (Department) dataObject;
 			final KVMap data = new KVMap();
 			final StringBuilder txt = new StringBuilder();
@@ -187,8 +184,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			} else {
 				final boolean leaf = Convert.toBool(dept.getAttr("_leaf"));
 				if (!leaf) {
-					txt.append("<img class='toggle' style='' src=\"").append(
-							cp.getCssResourceHomePath(DepartmentMgrTPage.class));
+					txt.append("<img class='toggle' style='' src=\"")
+							.append(cp.getCssResourceHomePath(DepartmentMgrTPage.class));
 					txt.append("/images/p_toggle.png\" />");
 				} else {
 					txt.append("<span class='imgToggle'></span>");
@@ -196,8 +193,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				txt.append(dept.getText());
 			}
 			final int lev = Convert.toInt(dept.getAttr("_lev"));
-			final SpanElement tEle = new SpanElement(txt).setStyle("margin-left: "
-					+ (lev == 1 ? 10 : lev * 15) + "px");
+			final SpanElement tEle = new SpanElement(txt)
+					.setStyle("margin-left: " + (lev == 1 ? 10 : lev * 15) + "px");
 			if (lev > 1) {
 				tEle.setColor(L_COLORs[lev - 2]);
 			}
@@ -209,8 +206,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			}
 
 			final AccountStat stat = _accountStatService.getDeptAccountStat(dept);
-			final LinkElement le = LinkElement.style2(stat.getRnums()).setHref(
-					getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
+			final LinkElement le = LinkElement.style2(stat.getRnums())
+					.setHref(getUrl(cp, UserMgrTPage.class, "deptId=" + dept.getId()));
 			data.add("users", le);
 			data.add(TablePagerColumn.OPE, toOpeHTML(cp, dept));
 			return data;
@@ -226,11 +223,11 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final Department dept) {
 			final Object id = dept.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(ButtonElement.addBtn().setOnclick(
-					"$Actions['DepartmentMgrTPage_editWin']('parentId=" + id + "');"));
+			sb.append(ButtonElement.addBtn()
+					.setOnclick("$Actions['DepartmentMgrTPage_editWin']('parentId=" + id + "');"));
 			sb.append(SpanElement.SPACE);
-			sb.append(ButtonElement.editBtn().setOnclick(
-					"$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
+			sb.append(ButtonElement.editBtn()
+					.setOnclick("$Actions['DepartmentMgrTPage_editWin']('deptId=" + id + "');"));
 			if (dept.getDepartmentType() == EDepartmentType.department) {
 				sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			}
@@ -244,8 +241,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 				return null;
 			}
 			final MenuItems items = MenuItems.of();
-			items.append(MenuItem.of($m("DepartmentMgrTPage.5")).setOnclick_act(
-					"DepartmentMgrTPage_userSelect", "deptId"));
+			items.append(MenuItem.of($m("DepartmentMgrTPage.5"))
+					.setOnclick_act("DepartmentMgrTPage_userSelect", "deptId"));
 			items.append(MenuItem.sep());
 			items.append(MenuItem.itemEdit().setOnclick_act("DepartmentMgrTPage_editWin", "deptId"));
 			items.append(MenuItem.itemDelete().setOnclick_act("DepartmentMgrTPage_delete", "id"));
@@ -276,8 +273,8 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			if (dept == null) {
 				return DataQueryUtils.nullQuery();
 			}
-			return new NestDataQuery<PermissionUser, User>(_userService.queryUsers(
-					_deptService.getOrg(dept), Account.TYPE_NO_DEPT)) {
+			return new NestDataQuery<PermissionUser, User>(
+					_userService.queryUsers(_deptService.getOrg(dept), Account.TYPE_NO_DEPT)) {
 				@Override
 				protected PermissionUser change(final User n) {
 					return n == null ? null : cp.getUser(n);

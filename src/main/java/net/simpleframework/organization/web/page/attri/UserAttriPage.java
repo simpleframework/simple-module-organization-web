@@ -1,6 +1,7 @@
 package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
+
 import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.JavascriptForward;
@@ -57,8 +58,9 @@ public class UserAttriPage extends AbstractAccountAttriPage {
 	@Override
 	public ElementList getLeftElements(final PageParameter pp) {
 		final boolean saved = pp.getBoolParameter("saved");
-		final SpanElement txt = SpanElement.strongText(
-				saved ? $m("UserAttriPage.0") : $m("UserAttriPage.1")).addStyle("line-height: 2;");
+		final SpanElement txt = SpanElement
+				.strongText(saved ? $m("UserAttriPage.0") : $m("UserAttriPage.1"))
+				.addStyle("line-height: 2;");
 		if (saved) {
 			txt.setColor("#f00");
 		}
