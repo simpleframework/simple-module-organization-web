@@ -52,28 +52,12 @@
 </div>
 <script type="text/javascript">
   var AccountStatPage = {
-    _do_sent_interval : function(obj) {
-      var btxt = obj.value;
-      obj.disable();
-      var i = 60;
-      obj.value = btxt + "(" + (i--) + ")";
-      var hdl = setInterval(function() {
-        if (i == 0) {
-          clearTimeout(hdl);
-          obj.value = btxt;
-          obj.enable();
-        } else {
-          obj.value = btxt + "(" + (i--) + ")";
-        }
-      }, 1000);
-    },
-
     sms_sent : function(obj) {
       var mobile = $F(obj.previous());
       var act = $Actions['AccountMobileBindingPage_sentcode'];
-      var callback = this._do_sent_interval;
+      var callback = $UI.doMobileSentInterval;
       act.jsCompleteCallback = function() {
-        callback(obj);
+        callback(obj, true);
       };
       act("mobile=" + mobile);
     },
@@ -81,9 +65,9 @@
     mail_sent : function(obj) {
       var mail = $F(obj.previous());
       var act = $Actions['AccountMailBindingPage_sentcode'];
-      var callback = this._do_sent_interval;
+      var callback = $UI.doMobileSentInterval;
       act.jsCompleteCallback = function() {
-        callback(obj);
+        callback(obj, true);
       };
       act("mail=" + mail);
     }

@@ -7,6 +7,7 @@ import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.mail.Email;
+import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.common.MValidateCode;
 import net.simpleframework.ctx.common.MValidateCode.Code;
 import net.simpleframework.ctx.trans.Transaction;
@@ -145,6 +146,14 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 		}
 
 		@Override
+		public String toTableRowsString(final PageParameter pp) {
+			final StringBuilder sb = new StringBuilder();
+			sb.append(super.toTableRowsString(pp));
+			sb.append(JavascriptUtils.wrapScriptTag("$UI.doMobileSentInterval('mail_binding_btn');"));
+			return sb.toString();
+		}
+
+		@Override
 		protected TableRows getTableRows(final PageParameter pp) {
 			final Account account = getAccount(pp);
 			final User user = _accountService.getUser(account.getId());
@@ -209,6 +218,15 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 			}
 
 			return super.onSave(cp).append("$Actions.reloc();");
+		}
+
+		@Override
+		public String toTableRowsString(final PageParameter pp) {
+			final StringBuilder sb = new StringBuilder();
+			sb.append(super.toTableRowsString(pp));
+			sb.append(
+					JavascriptUtils.wrapScriptTag("$UI.doMobileSentInterval('mobile_binding_btn');"));
+			return sb.toString();
 		}
 
 		@Override
