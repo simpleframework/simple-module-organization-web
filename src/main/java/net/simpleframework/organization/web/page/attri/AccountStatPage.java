@@ -2,10 +2,12 @@ package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.IOException;
+import java.util.Map;
+
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
 import net.simpleframework.common.StringUtils;
-import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.common.mail.Email;
 import net.simpleframework.common.web.JavascriptUtils;
 import net.simpleframework.ctx.common.MValidateCode;
@@ -46,6 +48,8 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
+		pp.addImportJavascript(AccountStatPage.class, "/js/account-stat.js");
+
 		// 邮件binding
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mailbinding_page",
 				AccountMailBindingPage.class);
@@ -57,25 +61,69 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 		addWindowBean(pp, "AccountStatPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250);
 	}
 
+	public String toTitleHTML(final PageParameter pp) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='tt'>");
+		sb.append(" <strong>#(AccountStatPage.10)</strong>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
 	@Override
-	public KVMap createVariables(final PageParameter pp) {
-		final KVMap kv = super.createVariables(pp);
+	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+			final String currentVariable) throws IOException {
+		final StringBuilder sb = new StringBuilder();
 		final Account account = getAccount(pp);
 		final User user = _accountService.getUser(account.getId());
-		kv.add("name", account.getName()).add("status", account.getStatus())
-				.add("createDate", blank(Convert.toDateTimeString(account.getCreateDate())))
-				.add("lastLoginDate", blank(Convert.toDateTimeString(account.getLastLoginDate())))
-				.add("lastLoginIP", blank(account.getLastLoginIP()))
-				.add("loginTimes", account.getLoginTimes())
-				.add("onlineMillis", DateUtils.toDifferenceDate(account.getOnlineMillis()))
-				.add("mdevid", account.getMdevid());
+		sb.append("<div class='AccountStatPage'>");
+		sb.append(toTitleHTML(pp));
+		sb.append(" <table class='form_tbl'>");
+		// 账号名
+		sb.append(toTrHTML_name(pp, account));
+		// 邮件绑定
+		sb.append(toTrHTML_mailbinding(pp, account, user.getEmail()));
+		// 手机绑定
+		sb.append(toTrHTML_mobilebinding(pp, account, user.getMobile()));
+
+		// 状态
+		sb.append(toTrHTML(pp, $m("AccountStatPage.0"), account.getStatus()));
+		// 创建时间
+		sb.append(toTrHTML(pp, $m("AccountStatPage.1"),
+				Convert.toDateTimeString(account.getCreateDate())));
+		// 最后一次登录时间
+		sb.append(toTrHTML(pp, $m("AccountStatPage.2"),
+				Convert.toDateTimeString(account.getLastLoginDate())));
+		// 最后一次登录IP
+		sb.append(toTrHTML(pp, $m("AccountStatPage.3"), account.getLastLoginIP()));
+		// 总登录次数
+		sb.append(toTrHTML(pp, $m("AccountStatPage.4"), account.getLoginTimes()));
+		// 总在线时间
+		sb.append(toTrHTML(pp, $m("AccountStatPage.5"),
+				DateUtils.toDifferenceDate(account.getOnlineMillis())));
+		// 移动设备号
+		sb.append(toTrHTML(pp, $m("AccountStatPage.11"), account.getMdevid()));
+		sb.append(" </table>");
+		sb.append(" <div class='desc'>* #(AccountStatPage.14)</div>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	protected String toTrHTML_name(final PageParameter pp, final Account account) {
+		return toTrHTML(pp, $m("AccountStatPage.16"), account.getName());
+	}
+
+	protected String toTrHTML_mailbinding(final PageParameter pp, final Account account,
+			final String email) {
 		final boolean mailbinding = account.isMailbinding();
-		kv.add("mailbinding", mailbinding ? user.getEmail() : $m("AccountStatPage.9"))
-				.add("mailbinding_act", createBinding(account, "mailbinding", mailbinding));
+		return toTrHTML(pp, $m("AccountStatPage.6"), mailbinding ? email : $m("AccountStatPage.9"),
+				createBinding(account, "mailbinding", mailbinding));
+	}
+
+	protected String toTrHTML_mobilebinding(final PageParameter pp, final Account account,
+			final String mobile) {
 		final boolean mobilebinding = account.isMobilebinding();
-		kv.add("mobilebinding", mobilebinding ? user.getMobile() : $m("AccountStatPage.9"))
-				.add("mobilebinding_act", createBinding(account, "mobilebinding", mobilebinding));
-		return kv;
+		return toTrHTML(pp, $m("AccountStatPage.7"), mobilebinding ? mobile : $m("AccountStatPage.9"),
+				createBinding(account, "mobilebinding", mobilebinding));
 	}
 
 	private LinkButton createBinding(final Account account, final String act,
@@ -85,17 +133,26 @@ public class AccountStatPage extends AbstractAccountPage implements IMessageCont
 						+ "&unbinding=" + binding + "');");
 	}
 
+	protected String toTrHTML(final PageParameter pp, final String lbl, final Object... vals) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append(" <td class='l'>").append(lbl).append("</td>");
+		sb.append(" <td class='v'>");
+		if (vals.length == 1) {
+			sb.append(blank(vals[0]));
+		}
+		if (vals.length > 1) {
+			sb.append("<div class='left'>").append(blank(vals[0])).append("</div>");
+			sb.append("<div class='right'>").append(blank(vals[1])).append("</div>");
+		}
+		sb.append(" </td>");
+		sb.append("</tr>");
+		return sb.toString();
+	}
+
 	private String blank(final Object o) {
 		final String r = Convert.toString(o);
 		return StringUtils.hasText(r) ? r : "&nbsp;";
-	}
-
-	public String toTitleHTML(final PageParameter pp) {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='tt'>");
-		sb.append(" <strong>#(AccountStatPage.10)</strong>");
-		sb.append("</div>");
-		return sb.toString();
 	}
 
 	public static class AccountMailBindingPage extends AbstractAccountBindingPage {
