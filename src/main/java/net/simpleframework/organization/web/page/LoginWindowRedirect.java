@@ -32,8 +32,8 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 
 	@Override
 	public Map<String, Object> createVariables(final PageParameter pp) {
-		return ((KVMap) super.createVariables(pp)).add("loginId", "login_" + hashId).add("win",
-				COMPONENT_PREFIX + "Window");
+		return ((KVMap) super.createVariables(pp)).add("lpath", mvcSettings.getLoginPath(pp))
+				.add("loginId", "login_" + hashId).add("win", COMPONENT_PREFIX + "Window");
 	}
 
 	@Override

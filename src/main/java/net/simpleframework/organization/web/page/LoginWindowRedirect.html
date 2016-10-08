@@ -1,6 +1,9 @@
 <div id="${loginId}"></div>
 <script type="text/javascript">
   (function() {
+    if (${parameter.isMobile()}) {
+      $Actions.loc('${lpath}');
+    }
     var ele = $("${loginId}");
     var win = $win(ele);
     var loginWin = function() {
