@@ -6,6 +6,8 @@ import java.util.Map;
 
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.permission.PermissionConst;
+import net.simpleframework.mvc.IForward;
+import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.component.base.ajaxrequest.AjaxRequestBean;
 import net.simpleframework.mvc.template.AbstractTemplatePage;
@@ -21,6 +23,14 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 	static final String COMPONENT_PREFIX = "LoginWindowRedirect_";
 
 	@Override
+	public IForward forward(final PageParameter pp) throws Exception {
+		if (pp.isMobile()) {
+			return JavascriptForward.loc(mvcSettings.getLoginPath(pp));
+		}
+		return super.forward(pp);
+	}
+
+	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
@@ -32,8 +42,8 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 
 	@Override
 	public Map<String, Object> createVariables(final PageParameter pp) {
-		return ((KVMap) super.createVariables(pp)).add("lpath", mvcSettings.getLoginPath(pp))
-				.add("loginId", "login_" + hashId).add("win", COMPONENT_PREFIX + "Window");
+		return ((KVMap) super.createVariables(pp)).add("loginId", "login_" + hashId).add("win",
+				COMPONENT_PREFIX + "Window");
 	}
 
 	@Override
