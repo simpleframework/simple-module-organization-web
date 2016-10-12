@@ -17,6 +17,7 @@ import net.simpleframework.mvc.MVCContext;
 import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.bean.Account;
+import net.simpleframework.organization.bean.User;
 import net.simpleframework.organization.login.IAccountSession;
 import net.simpleframework.organization.login.LoginObject;
 
@@ -127,8 +128,26 @@ public class HttpAccountSession extends ObjectEx
 		Account login = null;
 		final String pwd = HttpUtils.getCookie(rRequest.request, "_account_pwd");
 		if (StringUtils.hasText(pwd) && getLogin() == null) {
-			login = _accountService
-					.getAccountByName(HttpUtils.getCookie(rRequest.request, "_account_name"));
+			final String account_name = HttpUtils.getCookie(rRequest.request, "_account_name");
+			if (StringUtils.hasText(account_name)) {
+				login = _accountService.getAccountByName(account_name);
+				if (login == null) {
+					Account account = null;
+					if (account_name.contains("@")) {
+						final User user = _userService.getUserByEmail(account_name);
+						if (user != null && (account = _userService.getAccount(user.getId())) != null
+								&& account.isMailbinding()) {
+							login = account;
+						}
+					} else {
+						final User user = _userService.getUserByMobile(account_name);
+						if (user != null && (account = _userService.getAccount(user.getId())) != null
+								&& account.isMobilebinding()) {
+							login = account;
+						}
+					}
+				}
+			}
 		}
 		return login != null
 				? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0")) : null;
