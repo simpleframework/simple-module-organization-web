@@ -111,6 +111,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		tablePager.addColumn(AccountMgrPageUtils.TC_TEXT()).addColumn(AccountMgrPageUtils.TC_NAME())
 				.addColumn(AccountMgrPageUtils.TC_NICK().setFilterSort(false))
 				.addColumn(new TablePagerColumn("u.departmentId", $m("AccountMgrPage.5")) {
+					private static final long serialVersionUID = 3540144012822927104L;
+
 					@Override
 					public String getFilterVal(final String val) {
 						if (val == null) {
