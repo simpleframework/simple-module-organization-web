@@ -291,6 +291,12 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 		}
 
 		@Override
+		public boolean isNormal() {
+			final Account account = _userService.getAccount(getId());
+			return account.getStatus() == EAccountStatus.normal;
+		}
+
+		@Override
 		public int getOorder() {
 			return oUser.getOorder();
 		}
