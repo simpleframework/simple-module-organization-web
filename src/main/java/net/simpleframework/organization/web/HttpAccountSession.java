@@ -73,9 +73,21 @@ public class HttpAccountSession extends ObjectEx
 		return (Set<Class<T>>) getHttpSession().getAttribute("_httpaccount_listeners");
 	}
 
+	protected Object getSessionAttribute(final String key) {
+		return httpSession.getAttribute(key);
+	}
+
+	protected void setSessionAttribute(final String key, final Object val) {
+		httpSession.setAttribute(key, val);
+	}
+
+	protected void romoveSessionAttribute(final String key) {
+		httpSession.removeAttribute(key);
+	}
+
 	@Override
 	public LoginObject getLogin() {
-		LoginObject lObj = (LoginObject) httpSession.getAttribute(LOGIN_KEY);
+		LoginObject lObj = (LoginObject) getSessionAttribute(LOGIN_KEY);
 		// 根据jsessionid自动登录
 		if (lObj == null && rRequest != null && rRequest.getRequestAttr("_jsessionid_login") == null
 				&& rRequest.isHttpRequest()) {
@@ -108,7 +120,7 @@ public class HttpAccountSession extends ObjectEx
 		if (login == null) {
 			logout();
 		} else {
-			httpSession.setAttribute(LOGIN_KEY, login);
+			setSessionAttribute(LOGIN_KEY, login);
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
 				login.setAttr("logId", ((OrganizationLogRef) ref).logLogin(login.getAccountId(),
@@ -156,9 +168,9 @@ public class HttpAccountSession extends ObjectEx
 
 	@Override
 	public void logout() {
-		final LoginObject login = (LoginObject) httpSession.getAttribute(LOGIN_KEY);
+		final LoginObject login = (LoginObject) getSessionAttribute(LOGIN_KEY);
 		if (login != null) {
-			httpSession.removeAttribute(LOGIN_KEY);
+			romoveSessionAttribute(LOGIN_KEY);
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
 				((OrganizationLogRef) ref).logLogout(login.getAttr("logId"));
