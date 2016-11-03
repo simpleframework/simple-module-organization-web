@@ -42,6 +42,7 @@ import net.simpleframework.organization.bean.Role;
 import net.simpleframework.organization.bean.RoleMember;
 import net.simpleframework.organization.bean.RoleMember.ERoleMemberType;
 import net.simpleframework.organization.bean.User;
+import net.simpleframework.organization.login.IAccountSession;
 import net.simpleframework.organization.login.LoginObject;
 import net.simpleframework.organization.role.RolenameW;
 import net.simpleframework.organization.web.page.LoginWindowRedirect;
@@ -112,7 +113,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 
 	@Override
 	public ID getLoginId(final PageRequestResponse rRequest) {
-		return _accountService.getLoginId(new HttpAccountSession(rRequest));
+		return _accountService.getLoginId(createAccountSession(rRequest));
 	}
 
 	public static final String ACCOUNT_TYPE = "accountType";
@@ -120,7 +121,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 	@Override
 	public void login(final PageRequestResponse rRequest, final String login, final String password,
 			final Map<String, Object> params) {
-		final HttpAccountSession accountSession = new HttpAccountSession(rRequest);
+		final IAccountSession accountSession = createAccountSession(rRequest);
 
 		EAccountType accountType = null;
 		if (params != null) {
@@ -182,13 +183,17 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 
 	@Override
 	public void logout(final PageRequestResponse rRequest) {
-		_accountService.logout(new HttpAccountSession(rRequest), true);
+		_accountService.logout(createAccountSession(rRequest), true);
 		rRequest.removeSessionAttr(MVCConst.SESSION_ATTRI_LASTURL);
+	}
+
+	protected IAccountSession createAccountSession(final PageRequestResponse rRequest) {
+		return ((IOrganizationWebContext) orgContext).createAccountSession(rRequest, null);
 	}
 
 	@Override
 	public String getLoginRedirectUrl(final PageRequestResponse rRequest, final String roleName) {
-		final HttpAccountSession accountSession = new HttpAccountSession(rRequest);
+		final IAccountSession accountSession = createAccountSession(rRequest);
 		final LoginObject loginObject = accountSession.getAutoLogin();
 		if (loginObject != null) {
 			doAutoLogin(accountSession, loginObject);
@@ -197,8 +202,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 		return super.getLoginRedirectUrl(rRequest, roleName);
 	}
 
-	protected void doAutoLogin(final HttpAccountSession accountSession,
-			final LoginObject loginObject) {
+	protected void doAutoLogin(final IAccountSession accountSession, final LoginObject loginObject) {
 		_accountService.setLogin(accountSession, loginObject);
 	}
 

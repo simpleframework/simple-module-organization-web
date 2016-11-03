@@ -11,8 +11,10 @@ import net.simpleframework.ctx.IModuleRef;
 import net.simpleframework.ctx.ModuleFunctions;
 import net.simpleframework.ctx.ModuleRefUtils;
 import net.simpleframework.mvc.MVCContext;
+import net.simpleframework.mvc.PageRequestResponse;
 import net.simpleframework.mvc.ctx.WebModuleFunction;
 import net.simpleframework.organization.impl.OrganizationContext;
+import net.simpleframework.organization.login.IAccountSession;
 import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
 
 /**
@@ -22,6 +24,16 @@ import net.simpleframework.organization.web.page.mgr.t1.AccountMgrPage;
  *         http://www.simpleframework.net
  */
 public class OrganizationWebContext extends OrganizationContext implements IOrganizationWebContext {
+
+	@Override
+	public IAccountSession createAccountSession(final PageRequestResponse rRequest,
+			final HttpSession httpSession) {
+		if (rRequest != null) {
+			return new HttpAccountSession(rRequest);
+		} else {
+			return new HttpAccountSession(httpSession);
+		}
+	}
 
 	@Override
 	public void onInit(final IApplicationContext application) throws Exception {
@@ -45,7 +57,7 @@ public class OrganizationWebContext extends OrganizationContext implements IOrga
 		// + (System.currentTimeMillis() - httpSession.getCreationTime()) / 1000 +
 		// "s] - "
 		// + httpSession.getId() + "");
-		getAccountService().logout(new HttpAccountSession(httpSession), false);
+		getAccountService().logout(createAccountSession(null, httpSession), false);
 	}
 
 	// protected IOrganizationContext getRemoteContext() {
