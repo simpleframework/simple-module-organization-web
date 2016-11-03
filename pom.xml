@@ -32,12 +32,6 @@
       <artifactId>simple-module-msg-web</artifactId>
       <optional>true</optional>
     </dependency>
-    
-    <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-      <scope>provided</scope>
-    </dependency>
 
     <!-- web容器包 -->
     <dependency>
