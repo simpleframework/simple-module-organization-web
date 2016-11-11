@@ -61,7 +61,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage
 				// .addValidators(new Validator(EValidatorMethod.number,
 				// "#ue_oorder"))
 				.addValidators(new Validator(EValidatorMethod.email, "#ue_email"))
-				.addValidators(new Validator(EValidatorMethod.mobile_phone, "#ue_mobile, #ue_mobile2"))
+				.addValidators(new Validator(EValidatorMethod.mobile_phone, "#ue_mobile"))
 				.addValidators(new Validator(EValidatorMethod.phone, "#ue_homePhone")) // ,
 																												// #ue_officePhone
 				.addValidators(new Validator(EValidatorMethod.date, "#ue_birthday", "yyyy-MM-dd"));

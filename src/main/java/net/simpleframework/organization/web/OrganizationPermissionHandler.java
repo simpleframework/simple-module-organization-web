@@ -119,17 +119,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 
 	public static final String ACCOUNT_TYPE = "accountType";
 
-	@Override
-	public void login(final PageRequestResponse rRequest, final String login, final String password,
-			final Map<String, Object> params) {
-		final IAccountSession accountSession = createAccountSession(rRequest);
-
-		EAccountType accountType = null;
-		if (params != null) {
-			accountType = (EAccountType) params.get(ACCOUNT_TYPE);
-		}
-
-		// 自动识别 accountType == null
+	protected Account getLoginAccount(final EAccountType accountType, final String login) {
 		Account account = null;
 		if (accountType == null || accountType == EAccountType.normal) {
 			account = _accountService.getAccountByName(login);
@@ -153,7 +143,21 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 				}
 			}
 		}
+		return account;
+	}
 
+	@Override
+	public void login(final PageRequestResponse rRequest, final String login, final String password,
+			final Map<String, Object> params) {
+		final IAccountSession accountSession = createAccountSession(rRequest);
+
+		// 自动识别 accountType == null
+		EAccountType accountType = null;
+		if (params != null) {
+			accountType = (EAccountType) params.get(ACCOUNT_TYPE);
+		}
+
+		final Account account = getLoginAccount(accountType, login);
 		if (account == null) {
 			throw OrganizationException.of($m("OrganizationPermission.1")).setCode(2001);
 		} else {
