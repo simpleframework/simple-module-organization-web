@@ -152,7 +152,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage
 			final InputElement ue_mobile) {
 	}
 
-	protected final TableRow r3(final PageParameter pp) {
+	protected TableRow r3(final PageParameter pp) {
 		final InputElement ue_email = new InputElement("ue_email");
 		final InputElement ue_mobile = new InputElement("ue_mobile");
 		doR3(pp, ue_email, ue_mobile);
@@ -160,12 +160,12 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage
 				new RowField($m("AccountEditPage.5"), ue_mobile));
 	}
 
-	protected final TableRow r4(final PageParameter pp) {
+	protected TableRow r4(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.18"), new InputElement("ue_mobile2")),
 				new RowField($m("AccountEditPage.9"), new InputElement("ue_postcode")));
 	}
 
-	protected final TableRow r5(final PageParameter pp) {
+	protected TableRow r5(final PageParameter pp) {
 		return new TableRow(
 				new RowField($m("AccountEditPage.6"),
 						InputElement.select("ue_sex").addElements(new Option($m("AccountEditPage.16")),
@@ -174,21 +174,21 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage
 						new CalendarInput("ue_birthday").setCalendarComponent("cal_Birthday")));
 	}
 
-	protected final TableRow r6(final PageParameter pp) {
+	protected TableRow r6(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.10"), new InputElement("ue_homePhone")),
 				new RowField($m("AccountEditPage.11"), new InputElement("ue_officePhone")));
 	}
 
-	protected final TableRow r7(final PageParameter pp) {
+	protected TableRow r7(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.12"), new InputElement("ue_nick")),
 				new RowField($m("AccountEditPage.13"), new InputElement("ue_job")));
 	}
 
-	protected final TableRow r8(final PageParameter pp) {
+	protected TableRow r8(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.14"), new InputElement("ue_address")));
 	}
 
-	protected final TableRow r9(final PageParameter pp) {
+	protected TableRow r9(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.8"), new InputElement("ue_hometown")));
 	}
 
@@ -196,7 +196,7 @@ public abstract class AbstractAccountAttriPage extends FormTableRowTemplatePage
 		return InputElement.textarea("ue_description").setRows(3);
 	}
 
-	protected final TableRow r10(final PageParameter pp) {
+	protected TableRow r10(final PageParameter pp) {
 		return new TableRow(new RowField($m("AccountEditPage.15"), createTextarea()));
 	}
 }
