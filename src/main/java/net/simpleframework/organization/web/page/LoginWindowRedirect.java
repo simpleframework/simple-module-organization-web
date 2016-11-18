@@ -26,7 +26,7 @@ public class LoginWindowRedirect extends AbstractTemplatePage {
 	@Override
 	public IForward forward(final PageParameter pp) throws Exception {
 		if (pp.isMobile()) {
-			return JavascriptForward.loc(mvcSettings.getLoginPath(pp));
+			return JavascriptForward.login(pp);
 		}
 		return super.forward(pp);
 	}
