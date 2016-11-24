@@ -31,7 +31,7 @@ import net.simpleframework.organization.web.OrganizationMessageWebRef;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AccountPasswordPage extends AbstractAccountFormPage {
+public class AccountPasswordFormPage extends AbstractAccountFormPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -45,7 +45,7 @@ public class AccountPasswordPage extends AbstractAccountFormPage {
 						.setArgs("#user_password"));
 
 		addAjaxRequest(pp, "ajaxEditPassword").setConfirmMessage($m("Confirm.Post"))
-				.setHandlerMethod("saveAction").setSelector(".AccountPasswordPage");
+				.setHandlerMethod("saveAction").setSelector(".AccountPasswordFormPage");
 	}
 
 	@Override
@@ -58,9 +58,9 @@ public class AccountPasswordPage extends AbstractAccountFormPage {
 		return super.createVariables(pp)
 				.add("nav",
 						BlockElement.nav()
-								.addElements(SpanElement.strongText($m("AccountPasswordPage.0"))))
+								.addElements(SpanElement.strongText($m("AccountPasswordFormPage.0"))))
 				.add("pwdstrength", new PwdStrength().setTextInput("user_password")).add("sendmail",
-						new Checkbox("user_SendMail", $m("AccountPasswordPage.1")).setChecked(true));
+						new Checkbox("user_SendMail", $m("AccountPasswordFormPage.1")).setChecked(true));
 	}
 
 	@Transaction(context = IOrganizationContext.class)
@@ -71,7 +71,7 @@ public class AccountPasswordPage extends AbstractAccountFormPage {
 		final String oldpassword = cp.getParameter("user_old_password");
 		if (!_accountService.verifyPassword(account, oldpassword)) {
 			js.append("Validation.insertAfter('user_old_password', '")
-					.append($m("AccountPasswordPage.6")).append("');");
+					.append($m("AccountPasswordFormPage.6")).append("');");
 		} else {
 			final String password = cp.getParameter("user_password");
 			account.setPassword(AlgorithmUtils.encryptPass(password));

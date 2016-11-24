@@ -40,25 +40,25 @@
   background-image: url("images/user.png");
 }
 
-/*-----------------------AccountPasswordPage----------------------*/
+/*-----------------------AccountPasswordFormPage----------------------*/
 .UserAttriTPage .FormTemplatePage {
   text-align: left;
   margin-top: 40px;
   width: 650px;
 }
 
-/*-----------------------AccountPasswordPage----------------------*/
-.AccountPasswordPage table.form_tbl .l {
+/*-----------------------AccountPasswordFormPage----------------------*/
+.AccountPasswordFormPage table.form_tbl .l {
   padding: 15px 6px;
 }
 
-.AccountPasswordPage {
+.AccountPasswordFormPage {
   text-align: left;
   margin-top: 40px;
   width: 450px;
 }
 
-.AccountPasswordPage .pwdstrength {
+.AccountPasswordFormPage .pwdstrength {
   margin-top: 4px;
 }
 
