@@ -9,12 +9,12 @@
   line-height: 2;
 }
 
-.ui-window .AccountStatPage {
+.ui-window .AccountStatFormPage {
   margin-top: -1px;
   width: 100%;
 }
 
-.ui-window .AccountStatPage table.form_tbl .l {
+.ui-window .AccountStatFormPage table.form_tbl .l {
   width: 110px;
 }
 

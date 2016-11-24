@@ -101,7 +101,7 @@ public abstract class AbstractAttriTPage extends Category_BlankPage
 
 		@Override
 		protected Class<? extends AbstractMVCPage> getFormClass() {
-			return AccountStatPage.class;
+			return AccountStatFormPage.class;
 		}
 	}
 

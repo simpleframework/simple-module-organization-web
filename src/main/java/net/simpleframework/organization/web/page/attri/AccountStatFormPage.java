@@ -42,13 +42,13 @@ import net.simpleframework.organization.bean.User;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AccountStatPage extends AbstractAccountFormPage implements IMessageContextAware {
+public class AccountStatFormPage extends AbstractAccountFormPage implements IMessageContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportJavascript(AccountStatPage.class, "/js/account-stat.js");
+		pp.addImportJavascript(AccountStatFormPage.class, "/js/account-stat.js");
 
 		// 邮件binding
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mailbinding_page",
@@ -64,7 +64,7 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 	public String toTitleHTML(final PageParameter pp) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("<div class='tt'>");
-		sb.append(" <strong>#(AccountStatPage.10)</strong>");
+		sb.append(" <strong>#(AccountStatFormPage.10)</strong>");
 		sb.append("</div>");
 		return sb.toString();
 	}
@@ -75,7 +75,7 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 		final StringBuilder sb = new StringBuilder();
 		final Account account = getAccount(pp);
 		final User user = _accountService.getUser(account.getId());
-		sb.append("<div class='AccountStatPage'>");
+		sb.append("<div class='AccountStatFormPage'>");
 		sb.append(toTitleHTML(pp));
 		sb.append(" <table class='form_tbl'>");
 		// 账号名
@@ -86,49 +86,52 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 		sb.append(toTrHTML_mobilebinding(pp, account, user.getMobile()));
 
 		// 状态
-		sb.append(toTrHTML(pp, $m("AccountStatPage.0"), account.getStatus()));
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.0"), account.getStatus()));
 		// 创建时间
-		sb.append(toTrHTML(pp, $m("AccountStatPage.1"),
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.1"),
 				Convert.toDateTimeString(account.getCreateDate())));
 		// 最后一次登录时间
-		sb.append(toTrHTML(pp, $m("AccountStatPage.2"),
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.2"),
 				Convert.toDateTimeString(account.getLastLoginDate())));
 		// 最后一次登录IP
-		sb.append(toTrHTML(pp, $m("AccountStatPage.3"), account.getLastLoginIP()));
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.3"), account.getLastLoginIP()));
 		// 总登录次数
-		sb.append(toTrHTML(pp, $m("AccountStatPage.4"), account.getLoginTimes()));
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.4"), account.getLoginTimes()));
 		// 总在线时间
-		sb.append(toTrHTML(pp, $m("AccountStatPage.5"),
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.5"),
 				DateUtils.toDifferenceDate(account.getOnlineMillis())));
 		// 移动设备号
-		sb.append(toTrHTML(pp, $m("AccountStatPage.11"), account.getMdevid()));
+		sb.append(toTrHTML(pp, $m("AccountStatFormPage.11"), account.getMdevid()));
 		sb.append(" </table>");
-		sb.append(" <div class='desc'>* #(AccountStatPage.14)</div>");
+		sb.append(" <div class='desc'>* #(AccountStatFormPage.14)</div>");
 		sb.append("</div>");
 		return sb.toString();
 	}
 
 	protected String toTrHTML_name(final PageParameter pp, final Account account) {
-		return toTrHTML(pp, $m("AccountStatPage.16"), account.getName());
+		return toTrHTML(pp, $m("AccountStatFormPage.16"), account.getName());
 	}
 
 	protected String toTrHTML_mailbinding(final PageParameter pp, final Account account,
 			final String email) {
 		final boolean mailbinding = account.isMailbinding();
-		return toTrHTML(pp, $m("AccountStatPage.6"), mailbinding ? email : $m("AccountStatPage.9"),
+		return toTrHTML(pp, $m("AccountStatFormPage.6"),
+				mailbinding ? email : $m("AccountStatFormPage.9"),
 				createBinding(account, "mailbinding", mailbinding));
 	}
 
 	protected String toTrHTML_mobilebinding(final PageParameter pp, final Account account,
 			final String mobile) {
 		final boolean mobilebinding = account.isMobilebinding();
-		return toTrHTML(pp, $m("AccountStatPage.7"), mobilebinding ? mobile : $m("AccountStatPage.9"),
+		return toTrHTML(pp, $m("AccountStatFormPage.7"),
+				mobilebinding ? mobile : $m("AccountStatFormPage.9"),
 				createBinding(account, "mobilebinding", mobilebinding));
 	}
 
 	private LinkButton createBinding(final Account account, final String act,
 			final boolean binding) {
-		return LinkButton.corner(binding ? $m("AccountStatPage.13") : $m("AccountStatPage.12"))
+		return LinkButton
+				.corner(binding ? $m("AccountStatFormPage.13") : $m("AccountStatFormPage.12"))
 				.setOnclick("$Actions['AccountStatPage_" + act + "']('accountId=" + account.getId()
 						+ "&unbinding=" + binding + "');");
 	}
@@ -178,7 +181,7 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 			final IEmailService emailService = messageContext.getEmailService();
 			final Code code = MValidateCode.genCode(mail);
 			emailService
-					.sentMail(Email.of(mail).subject($m("AccountStatPage.15")).addText(code.val()));
+					.sentMail(Email.of(mail).subject($m("AccountStatFormPage.15")).addText(code.val()));
 			return null;
 		}
 
@@ -222,7 +225,7 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 					.setReadonly(unbinding && StringUtils.hasText(email))
 					.setPlaceholder($m("AccountEditPage.23")).setText(email);
 			final ButtonElement mail_binding_btn = new ButtonElement($m("AccountEditPage.20"))
-					.setId("mail_binding_btn").setOnclick("AccountStatPage.mail_sent(this);");
+					.setId("mail_binding_btn").setOnclick("AccountStatFormPage.mail_sent(this);");
 
 			final InputElement mail_validate_code = new InputElement("mail_validate_code")
 					.setPlaceholder($m("AccountEditPage.22"));
@@ -298,7 +301,7 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 					.setReadonly(unbinding && StringUtils.hasText(mobile))
 					.setPlaceholder($m("AccountEditPage.21")).setText(mobile);
 			final ButtonElement mobile_binding_btn = new ButtonElement($m("AccountEditPage.20"))
-					.setId("mobile_binding_btn").setOnclick("AccountStatPage.sms_sent(this);");
+					.setId("mobile_binding_btn").setOnclick("AccountStatFormPage.sms_sent(this);");
 
 			final InputElement mobile_validate_code = new InputElement("mobile_validate_code")
 					.setPlaceholder($m("AccountEditPage.22"));
@@ -314,8 +317,8 @@ public class AccountStatPage extends AbstractAccountFormPage implements IMessage
 
 		@Override
 		public String getTitle(final PageParameter pp) {
-			return pp.getBoolParameter("unbinding") ? $m("AccountStatPage.13")
-					: $m("AccountStatPage.12");
+			return pp.getBoolParameter("unbinding") ? $m("AccountStatFormPage.13")
+					: $m("AccountStatFormPage.12");
 		}
 	}
 }

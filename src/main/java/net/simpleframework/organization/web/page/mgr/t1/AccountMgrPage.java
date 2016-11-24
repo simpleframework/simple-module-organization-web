@@ -45,7 +45,7 @@ import net.simpleframework.organization.bean.Department;
 import net.simpleframework.organization.bean.User;
 import net.simpleframework.organization.web.IOrganizationWebContext;
 import net.simpleframework.organization.web.OrganizationLogRef;
-import net.simpleframework.organization.web.page.attri.AccountStatPage;
+import net.simpleframework.organization.web.page.attri.AccountStatFormPage;
 import net.simpleframework.organization.web.page.mgr.AccountEditPage;
 import net.simpleframework.organization.web.page.mgr.DepartmentCategory;
 import net.simpleframework.organization.web.page.mgr.UserRolesPage;
@@ -379,7 +379,7 @@ public class AccountMgrPage extends CategoryTableLCTemplatePage
 		}
 	}
 
-	public static class _AccountStatPage extends AccountStatPage {
+	public static class _AccountStatPage extends AccountStatFormPage {
 		@Override
 		public String toTitleHTML(final PageParameter pp) {
 			return "";

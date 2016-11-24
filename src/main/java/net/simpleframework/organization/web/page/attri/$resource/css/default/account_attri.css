@@ -62,30 +62,30 @@
   margin-top: 4px;
 }
 
-/*-----------------------AccountStatPage----------------------*/
+/*-----------------------AccountStatFormPage----------------------*/
 .ui-window table.form_tbl .l {
   padding: 15px 6px;
 }
 
-.AccountStatPage {
+.AccountStatFormPage {
   text-align: left;
   margin-top: 40px;
   width: 650px;
 }
 
-.AccountStatPage table.form_tbl .l {
+.AccountStatFormPage table.form_tbl .l {
   width: 150px;
 }
 
-.AccountStatPage .v .left {
+.AccountStatFormPage .v .left {
   line-height: 2.1;
 }
 
-.AccountStatPage .v .right a.simple_btn {
+.AccountStatFormPage .v .right a.simple_btn {
   margin-right: 8px;
 }
 
-.AccountStatPage .desc {
+.AccountStatFormPage .desc {
   color: #888;
   padding: 10px 20px;
 }

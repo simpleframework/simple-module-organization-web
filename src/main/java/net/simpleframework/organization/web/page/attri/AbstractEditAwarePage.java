@@ -25,7 +25,7 @@ public abstract class AbstractEditAwarePage extends AbstractTemplatePage
 
 	protected void addComponent_editUserWin(final PageParameter pp) {
 		addAjaxRequest(pp, "taAttri_1", UserAttriPage.class);
-		addAjaxRequest(pp, "taAttri_2", AccountStatPage.class);
+		addAjaxRequest(pp, "taAttri_2", AccountStatFormPage.class);
 		addAjaxRequest(pp, "taAttri_3", AccountPasswordPage.class);
 		addAjaxRequest(pp, "taAttri_4", PhotoPage.class);
 
