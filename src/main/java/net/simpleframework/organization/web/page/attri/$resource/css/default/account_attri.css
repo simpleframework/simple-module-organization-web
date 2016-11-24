@@ -102,29 +102,29 @@
   top: 10px;
 }
 
-/*-----------------------PhotoPage----------------------*/
-.PhotoPage {
+/*-----------------------PhotoFormPage----------------------*/
+.PhotoFormPage {
   text-align: left;
   margin-top: 40px;
   width: 450px;
 }
 
-.PhotoPage .tc {
+.PhotoFormPage .tc {
   border: 1px solid #ccc;
   border-top: 0;
 }
 
-.PhotoPage .tc .photo {
+.PhotoFormPage .tc .photo {
   text-align: center;
   padding: 20px 0;
 }
 
-.PhotoPage .tc .upload {
+.PhotoFormPage .tc .upload {
   background-color: #f6f6f6;
   border-top: 1px solid #ccc;
 }
 
-.PhotoPage .photo_icon {
+.PhotoFormPage .photo_icon {
 	width: 168px;
 	height: 168px;
 }

@@ -1,4 +1,4 @@
-var AccountStatPage = {
+var AccountStatFormPage = {
   sms_sent : function(obj) {
     var mobile = $F(obj.previous());
     var act = $Actions['AccountMobileBindingPage_sentcode'];

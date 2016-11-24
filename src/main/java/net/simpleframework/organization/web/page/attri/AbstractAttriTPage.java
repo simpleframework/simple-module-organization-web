@@ -135,7 +135,7 @@ public abstract class AbstractAttriTPage extends Category_BlankPage
 
 		@Override
 		protected Class<? extends AbstractMVCPage> getFormClass() {
-			return PhotoPage.class;
+			return PhotoFormPage.class;
 		}
 	}
 }

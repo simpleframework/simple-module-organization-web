@@ -51,14 +51,14 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 		pp.addImportJavascript(AccountStatFormPage.class, "/js/account-stat.js");
 
 		// 邮件binding
-		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mailbinding_page",
+		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatFormPage_mailbinding_page",
 				AccountMailBindingPage.class);
-		addWindowBean(pp, "AccountStatPage_mailbinding", ajaxRequest).setWidth(420).setHeight(250);
+		addWindowBean(pp, "AccountStatFormPage_mailbinding", ajaxRequest).setWidth(420).setHeight(250);
 
 		// 手机binding
-		ajaxRequest = addAjaxRequest(pp, "AccountStatPage_mobilebinding_page",
+		ajaxRequest = addAjaxRequest(pp, "AccountStatFormPage_mobilebinding_page",
 				AccountMobileBindingPage.class);
-		addWindowBean(pp, "AccountStatPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250);
+		addWindowBean(pp, "AccountStatFormPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250);
 	}
 
 	public String toTitleHTML(final PageParameter pp) {
@@ -132,7 +132,7 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 			final boolean binding) {
 		return LinkButton
 				.corner(binding ? $m("AccountStatFormPage.13") : $m("AccountStatFormPage.12"))
-				.setOnclick("$Actions['AccountStatPage_" + act + "']('accountId=" + account.getId()
+				.setOnclick("$Actions['AccountStatFormPage_" + act + "']('accountId=" + account.getId()
 						+ "&unbinding=" + binding + "');");
 	}
 

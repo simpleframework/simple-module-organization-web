@@ -27,7 +27,7 @@ public abstract class AbstractEditAwarePage extends AbstractTemplatePage
 		addAjaxRequest(pp, "taAttri_1", UserAttriPage.class);
 		addAjaxRequest(pp, "taAttri_2", AccountStatFormPage.class);
 		addAjaxRequest(pp, "taAttri_3", AccountPasswordFormPage.class);
-		addAjaxRequest(pp, "taAttri_4", PhotoPage.class);
+		addAjaxRequest(pp, "taAttri_4", PhotoFormPage.class);
 
 		addComponentBean(pp, "taAttri", TabsBean.class)
 				.addTab(new TabItem($m("AbstractEditAwarePage.0")).setContentRef("taAttri_1")

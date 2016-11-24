@@ -20,14 +20,14 @@ import net.simpleframework.organization.bean.User;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class PhotoPage extends AbstractAccountFormPage {
+public class PhotoFormPage extends AbstractAccountFormPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		addAjaxRequest(pp, "PhotoPage_del").setHandlerMethod("doDel")
-				.setConfirmMessage($m("PhotoPage.1"));
+		addAjaxRequest(pp, "PhotoFormPage_del").setHandlerMethod("doDel")
+				.setConfirmMessage($m("PhotoFormPage.1"));
 	}
 
 	@Transaction(context = IOrganizationContext.class)
