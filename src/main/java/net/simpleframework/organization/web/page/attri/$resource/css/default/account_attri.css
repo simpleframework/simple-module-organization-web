@@ -129,12 +129,12 @@
 	height: 168px;
 }
 
-/*-----------------------PhotoUploadPage----------------------*/
-.PhotoUploadPage {
+/*-----------------------PhotoUploadFormPage----------------------*/
+.PhotoUploadFormPage {
   padding: 8px;
 }
 
-.PhotoUploadPage .btns {
+.PhotoUploadFormPage .btns {
   position: relative;
 }
 
@@ -152,11 +152,11 @@
   -moz-opacity: 0;
 }
 
-.PhotoUploadPage .desc {
+.PhotoUploadFormPage .desc {
   color: #666;
 }
 
-.PhotoUploadPage .err {
+.PhotoUploadFormPage .err {
   color: #c00;
   margin-top: 10px;
   text-align: right;

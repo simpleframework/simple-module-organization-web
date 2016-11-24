@@ -37,7 +37,7 @@ import net.simpleframework.organization.bean.User;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class PhotoUploadPage extends AbstractAccountFormPage {
+public class PhotoUploadFormPage extends AbstractAccountFormPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
@@ -45,7 +45,7 @@ public class PhotoUploadPage extends AbstractAccountFormPage {
 
 		addComponentBean(pp, "uploadPhoto", SubmitBean.class).setFormName("uploadPhoto")
 				.setBinary(true).setConfirmMessage($m("Confirm.Post")).setHandlerMethod("upload")
-				.setHandlerClass(PhotoUploadPage.class);
+				.setHandlerClass(PhotoUploadFormPage.class);
 		addValidationBean(pp, "uploadValidation").setTriggerSelector("#btnUploadPhoto").addValidators(
 				new Validator(EValidatorMethod.file, "#user_photo").setArgs("jpg,jpeg,bmp,gif,png"));
 	}
@@ -77,7 +77,7 @@ public class PhotoUploadPage extends AbstractAccountFormPage {
 		final IMultipartFile multipart = request.getFile("user_photo");
 		long size;
 		if ((size = multipart.getSize()) > 1024 * 1024) {
-			return new UrlForward(url(PhotoUploadPage.class, "size=" + size));
+			return new UrlForward(url(PhotoUploadFormPage.class, "size=" + size));
 		} else {
 			try {
 				final User user = _accountService.getUser(accountId);
@@ -92,7 +92,7 @@ public class PhotoUploadPage extends AbstractAccountFormPage {
 				}
 				// 删除图片缓存
 				cp.clearPhotoCache(accountId);
-				return new UrlForward(url(PhotoUploadPage.class,
+				return new UrlForward(url(PhotoUploadFormPage.class,
 						"src=" + AlgorithmUtils.base64Encode(cp.getPhotoUrl(accountId).getBytes())));
 			} catch (final IOException e) {
 				throw OrganizationException.of(e);

@@ -45,6 +45,6 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 	}
 
 	public String getUploadUrl(final PageParameter pp, final Account account) {
-		return pp.getContextPath() + url(PhotoUploadPage.class, "accountId=" + account.getId());
+		return pp.getContextPath() + url(PhotoUploadFormPage.class, "accountId=" + account.getId());
 	}
 }

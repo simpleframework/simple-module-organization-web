@@ -1,16 +1,16 @@
 <html>
 <body>
-  <div class="PhotoUploadPage">
+  <div class="PhotoUploadFormPage">
     <form id="uploadPhoto">
       ${page.buildFormHidden(parameter)}
       <div class="btns">
         <input type="file" id="user_photo" name="user_photo" accept="image/png,image/gif,image/jpeg" /><input 
           type="button" class="button2"
-          id="btnUploadPhoto" value="#(PhotoUploadPage.1)" />
+          id="btnUploadPhoto" value="#(PhotoUploadFormPage.1)" />
       </div>
-      <div class="desc">#(PhotoUploadPage.0)</div>
+      <div class="desc">#(PhotoUploadFormPage.0)</div>
       $if{isdef size}
-      <div class="err">#(PhotoUploadPage.2)${size}</div>
+      <div class="err">#(PhotoUploadFormPage.2)${size}</div>
       $end{}
     </form>
   </div>
