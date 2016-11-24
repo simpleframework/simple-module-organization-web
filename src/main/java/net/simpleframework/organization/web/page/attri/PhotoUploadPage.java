@@ -37,7 +37,7 @@ import net.simpleframework.organization.bean.User;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class PhotoUploadPage extends AbstractAccountPage {
+public class PhotoUploadPage extends AbstractAccountFormPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

@@ -31,7 +31,7 @@ import net.simpleframework.organization.web.OrganizationMessageWebRef;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AccountPasswordPage extends AbstractAccountPage {
+public class AccountPasswordPage extends AbstractAccountFormPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

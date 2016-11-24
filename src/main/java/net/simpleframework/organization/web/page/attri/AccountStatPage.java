@@ -42,7 +42,7 @@ import net.simpleframework.organization.bean.User;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class AccountStatPage extends AbstractAccountPage implements IMessageContextAware {
+public class AccountStatPage extends AbstractAccountFormPage implements IMessageContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {

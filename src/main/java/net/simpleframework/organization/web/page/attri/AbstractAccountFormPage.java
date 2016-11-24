@@ -16,14 +16,14 @@ import net.simpleframework.organization.bean.Account;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public abstract class AbstractAccountPage extends AbstractTemplatePage
+public abstract class AbstractAccountFormPage extends AbstractTemplatePage
 		implements IOrganizationContextAware {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(AbstractAccountPage.class, "/account_attri.css");
+		pp.addImportCSS(AbstractAccountFormPage.class, "/account_attri.css");
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import net.simpleframework.organization.bean.User;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class PhotoPage extends AbstractAccountPage {
+public class PhotoPage extends AbstractAccountFormPage {
 
 	@Override
 	protected void onForward(final PageParameter pp) throws Exception {
