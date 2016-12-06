@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.DateUtils;
+import net.simpleframework.common.ID;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.mail.Email;
 import net.simpleframework.common.web.JavascriptUtils;
@@ -53,12 +54,14 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 		// 邮件binding
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatFormPage_mailbinding_page",
 				AccountMailBindingPage.class);
-		addWindowBean(pp, "AccountStatFormPage_mailbinding", ajaxRequest).setWidth(420).setHeight(250);
+		addWindowBean(pp, "AccountStatFormPage_mailbinding", ajaxRequest).setWidth(420)
+				.setHeight(250);
 
 		// 手机binding
 		ajaxRequest = addAjaxRequest(pp, "AccountStatFormPage_mobilebinding_page",
 				AccountMobileBindingPage.class);
-		addWindowBean(pp, "AccountStatFormPage_mobilebinding", ajaxRequest).setWidth(420).setHeight(250);
+		addWindowBean(pp, "AccountStatFormPage_mobilebinding", ajaxRequest).setWidth(420)
+				.setHeight(250);
 	}
 
 	public String toTitleHTML(final PageParameter pp) {
@@ -198,10 +201,8 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 			account.setMailbinding(binding);
 			_accountService.update(new String[] { "mailbinding" }, account);
 
-			if (binding && !mail.equals(user.getEmail())) {
-				user.setEmail(mail);
-				_userService.update(new String[] { "email" }, user);
-			}
+			user.setEmail(binding ? mail : "");
+			_userService.update(new String[] { "email" }, user);
 			return super.onSave(cp).append("$Actions.reloc();");
 		}
 
@@ -265,18 +266,17 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 		@Override
 		public JavascriptForward onSave(final ComponentParameter cp) throws Exception {
 			final Account account = getAccount(cp);
-			final User user = _accountService.getUser(account.getId());
+			final ID accountId = account.getId();
+			final User user = _accountService.getUser(accountId);
 			final String mobile = cp.getParameter("mobile_binding");
 			MValidateCode.verifyCode(mobile, cp.getParameter("mobile_validate_code"));
 
 			final boolean binding = !cp.getBoolParameter("unbinding");
 			account.setMobilebinding(binding);
 			_accountService.update(new String[] { "mobilebinding" }, account);
-			if (binding && !mobile.equals(user.getMobile())) {
-				user.setMobile(mobile);
-				_userService.update(new String[] { "mobile" }, user);
-			}
 
+			user.setMobile(binding ? mobile : "");
+			_userService.update(new String[] { "mobile" }, user);
 			return super.onSave(cp).append("$Actions.reloc();");
 		}
 
