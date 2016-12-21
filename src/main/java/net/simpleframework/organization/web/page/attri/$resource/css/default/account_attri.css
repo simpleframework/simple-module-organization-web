@@ -104,60 +104,43 @@
 
 /*-----------------------PhotoFormPage----------------------*/
 .PhotoFormPage {
+  width: 80%;
+  padding: 20px 0;
   text-align: left;
-  margin-top: 40px;
-  width: 450px;
 }
 
-.PhotoFormPage .tc {
-  border: 1px solid #ccc;
+.PhotoFormPage .swfupload .queue {
   border-top: 0;
 }
 
-.PhotoFormPage .tc .photo {
+.PhotoFormPage .swfupload .swf_btns {
+  margin: 8px 0;
+}
+
+.PhotoFormPage .desc {
+  padding: 10px 0;
+}
+
+.PhotoFormPage .img-c {
+  background-color: #f9f9f9;
+  border: 1px solid #aaa;
+  display: table;
+  width: 100%;
   text-align: center;
-  padding: 20px 0;
 }
 
-.PhotoFormPage .tc .upload {
-  background-color: #f6f6f6;
-  border-top: 1px solid #ccc;
+.PhotoFormPage .img-c img {
+  max-height: 240px;
+  max-width: 100%;
+  vertical-align: middle;
+  box-shadow: 0 0 8px #aaa;
 }
 
-.PhotoFormPage .photo_icon {
-	width: 168px;
-	height: 168px;
+.PhotoFormPage .img-c .cc {
+  padding: 30px 0;
 }
 
-/*-----------------------PhotoUploadFormPage----------------------*/
-.PhotoUploadFormPage {
-  padding: 8px;
-}
-
-.PhotoUploadFormPage .btns {
-  position: relative;
-}
-
-#user_photo, 
-#btnUploadPhoto {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-
-#user_photo {
-  z-index: 10;
-  filter: alpha(opacity = 0);
-  opacity: 0;
-  -moz-opacity: 0;
-}
-
-.PhotoUploadFormPage .desc {
-  color: #666;
-}
-
-.PhotoUploadFormPage .err {
-  color: #c00;
-  margin-top: 10px;
-  text-align: right;
+.PhotoFormPage .img-c .bb {
+  border-top: 1px solid #aaa;
+  padding: 10px 0;
 }
