@@ -20,7 +20,6 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
-import net.simpleframework.ctx.settings.ContextSettings;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IMultipartFile;
@@ -92,15 +91,8 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 		if (af != null) {
 			istream = new FileInputStream(af.getAttachment());
 		} else {
-			String url = cp.getPhotoUrl(loginId, 0, 0);
-			final int p = url.lastIndexOf("?");
-			if (p > 0) {
-				url = url.substring(0, p);
-			}
-			final ContextSettings settings = getModuleContext().getApplicationContext()
-					.getContextSettings();
-			istream = new FileInputStream(new File(
-					settings.getHomeFileDir().getAbsolutePath() + url.replace("/", File.separator)));
+			cp.getPhotoUrl(loginId, 0, 0);
+			istream = new FileInputStream((File) cp.getRequestAttr("_photoFile"));
 		}
 
 		if (istream != null) {
