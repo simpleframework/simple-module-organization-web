@@ -289,8 +289,8 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		}
 
 		protected String toOpeHTML(final ComponentParameter cp, final User user) {
-			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();
+			// final Object id = user.getId();
 			// sb.append(new ButtonElement($m("AccountMgrPage.22"))
 			// .setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id +
 			// "');"));
