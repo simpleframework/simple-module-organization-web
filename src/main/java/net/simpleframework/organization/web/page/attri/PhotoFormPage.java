@@ -20,11 +20,11 @@ import net.simpleframework.common.ID;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
+import net.simpleframework.ctx.settings.ContextSettings;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.IMultipartFile;
 import net.simpleframework.mvc.JavascriptForward;
-import net.simpleframework.mvc.MVCUtils;
 import net.simpleframework.mvc.PageParameter;
 import net.simpleframework.mvc.common.ImageCache;
 import net.simpleframework.mvc.common.element.ImageElement;
@@ -97,7 +97,10 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 			if (p > 0) {
 				url = url.substring(0, p);
 			}
-			istream = new FileInputStream(new File(MVCUtils.getRealPath(url)));
+			final ContextSettings settings = getModuleContext().getApplicationContext()
+					.getContextSettings();
+			istream = new FileInputStream(new File(
+					settings.getHomeFileDir().getAbsolutePath() + url.replace("/", File.separator)));
 		}
 
 		if (istream != null) {
