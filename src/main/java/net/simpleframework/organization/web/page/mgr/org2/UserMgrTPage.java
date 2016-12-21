@@ -26,6 +26,7 @@ import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.ElementList;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.common.element.LinkElement;
+import net.simpleframework.mvc.common.element.SpanElement;
 import net.simpleframework.mvc.common.element.TabButton;
 import net.simpleframework.mvc.common.element.TabButtons;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -130,7 +131,7 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		if (self) {
 			tablePager.addColumn(AccountMgrPageUtils.TC_STATUS().setFilterSort(false));
 		}
-		tablePager.addColumn(TablePagerColumn.OPE(70));
+		tablePager.addColumn(TablePagerColumn.OPE(120));
 		return tablePager;
 	}
 
@@ -290,9 +291,15 @@ public class UserMgrTPage extends AbstractOrgMgrTPage {
 		protected String toOpeHTML(final ComponentParameter cp, final User user) {
 			final Object id = user.getId();
 			final StringBuilder sb = new StringBuilder();
-			sb.append(new ButtonElement($m("AccountMgrPage.22"))
-					.setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id + "');"))
-					.append(AbstractTablePagerSchema.IMG_DOWNMENU);
+			// sb.append(new ButtonElement($m("AccountMgrPage.22"))
+			// .setOnclick("$Actions['UserMgrTPage_roleWin']('accountId=" + id +
+			// "');"));
+			sb.append(new ButtonElement($m("Menu.up"))
+					.setOnclick("$pager_action(this).move(true, 'UserMgrTPage_Move');"));
+			sb.append(SpanElement.SPACE);
+			sb.append(new ButtonElement($m("Menu.down"))
+					.setOnclick("$pager_action(this).move(false, 'UserMgrTPage_Move');"));
+			sb.append(AbstractTablePagerSchema.IMG_DOWNMENU);
 			return sb.toString();
 		}
 	}
