@@ -77,55 +77,58 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doSave(final ComponentParameter cp) throws Exception {
-		final String dstr = cp.getParameter("data");
-		if (!StringUtils.hasText(dstr)) {
-			return JavascriptForward.RELOC;
-		}
-
-		final Map<String, ?> data = JsonUtils.toMap(dstr);
 		final AttachmentFile af = (AttachmentFile) cp.getSessionAttr(PHOTO_CACHE);
 		final ID loginId = cp.getLoginId();
 		final User user = _accountService.getUser(loginId);
 
 		FileInputStream istream = null;
-		if (af != null) {
-			istream = new FileInputStream(af.getAttachment());
-		} else {
-			cp.getPhotoUrl(loginId, 0, 0);
-			istream = new FileInputStream((File) cp.getRequestAttr("_photoFile"));
-		}
-
-		if (istream != null) {
-			try {
-				final BufferedImage sbi = ImageIO.read(istream);
-				int width = Convert.toInt(data.get("width"));
-				int height = Convert.toInt(data.get("height"));
-				final BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-				final Graphics2D g = bi.createGraphics();
-				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-						RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-				g.setColor(Color.WHITE);
-				g.fillRect(0, 0, width, height);
-				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-						RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-				final int srcX = Convert.toInt(Convert.toInt(data.get("x")));
-				final int srcY = Convert.toInt(Convert.toInt(data.get("y")));
-				width = Math.min(width, sbi.getWidth());
-				height = Math.min(height, sbi.getHeight());
-				g.drawImage(sbi, 0, 0, width, height, srcX, srcY, srcX + width, srcY + height, null);
-				g.dispose();
-
-				final ByteArrayOutputStream os = new ByteArrayOutputStream();
-				ImageIO.write(bi, "png", os);
-				_userService.updatePhoto(user, new ByteArrayInputStream(os.toByteArray()));
-			} finally {
-				istream.close();
-				cp.removeSessionAttr(PHOTO_CACHE);
-				cp.clearPhotoCache(loginId);
+		try {
+			final String dstr = cp.getParameter("data");
+			if (!StringUtils.hasText(dstr)) {
+				if (af != null) {
+					_userService.updatePhoto(user, (istream = new FileInputStream(af.getAttachment())));
+				}
+				return JavascriptForward.RELOC;
 			}
+
+			final Map<String, ?> data = JsonUtils.toMap(dstr);
+			if (af != null) {
+				istream = new FileInputStream(af.getAttachment());
+			} else {
+				cp.getPhotoUrl(loginId, 0, 0);
+				istream = new FileInputStream((File) cp.getRequestAttr("_photoFile"));
+			}
+			final BufferedImage sbi = ImageIO.read(istream);
+			int width = Convert.toInt(data.get("width"));
+			int height = Convert.toInt(data.get("height"));
+			final BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			final Graphics2D g = bi.createGraphics();
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, width, height);
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+			final int srcX = Convert.toInt(Convert.toInt(data.get("x")));
+			final int srcY = Convert.toInt(Convert.toInt(data.get("y")));
+			width = Math.min(width, sbi.getWidth());
+			height = Math.min(height, sbi.getHeight());
+			g.drawImage(sbi, 0, 0, width, height, srcX, srcY, srcX + width, srcY + height, null);
+			g.dispose();
+
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(bi, "png", os);
+			_userService.updatePhoto(user, new ByteArrayInputStream(os.toByteArray()));
+
+			return JavascriptForward.RELOC;
+		} finally {
+			if (istream != null) {
+				istream.close();
+			}
+			cp.removeSessionAttr(PHOTO_CACHE);
+			cp.clearPhotoCache(loginId);
 		}
-		return JavascriptForward.RELOC;
 	}
 
 	@Override
