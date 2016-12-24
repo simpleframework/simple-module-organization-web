@@ -2,9 +2,6 @@ package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +14,7 @@ import javax.imageio.ImageIO;
 
 import net.simpleframework.common.Convert;
 import net.simpleframework.common.ID;
+import net.simpleframework.common.ImageUtils;
 import net.simpleframework.common.JsonUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.common.bean.AttachmentFile;
@@ -33,7 +31,7 @@ import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.plupload.PluploadBean;
 import net.simpleframework.mvc.component.ui.swfupload.AbstractSwfUploadHandler;
 import net.simpleframework.mvc.component.ui.swfupload.SwfUploadBean;
-import net.simpleframework.mvc.template.ITemplateHandler;
+import net.simpleframework.mvc.impl.DefaultPageResourceProvider;
 import net.simpleframework.organization.IOrganizationContext;
 import net.simpleframework.organization.bean.User;
 
@@ -50,8 +48,8 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 	protected void onForward(final PageParameter pp) throws Exception {
 		super.onForward(pp);
 
-		pp.addImportCSS(ITemplateHandler.class, "/cropper.css");
-		pp.addImportJavascript(ITemplateHandler.class, "/js/cropper.js");
+		pp.addImportCSS(DefaultPageResourceProvider.class, "/cropper.css");
+		pp.addImportJavascript(DefaultPageResourceProvider.class, "/js/cropper.js");
 
 		pp.addImportJavascript(PhotoFormPage.class, "/js/account-photo.js");
 
@@ -98,24 +96,12 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 				cp.getPhotoUrl(loginId, 0, 0);
 				istream = new FileInputStream((File) cp.getRequestAttr("_photoFile"));
 			}
-			final BufferedImage sbi = ImageIO.read(istream);
-			int width = Convert.toInt(data.get("width"));
-			int height = Convert.toInt(data.get("height"));
-			final BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			final Graphics2D g = bi.createGraphics();
-			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, width, height);
-			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-					RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-			final int srcX = Convert.toInt(Convert.toInt(data.get("x")));
-			final int srcY = Convert.toInt(Convert.toInt(data.get("y")));
-			width = Math.min(width, sbi.getWidth());
-			height = Math.min(height, sbi.getHeight());
-			g.drawImage(sbi, 0, 0, width, height, srcX, srcY, srcX + width, srcY + height, null);
-			g.dispose();
+			final int width = Convert.toInt(data.get("width"));
+			final int height = Convert.toInt(data.get("height"));
+			final int srcX = Convert.toInt(data.get("x"));
+			final int srcY = Convert.toInt(data.get("y"));
+			final BufferedImage bi = ImageUtils.clip(istream, width, height, srcX, srcY);
 
 			final ByteArrayOutputStream os = new ByteArrayOutputStream();
 			ImageIO.write(bi, "png", os);
