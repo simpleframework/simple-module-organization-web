@@ -4,6 +4,7 @@ $ready(function() {
   window.PhotoTPage = {
     create_cropper : function() {
       this._cropper = new Cropper(img, {
+        dragMode : 'move',
         viewMode : 1,
         aspectRatio : 1 / 1,
         zoomable : false
