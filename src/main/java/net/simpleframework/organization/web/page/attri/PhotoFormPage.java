@@ -59,7 +59,7 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 
 		addComponentBean(pp, "PhotoFormPage_upload", PluploadBean.class).setMultiFileSelected(false)
 				.setUploadText($m("PhotoFormPage.0")).setFileTypes(SwfUploadBean.IMAGES_FILETYPES)
-				.setFileSizeLimit("2MB").setFileQueueLimit(1)
+				.setFileSizeLimit("3MB").setFileQueueLimit(1)
 				.setJsCompleteCallback("$Actions['PhotoFormPage_gurl']();")
 				.setContainerId("idPhotoFormPage_upload").setHandlerClass(PhotoUploadHandler.class);
 	}
