@@ -81,6 +81,15 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 		sb.append("<div class='AccountStatFormPage'>");
 		sb.append(toTitleHTML(pp));
 		sb.append(" <table class='form_tbl'>");
+		appendTrHTMLs(pp, sb, account, user);
+		sb.append(" </table>");
+		sb.append(" <div class='desc'>* #(AccountStatFormPage.14)</div>");
+		sb.append("</div>");
+		return sb.toString();
+	}
+
+	protected void appendTrHTMLs(final PageParameter pp, final StringBuilder sb,
+			final Account account, final User user) {
 		// 账号名
 		sb.append(toTrHTML_name(pp, account));
 		// 邮件绑定
@@ -105,10 +114,6 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 				DateUtils.toDifferenceDate(account.getOnlineMillis())));
 		// 移动设备号
 		sb.append(toTrHTML(pp, $m("AccountStatFormPage.11"), account.getMdevid()));
-		sb.append(" </table>");
-		sb.append(" <div class='desc'>* #(AccountStatFormPage.14)</div>");
-		sb.append("</div>");
-		return sb.toString();
 	}
 
 	protected String toTrHTML_name(final PageParameter pp, final Account account) {
