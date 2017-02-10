@@ -10,6 +10,7 @@ import java.util.Map;
 import net.simpleframework.ado.query.IDataQuery;
 import net.simpleframework.ado.query.ListDataQuery;
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.StringUtils;
 import net.simpleframework.common.coll.KVMap;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.mvc.IForward;
@@ -86,7 +87,9 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 
 	@Transaction(context = IOrganizationContext.class)
 	public IForward doDelete(final ComponentParameter cp) {
-		_roleService.delete(cp.getParameter("id"));
+		for (final String id : StringUtils.split(cp.getParameter("id"), ";")) {
+			_roleService.delete(id);
+		}
 		return new JavascriptForward("$Actions['RoleMgrTPage_tbl']();");
 	}
 
@@ -128,7 +131,8 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 			sb.append("  <div class='tbar'>");
 			sb.append(
 					ElementList.of(LinkButton.addBtn().setOnclick("$Actions['RoleMgrTPage_roleWin']();"),
-							SpanElement.SPACE, LinkButton.deleteBtn()));
+							SpanElement.SPACE, LinkButton.deleteBtn().setOnclick(
+									"$Actions['RoleMgrTPage_tbl'].doAct('RoleMgrTPage_delete');")));
 			sb.append("  </div>");
 		}
 		sb.append("  <div id='idRoleMgrTPage_tbl'></div>");

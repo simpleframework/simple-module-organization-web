@@ -114,12 +114,15 @@ public class RoleEditPage extends FormPropEditorTemplatePage implements IOrganiz
 		final PropField f1 = new PropField($m("category_edit.0")).addComponents(
 				InputComp.hidden("chartId").setDefaultValue(rchart.getId()),
 				InputComp.hidden("category_id"), new InputComp("category_text"));
+		final Role r = _roleService.getBean(pp.getParameter("roleId"));
+		if (r != null) {
+			f1.addComponents(InputComp.hidden("roleId").setDefaultValue(r.getId()));
+		}
 		final PropField f2 = new PropField($m("category_edit.1"))
 				.addComponents(new InputComp("category_name"));
 
 		final PropField f3 = new PropField($m("RoleCategory.4"))
 				.addComponents(InputComp.checkbox("role_isUserRole"));
-		final Role r = _roleService.getBean(pp.getParameter("roleId"));
 		final PropField f4 = new PropField($m("RoleCategory.2")).addComponents(r == null
 				? InputComp.select("role_type", ERoleType.class) : InputComp.label(r.getRoleType()));
 
