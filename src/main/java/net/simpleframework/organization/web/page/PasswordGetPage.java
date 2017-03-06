@@ -2,6 +2,9 @@ package net.simpleframework.organization.web.page;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.io.IOException;
+import java.util.Map;
+
 import net.simpleframework.common.AlgorithmUtils;
 import net.simpleframework.common.StringUtils;
 import net.simpleframework.ctx.IModuleRef;
@@ -9,6 +12,9 @@ import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.common.element.ButtonElement;
+import net.simpleframework.mvc.common.element.InputElement;
+import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.base.validation.EValidatorMethod;
 import net.simpleframework.mvc.component.base.validation.EWarnType;
@@ -105,5 +111,30 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
+			final String currentVariable) throws IOException {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("<div class='PasswordGetPage'>");
+		sb.append(" <div class='cc1'>");
+		sb.append("  <div class='lbl'>#(PasswordGetPage.0)</div>");
+		sb.append(new InputElement("pg_account").setPlaceholder($m("PasswordGetPage.2")));
+		sb.append(new ButtonElement("pg_account_btn").setText($m("PasswordGetPage.3")).setOnclick(
+				"$Actions['PasswordGetPage_post']('t=account&val=' + $F(this.previous()));"));
+		sb.append(" </div>");
+		sb.append(" <div class='cc2'>");
+		sb.append("  <div class='lbl'>#(PasswordGetPage.1)</div>");
+		sb.append(new InputElement("pg_code").setPlaceholder($m("PasswordGetPage.4")));
+		sb.append(new ButtonElement("pg_code_btn").setText($m("PasswordGetPage.5"))
+				.setOnclick("$Actions['PasswordGetPage_post']('t=code&val=' + $F(this.previous()));"));
+		sb.append(" </div>");
+		sb.append(" <div class='bc'>");
+		sb.append("  <div id='idNewPassword'></div>");
+		sb.append(LinkButton.closeBtn().corner());
+		sb.append(" </div>");
+		sb.append("</div>");
+		return sb.toString();
 	}
 }
