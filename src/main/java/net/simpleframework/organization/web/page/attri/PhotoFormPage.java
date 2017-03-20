@@ -103,10 +103,13 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 			final int srcY = Convert.toInt(data.get("y"));
 			final BufferedImage bi = ImageUtils.clip(istream, width, height, srcX, srcY);
 
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			ImageIO.write(bi, "png", os);
-			_userService.updatePhoto(user, new ByteArrayInputStream(os.toByteArray()));
-
+			final ByteArrayOutputStream oStream = new ByteArrayOutputStream();
+			if (bi.getWidth() > 480) {
+				ImageUtils.thumbnail(bi, 640.0 / bi.getWidth(), oStream, "png");
+			} else {
+				ImageIO.write(bi, "png", oStream);
+			}
+			_userService.updatePhoto(user, new ByteArrayInputStream(oStream.toByteArray()));
 			return JavascriptForward.RELOC;
 		} finally {
 			if (istream != null) {
