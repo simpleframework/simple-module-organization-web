@@ -104,8 +104,9 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 			final BufferedImage bi = ImageUtils.clip(istream, width, height, srcX, srcY);
 
 			final ByteArrayOutputStream oStream = new ByteArrayOutputStream();
-			if (bi.getWidth() > 480) {
-				ImageUtils.thumbnail(bi, 640.0 / bi.getWidth(), oStream, "png");
+			final int w = bi.getWidth();
+			if (w > 480) {
+				ImageUtils.thumbnail(bi, 480.0 / w, oStream, "png");
 			} else {
 				ImageIO.write(bi, "png", oStream);
 			}
