@@ -94,23 +94,28 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 				istream = new FileInputStream(af.getAttachment());
 			} else {
 				cp.getPhotoUrl(loginId, 0, 0);
-				istream = new FileInputStream((File) cp.getRequestAttr("_photoFile"));
+				final File photoFile = (File) cp.getRequestAttr("_photoFile");
+				if (photoFile != null) {
+					istream = new FileInputStream(photoFile);
+				}
 			}
 
-			final int width = Convert.toInt(data.get("width"));
-			final int height = Convert.toInt(data.get("height"));
-			final int srcX = Convert.toInt(data.get("x"));
-			final int srcY = Convert.toInt(data.get("y"));
-			final BufferedImage bi = ImageUtils.clip(istream, width, height, srcX, srcY);
+			if (istream != null) {
+				final int width = Convert.toInt(data.get("width"));
+				final int height = Convert.toInt(data.get("height"));
+				final int srcX = Convert.toInt(data.get("x"));
+				final int srcY = Convert.toInt(data.get("y"));
+				final BufferedImage bi = ImageUtils.clip(istream, width, height, srcX, srcY);
 
-			final ByteArrayOutputStream oStream = new ByteArrayOutputStream();
-			final int w = bi.getWidth();
-			if (w > 480) {
-				ImageUtils.thumbnail(bi, 480.0 / w, oStream, "png");
-			} else {
-				ImageIO.write(bi, "png", oStream);
+				final ByteArrayOutputStream oStream = new ByteArrayOutputStream();
+				final int w = bi.getWidth();
+				if (w > 480) {
+					ImageUtils.thumbnail(bi, 480.0 / w, oStream, "png");
+				} else {
+					ImageIO.write(bi, "png", oStream);
+				}
+				_userService.updatePhoto(user, new ByteArrayInputStream(oStream.toByteArray()));
 			}
-			_userService.updatePhoto(user, new ByteArrayInputStream(oStream.toByteArray()));
 			return JavascriptForward.RELOC;
 		} finally {
 			if (istream != null) {
