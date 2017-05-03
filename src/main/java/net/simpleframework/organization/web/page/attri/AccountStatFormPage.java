@@ -19,6 +19,7 @@ import net.simpleframework.module.msg.IMessageContextAware;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
+import net.simpleframework.mvc.UrlForward;
 import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
@@ -208,7 +209,12 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 
 			user.setEmail(binding ? mail : "");
 			_userService.update(new String[] { "email" }, user);
-			return super.onSave(cp).append("$Actions.reloc();");
+
+			final String redirect_url = UrlForward.getCookieRedirectUrl(cp);
+			if (StringUtils.hasText(redirect_url)) {
+				return JavascriptForward.loc(redirect_url);
+			}
+			return JavascriptForward.RELOC;
 		}
 
 		@Override
@@ -282,7 +288,12 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 
 			user.setMobile(binding ? mobile : "");
 			_userService.update(new String[] { "mobile" }, user);
-			return super.onSave(cp).append("$Actions.reloc();");
+
+			final String redirect_url = UrlForward.getCookieRedirectUrl(cp);
+			if (StringUtils.hasText(redirect_url)) {
+				return JavascriptForward.loc(redirect_url);
+			}
+			return JavascriptForward.RELOC;
 		}
 
 		@Override
