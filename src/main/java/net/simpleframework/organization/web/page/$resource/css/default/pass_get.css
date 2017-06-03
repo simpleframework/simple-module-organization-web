@@ -3,9 +3,15 @@
   padding: 0 8px;
 }
 
-.PasswordGetPage .cc1, .PasswordGetPage .cc2 {
-  margin-top: 10px;
-  padding: 8px 10px 15px 10px;
+.PasswordGetPage .step {
+  font-size: 11.5pt;
+  font-weight: bold;
+  padding: 8px 0;
+}
+
+.PasswordGetPage .cc1, 
+.PasswordGetPage .cc2 {
+  padding: 10px 8px;
 }
 
 .PasswordGetPage .cc1 {
@@ -20,30 +26,13 @@
   line-height: 2.1;
 }
 
-.PasswordGetPage input[type=text] {
-  background-image: none;
-  background-color: #fff;
-  padding: 4px;
-  width: 295px;
-  vertical-align: top;
-}
-
-.PasswordGetPage input[type=button] {
-  vertical-align: top;
-  background-image: none;
-  background-color: #eee;
-  height: 29px;
-  line-height: 28px;
-  margin: 0 0 0 -1px;
-  width: 70px;
-  border-radius: 0;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-}
-
-.PasswordGetPage .bc {
+.PasswordGetPage .btn {
+  margin-top: 8px;
   text-align: right;
-  margin: 10px;
+}
+
+.PasswordGetPage a.simple_btn.green {
+  padding: 1px 24px;
 }
 
 #idNewPassword {

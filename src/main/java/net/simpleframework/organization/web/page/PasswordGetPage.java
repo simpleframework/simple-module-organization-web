@@ -12,7 +12,6 @@ import net.simpleframework.ctx.permission.PermissionConst;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
-import net.simpleframework.mvc.common.element.ButtonElement;
 import net.simpleframework.mvc.common.element.InputElement;
 import net.simpleframework.mvc.common.element.LinkButton;
 import net.simpleframework.mvc.component.ComponentParameter;
@@ -98,16 +97,10 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 
 			final Account account = _accountService.getBean(arr[1]);
 			if (account != null) {
-				final String password = StringUtils.genRandomNum(8);
+				final String password = cp.getParameter("pwd");
 				account.setPassword(AlgorithmUtils.encryptPass(password));
 				_accountService.update(new String[] { "password" }, account);
-
-				final JavascriptForward js = new JavascriptForward();
-				js.append("var np=$('idNewPassword');");
-				js.append("np.innerHTML='")
-						.append($m("PasswordGetPage.10", account.getName(), password)).append("';");
-				js.append("$Effect.shake(np);");
-				return js;
+				return JavascriptForward.alert($m("PasswordGetPage.10"));
 			}
 		}
 		return null;
@@ -117,23 +110,37 @@ public class PasswordGetPage extends AbstractTemplatePage implements IOrganizati
 	protected String toHtml(final PageParameter pp, final Map<String, Object> variables,
 			final String currentVariable) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		sb.append("<div class='PasswordGetPage'>");
+		final InputElement pg_account = new InputElement("pg_account");
+		final InputElement pg_code = new InputElement("pg_code");
+		final InputElement pg_pwd = new InputElement("pg_pwd");
+		sb.append("<div class='simple_window_tcb PasswordGetPage'>");
+		sb.append(" <div class='step'>#(PasswordGetPage.2)</div>");
 		sb.append(" <div class='cc1'>");
 		sb.append("  <div class='lbl'>#(PasswordGetPage.0)</div>");
-		sb.append(new InputElement("pg_account").setPlaceholder($m("PasswordGetPage.2")));
-		sb.append(new ButtonElement("pg_account_btn").setText($m("PasswordGetPage.3")).setOnclick(
-				"$Actions['PasswordGetPage_post']('t=account&val=' + $F(this.previous()));"));
+		sb.append(wrapInputElement(pg_account));
+		sb.append("  <div class='btn'>");
+		sb.append(LinkButton.corner($m("PasswordGetPage.4")).setId("pg_account_btn")
+				.addClassName("green")
+				.setOnclick("$Actions['PasswordGetPage_post']('t=account&val=' + $F('pg_account'));"));
+		sb.append("  </div>");
 		sb.append(" </div>");
+		sb.append(" <div class='step'>#(PasswordGetPage.3)</div>");
 		sb.append(" <div class='cc2'>");
 		sb.append("  <div class='lbl'>#(PasswordGetPage.1)</div>");
-		sb.append(new InputElement("pg_code").setPlaceholder($m("PasswordGetPage.4")));
-		sb.append(new ButtonElement("pg_code_btn").setText($m("PasswordGetPage.5"))
-				.setOnclick("$Actions['PasswordGetPage_post']('t=code&val=' + $F(this.previous()));"));
+		sb.append(wrapInputElement(pg_code));
+		sb.append("  <div class='lbl'>#(PasswordGetPage.11)</div>");
+		sb.append(wrapInputElement(pg_pwd));
+		sb.append("  <div class='btn'>");
+		sb.append(LinkButton.corner($m("PasswordGetPage.5")).setId("pg_code_btn")
+				.addClassName("green").setOnclick(
+						"$Actions['PasswordGetPage_post']('t=code&val=' + $F('pg_code') + '&pwd=' + $F('pg_pwd'));"));
+		sb.append("  </div>");
 		sb.append(" </div>");
-		sb.append(" <div class='bc'>");
-		sb.append("  <div id='idNewPassword'></div>");
-		sb.append(LinkButton.closeBtn().corner());
-		sb.append(" </div>");
+		if (!pp.isMobile()) {
+			sb.append(" <div class='b'>");
+			sb.append(LinkButton.closeBtn().corner());
+			sb.append(" </div>");
+		}
 		sb.append("</div>");
 		return sb.toString();
 	}
