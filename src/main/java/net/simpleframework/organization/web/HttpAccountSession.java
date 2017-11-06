@@ -62,8 +62,7 @@ public class HttpAccountSession extends ObjectEx
 		Set<Class<T>> listeners = (Set<Class<T>>) getHttpSession()
 				.getAttribute("_httpaccount_listeners");
 		if (listeners == null) {
-			getHttpSession().setAttribute("_httpaccount_listeners",
-					listeners = new LinkedHashSet<Class<T>>());
+			getHttpSession().setAttribute("_httpaccount_listeners", listeners = new LinkedHashSet<>());
 		}
 		listeners.add(lClass);
 	}

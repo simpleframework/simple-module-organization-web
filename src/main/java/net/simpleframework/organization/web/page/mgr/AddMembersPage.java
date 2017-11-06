@@ -135,7 +135,7 @@ public class AddMembersPage extends FormPropEditorTemplatePage
 		} else {
 			mgr = _deptService;
 		}
-		final ArrayList<RoleMember> beans = new ArrayList<RoleMember>();
+		final ArrayList<RoleMember> beans = new ArrayList<>();
 		for (final String id : StringUtils.split(cp.getParameter("member_id"), ",")) {
 			final IIdBeanAware bean = (IIdBeanAware) mgr.getBean(id);
 			final ID mId = bean.getId();

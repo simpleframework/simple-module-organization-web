@@ -110,7 +110,7 @@ public class UserRolesPage extends OneTableTemplatePage implements IOrganization
 			final User user = getUser(cp);
 			if (user != null) {
 				cp.addFormParameter("accountId", user.getId());
-				return new IteratorDataQuery<RoleM>(
+				return new IteratorDataQuery<>(
 						_roleService.roles(user, new KVMap().add("inOrg", true)));
 			}
 			return null;

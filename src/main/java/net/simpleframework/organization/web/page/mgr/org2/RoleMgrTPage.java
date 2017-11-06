@@ -160,13 +160,13 @@ public class RoleMgrTPage extends AbstractOrgMgrTPage {
 			if (rchart != null) {
 				cp.addFormParameter("orgId", rchart.getOrgId());
 				cp.addFormParameter("chartId", rchart.getId());
-				return new ListDataQuery<Role>(list(rchart, null));
+				return new ListDataQuery<>(list(rchart, null));
 			}
 			return null;
 		}
 
 		private List<Role> list(final RoleChart chart, final Role parent) {
-			final List<Role> l = new ArrayList<Role>();
+			final List<Role> l = new ArrayList<>();
 
 			final IDataQuery<Role> dq = parent == null ? _roleService.queryRoot(chart)
 					: _roleService.queryChildren(parent);

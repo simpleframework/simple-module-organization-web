@@ -154,11 +154,11 @@ public class DepartmentMgrTPage extends AbstractOrgMgrTPage {
 			final Department org = getOrg2(cp);
 			final List<Department> list = list(org);
 			list.add(0, org);
-			return new ListDataQuery<Department>(list);
+			return new ListDataQuery<>(list);
 		}
 
 		private List<Department> list(final Department parent) {
-			final List<Department> l = new ArrayList<Department>();
+			final List<Department> l = new ArrayList<>();
 			if (parent != null) {
 				final IDataQuery<Department> dq = _deptService.queryDepartments(parent,
 						EDepartmentType.department);

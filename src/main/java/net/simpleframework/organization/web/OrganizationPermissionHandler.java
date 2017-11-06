@@ -333,19 +333,19 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 
 		@Override
 		public List<PermissionDept> depts() {
-			final Set<ID> deptIds = new LinkedHashSet<ID>();
+			final Set<ID> deptIds = new LinkedHashSet<>();
 			deptIds.add(oUser.getDepartmentId());
 			for (final Department dept : _rolemService.getDeptsByUser(oUser)) {
 				deptIds.add(dept.getId());
 			}
-			final List<PermissionDept> depts = new ArrayList<PermissionDept>();
+			final List<PermissionDept> depts = new ArrayList<>();
 			for (final ID deptId : deptIds) {
 				depts.add(OrganizationPermissionHandler.this.getDept(deptId));
 			}
 			return depts;
 		}
 
-		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<String, Boolean>();
+		private final Map<String, Boolean> _MEMBERs = new ConcurrentHashMap<>();
 
 		@Override
 		public boolean isMember(final Object role, final Map<String, Object> variables) {
@@ -392,7 +392,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 
 		@Override
 		public List<PermissionRole> roles(final Map<String, Object> variables) {
-			final ArrayList<PermissionRole> l = new ArrayList<PermissionRole>();
+			final ArrayList<PermissionRole> l = new ArrayList<>();
 			final Iterator<RoleM> it = _roleService.roles(oUser, variables);
 			final OrganizationPermissionHandler hdl = OrganizationPermissionHandler.this;
 			RoleM n;
@@ -505,7 +505,7 @@ public class OrganizationPermissionHandler extends DefaultPagePermissionHandler
 	}
 
 	private List<PermissionDept> _dept_children(final IDataQuery<Department> dq) {
-		final List<PermissionDept> l = new ArrayList<PermissionDept>();
+		final List<PermissionDept> l = new ArrayList<>();
 		Department dept;
 		while ((dept = dq.next()) != null) {
 			l.add(getDept(dept));

@@ -48,7 +48,7 @@ public class UserAutocompleteHandler extends AbstractAutocompleteHandler
 		final StringBuilder sql = new StringBuilder("select a.* from ")
 				.append(_userService.getTablename()).append(" u left join ")
 				.append(_accountService.getTablename()).append(" a on u.id=a.id where 1=1");
-		final List<Object> params = new ArrayList<Object>();
+		final List<Object> params = new ArrayList<>();
 		final ID domainId = cp.getLdept().getDomainId();
 		if (domainId != null) {
 			sql.append(" and u.orgid=?");
