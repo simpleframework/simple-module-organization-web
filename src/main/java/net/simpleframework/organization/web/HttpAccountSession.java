@@ -162,7 +162,8 @@ public class HttpAccountSession extends ObjectEx
 			}
 		}
 		return login != null
-				? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0")) : null;
+				? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0"))
+				: null;
 	}
 
 	@Override

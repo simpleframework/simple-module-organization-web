@@ -122,8 +122,8 @@ public class DepartmentEditPage extends FormPropEditorTemplatePage
 		final PropField f3 = new PropField($m("category_edit.2")).addComponents(
 				InputComp.hidden("category_parentId"),
 				InputComp.textButton("category_parentText").setAttributes("readonly").addEvent(
-						EElementEvent.click, "$Actions['DepartmentEditPage_deptSelect']('orgId="
-								+ org.getId() + "');"));
+						EElementEvent.click,
+						"$Actions['DepartmentEditPage_deptSelect']('orgId=" + org.getId() + "');"));
 		final PropField f4 = new PropField($m("Description"))
 				.addComponents(new InputComp("category_description").setType(EInputCompType.textarea)
 						.setAttributes("rows:6"));

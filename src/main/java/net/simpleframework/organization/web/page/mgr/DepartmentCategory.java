@@ -98,8 +98,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department>
 				final Object dataObject = treeNode.getDataObject();
 				if (dataObject instanceof Department) {
 					final Department dept = (Department) dataObject;
-					treeNode.setImage(dept.getDepartmentType() == EDepartmentType.organization
-							? "/org.gif" : "/dept.png");
+					treeNode
+							.setImage(dept.getDepartmentType() == EDepartmentType.organization ? "/org.gif"
+									: "/dept.png");
 					treeNode.setPostfixText(getPostfixText(dept));
 					treeNode.setJsClickCallback(CategoryTableLCTemplatePage
 							.createTableRefresh("deptId=" + dept.getId()).toString());
@@ -154,8 +155,9 @@ public class DepartmentCategory extends CategoryBeanAwareHandler<Department>
 			final TreeNode treeNode) {
 		final Object dept;
 		if (treeNode != null && (dept = treeNode.getDataObject()) instanceof Department) {
-			treeNode.setImage(((Department) dept).getDepartmentType() == EDepartmentType.organization
-					? "/org.gif" : "/dept.png");
+			treeNode.setImage(
+					((Department) dept).getDepartmentType() == EDepartmentType.organization ? "/org.gif"
+							: "/dept.png");
 		}
 		final TreeNodes nodes = super.getCategoryTreenodes(cp, treeBean, treeNode);
 		if (nodes != null) {
