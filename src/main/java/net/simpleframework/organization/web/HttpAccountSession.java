@@ -162,8 +162,9 @@ public class HttpAccountSession extends ObjectEx
 			}
 		}
 		return login != null
-				? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0"))
-				: null;
+				&& (login.getPassword().equals(pwd) || _accountService.verifyPassword(login, pwd))
+						? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0"))
+						: null;
 	}
 
 	@Override

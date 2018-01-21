@@ -11,7 +11,9 @@ import net.simpleframework.mvc.common.element.JS;
 import net.simpleframework.mvc.component.ComponentParameter;
 import net.simpleframework.mvc.component.ext.login.AbstractLoginHandler;
 import net.simpleframework.mvc.component.ui.validatecode.ValidateCodeUtils;
+import net.simpleframework.organization.IOrganizationContextAware;
 import net.simpleframework.organization.OrganizationException;
+import net.simpleframework.organization.bean.Account;
 import net.simpleframework.organization.bean.Account.EAccountType;
 import net.simpleframework.organization.web.OrganizationPermissionHandler;
 import net.simpleframework.organization.web.page.PasswordGetPage;
@@ -23,7 +25,7 @@ import net.simpleframework.organization.web.page.PasswordGetPage;
  *         https://github.com/simpleframework
  *         http://www.simpleframework.net
  */
-public class DefaultLoginHandler extends AbstractLoginHandler {
+public class DefaultLoginHandler extends AbstractLoginHandler implements IOrganizationContextAware {
 
 	@Override
 	public Object getBeanProperty(final ComponentParameter cp, final String beanProperty) {
@@ -57,7 +59,11 @@ public class DefaultLoginHandler extends AbstractLoginHandler {
 			} else {
 				js.append(JS.loc(loginForward));
 			}
-			js.append("_save_cookie();");
+			final Account account = _accountService.getBean(cp.getLoginId());
+			if (account != null) {
+				js.append("_save_cookie('").append(account.getName()).append("', '")
+						.append(account.getPassword()).append("');");
+			}
 		} catch (final OrganizationException e) {
 			final int code = e.getCode();
 			if (code == 2002) {
