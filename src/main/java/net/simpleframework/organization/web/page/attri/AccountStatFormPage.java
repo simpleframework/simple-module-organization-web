@@ -16,6 +16,7 @@ import net.simpleframework.ctx.common.MValidateCode.Code;
 import net.simpleframework.ctx.trans.Transaction;
 import net.simpleframework.module.msg.IEmailService;
 import net.simpleframework.module.msg.IMessageContextAware;
+import net.simpleframework.mvc.AbstractMVCPage;
 import net.simpleframework.mvc.IForward;
 import net.simpleframework.mvc.JavascriptForward;
 import net.simpleframework.mvc.PageParameter;
@@ -54,15 +55,23 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 
 		// 邮件binding
 		AjaxRequestBean ajaxRequest = addAjaxRequest(pp, "AccountStatFormPage_mailbinding_page",
-				AccountMailBindingPage.class);
+				getAccountMailBindingPage());
 		addWindowBean(pp, "AccountStatFormPage_mailbinding", ajaxRequest).setWidth(420)
 				.setHeight(250);
 
 		// 手机binding
 		ajaxRequest = addAjaxRequest(pp, "AccountStatFormPage_mobilebinding_page",
-				AccountMobileBindingPage.class);
+				getAccountMobileBindingPage());
 		addWindowBean(pp, "AccountStatFormPage_mobilebinding", ajaxRequest).setWidth(420)
 				.setHeight(250);
+	}
+
+	protected Class<? extends AbstractMVCPage> getAccountMailBindingPage() {
+		return AccountMailBindingPage.class;
+	}
+
+	protected Class<? extends AbstractMVCPage> getAccountMobileBindingPage() {
+		return AccountMobileBindingPage.class;
 	}
 
 	public String toTitleHTML(final PageParameter pp) {
@@ -269,7 +278,7 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 
 		public IForward doSentcode(final ComponentParameter cp) {
 			final String mobile = cp.getParameter("mobile");
-			_accountService.sentBindingSMS(mobile);
+			_accountService.sentBindingSMS(null, mobile);
 			return null;
 		}
 
