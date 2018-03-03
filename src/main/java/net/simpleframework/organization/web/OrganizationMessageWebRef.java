@@ -60,7 +60,7 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 		if (MC_PASSWORD_EDIT == null) {
 			return;
 		}
-		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_EDIT,
+		getNoticeMessagePlugin().sentMessage(account.getId(), null, MC_PASSWORD_EDIT,
 				new KVMap().add("account", account).add("password", password));
 	}
 
@@ -68,7 +68,7 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 		if (MC_PASSWORD_RESET_EMAIL == null) {
 			return;
 		}
-		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_RESET_EMAIL,
+		getNoticeMessagePlugin().sentMessage(account.getId(), null, MC_PASSWORD_RESET_EMAIL,
 				new KVMap().add("code", code));
 	}
 
@@ -76,7 +76,7 @@ public class OrganizationMessageWebRef extends OrganizationMessageRef {
 		if (MC_PASSWORD_RESET_MOBILE == null) {
 			return;
 		}
-		getNoticeMessagePlugin().sentMessage(account.getId(), MC_PASSWORD_RESET_MOBILE,
+		getNoticeMessagePlugin().sentMessage(account.getId(), null, MC_PASSWORD_RESET_MOBILE,
 				new KVMap().add("code", code));
 	}
 }
