@@ -84,9 +84,17 @@ public class HttpAccountSession extends ObjectEx
 		httpSession.removeAttribute(key);
 	}
 
+	protected String getLoginKey() {
+		return LOGIN_KEY;
+	}
+
+	protected boolean isAutoLogin(final Account account) {
+		return account != null;
+	}
+
 	@Override
 	public LoginObject getLogin() {
-		LoginObject lObj = (LoginObject) getSessionAttribute(LOGIN_KEY);
+		LoginObject lObj = (LoginObject) getSessionAttribute(getLoginKey());
 		// 根据jsessionid自动登录
 		if (lObj == null && rRequest != null && rRequest.getRequestAttr("_jsessionid_login") == null
 				&& rRequest.isHttpRequest()) {
@@ -102,7 +110,7 @@ public class HttpAccountSession extends ObjectEx
 			}
 			if (StringUtils.hasText(jsessionid)) {
 				final Account account = _accountService.getAccountBySessionid(jsessionid);
-				if (account != null) {
+				if (isAutoLogin(account)) {
 					_accountService.setLogin(this, lObj = new LoginObject(account.getId())
 							.setDescription($m("HttpAccountSession.1")));
 					oprintln("jsessionid: " + jsessionid);
@@ -119,7 +127,7 @@ public class HttpAccountSession extends ObjectEx
 		if (login == null) {
 			logout();
 		} else {
-			setSessionAttribute(LOGIN_KEY, login);
+			setSessionAttribute(getLoginKey(), login);
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
 				login.setAttr("logId", ((OrganizationLogRef) ref).logLogin(login.getAccountId(),
@@ -169,9 +177,10 @@ public class HttpAccountSession extends ObjectEx
 
 	@Override
 	public void logout() {
-		final LoginObject login = (LoginObject) getSessionAttribute(LOGIN_KEY);
+		final String loginkey = getLoginKey();
+		final LoginObject login = (LoginObject) getSessionAttribute(loginkey);
 		if (login != null) {
-			romoveSessionAttribute(LOGIN_KEY);
+			romoveSessionAttribute(loginkey);
 			final IModuleRef ref = ((IOrganizationWebContext) orgContext).getLogRef();
 			if (ref != null) {
 				((OrganizationLogRef) ref).logLogout(login.getAttr("logId"));
