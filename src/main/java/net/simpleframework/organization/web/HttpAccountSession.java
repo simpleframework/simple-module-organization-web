@@ -88,8 +88,8 @@ public class HttpAccountSession extends ObjectEx
 		return LOGIN_KEY;
 	}
 
-	protected boolean isAutoLogin(final Account account) {
-		return account != null;
+	protected boolean isLogin(final Account account) {
+		return true;
 	}
 
 	@Override
@@ -110,14 +110,16 @@ public class HttpAccountSession extends ObjectEx
 			}
 			if (StringUtils.hasText(jsessionid)) {
 				final Account account = _accountService.getAccountBySessionid(jsessionid);
-				if (isAutoLogin(account)) {
+				if (account != null && isLogin(account)) {
 					_accountService.setLogin(this, lObj = new LoginObject(account.getId())
 							.setDescription($m("HttpAccountSession.1")));
+
 					oprintln("jsessionid: " + jsessionid);
 					oprintln("auto login ok.");
+
+					rRequest.setRequestAttr("_jsessionid_login", Boolean.TRUE);
 				}
 			}
-			rRequest.setRequestAttr("_jsessionid_login", Boolean.TRUE);
 		}
 		return lObj;
 	}
@@ -169,7 +171,7 @@ public class HttpAccountSession extends ObjectEx
 				}
 			}
 		}
-		return login != null
+		return (login != null && isLogin(login))
 				&& (login.getPassword().equals(pwd) || _accountService.verifyPassword(login, pwd))
 						? new LoginObject(login.getId()).setDescription($m("HttpAccountSession.0"))
 						: null;
