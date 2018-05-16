@@ -223,7 +223,7 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 			if (StringUtils.hasText(redirect_url)) {
 				return JavascriptForward.loc(redirect_url);
 			}
-			return JavascriptForward.RELOC;
+			return JavascriptForward.reloc();
 		}
 
 		@Override
@@ -302,7 +302,7 @@ public class AccountStatFormPage extends AbstractAccountFormPage implements IMes
 			if (StringUtils.hasText(redirect_url)) {
 				return JavascriptForward.loc(redirect_url);
 			}
-			return JavascriptForward.RELOC;
+			return JavascriptForward.reloc();
 		}
 
 		@Override

@@ -88,7 +88,7 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 				if (af != null) {
 					_userService.updatePhoto(user, (istream = new FileInputStream(af.getAttachment())));
 				}
-				return JavascriptForward.RELOC;
+				return JavascriptForward.reloc();
 			}
 
 			String type = null;
@@ -124,7 +124,7 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 				}
 				_userService.updatePhoto(user, new ByteArrayInputStream(oStream.toByteArray()));
 			}
-			return JavascriptForward.RELOC;
+			return JavascriptForward.reloc();
 		} finally {
 			if (istream != null) {
 				istream.close();
