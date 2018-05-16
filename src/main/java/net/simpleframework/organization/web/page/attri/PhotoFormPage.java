@@ -2,6 +2,7 @@ package net.simpleframework.organization.web.page.attri;
 
 import static net.simpleframework.common.I18n.$m;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,6 +14,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import net.simpleframework.common.Convert;
+import net.simpleframework.common.FileUtils;
 import net.simpleframework.common.ID;
 import net.simpleframework.common.ImageUtils;
 import net.simpleframework.common.JsonUtils;
@@ -89,14 +91,17 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 				return JavascriptForward.RELOC;
 			}
 
+			String type = null;
 			final Map<String, ?> data = JsonUtils.toMap(dstr);
 			if (af != null) {
 				istream = new FileInputStream(af.getAttachment());
+				type = af.getExt();
 			} else {
 				cp.getPhotoUrl(loginId, 0, 0);
 				final File photoFile = (File) cp.getRequestAttr("_photoFile");
 				if (photoFile != null) {
 					istream = new FileInputStream(photoFile);
+					type = FileUtils.getFilenameExtension(photoFile.getName());
 				}
 			}
 
@@ -105,14 +110,17 @@ public class PhotoFormPage extends AbstractAccountFormPage {
 				final int height = Convert.toInt(data.get("height"));
 				final int srcX = Convert.toInt(data.get("x"));
 				final int srcY = Convert.toInt(data.get("y"));
-				final BufferedImage bi = ImageUtils.clip(istream, width, height, srcX, srcY);
 
+				type = StringUtils.text(type, "png");
+
+				final BufferedImage bi = ImageUtils.clip(istream,
+						new Rectangle(srcX, srcY, width, height), type);
 				final ByteArrayOutputStream oStream = new ByteArrayOutputStream();
 				final int w = bi.getWidth();
 				if (w > 480) {
-					ImageUtils.thumbnail(bi, 480.0 / w, oStream, "png");
+					ImageUtils.thumbnail(bi, 480.0 / w, oStream, type);
 				} else {
-					ImageIO.write(bi, "png", oStream);
+					ImageIO.write(bi, type, oStream);
 				}
 				_userService.updatePhoto(user, new ByteArrayInputStream(oStream.toByteArray()));
 			}
